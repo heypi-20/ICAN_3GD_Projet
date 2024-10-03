@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class S_PlayerController : MonoBehaviour
 {
+    public float speed = 10f;
+
     private float h;
     private float v;
 
@@ -23,7 +25,8 @@ public class S_PlayerController : MonoBehaviour
         v = Input.GetAxisRaw("Vertical");
 
         Vector3 moveDirection = transform.forward * v + transform.right * h;
+        Vector3 normMove = moveDirection.normalized;
 
-        rb.AddForce(moveDirection * 10f);
+        rb.velocity = normMove * speed;
     }
 }
