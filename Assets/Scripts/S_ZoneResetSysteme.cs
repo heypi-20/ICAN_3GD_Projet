@@ -1,55 +1,50 @@
 ﻿using System;
 using UnityEngine;
-using TMPro;  // 引入TextMeshPro命名空间
+using TMPro;  
 
 public class S_ZoneResetSysteme : MonoBehaviour
 {
-    // 定义一个事件，供其他物体订阅
-    public static event Action OnZoneReset;
-    // TextMeshPro UI 组件，用于显示重置次数
-    public TextMeshProUGUI resetCountText;
-    // 可以自行设定的按键，用于触发区域重置
-    [SerializeField] private KeyCode resetKey = KeyCode.R;
-
-    // 重置事件触发计数
-    private int resetCount = 0;
-
     
+    public static event Action OnZoneReset;// Définir un événement pour que d'autres objets puissent s'y abonner   
+    public TextMeshProUGUI resetCountText;// Composant TextMeshPro UI pour afficher le nombre de réinitialisations
+    [SerializeField] private KeyCode resetKey = KeyCode.R;// Touche configurable pour déclencher la réinitialisation de la zone
+
+    private int resetCount = 0; // Compteur du nombre de réinitialisations déclenchées
 
     void Update()
     {
-        // 当按下设定的键时，触发重置事件
+        // Lorsque la touche définie est pressée, déclencher l'événement de réinitialisation
         if (Input.GetKeyDown(resetKey))
         {
             TriggerZoneReset();
         }
     }
 
-    // 触发区域重置事件的方法
+    // Méthode pour déclencher l'événement de réinitialisation
     private void TriggerZoneReset()
     {
-        Debug.Log("Zone reset triggered!");
+        Debug.Log("Réinitialisation de la zone déclenchée!");
 
-        // 增加重置计数
+        // Incrémenter le compteur de réinitialisations
         resetCount++;
 
-        // 更新 UI 文本显示
+        // Mettre à jour l'affichage du texte dans l'UI
         UpdateResetCountText();
 
-        // 触发事件，如果有订阅者
+        // Déclencher l'événement s'il y a des abonnés
         OnZoneReset?.Invoke();
     }
 
-    // 更新 TextMeshPro 文本的方法
+    // Méthode pour mettre à jour le texte TextMeshPro
     private void UpdateResetCountText()
     {
         if (resetCountText != null)
         {
-            resetCountText.text = $"Zone Reset Count: {resetCount}";
+            resetCountText.text = $"Nombre de réinitialisations : {resetCount}";
         }
         else
         {
-            Debug.LogWarning("TextMeshProUGUI component is not assigned.");
+            Debug.LogWarning("Le composant TextMeshProUGUI n'est pas assigné.");
         }
     }
 }
