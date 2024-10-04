@@ -6,10 +6,21 @@ public class S_CultivableCube : MonoBehaviour
 {
     public string growthTag = "Player";  // Tag qui déclenche la croissance
     public string growingStateTag = "Growing";  // Tag assigné lors de la croissance
-    public GameObject growthPrefab;  // Préfabriqué à générer pendant la croissance
-    public Vector3 growthRange = new Vector3(2f, 1f, 2f);  // Plage de croissance autour et au-dessus
     public bool isGrowing = false;  // Indique si le cube est en mode croissance
     public bool visualizeRange = true;  // Option de visualisation dans la scène
+    public Color growingColor = Color.green;  // Couleur lorsque le cube est en mode croissance
+    public Color defaultColor = Color.white;  // Couleur par défaut lorsque le cube n'est pas en mode croissance
+
+    [Space (20)]
+    [Header ("Paramètres de gameplay")]
+    public GameObject growthPrefab;  // Préfabriqué à générer pendant la croissance
+    public Vector3 growthRange = new Vector3(2f, 1f, 2f);  // Plage de croissance autour et au-dessus
+    public int growthPerCycle = 1;  // Nombre de blocs générés par cycle
+    public bool destroyAllOnHit = true;  // Détermine si tous les blocs sont détruits en une seule fois
+    public int destroyAmountPerHit = 1;  // Nombre de blocs à détruire par coup si destroyAllOnHit est faux
+
+    
+    
 
     private Vector3 currentGrowthCenter; // La position actuelle du dernier point de croissance
     private Rigidbody rb;  // Référence au composant Rigidbody pour gérer la physique
@@ -38,6 +49,9 @@ public class S_CultivableCube : MonoBehaviour
         {
             rb = gameObject.AddComponent<Rigidbody>();  // Si le Rigidbody n'existe pas, en ajouter un
         }
+
+        
+        SetCubeColor(defaultColor);  // Mettre la couleur par défaut
     }
 
     // Détecter la collision avec un objet ayant le bon tag pour démarrer la croissance ou réinitialiser
@@ -47,8 +61,14 @@ public class S_CultivableCube : MonoBehaviour
         {
             if (isGrowing)
             {
-                // Si en mode croissance, réinitialiser l'état
-                ResetGrowth();
+                if (destroyAllOnHit)
+                {
+                    ResetGrowth();  // Tout détruire d'un coup
+                }
+                else
+                {
+                    DestroyGrowthBlocks(destroyAmountPerHit);  // Détruire un certain nombre de blocs
+                }
             }
             else
             {
@@ -56,7 +76,8 @@ public class S_CultivableCube : MonoBehaviour
                 isGrowing = true;
                 rb.isKinematic = true;  // Désactiver le mouvement physique lors de la croissance
                 currentGrowthCenter = transform.position;
-                SetTags(growingStateTag); // Ajouter le tag "Growing" à l'objet et ses enfants
+                SetTags(growingStateTag);  // Ajouter le tag "Growing" à l'objet et ses enfants
+                SetCubeColor(growingColor);  // Changer la couleur en mode croissance
                 Debug.Log("Cube en mode croissance.");
             }
 
@@ -73,6 +94,37 @@ public class S_CultivableCube : MonoBehaviour
         isCooldown = false;
     }
 
+    // Changer la couleur de tous les enfants uniquement
+    private void SetCubeColor(Color color)
+    {
+        // Parcourir tous les enfants et changer leur couleur
+        foreach (Transform child in transform)
+        {
+            Renderer childRenderer = child.GetComponent<Renderer>();
+            if (childRenderer != null)
+            {
+                childRenderer.material.color = color;
+            }
+        }
+    }
+
+    private void DestroyGrowthBlocks(int amount)
+    {
+        int blocksToDestroy = Mathf.Min(amount, transform.childCount - 1);  // S'assurer de ne pas détruire le centre
+
+        for (int i = transform.childCount - 1; i > 0 && blocksToDestroy > 0; i--)
+        {
+            Destroy(transform.GetChild(i).gameObject);
+            blocksToDestroy--;
+        }
+
+        // Si un seul bloc reste, réinitialiser la croissance
+        if (transform.childCount <= 1)
+        {
+            ResetGrowth();
+        }
+    }
+
     // Croissance du cube à chaque reset
     public void Grow()
     {
@@ -84,20 +136,25 @@ public class S_CultivableCube : MonoBehaviour
             currentGrowthCenter = transform.GetChild(transform.childCount - 1).position;
         }
 
-        // Définir un point de croissance aléatoire dans la plage définie
-        Vector3 randomPosition = currentGrowthCenter + new Vector3(
-            Random.Range(-growthRange.x, growthRange.x),
-            Random.Range(0, growthRange.y),  // Seulement vers le haut
-            Random.Range(-growthRange.z, growthRange.z)
-        );
+        // Générer plusieurs préfabriqués selon le nombre de "growthPerCycle"
+        for (int i = 0; i < growthPerCycle; i++)
+        {
+            // Définir un point de croissance aléatoire dans la plage définie
+            Vector3 randomPosition = currentGrowthCenter + new Vector3(
+                Random.Range(-growthRange.x, growthRange.x),
+                Random.Range(0, growthRange.y),  // Seulement vers le haut
+                Random.Range(-growthRange.z, growthRange.z)
+            );
 
-        // Générer le préfabriqué à la nouvelle position
-        GameObject newGrowth = Instantiate(growthPrefab, randomPosition, Quaternion.identity, this.transform);
+            // Générer le préfabriqué à la nouvelle position
+            GameObject newGrowth = Instantiate(growthPrefab, randomPosition, Quaternion.identity, this.transform);
 
-        // Mettre à jour le centre de croissance à la nouvelle position
-        currentGrowthCenter = newGrowth.transform.position;
+            // Mettre à jour le centre de croissance à la nouvelle position
+            currentGrowthCenter = newGrowth.transform.position;
 
-        Debug.Log("Nouveau préfabriqué généré à : " + randomPosition);
+            Debug.Log("Nouveau préfabriqué généré à : " + randomPosition);
+        }
+        SetCubeColor(growingColor);
     }
 
     // Réinitialiser la croissance en détruisant tous les enfants sauf le centre
@@ -114,7 +171,8 @@ public class S_CultivableCube : MonoBehaviour
         // Remettre le cube à l'état de départ
         isGrowing = false;
         rb.isKinematic = false;  // Autoriser de nouveau le mouvement physique
-        RemoveTags(); // Retirer le tag "Growing" de l'objet et de ses enfants
+        RemoveTags();  // Retirer le tag "Growing" de l'objet et de ses enfants
+        SetCubeColor(defaultColor);  // Revenir à la couleur par défaut
     }
 
     // Ajouter un tag à l'objet et à tous ses enfants

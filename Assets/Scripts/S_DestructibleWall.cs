@@ -8,6 +8,8 @@ public class S_DestructibleWall : MonoBehaviour
     public string rangeTag = "Enemy"; // Tag pour la détection dans la portée
     public GameObject destructionEffect; // L'effet de particule lors de la désactivation du mur
     public GameObject resetPrefab; // Le prefab à générer lors de la réinitialisation
+    [Space(20)]
+    [Header("Paramètres de gameplay")]
     public int regrowThreshold = 3; // Nombre de réinitialisations avant la régénération du mur
     
 
