@@ -59,6 +59,7 @@ public class S_CultivableCube : MonoBehaviour
     {
         if (!isCooldown && collision.gameObject.CompareTag(growthTag))
         {
+            
             if (isGrowing)
             {
                 if (destroyAllOnHit)
@@ -80,7 +81,7 @@ public class S_CultivableCube : MonoBehaviour
                 SetCubeColor(growingColor);  // Changer la couleur en mode croissance
                 Debug.Log("Cube en mode croissance.");
             }
-
+            Destroy(collision.gameObject);
             // Activer le refroidissement pour empêcher les collisions rapides
             StartCoroutine(CollisionCooldownCoroutine());
         }
@@ -152,7 +153,7 @@ public class S_CultivableCube : MonoBehaviour
             // Mettre à jour le centre de croissance à la nouvelle position
             currentGrowthCenter = newGrowth.transform.position;
 
-            Debug.Log("Nouveau préfabriqué généré à : " + randomPosition);
+            //Debug.Log("Nouveau préfabriqué généré à : " + randomPosition);
         }
         SetCubeColor(growingColor);
     }

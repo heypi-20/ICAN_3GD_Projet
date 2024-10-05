@@ -80,6 +80,7 @@ public class S_DestructibleWall : MonoBehaviour
         // Vérifier si l'objet en collision a le bon tag
         if (collision.gameObject.CompareTag(targetTag))
         {
+            
             // Vérifier si le collider en collision appartient bien au sous-objet (mur)
             if (collision.contacts[0].thisCollider.gameObject == wallChild)
             {
@@ -87,6 +88,7 @@ public class S_DestructibleWall : MonoBehaviour
                 DisableWall();
                 Debug.Log("Le sous-objet (mur) a été désactivé.");
             }
+            Destroy(collision.gameObject);
         }
     }
 
