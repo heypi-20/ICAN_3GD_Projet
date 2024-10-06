@@ -9,7 +9,12 @@ public class RespawnableObject
     public GameObject objectToRespawn;  // Objet à réapparaître ou à réinitialiser
     public Transform respawnLocation;   // Position de réapparition
     public bool shouldRespawn = false;  // Indique si l'objet doit être recréé au lieu d'être déplacé
+    [Tooltip("Nombre de tours avant de faire réapparaître ou réinitialiser cet objet.")]
+    public int respawnAfterRounds = 1;  // Nombre de tours avant de réapparaître ou réinitialiser l'objet
+    [HideInInspector]
+    public int currentRounds = 0;  // Compteur du nombre de tours actuels avant réapparition
 }
+
 
 
 public class S_ZoneResetSysteme : MonoBehaviour
@@ -54,31 +59,41 @@ public class S_ZoneResetSysteme : MonoBehaviour
     {
         foreach (RespawnableObject respawnableObject in respawnableObjects)
         {
-            if (respawnableObject.objectToRespawn != null && respawnableObject.respawnLocation != null)
+            // Incrémenter le nombre de tours pour chaque objet
+            respawnableObject.currentRounds++;
+
+            // Vérifier si l'objet a atteint le nombre de tours requis pour être réinitialisé
+            if (respawnableObject.currentRounds >= respawnableObject.respawnAfterRounds)
             {
-                if (respawnableObject.shouldRespawn)
+                // Si l'objet doit être recréé (reset total)
+                if (respawnableObject.objectToRespawn != null && respawnableObject.respawnLocation != null)
                 {
-                    // Si l'objet doit être recréé (reset total)
-                   
-                    Instantiate(
-                        respawnableObject.objectToRespawn,
-                        respawnableObject.respawnLocation.position,
-                        respawnableObject.respawnLocation.rotation
-                    );  // Recréer un nouvel objet
+                    if (respawnableObject.shouldRespawn)
+                    {
+                        Instantiate(
+                            respawnableObject.objectToRespawn,
+                            respawnableObject.respawnLocation.position,
+                            respawnableObject.respawnLocation.rotation
+                        );  // Recréer un nouvel objet
+                    }
+                    else
+                    {
+                        // Si l'objet doit être déplacé à sa position initiale
+                        respawnableObject.objectToRespawn.transform.position = respawnableObject.respawnLocation.position;
+                        respawnableObject.objectToRespawn.transform.rotation = respawnableObject.respawnLocation.rotation;
+                    }
+
+                    // Réinitialiser le compteur après la réapparition
+                    respawnableObject.currentRounds = 0;
                 }
                 else
                 {
-                    // Si l'objet doit être déplacé à sa position initiale
-                    respawnableObject.objectToRespawn.transform.position = respawnableObject.respawnLocation.position;
-                    respawnableObject.objectToRespawn.transform.rotation = respawnableObject.respawnLocation.rotation;
+                    Debug.LogWarning("L'objet ou la position de réapparition n'est pas définie.");
                 }
-            }
-            else
-            {
-                Debug.LogWarning("L'objet ou la position de réapparition n'est pas définie.");
             }
         }
     }
+
 
 
     // Méthode pour mettre à jour le texte TextMeshPro

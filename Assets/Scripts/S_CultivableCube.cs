@@ -77,7 +77,7 @@ public class S_CultivableCube : MonoBehaviour
                 isGrowing = true;
                 rb.isKinematic = true;  // Désactiver le mouvement physique lors de la croissance
                 currentGrowthCenter = transform.position;
-                SetTags(growingStateTag);  // Ajouter le tag "Growing" à l'objet et ses enfants
+                SetTagsAndActiveCollider(growingStateTag);  // Ajouter le tag "Growing" à l'objet et ses enfants
                 SetCubeColor(growingColor);  // Changer la couleur en mode croissance
                 Debug.Log("Cube en mode croissance.");
             }
@@ -172,27 +172,37 @@ public class S_CultivableCube : MonoBehaviour
         // Remettre le cube à l'état de départ
         isGrowing = false;
         rb.isKinematic = false;  // Autoriser de nouveau le mouvement physique
-        RemoveTags();  // Retirer le tag "Growing" de l'objet et de ses enfants
+        RemoveTagsAndDeactiveCollider();  // Retirer le tag "Growing" de l'objet et de ses enfants
         SetCubeColor(defaultColor);  // Revenir à la couleur par défaut
     }
 
-    // Ajouter un tag à l'objet et à tous ses enfants
-    private void SetTags(string tag)
+    // Activer le mode croissance
+    private void SetTagsAndActiveCollider(string tag)
     {
         gameObject.tag = tag;
         foreach (Transform child in transform)
         {
             child.gameObject.tag = tag;
+            Collider childCollider = child.GetComponent<Collider>();
+            if (childCollider != null)
+            {
+                childCollider.enabled = true;  // Activer le collider lors de la croissance
+            }
         }
     }
 
-    // Retirer un tag en réinitialisant à "Untagged"
-    private void RemoveTags()
+    // Désactiver le mode croissance et remettre à l'état de départ
+    private void RemoveTagsAndDeactiveCollider()
     {
-        gameObject.tag = "Untagged";
+        gameObject.tag = "Cultivable";
         foreach (Transform child in transform)
         {
-            child.gameObject.tag = "Untagged";
+            child.gameObject.tag = "Cultivable";
+            Collider childCollider = child.GetComponent<Collider>();
+            if (childCollider != null)
+            {
+                childCollider.enabled = false;  // Désactiver le collider lors de la réinitialisation
+            }
         }
     }
 

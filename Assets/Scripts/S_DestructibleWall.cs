@@ -11,8 +11,10 @@ public class S_DestructibleWall : MonoBehaviour
     [Space(20)]
     [Header("Paramètres de gameplay")]
     public int regrowThreshold = 3; // Nombre de réinitialisations avant la régénération du mur
-    
+    public int hitPoints = 3; // Nombre de coups que le mur peut encaisser avant d'être désactivé
 
+
+    private int currentHits = 0; // Compteur des coups actuels sur le mur
     private Vector3 destroyedWallPosition;
     private bool hasResetPrefab = false;
     private int currentResetRound = 0;
@@ -84,9 +86,19 @@ public class S_DestructibleWall : MonoBehaviour
             // Vérifier si le collider en collision appartient bien au sous-objet (mur)
             if (collision.contacts[0].thisCollider.gameObject == wallChild)
             {
-                // Désactiver le sous-objet (mur) et enregistrer sa position
-                DisableWall();
-                Debug.Log("Le sous-objet (mur) a été désactivé.");
+
+                // Incrémenter le compteur de coups
+                currentHits++;
+                // Si le nombre de coups atteint ou dépasse hitPoints, désactiver le mur
+                if (currentHits >= hitPoints)
+                {
+                    DisableWall();
+                    Debug.Log("Le sous-objet (mur) a été désactivé après avoir été frappé plusieurs fois.");
+                }
+                else
+                {
+                    Debug.Log($"Le mur a été frappé {currentHits} fois. Il en reste {hitPoints - currentHits} avant la désactivation.");
+                }
             }
             Destroy(collision.gameObject);
         }
@@ -121,6 +133,7 @@ public class S_DestructibleWall : MonoBehaviour
         }
 
         currentResetRound++;
+        currentHits = 0; // Réinitialiser le compteur de coups
 
         // Générer le resetPrefab uniquement la première fois
         if (!hasResetPrefab)
