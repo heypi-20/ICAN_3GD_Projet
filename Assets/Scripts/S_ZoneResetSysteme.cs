@@ -60,7 +60,7 @@ public class S_ZoneResetSysteme : MonoBehaviour
                 {
                     // Si l'objet doit être recréé (reset total)
                    
-                    respawnableObject.objectToRespawn = Instantiate(
+                    Instantiate(
                         respawnableObject.objectToRespawn,
                         respawnableObject.respawnLocation.position,
                         respawnableObject.respawnLocation.rotation
