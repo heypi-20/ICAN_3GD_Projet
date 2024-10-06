@@ -3,9 +3,13 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    [Header("Scene Name")]
     public string scene1;
     public string scene2;
     public string scene3;
+
+    [Header("Menu")]
+    public GameObject settingWindow;
 
     void Update()
     {
@@ -34,7 +38,17 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene(scene3);
     }
 
-    void Quit()
+    public void OpenSettingButton()
+    {
+        settingWindow.SetActive(true);
+    }
+
+    public void CloseSettingButton()
+    {
+        settingWindow.SetActive(false);
+    }
+
+    public void Quit()
     {
         Debug.Log("Closing Game");
         Application.Quit();
