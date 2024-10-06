@@ -6,8 +6,11 @@ public class S_PlayerCatch : MonoBehaviour
 {
     public Transform catchPoint;
     public float checkCubeRadius = 2f;
-    public float throwForce = 10f;
     public string addTag = "Player";
+    [Space(20)]
+    [Header("Gameplay Settings")]
+    public float throwForce = 10f;
+    
 
     private Collider cube = null;
     private Rigidbody cubeRb = null;  // Référence au Rigidbody de l'objet attrapé

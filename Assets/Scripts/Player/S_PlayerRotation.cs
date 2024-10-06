@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class S_PlayerRotation : MonoBehaviour
 {
+
     public float moveSpeed = 10f;  // Vitesse de déplacement
     public bool canMove = true;    // Booléen pour activer ou désactiver le mouvement
 

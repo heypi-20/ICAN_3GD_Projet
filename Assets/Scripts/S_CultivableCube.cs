@@ -12,7 +12,7 @@ public class S_CultivableCube : MonoBehaviour
     public Color defaultColor = Color.white;  // Couleur par défaut lorsque le cube n'est pas en mode croissance
 
     [Space (20)]
-    [Header ("Paramètres de gameplay")]
+    [Header ("Gameplay Settings")]
     public GameObject growthPrefab;  // Préfabriqué à générer pendant la croissance
     public Vector3 growthRange = new Vector3(2f, 1f, 2f);  // Plage de croissance autour et au-dessus
     public int growthPerCycle = 1;  // Nombre de blocs générés par cycle

@@ -9,9 +9,11 @@ public class S_DestructibleWall : MonoBehaviour
     public GameObject destructionEffect; // L'effet de particule lors de la désactivation du mur
     public GameObject resetPrefab; // Le prefab à générer lors de la réinitialisation
     [Space(20)]
-    [Header("Paramètres de gameplay")]
+    [Header("Gameplay Settings")]
     public int regrowThreshold = 3; // Nombre de réinitialisations avant la régénération du mur
     public int hitPoints = 3; // Nombre de coups que le mur peut encaisser avant d'être désactivé
+    [Tooltip("Détruire le cube en touchant le mur ? Ou alors détruire le cube lorsque le mur est détruit")]
+    public bool DestroyCubeOnHit=true;
 
 
     private int currentHits = 0; // Compteur des coups actuels sur le mur
@@ -92,7 +94,9 @@ public class S_DestructibleWall : MonoBehaviour
                 // Si le nombre de coups atteint ou dépasse hitPoints, désactiver le mur
                 if (currentHits >= hitPoints)
                 {
+                    
                     DisableWall();
+                    Destroy(collision.gameObject);
                     Debug.Log("Le sous-objet (mur) a été désactivé après avoir été frappé plusieurs fois.");
                 }
                 else
@@ -100,7 +104,11 @@ public class S_DestructibleWall : MonoBehaviour
                     Debug.Log($"Le mur a été frappé {currentHits} fois. Il en reste {hitPoints - currentHits} avant la désactivation.");
                 }
             }
-            Destroy(collision.gameObject);
+            if (DestroyCubeOnHit)
+            {
+                Destroy(collision.gameObject);
+            }
+            
         }
     }
 
