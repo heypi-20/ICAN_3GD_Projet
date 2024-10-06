@@ -1,15 +1,31 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro;
 
 public class MainMenu : MonoBehaviour
 {
-    [Header("Scene Name")]
-    public string scene1;
-    public string scene2;
-    public string scene3;
+    [Header("Prefab")]
+    public GameObject myButton;
+    public Transform buttonContainer;
+
+    [Header("Scene List")]
+    public string[] level;
 
     [Header("Menu")]
+    public GameObject levelWindow;
     public GameObject settingWindow;
+
+    void Start()
+    {
+        
+        // Créer un bouton pour chaque éléments présent dans la liste
+        foreach (string levelName in level)
+        {
+            CreateButton(levelName);
+        }
+
+    }
 
     void Update()
     {
@@ -20,22 +36,41 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    public void GoToScene1()
+    void CreateButton(string buttonName)
     {
-        Debug.Log("Loading " + scene1 + " scene");
-        SceneManager.LoadScene(scene1);
+        // On instancie le Bouton qui est un GameObject et on le stock dans un variable pour la manipulé
+        GameObject newButton = Instantiate(myButton, buttonContainer);
+
+        // On récupere le component TextMeshProUGUI pour modifier le texte du bouton
+        TextMeshProUGUI buttonText = newButton.GetComponentInChildren<TextMeshProUGUI>();
+        
+        if (buttonText != null) // Si l'élément de la liste n'est pas sans nom
+        {
+            buttonText.text = buttonName; // Le Texte devient la string de son index dans la liste
+        }
+
+        Button buttonComponent = newButton.GetComponent<Button>();
+        
+        if (buttonComponent != null)
+        {
+            buttonComponent.onClick.AddListener(() => OnButtonClicked(buttonName)); // Permet de relier OnButtonClicked 
+        }
     }
 
-    public void GoToScene2()
+    void OnButtonClicked(string buttonName)
     {
-        Debug.Log("Loading " + scene2 + " scene");
-        SceneManager.LoadScene(scene2);
+        Debug.Log("Lancement de la scene : " + buttonName);
+        SceneManager.LoadScene(buttonName);
     }
 
-    public void GoToScene3()
+    public void OpenLevelButton()
     {
-        Debug.Log("Loading " + scene3 + " scene");
-        SceneManager.LoadScene(scene3);
+        levelWindow.SetActive(true);
+    }
+
+    public void CloseLevelButton()
+    {
+        levelWindow.SetActive(false);
     }
 
     public void OpenSettingButton()
