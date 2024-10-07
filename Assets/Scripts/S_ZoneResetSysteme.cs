@@ -4,11 +4,15 @@ using TMPro;
 using System.Collections.Generic;
 
 [System.Serializable]  // Permet à Unity de rendre cette classe visible dans l'Inspector
+
 public class RespawnableObject
 {
-    public GameObject objectToRespawn;  // Objet à réapparaître ou à réinitialiser
+    public GameObject prefabToRespawn;  // Préfabriqué utilisé pour recréer l'objet
+    [HideInInspector]
+    public GameObject currentInstance;  // Référence à l'instance actuelle générée
     public Transform respawnLocation;   // Position de réapparition
     public bool shouldRespawn = false;  // Indique si l'objet doit être recréé au lieu d'être déplacé
+    public bool destroyPrevious = false;  // Détermine si l'objet précédent doit être détruit s'il existe
     [Tooltip("Nombre de tours avant de faire réapparaître ou réinitialiser cet objet.")]
     public int respawnAfterRounds = 1;  // Nombre de tours avant de réapparaître ou réinitialiser l'objet
     [HideInInspector]
@@ -16,12 +20,10 @@ public class RespawnableObject
 }
 
 
-
 public class S_ZoneResetSysteme : MonoBehaviour
 {
     [Header("Réinitialisation des objets")]
     public List<RespawnableObject> respawnableObjects;  // Liste des objets réapparaissables
-
     public static event Action OnZoneReset;// Définir un événement pour que d'autres objets puissent s'y abonner   
     public TextMeshProUGUI resetCountText;// Composant TextMeshPro UI pour afficher le nombre de réinitialisations
     [SerializeField] private KeyCode resetKey = KeyCode.R;// Touche configurable pour déclencher la réinitialisation de la zone
@@ -52,49 +54,52 @@ public class S_ZoneResetSysteme : MonoBehaviour
         OnZoneReset?.Invoke();
 
         RespawnObjects();
-
     }
 
     private void RespawnObjects()
     {
         foreach (RespawnableObject respawnableObject in respawnableObjects)
         {
-            // Incrémenter le nombre de tours pour chaque objet
             respawnableObject.currentRounds++;
 
-            // Vérifier si l'objet a atteint le nombre de tours requis pour être réinitialisé
-            if (respawnableObject.currentRounds >= respawnableObject.respawnAfterRounds)
-            {
-                // Si l'objet doit être recréé (reset total)
-                if (respawnableObject.objectToRespawn != null && respawnableObject.respawnLocation != null)
-                {
-                    if (respawnableObject.shouldRespawn)
-                    {
-                        Instantiate(
-                            respawnableObject.objectToRespawn,
-                            respawnableObject.respawnLocation.position,
-                            respawnableObject.respawnLocation.rotation
-                        );  // Recréer un nouvel objet
-                    }
-                    else
-                    {
-                        // Si l'objet doit être déplacé à sa position initiale
-                        respawnableObject.objectToRespawn.transform.position = respawnableObject.respawnLocation.position;
-                        respawnableObject.objectToRespawn.transform.rotation = respawnableObject.respawnLocation.rotation;
-                    }
+            // Vérifier si le nombre de tours requis est atteint
+            if (respawnableObject.currentRounds < respawnableObject.respawnAfterRounds) continue;
 
-                    // Réinitialiser le compteur après la réapparition
-                    respawnableObject.currentRounds = 0;
-                }
-                else
-                {
-                    Debug.LogWarning("L'objet ou la position de réapparition n'est pas définie.");
-                }
+            if (respawnableObject.prefabToRespawn == null || respawnableObject.respawnLocation == null)
+            {
+                Debug.LogWarning("Le prefab ou la position de réapparition n'est pas définie.");
+                continue;
             }
+
+            HandleObjectRespawn(respawnableObject);
+            respawnableObject.currentRounds = 0; // Réinitialiser le compteur après la réapparition
         }
     }
 
+    private void HandleObjectRespawn(RespawnableObject respawnableObject)
+    {
+        // Si l'option de détruire le précédent objet est activée
+        if (respawnableObject.destroyPrevious && respawnableObject.currentInstance != null)
+        {
+            Destroy(respawnableObject.currentInstance);
+        }
 
+        if (respawnableObject.shouldRespawn)
+        {
+            // Recréer un nouvel objet à partir du prefab
+            respawnableObject.currentInstance = Instantiate(
+                respawnableObject.prefabToRespawn,
+                respawnableObject.respawnLocation.position,
+                respawnableObject.respawnLocation.rotation
+            );
+        }
+        else if (respawnableObject.currentInstance != null)
+        {
+            // Déplacer l'objet à sa position initiale
+            respawnableObject.currentInstance.transform.position = respawnableObject.respawnLocation.position;
+            respawnableObject.currentInstance.transform.rotation = respawnableObject.respawnLocation.rotation;
+        }
+    }
 
     // Méthode pour mettre à jour le texte TextMeshPro
     private void UpdateResetCountText()
