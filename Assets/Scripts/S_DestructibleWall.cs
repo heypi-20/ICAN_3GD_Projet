@@ -144,7 +144,7 @@ public class S_DestructibleWall : MonoBehaviour
         currentHits = 0; // Réinitialiser le compteur de coups
 
         // Générer le resetPrefab uniquement la première fois
-        if (!hasResetPrefab)
+        if (!hasResetPrefab&&resetPrefab!=null)
         {
             Instantiate(resetPrefab, destroyedWallPosition, Quaternion.identity);
             hasResetPrefab = true;
