@@ -71,7 +71,7 @@ public class S_DestructibleWall : MonoBehaviour
         {
             if (hitCollider.CompareTag(rangeTag))
             {
-                Debug.Log("Un objet avec le tag 'Enemy' a été détecté dans la portée.");
+                Debug.Log("Objet with 'Enemy' tag detected in range.");
                 DisableWall();
                 return; // Arrêter de vérifier si un objet est trouvé
             }
@@ -97,11 +97,11 @@ public class S_DestructibleWall : MonoBehaviour
                     
                     DisableWall();
                     Destroy(collision.gameObject);
-                    Debug.Log("Le sous-objet (mur) a été désactivé après avoir été frappé plusieurs fois.");
+                    Debug.Log("The 'under-obj' (wall) got deactivated after getting hit multiple times.");
                 }
                 else
                 {
-                    Debug.Log($"Le mur a été frappé {currentHits} fois. Il en reste {hitPoints - currentHits} avant la désactivation.");
+                    Debug.Log($"The wall got hit {currentHits} time. {hitPoints - currentHits} hits before deactivation.");
                 }
             }
             if (DestroyCubeOnHit)
@@ -136,7 +136,7 @@ public class S_DestructibleWall : MonoBehaviour
         // Ignorer si le mur n'est pas désactivé
         if (wallChild.activeSelf)
         {
-            Debug.Log("Le mur est déjà actif, réinitialisation ignorée.");
+            Debug.Log("The wall is already actif, reset ignored.");
             return;
         }
 

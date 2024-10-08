@@ -13,7 +13,7 @@ public class RespawnableObject
     public Transform respawnLocation;   // Position de réapparition
     public bool shouldRespawn = false;  // Indique si l'objet doit être recréé au lieu d'être déplacé
     public bool destroyPrevious = false;  // Détermine si l'objet précédent doit être détruit s'il existe
-    [Tooltip("Nombre de tours avant de faire réapparaître ou réinitialiser cet objet.")]
+    [Tooltip("Number of round before object's respawn or resets.")]
     public int respawnAfterRounds = 1;  // Nombre de tours avant de réapparaître ou réinitialiser l'objet
     [HideInInspector]
     public int currentRounds = 0;  // Compteur du nombre de tours actuels avant réapparition
@@ -22,7 +22,7 @@ public class RespawnableObject
 
 public class S_ZoneResetSysteme : MonoBehaviour
 {
-    [Header("Réinitialisation des objets")]
+    [Header("Reset of the objects")]
     public List<RespawnableObject> respawnableObjects;  // Liste des objets réapparaissables
     public static event Action OnZoneReset;// Définir un événement pour que d'autres objets puissent s'y abonner   
     public TextMeshProUGUI resetCountText;// Composant TextMeshPro UI pour afficher le nombre de réinitialisations
@@ -42,7 +42,7 @@ public class S_ZoneResetSysteme : MonoBehaviour
     // Méthode pour déclencher l'événement de réinitialisation
     private void TriggerZoneReset()
     {
-        Debug.Log("Réinitialisation de la zone déclenchée!");
+        Debug.Log("Zone resets activated!");
 
         // Incrémenter le compteur de réinitialisations
         resetCount++;
@@ -67,7 +67,7 @@ public class S_ZoneResetSysteme : MonoBehaviour
 
             if (respawnableObject.prefabToRespawn == null || respawnableObject.respawnLocation == null)
             {
-                Debug.LogWarning("Le prefab ou la position de réapparition n'est pas définie.");
+                Debug.LogWarning("Prefab or respawn position not defined.");
                 continue;
             }
 
@@ -110,7 +110,7 @@ public class S_ZoneResetSysteme : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Le composant TextMeshProUGUI n'est pas assigné.");
+            Debug.LogWarning("The TextMeshProUGUI component isn't assigned.");
         }
     }
 }

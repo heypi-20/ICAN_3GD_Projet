@@ -45,6 +45,7 @@ public class S_CultivableCube : MonoBehaviour
         isGrowing = false;
         // Obtenir le Rigidbody pour gérer le déplacement physique
         rb = GetComponent<Rigidbody>();
+
         if (rb == null)
         {
             rb = gameObject.AddComponent<Rigidbody>();  // Si le Rigidbody n'existe pas, en ajouter un
@@ -59,7 +60,6 @@ public class S_CultivableCube : MonoBehaviour
     {
         if (!isCooldown && collision.gameObject.CompareTag(growthTag))
         {
-            
             if (isGrowing)
             {
                 if (destroyAllOnHit)
@@ -79,7 +79,7 @@ public class S_CultivableCube : MonoBehaviour
                 currentGrowthCenter = transform.position;
                 SetTagsAndActiveCollider(growingStateTag);  // Ajouter le tag "Growing" à l'objet et ses enfants
                 SetCubeColor(growingColor);  // Changer la couleur en mode croissance
-                Debug.Log("Cube en mode croissance.");
+                Debug.Log("Cube in growing mode.");
             }
             Destroy(collision.gameObject);
             // Activer le refroidissement pour empêcher les collisions rapides
@@ -161,7 +161,7 @@ public class S_CultivableCube : MonoBehaviour
     // Réinitialiser la croissance en détruisant tous les enfants sauf le centre
     private void ResetGrowth()
     {
-        Debug.Log("Réinitialisation du cube et suppression des branches.");
+        Debug.Log("Reset of the cube and deleting branches.");
 
         // Parcourir les enfants et détruire tous sauf le premier enfant
         for (int i = transform.childCount - 1; i > 0; i--)
