@@ -49,9 +49,13 @@ public class S_CultivableCube : MonoBehaviour
         {
             rb = gameObject.AddComponent<Rigidbody>();  // Si le Rigidbody n'existe pas, en ajouter un
         }
-
         
+
         SetCubeColor(defaultColor);  // Mettre la couleur par défaut
+        if (isGrowing)
+        {
+            EnterGrowingState();
+        }
     }
 
     // Détecter la collision avec un objet ayant le bon tag pour démarrer la croissance ou réinitialiser
@@ -74,16 +78,21 @@ public class S_CultivableCube : MonoBehaviour
             {
                 // Démarrer la croissance si elle n'est pas active
                 isGrowing = true;
-                rb.isKinematic = true;  // Désactiver le mouvement physique lors de la croissance
-                currentGrowthCenter = transform.position;
-                SetTagsAndActiveCollider(growingStateTag);  // Ajouter le tag "Growing" à l'objet et ses enfants
-                SetCubeColor(growingColor);  // Changer la couleur en mode croissance
-                Debug.Log("Cube in growing mode.");
+                EnterGrowingState();
             }
             Destroy(collision.gameObject);
             // Activer le refroidissement pour empêcher les collisions rapides
             StartCoroutine(CollisionCooldownCoroutine());
         }
+    }
+
+    public void EnterGrowingState()
+    {
+        rb.isKinematic = true;  // Désactiver le mouvement physique lors de la croissance
+        currentGrowthCenter = transform.position;
+        SetTagsAndActiveCollider(growingStateTag);  // Ajouter le tag "Growing" à l'objet et ses enfants
+        SetCubeColor(growingColor);  // Changer la couleur en mode croissance
+        Debug.Log("Cube in growing mode.");
     }
 
     // Coroutine pour gérer le délai de refroidissement des collisions
