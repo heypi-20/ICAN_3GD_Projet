@@ -703,12 +703,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 934324894}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 82898477a32179348b117857f0812df9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  moveSpeed: 10
+  canMove: 1
 --- !u!54 &934324897
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -766,8 +767,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73866e83631c62d4bbfc4e1ed6861052, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
-  canMove: 1
 --- !u!1 &1177653183
 GameObject:
   m_ObjectHideFlags: 0
@@ -1323,10 +1322,6 @@ PrefabInstance:
     - target: {fileID: 3540352468643827044, guid: a46441539f4f6114f96dcb7188962976, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7519484645307663104, guid: a46441539f4f6114f96dcb7188962976, type: 3}
-      propertyPath: resetPrefab
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

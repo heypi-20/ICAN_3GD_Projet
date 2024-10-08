@@ -126,7 +126,7 @@ public class S_DestructibleWall : MonoBehaviour
         if (destructionEffect != null)
         {
             Destroy(activeEffect);
-            activeEffect = Instantiate(destructionEffect, destroyedWallPosition, Quaternion.identity,this.transform);
+            activeEffect = Instantiate(destructionEffect, destroyedWallPosition, Quaternion.identity);
         }
     }
 
