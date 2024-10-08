@@ -4,24 +4,21 @@ using UnityEngine;
 
 public class S_PlayerRotation : MonoBehaviour
 {
-
-    public float moveSpeed = 10f;  // Vitesse de déplacement
-    public bool canMove = true;    // Booléen pour activer ou désactiver le mouvement
-
     private Rigidbody rb;          // Référence au Rigidbody
+    private S_PlayerController pc;
 
     void Start()
     {
         // Obtenir le Rigidbody attaché à l'objet
         rb = GetComponent<Rigidbody>();
+        
+        pc = GetComponent<S_PlayerController>();
     }
     void Update()
     {
         RotateTowardsMouse();
-        if (canMove)
-        {
-            MovePlayer();
-        }
+
+        pc.MovePlayer();
     }
 
     // Faire tourner l'objet vers la position de la souris
@@ -45,21 +42,5 @@ public class S_PlayerRotation : MonoBehaviour
             // Utiliser LookAt pour que l'objet tourne vers le point de la souris, en verrouillant l'axe Y
             transform.LookAt(new Vector3(pointToLook.x, transform.position.y, pointToLook.z));
         }
-    }
-
-    void MovePlayer()
-    {
-        // Récupérer les entrées brutes de l'utilisateur pour les axes X (gauche/droite) et Z (avant/arrière)
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-
-        // Créer une direction de mouvement basée sur les axes X et Z (sans tenir compte de la rotation du joueur)
-        Vector3 moveDirection = new Vector3(h, 0f, v);
-
-        // Normaliser la direction pour éviter que le mouvement diagonal soit plus rapide
-        Vector3 normMove = moveDirection.normalized;
-
-        // Mettre à jour la vélocité du Rigidbody pour déplacer le joueur uniquement sur l'axe XZ
-        rb.velocity = new Vector3(normMove.x * moveSpeed, rb.velocity.y, normMove.z * moveSpeed);
     }
 }
