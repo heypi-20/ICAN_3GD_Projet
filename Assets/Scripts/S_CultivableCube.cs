@@ -42,7 +42,6 @@ public class S_CultivableCube : MonoBehaviour
 
     void Start()
     {
-        isGrowing = false;
         // Obtenir le Rigidbody pour gérer le déplacement physique
         rb = GetComponent<Rigidbody>();
 
