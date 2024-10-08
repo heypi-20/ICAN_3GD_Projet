@@ -7,7 +7,6 @@ public class S_CameraFollow : MonoBehaviour
     public Transform player;  
     public Vector3 offset;    
 
-    
     void LateUpdate()
     {
         
