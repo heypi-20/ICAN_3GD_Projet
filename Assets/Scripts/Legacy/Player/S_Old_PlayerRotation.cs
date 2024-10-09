@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class S_PlayerRotation : MonoBehaviour
+public class S_Old_PlayerRotation : MonoBehaviour
 {
     private Rigidbody rb;          // Référence au Rigidbody
-    private S_PlayerController pc;
+    private S_Old_PlayerController pc;
 
     void Start()
     {
         // Obtenir le Rigidbody attaché à l'objet
         rb = GetComponent<Rigidbody>();
         
-        pc = GetComponent<S_PlayerController>();
+        pc = GetComponent<S_Old_PlayerController>();
     }
     void Update()
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class S_DestructibleWall : MonoBehaviour
+public class S_Old_DestructibleWall : MonoBehaviour
 {
     public string targetTag = "Player"; // Tag de l'objet qui déclenche la désactivation du mur
     public string rangeTag = "Enemy"; // Tag pour la détection dans la portée
@@ -30,13 +30,13 @@ public class S_DestructibleWall : MonoBehaviour
     // S'abonner à l'événement de réinitialisation lors de l'activation
     void OnEnable()
     {
-        S_ZoneResetSysteme.OnZoneReset += ResetDestroyedWall;
+        S_Old_ZoneResetSysteme.OnZoneReset += ResetDestroyedWall;
     }
 
     // Se désabonner de l'événement de réinitialisation lors de la désactivation
     void OnDisable()
     {
-        S_ZoneResetSysteme.OnZoneReset -= ResetDestroyedWall;
+        S_Old_ZoneResetSysteme.OnZoneReset -= ResetDestroyedWall;
     }
 
     void Start()

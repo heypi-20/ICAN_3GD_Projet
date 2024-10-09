@@ -4,7 +4,7 @@ using TMPro;
 using System.Collections.Generic;
 using System.Linq; // Pour des requetes SQL en general
 
-public class S_SettingMenu : MonoBehaviour
+public class S_Old_SettingMenu : MonoBehaviour
 {
     Resolution[] resolutions;
 

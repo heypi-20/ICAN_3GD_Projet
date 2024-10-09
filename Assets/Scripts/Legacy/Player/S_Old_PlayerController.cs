@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class S_PlayerController : MonoBehaviour
+public class S_Old_PlayerController : MonoBehaviour
 {
     public float moveSpeed = 10f;
     public bool canMove = true;    // Booléen pour activer ou désactiver le mouvement

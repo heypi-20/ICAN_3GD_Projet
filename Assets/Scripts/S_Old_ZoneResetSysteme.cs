@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 [System.Serializable]  // Permet à Unity de rendre cette classe visible dans l'Inspector
 
-public class RespawnableObject
+public class Old_RespawnableObject
 {
     public GameObject prefabToRespawn;  // Préfabriqué utilisé pour recréer l'objet
     [HideInInspector]
@@ -20,10 +20,10 @@ public class RespawnableObject
 }
 
 
-public class S_ZoneResetSysteme : MonoBehaviour
+public class S_Old_ZoneResetSysteme : MonoBehaviour
 {
     [Header("Reset of the objects")]
-    public List<RespawnableObject> respawnableObjects;  // Liste des objets réapparaissables
+    public List<Old_RespawnableObject> respawnableObjects;  // Liste des objets réapparaissables
     public static event Action OnZoneReset;// Définir un événement pour que d'autres objets puissent s'y abonner   
     public TextMeshProUGUI resetCountText;// Composant TextMeshPro UI pour afficher le nombre de réinitialisations
     [SerializeField] private KeyCode resetKey = KeyCode.R;// Touche configurable pour déclencher la réinitialisation de la zone
@@ -58,7 +58,7 @@ public class S_ZoneResetSysteme : MonoBehaviour
 
     private void RespawnObjects()
     {
-        foreach (RespawnableObject respawnableObject in respawnableObjects)
+        foreach (Old_RespawnableObject respawnableObject in respawnableObjects)
         {
             respawnableObject.currentRounds++;
 
@@ -76,7 +76,7 @@ public class S_ZoneResetSysteme : MonoBehaviour
         }
     }
 
-    private void HandleObjectRespawn(RespawnableObject respawnableObject)
+    private void HandleObjectRespawn(Old_RespawnableObject respawnableObject)
     {
         // Si l'option de détruire le précédent objet est activée
         if (respawnableObject.destroyPrevious && respawnableObject.currentInstance != null)

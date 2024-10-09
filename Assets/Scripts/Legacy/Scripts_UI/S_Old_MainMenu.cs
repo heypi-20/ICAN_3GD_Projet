@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
-public class MainMenu : MonoBehaviour
+public class S_Old_MainMenu : MonoBehaviour
 {
     [Header("Prefab")]
     public GameObject myButton;

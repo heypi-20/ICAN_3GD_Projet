@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class S_CultivableCube : MonoBehaviour
+public class S_Old_CultivableCube : MonoBehaviour
 {
     public string growthTag = "Player";  // Tag qui déclenche la croissance
     public string growingStateTag = "Growing";  // Tag assigné lors de la croissance
@@ -31,13 +31,13 @@ public class S_CultivableCube : MonoBehaviour
     // S'abonner à l'événement de réinitialisation lors de l'activation
     void OnEnable()
     {
-        S_ZoneResetSysteme.OnZoneReset += Grow;
+        S_Old_ZoneResetSysteme.OnZoneReset += Grow;
     }
 
     // Se désabonner de l'événement de réinitialisation lors de la désactivation
     void OnDisable()
     {
-        S_ZoneResetSysteme.OnZoneReset -= Grow;
+        S_Old_ZoneResetSysteme.OnZoneReset -= Grow;
     }
 
     void Start()

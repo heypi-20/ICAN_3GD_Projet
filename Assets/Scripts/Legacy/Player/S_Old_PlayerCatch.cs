@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class S_PlayerCatch : MonoBehaviour
+public class S_Old_PlayerCatch : MonoBehaviour
 {
     public Transform catchPoint;
     public float checkCubeRadius = 2f;

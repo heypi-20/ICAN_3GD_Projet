@@ -2496,7 +2496,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 158486598}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 7
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -6407,7 +6407,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 436797865}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 7
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -8833,17 +8833,17 @@ MonoBehaviour:
     currentInstance: {fileID: 0}
     respawnLocation: {fileID: 454138227}
     shouldRespawn: 1
-    destroyPrevious: 1
-    respawnAfterRounds: 1
+    destroyPrevious: 0
+    respawnAfterRounds: 0
     currentRounds: 0
-  - prefabToRespawn: {fileID: 934324894}
+  - prefabToRespawn: {fileID: 1475850379687622011}
     currentInstance: {fileID: 0}
     respawnLocation: {fileID: 1637566852}
-    shouldRespawn: 0
+    shouldRespawn: 1
     destroyPrevious: 0
-    respawnAfterRounds: 1
+    respawnAfterRounds: 0
     currentRounds: 0
-  resetCountText: {fileID: 1177653185}
+  resetCountText: {fileID: 0}
   resetKey: 114
 --- !u!4 &593939851
 Transform:
@@ -14534,11 +14534,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 925950421}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &934324894 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6733017890105815651, guid: e1ca20fe450b0bf4d95cad6b119fc6e6, type: 3}
-  m_PrefabInstance: {fileID: 1475850379687622010}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &934324898 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6385740570311772027, guid: e1ca20fe450b0bf4d95cad6b119fc6e6, type: 3}
@@ -27097,7 +27092,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1766492313}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 7
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -33189,10 +33184,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2368631097503076296, guid: e1ca20fe450b0bf4d95cad6b119fc6e6, type: 3}
-      propertyPath: throwForce
-      value: 150
-      objectReference: {fileID: 0}
     - target: {fileID: 6385740570311772027, guid: e1ca20fe450b0bf4d95cad6b119fc6e6, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.43
@@ -33242,6 +33233,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e1ca20fe450b0bf4d95cad6b119fc6e6, type: 3}
+--- !u!1 &1475850379687622011 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6733017890105815651, guid: e1ca20fe450b0bf4d95cad6b119fc6e6, type: 3}
+  m_PrefabInstance: {fileID: 1475850379687622010}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1984629008720198059
 GameObject:
   m_ObjectHideFlags: 0
@@ -33491,7 +33487,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1984629008720198059}
   serializedVersion: 4
-  m_Mass: 10
+  m_Mass: 7
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
