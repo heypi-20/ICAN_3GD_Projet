@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class S_PlayerGrabAndThrow : MonoBehaviour
@@ -22,7 +23,7 @@ public class S_PlayerGrabAndThrow : MonoBehaviour
 
     [Header("Catch Point Settings")]
     [Tooltip("Le point où l'objet attrapé suivra")]
-    public Transform catchPoint; // Le point de la scène où l'objet attrapé sera attaché
+    public Transform catchPoint; 
 
     private Rigidbody grabbedObject = null;
     private bool isGrabbing = false;  // Bool pour suivre si le joueur est en train de tenir un objet
@@ -41,8 +42,8 @@ public class S_PlayerGrabAndThrow : MonoBehaviour
         // Si un objet est attrapé, il suit toujours le catchPoint
         if (grabbedObject != null)
         {
-            grabbedObject.transform.position = catchPoint.position;  // Synchroniser la position avec le catchPoint
-            grabbedObject.transform.rotation = catchPoint.rotation;  // Synchroniser la rotation avec le catchPoint
+            grabbedObject.MovePosition(catchPoint.position);  // Synchroniser la position avec le catchPoint
+            grabbedObject.MoveRotation(catchPoint.rotation);  // Synchroniser la rotation avec le catchPoint
         }
     }
 
@@ -56,7 +57,7 @@ public class S_PlayerGrabAndThrow : MonoBehaviour
         {
             if (hit.collider != null && hit.collider.GetComponent<Rigidbody>() != null&& !hit.collider.GetComponent<Rigidbody>().isKinematic)
             {
-                grabbedObject = hit.collider.GetComponent<Rigidbody>();
+                grabbedObject = hit.collider.attachedRigidbody;
                 grabbedObject.GetComponent<Collider>().enabled = false;  // Désactiver le collider pendant l'attrape
                 grabbedObject.useGravity = false;
                 isGrabbing = true;  // Marquer que l'objet est maintenant attrapé
@@ -70,9 +71,14 @@ public class S_PlayerGrabAndThrow : MonoBehaviour
         // Calculer la direction du lancer en ajoutant un angle pour créer une trajectoire en arc
         Vector3 throwDirection = Quaternion.AngleAxis(-throwAngle, transform.right) * transform.forward;
         // Appliquer une force pour lancer l'objet
-        grabbedObject.AddForce(throwDirection * throwForce, ForceMode.Impulse);
+        float adjustedThrowForce = throwForce / grabbedObject.mass;
+        grabbedObject.AddForce(throwDirection * adjustedThrowForce, ForceMode.Impulse);
         grabbedObject.GetComponent<Collider>().enabled = true;  // Réactiver le collider
         grabbedObject.useGravity = true;
+        if (grabbedObject.GetComponent<ThrownByThePlayer>() == null)
+        {
+            grabbedObject.AddComponent<ThrownByThePlayer>();
+        }
         grabbedObject = null;  // Remettre à zéro l'objet attrapé
         isGrabbing = false;  // Le joueur ne tient plus d'objet
     }

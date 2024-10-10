@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class S_PlayerGrabAndThrowMultiple : MonoBehaviour
@@ -10,7 +11,7 @@ public class S_PlayerGrabAndThrowMultiple : MonoBehaviour
     [Tooltip("Distance entre le joueur et la zone de prise")]
     public float grabBoxDistance = 1f;
     [Tooltip("Le nombre maximum d'objets que le joueur peut attraper")]
-    public int maxGrabCount = 5;  // 限制最多抓取的数量
+    public int maxGrabCount = 5;
     [Tooltip("La force appliquée lors du lancer")]
     public float throwForce = 10f;
     [Tooltip("L'angle à appliquer pour ajouter un arc lors du lancer (degrés)")]
@@ -20,19 +21,18 @@ public class S_PlayerGrabAndThrowMultiple : MonoBehaviour
     [Tooltip("La touche utilisée pour attraper")]
     public KeyCode grabKey = KeyCode.E;
     [Tooltip("La touche utilisée pour lancer un par un")]
-    public KeyCode throwKey = KeyCode.F;  // 用来一个一个扔
+    public KeyCode throwKey = KeyCode.F;
     [Tooltip("La touche utilisée pour lancer tous les objets d'un coup")]
-    public KeyCode throwAllKey = KeyCode.G;  // 用来一次性全部扔
+    public KeyCode throwAllKey = KeyCode.G;
 
     [Header("Catch Point Settings")]
     [Tooltip("Le point où l'objet attrapé suivra")]
-    public Transform catchPoint; // Le point de la scène où les objets attrapés seront attachés
+    public Transform catchPoint;
     [Tooltip("Si vrai, utiliser la même touche pour lancer un par un ou tous les objets")]
-    public bool toggleThrowMode = true; // 如果为true,使用同一个按键切换扔一个或全部
-    [Tooltip("Cette option nécessite que 'toggleThrowMode' soit activé")]
-    public bool throwOneByOne = true;  // 决定是否一个一个扔
+    public bool toggleThrowMode = true;
+    [Tooltip("Cette option nécessite que 'toggleThrowMode' soit activée")]
+    public bool throwOneByOne = true;
     private List<Rigidbody> grabbedObjects = new List<Rigidbody>(); // Liste des objets attrapés
-    
 
     void Update()
     {
@@ -68,8 +68,8 @@ public class S_PlayerGrabAndThrowMultiple : MonoBehaviour
         {
             foreach (var obj in grabbedObjects)
             {
-                obj.transform.position = catchPoint.position;
-                obj.transform.rotation = catchPoint.rotation;
+                obj.MovePosition(catchPoint.position); // Mettre l'objet à la position du catchPoint
+                obj.MoveRotation(catchPoint.rotation); // Ajuster la rotation de l'objet à celle du catchPoint
             }
         }
     }
@@ -79,7 +79,7 @@ public class S_PlayerGrabAndThrowMultiple : MonoBehaviour
     {
         if (grabbedObjects.Count >= maxGrabCount)
         {
-            Debug.Log("Maximum grab limit reached.");
+            Debug.Log("Maximum grab limit reached."); // Afficher un message quand la limite est atteinte
             return;
         }
 
@@ -89,9 +89,9 @@ public class S_PlayerGrabAndThrowMultiple : MonoBehaviour
         {
             if (hit.collider != null && hit.collider.GetComponent<Rigidbody>() != null && !hit.collider.GetComponent<Rigidbody>().isKinematic)
             {
-                Rigidbody grabbedObject = hit.collider.GetComponent<Rigidbody>();
+                Rigidbody grabbedObject = hit.collider.attachedRigidbody; // Récupérer le Rigidbody de l'objet
                 grabbedObject.GetComponent<Collider>().enabled = false;  // Désactiver le collider pendant l'attrape
-                grabbedObject.useGravity = false;
+                grabbedObject.useGravity = false; // Désactiver la gravité
                 grabbedObjects.Add(grabbedObject);  // Ajouter à la liste des objets attrapés
             }
         }
@@ -102,14 +102,18 @@ public class S_PlayerGrabAndThrowMultiple : MonoBehaviour
     {
         if (grabbedObjects.Count > 0)
         {
-            Rigidbody objToThrow = grabbedObjects[0];
+            Rigidbody objToThrow = grabbedObjects[0]; // Récupérer le premier objet attrapé
             grabbedObjects.RemoveAt(0);  // Enlever l'objet de la liste
 
             // Lancer l'objet
-            Vector3 throwDirection = Quaternion.AngleAxis(-throwAngle, transform.right) * transform.forward;
-            objToThrow.AddForce(throwDirection * throwForce, ForceMode.Impulse);
+            Vector3 throwDirection = Quaternion.AngleAxis(-throwAngle, transform.right) * transform.forward; // Calculer la direction du lancer avec un angle
+            objToThrow.AddForce(throwDirection * throwForce, ForceMode.Impulse); // Appliquer la force de lancer
             objToThrow.GetComponent<Collider>().enabled = true;  // Réactiver le collider
-            objToThrow.useGravity = true;
+            if (objToThrow.GetComponent<ThrownByThePlayer>() == null)
+            {
+                objToThrow.AddComponent<ThrownByThePlayer>();// Ajouter un composant indiquant que l'objet a été lancé
+            } 
+            objToThrow.useGravity = true; // Réactiver la gravité
         }
     }
 
@@ -118,10 +122,14 @@ public class S_PlayerGrabAndThrowMultiple : MonoBehaviour
     {
         foreach (var obj in grabbedObjects)
         {
-            Vector3 throwDirection = Quaternion.AngleAxis(-throwAngle, transform.right) * transform.forward;
-            obj.AddForce(throwDirection * throwForce, ForceMode.Impulse);
+            Vector3 throwDirection = Quaternion.AngleAxis(-throwAngle, transform.right) * transform.forward; // Calculer la direction du lancer avec un angle
+            obj.AddForce(throwDirection * throwForce, ForceMode.Impulse); // Appliquer la force de lancer
             obj.GetComponent<Collider>().enabled = true;  // Réactiver le collider
-            obj.useGravity = true;
+            if (obj.GetComponent<ThrownByThePlayer>() == null)
+            {
+                obj.AddComponent<ThrownByThePlayer>();
+            }
+            obj.useGravity = true; // Réactiver la gravité
         }
         grabbedObjects.Clear();  // Vider la liste des objets attrapés après les avoir tous lancés
     }
@@ -137,7 +145,7 @@ public class S_PlayerGrabAndThrowMultiple : MonoBehaviour
         // Vérifier si l'objet touché a un Rigidbody et n'est pas cinématique (donc grabable)
         if (isHit && hit.collider != null)
         {
-            Rigidbody hitRigidbody = hit.collider.GetComponent<Rigidbody>();
+            Rigidbody hitRigidbody = hit.collider.GetComponent<Rigidbody>(); // Récupérer le Rigidbody de l'objet touché
             if (hitRigidbody != null && !hitRigidbody.isKinematic)
             {
                 Gizmos.color = Color.red; // Si l'objet est grabable, changer la couleur en rouge
@@ -154,6 +162,6 @@ public class S_PlayerGrabAndThrowMultiple : MonoBehaviour
 
         // Afficher la zone de BoxCast pour attraper des objets, ajustée à la rotation du joueur
         Gizmos.matrix = Matrix4x4.TRS(transform.position + transform.forward * (grabBoxDistance / 2), transform.rotation, Vector3.one);
-        Gizmos.DrawWireCube(Vector3.zero, grabBoxSize);
+        Gizmos.DrawWireCube(Vector3.zero, grabBoxSize); // Dessiner le cube pour visualiser la zone de BoxCast
     }
 }
