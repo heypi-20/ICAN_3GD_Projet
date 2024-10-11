@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1453220878777448802
+--- !u!1 &4598187707729358796
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,47 +8,49 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5801800058434493559}
-  - component: {fileID: 3979015195362778193}
-  - component: {fileID: 8834972016147676349}
-  - component: {fileID: 6582941016571943572}
+  - component: {fileID: 8186762347510221113}
+  - component: {fileID: 8094808345736306756}
+  - component: {fileID: 8951008548406688358}
+  - component: {fileID: 7573667411993343941}
+  - component: {fileID: 7251046983522231016}
+  - component: {fileID: 7438576973981081573}
   m_Layer: 0
-  m_Name: Cube
-  m_TagString: Cultivable
+  m_Name: Pre_DestructibleWall
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5801800058434493559
+--- !u!4 &8186762347510221113
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1453220878777448802}
+  m_GameObject: {fileID: 4598187707729358796}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 527283867264360133}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &3979015195362778193
+--- !u!33 &8094808345736306756
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1453220878777448802}
+  m_GameObject: {fileID: 4598187707729358796}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &8834972016147676349
+--- !u!23 &8951008548406688358
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1453220878777448802}
+  m_GameObject: {fileID: 4598187707729358796}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -84,69 +86,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6582941016571943572
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1453220878777448802}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &7726342321974323781
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 527283867264360133}
-  - component: {fileID: 1501028411679781694}
-  - component: {fileID: 3918822148479038404}
-  - component: {fileID: 263472974306390222}
-  m_Layer: 0
-  m_Name: Pre_CultivableCube
-  m_TagString: Cultivable
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &527283867264360133
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7726342321974323781}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 5801800058434493559}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &1501028411679781694
+--- !u!54 &7573667411993343941
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7726342321974323781}
+  m_GameObject: {fileID: 4598187707729358796}
   serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
@@ -163,17 +109,17 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &3918822148479038404
+--- !u!65 &7251046983522231016
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7726342321974323781}
+  m_GameObject: {fileID: 4598187707729358796}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -188,26 +134,25 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &263472974306390222
+--- !u!114 &7438576973981081573
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7726342321974323781}
+  m_GameObject: {fileID: 4598187707729358796}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ef12ec4d3ffa83489458fe2b32993f9, type: 3}
+  m_Script: {fileID: 11500000, guid: 925b2853b8d6fe04ba10af1d445e7b8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  growthTag: Player
-  growingStateTag: Growing
-  isGrowing: 0
-  visualizeRange: 1
-  growingColor: {r: 0.7325116, g: 0.8773585, b: 0.7325116, a: 1}
-  defaultColor: {r: 1, g: 1, b: 1, a: 1}
-  growthPrefab: {fileID: 1453220878777448802}
-  growthRange: {x: 1, y: 0.32, z: 1}
-  growthPerCycle: 1
-  destroyAllOnHit: 1
-  destroyAmountPerHit: 0
+  destroyTouchingObject: 0
+  destructionEffect: {fileID: 2014564717100583912, guid: de8051323aef0554fb4a4ee3dd46ebed, type: 3}
+  shatterPrefab: {fileID: 0}
+  additionalPrefab: {fileID: 119670325412316827, guid: 45cad6e4d7b17be4795387c37ed5fc88, type: 3}
+  numberOfShatterPieces: 0
+  shatterForce: 10
+  DestroyTag: Growing
+  regrowThreshold: 3
+  additionalPrefabSpawnRound: 1
+  destroyPiecesOnReset: 1
