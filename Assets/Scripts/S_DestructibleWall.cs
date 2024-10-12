@@ -72,7 +72,7 @@ public class S_DestructibleWall : MonoBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         DetectGrowingObjects(); // Appeler la méthode pour détecter les objets en croissance autour du mur
     }

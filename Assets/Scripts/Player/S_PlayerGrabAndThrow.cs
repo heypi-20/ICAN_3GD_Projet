@@ -23,13 +23,21 @@ public class S_PlayerGrabAndThrow : MonoBehaviour
 
     [Header("Catch Point Settings")]
     [Tooltip("Le point où l'objet attrapé suivra")]
-    public Transform catchPoint; 
-
+    public Transform catchPoint;
+    public bool GizmosOn;
     private Rigidbody grabbedObject = null;
+    private void RemoveNullReferences()
+    {
+        if (grabbedObject == null)
+        {
+            isGrabbing = false;
+        }
+    }
     private bool isGrabbing = false;  // Bool pour suivre si le joueur est en train de tenir un objet
 
     void Update()
     {
+        RemoveNullReferences();
         if (Input.GetKeyDown(grabKey) && !isGrabbing)
         {
             TryGrabObject();  // Tenter de saisir un objet
@@ -50,17 +58,20 @@ public class S_PlayerGrabAndThrow : MonoBehaviour
     // Essayer d'attraper un objet
     private void TryGrabObject()
     {
-        RaycastHit hit;
-
-        // Utilisation de BoxCast pour détecter les objets avec une taille et distance ajustables
-        if (Physics.BoxCast(transform.position, grabBoxSize / 2, transform.forward, out hit, transform.rotation, grabBoxDistance))
+        Collider[] colliders = Physics.OverlapBox(transform.position + transform.forward * grabBoxDistance / 2, grabBoxSize / 2, transform.rotation);
+        foreach (var collider in colliders)
         {
-            if (hit.collider != null && hit.collider.GetComponent<Rigidbody>() != null&& !hit.collider.GetComponent<Rigidbody>().isKinematic)
+            if (collider != null && collider.GetComponent<Rigidbody>() != null && !collider.GetComponent<Rigidbody>().isKinematic)
             {
-                grabbedObject = hit.collider.attachedRigidbody;
+                grabbedObject = collider.attachedRigidbody;
                 grabbedObject.GetComponent<Collider>().enabled = false;  // Désactiver le collider pendant l'attrape
                 grabbedObject.useGravity = false;
+                if (grabbedObject.GetComponent<CaughtByPlayer>() == null)
+                {
+                    grabbedObject.AddComponent<CaughtByPlayer>();
+                }
                 isGrabbing = true;  // Marquer que l'objet est maintenant attrapé
+                break; // Attraper uniquement un objet à la fois
             }
         }
     }
@@ -68,6 +79,8 @@ public class S_PlayerGrabAndThrow : MonoBehaviour
     // Relâcher et lancer l'objet
     private void ThrowObject()
     {
+        RemoveNullReferences();
+        if (grabbedObject == null) return;
         // Calculer la direction du lancer en ajoutant un angle pour créer une trajectoire en arc
         Vector3 throwDirection = Quaternion.AngleAxis(-throwAngle, transform.right) * transform.forward;
         // Appliquer une force pour lancer l'objet
@@ -75,7 +88,12 @@ public class S_PlayerGrabAndThrow : MonoBehaviour
         grabbedObject.AddForce(throwDirection * adjustedThrowForce, ForceMode.Impulse);
         grabbedObject.GetComponent<Collider>().enabled = true;  // Réactiver le collider
         grabbedObject.useGravity = true;
-        if (grabbedObject.GetComponent<ThrownByThePlayer>() == null&&grabbedObject.GetComponent<S_RemoveComponent>()!=null)
+        if (grabbedObject.GetComponent<CaughtByPlayer>() != null)
+        {
+            CaughtByPlayer caughtByPlayer = grabbedObject.GetComponent<CaughtByPlayer>();
+            Destroy(caughtByPlayer);
+        }
+        if (grabbedObject.GetComponent<ThrownByThePlayer>() == null && grabbedObject.GetComponent<S_RemoveComponent>() != null)
         {
             grabbedObject.AddComponent<ThrownByThePlayer>();
         }
@@ -83,36 +101,24 @@ public class S_PlayerGrabAndThrow : MonoBehaviour
         isGrabbing = false;  // Le joueur ne tient plus d'objet
     }
 
-    // Visualiser la zone de BoxCast pour l'attrape
+    // Visualiser la zone de OverlapBox pour l'attrape
     private void OnDrawGizmos()
     {
-        RaycastHit hit;
-
-        // Effectuer un BoxCast pour vérifier s'il y a un objet dans la zone de prise
-        bool isHit = Physics.BoxCast(transform.position, grabBoxSize / 2, transform.forward, out hit, transform.rotation, grabBoxDistance);
-
-        // Vérifier si l'objet touché a un Rigidbody et n'est pas cinématique (donc grabable)
-        if (isHit && hit.collider != null)
+        if (!GizmosOn) return;
+        Collider[] colliders = Physics.OverlapBox(transform.position + transform.forward * grabBoxDistance / 2, grabBoxSize / 2, transform.rotation);
+        bool hasGrabbableObjects = false;
+        foreach (var collider in colliders)
         {
-            Rigidbody hitRigidbody = hit.collider.GetComponent<Rigidbody>();
-            // Vérifier que l'objet a un Rigidbody et qu'il n'est pas isKinematic, donc grabable
-            if (hitRigidbody != null && !hitRigidbody.isKinematic)
+            if (collider != null && collider.GetComponent<Rigidbody>() != null && !collider.GetComponent<Rigidbody>().isKinematic)
             {
-                Gizmos.color = Color.red; // Si l'objet est grabable, changer la couleur en rouge
-            }
-            else
-            {
-                Gizmos.color = Color.yellow; // Sinon, laisser la couleur en jaune
+                hasGrabbableObjects = true;
+                break;
             }
         }
-        else
-        {
-            Gizmos.color = Color.yellow; // Aucun objet détecté
-        }
+        Gizmos.color = hasGrabbableObjects ? Color.red : Color.yellow;
 
-        // Afficher la zone de BoxCast pour attraper des objets, ajustée à la rotation du joueur
+        // Afficher la zone de OverlapBox pour attraper des objets, ajustée à la rotation du joueur
         Gizmos.matrix = Matrix4x4.TRS(transform.position + transform.forward * (grabBoxDistance / 2), transform.rotation, Vector3.one);
         Gizmos.DrawWireCube(Vector3.zero, grabBoxSize);
     }
-
 }
