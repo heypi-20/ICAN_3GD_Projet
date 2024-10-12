@@ -75,7 +75,7 @@ public class S_PlayerGrabAndThrow : MonoBehaviour
         grabbedObject.AddForce(throwDirection * adjustedThrowForce, ForceMode.Impulse);
         grabbedObject.GetComponent<Collider>().enabled = true;  // Réactiver le collider
         grabbedObject.useGravity = true;
-        if (grabbedObject.GetComponent<ThrownByThePlayer>() == null)
+        if (grabbedObject.GetComponent<ThrownByThePlayer>() == null&&grabbedObject.GetComponent<S_RemoveComponent>()!=null)
         {
             grabbedObject.AddComponent<ThrownByThePlayer>();
         }

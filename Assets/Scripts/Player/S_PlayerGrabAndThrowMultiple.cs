@@ -109,7 +109,7 @@ public class S_PlayerGrabAndThrowMultiple : MonoBehaviour
             Vector3 throwDirection = Quaternion.AngleAxis(-throwAngle, transform.right) * transform.forward; // Calculer la direction du lancer avec un angle
             objToThrow.AddForce(throwDirection * throwForce, ForceMode.Impulse); // Appliquer la force de lancer
             objToThrow.GetComponent<Collider>().enabled = true;  // Réactiver le collider
-            if (objToThrow.GetComponent<ThrownByThePlayer>() == null)
+            if (objToThrow.GetComponent<ThrownByThePlayer>() == null && objToThrow.GetComponent<S_RemoveComponent>() != null)
             {
                 objToThrow.AddComponent<ThrownByThePlayer>();// Ajouter un composant indiquant que l'objet a été lancé
             } 
