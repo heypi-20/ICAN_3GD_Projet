@@ -446,6 +446,37 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
+--- !u!1 &141774453
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 141774454}
+  m_Layer: 0
+  m_Name: Spawnmarron
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &141774454
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 141774453}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.62, y: 1.4, z: -10.9}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 279602922}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &156695769
 GameObject:
   m_ObjectHideFlags: 0
@@ -1109,7 +1140,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 279602922}
-  - component: {fileID: 279602921}
+  - component: {fileID: 279602923}
   m_Layer: 0
   m_Name: SysZoneReset
   m_TagString: Untagged
@@ -1117,35 +1148,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &279602921
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 279602920}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8efa2748cab05f4c971272768aaaf4e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  respawnableObjects:
-  - prefabToRespawn: {fileID: 1520848676}
-    currentInstance: {fileID: 0}
-    respawnLocation: {fileID: 2040417481}
-    shouldRespawn: 0
-    destroyPrevious: 0
-    respawnAfterRounds: 0
-    currentRounds: 0
-  - prefabToRespawn: {fileID: 7726342321974323781, guid: 8dc7decb38e98034296abf0d59466bc6, type: 3}
-    currentInstance: {fileID: 0}
-    respawnLocation: {fileID: 2040417481}
-    shouldRespawn: 1
-    destroyPrevious: 0
-    respawnAfterRounds: 0
-    currentRounds: 0
-  resetCountText: {fileID: 331318696}
-  resetKey: 114
 --- !u!4 &279602922
 Transform:
   m_ObjectHideFlags: 0
@@ -1160,8 +1162,51 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2040417481}
+  - {fileID: 141774454}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &279602923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 279602920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a88844e133faf4f8778d70deca310d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  respawnableObjects:
+  - prefabToRespawn: {fileID: 1520848676}
+    currentInstance: {fileID: 0}
+    respawnLocation: {fileID: 2040417481}
+    shouldRespawn: 0
+    destroyPrevious: 0
+    destroyPlayerItem: 0
+    respawnAfterRounds: 0
+    currentRounds: 0
+    isHandledByPlayer: 0
+  - prefabToRespawn: {fileID: 7726342321974323781, guid: 8dc7decb38e98034296abf0d59466bc6, type: 3}
+    currentInstance: {fileID: 0}
+    respawnLocation: {fileID: 2040417481}
+    shouldRespawn: 1
+    destroyPrevious: 1
+    destroyPlayerItem: 0
+    respawnAfterRounds: 0
+    currentRounds: 0
+    isHandledByPlayer: 0
+  - prefabToRespawn: {fileID: 119670325412316827, guid: 45cad6e4d7b17be4795387c37ed5fc88, type: 3}
+    currentInstance: {fileID: 0}
+    respawnLocation: {fileID: 141774454}
+    shouldRespawn: 1
+    destroyPrevious: 1
+    destroyPlayerItem: 0
+    respawnAfterRounds: 0
+    currentRounds: 0
+    isHandledByPlayer: 0
+  resetCountText: {fileID: 0}
+  resetKey: 114
 --- !u!1 &331318695
 GameObject:
   m_ObjectHideFlags: 0
@@ -6967,6 +7012,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pre_DestructibleWall
       objectReference: {fileID: 0}
+    - target: {fileID: 7438576973981081573, guid: e6360871e08dd804b98336c29b3cef6f, type: 3}
+      propertyPath: regrowThreshold
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8186762347510221113, guid: e6360871e08dd804b98336c29b3cef6f, type: 3}
       propertyPath: m_LocalScale.x
       value: 3.613456
@@ -9218,6 +9267,10 @@ PrefabInstance:
     - target: {fileID: 4598187707729358796, guid: e6360871e08dd804b98336c29b3cef6f, type: 3}
       propertyPath: m_Name
       value: Pre_DestructibleWall (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7438576973981081573, guid: e6360871e08dd804b98336c29b3cef6f, type: 3}
+      propertyPath: regrowThreshold
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8186762347510221113, guid: e6360871e08dd804b98336c29b3cef6f, type: 3}
       propertyPath: m_LocalScale.x
@@ -12053,7 +12106,7 @@ Transform:
   m_GameObject: {fileID: 2040417480}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.45, y: 1.85, z: -8.2}
+  m_LocalPosition: {x: 3.87, y: 1.85, z: -8.98}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
