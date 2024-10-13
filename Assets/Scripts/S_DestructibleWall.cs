@@ -51,13 +51,13 @@ public class S_DestructibleWall : MonoBehaviour
     // S'abonner à l'événement de réinitialisation lors de l'activation de l'objet
     void OnEnable()
     {
-        S_Old_ZoneResetSysteme.OnZoneReset += ResetDestroyedWall; // Ajouter la méthode ResetDestroyedWall à l'événement OnZoneReset
+        S_ZoneResetSysteme.OnZoneReset += ResetDestroyedWall; // Ajouter la méthode ResetDestroyedWall à l'événement OnZoneReset
     }
 
     // Se désabonner de l'événement de réinitialisation lors de la désactivation de l'objet
     void OnDisable()
     {
-        S_Old_ZoneResetSysteme.OnZoneReset -= ResetDestroyedWall; // Retirer la méthode ResetDestroyedWall de l'événement OnZoneReset
+        S_ZoneResetSysteme.OnZoneReset -= ResetDestroyedWall; // Retirer la méthode ResetDestroyedWall de l'événement OnZoneReset
     }
 
     void Start()
