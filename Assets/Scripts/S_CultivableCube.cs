@@ -34,12 +34,12 @@ public class S_CultivableCube : MonoBehaviour
 
     void OnEnable()
     {
-        S_Old_ZoneResetSysteme.OnZoneReset += Grow; // S'abonner à l'événement de reset de zone
+        S_ZoneResetSysteme.OnZoneReset += Grow; // S'abonner à l'événement de reset de zone
     }
 
     void OnDisable()
     {
-        S_Old_ZoneResetSysteme.OnZoneReset -= Grow; // Se désabonner de l'événement de reset de zone
+        S_ZoneResetSysteme.OnZoneReset -= Grow; // Se désabonner de l'événement de reset de zone
     }
 
     void Start()
