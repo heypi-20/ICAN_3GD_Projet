@@ -105,8 +105,17 @@ public class S_ZoneResetSysteme : MonoBehaviour
         {
             if (respawnableObject.currentInstance.GetComponent<CaughtByPlayer>() == null)
             {
-                // Si l'objet n'a pas été pris par le joueur, le détruire
-                Destroy(respawnableObject.currentInstance);
+                if (respawnableObject.currentInstance.GetComponent<S_CultivableCube>() == null)
+                {
+                    // Si l'objet n'a pas été pris par le joueur et ne contient pas le script du cube cultivable
+                    //, le détruire.
+                    Destroy(respawnableObject.currentInstance);
+                }
+                else if (!respawnableObject.currentInstance.GetComponent<S_CultivableCube>().isGrowing)
+                {
+                    Destroy(respawnableObject.currentInstance);
+                }
+               
             }
             else
             {
@@ -143,8 +152,17 @@ public class S_ZoneResetSysteme : MonoBehaviour
             // Déplacer l'objet à sa position initiale
             if (respawnableObject.currentInstance != null)
             {
-                respawnableObject.currentInstance.transform.position = respawnableObject.respawnLocation.position;
-                respawnableObject.currentInstance.transform.rotation = respawnableObject.respawnLocation.rotation;
+                if (respawnableObject.currentInstance.GetComponent<S_CultivableCube>()==null)
+                {
+                    respawnableObject.currentInstance.transform.position = respawnableObject.respawnLocation.position;
+                    respawnableObject.currentInstance.transform.rotation = respawnableObject.respawnLocation.rotation;
+                }
+                else if (!respawnableObject.currentInstance.GetComponent<S_CultivableCube>().isGrowing)
+                {
+                    respawnableObject.currentInstance.transform.position = respawnableObject.respawnLocation.position;
+                    respawnableObject.currentInstance.transform.rotation = respawnableObject.respawnLocation.rotation;
+                }
+                
             }
         }
     }
