@@ -61,7 +61,7 @@ public class S_PlayerGrabAndThrow : MonoBehaviour
         Collider[] colliders = Physics.OverlapBox(transform.position + transform.forward * grabBoxDistance / 2, grabBoxSize / 2, transform.rotation);
         foreach (var collider in colliders)
         {
-            if (collider != null && collider.GetComponent<Rigidbody>() != null && !collider.GetComponent<Rigidbody>().isKinematic)
+            if (collider != null && collider.GetComponent<Rigidbody>() != null && !collider.GetComponent<Rigidbody>().isKinematic && collider.GetComponent<S_PlayerGrabAndThrow>()==null)
             {
                 grabbedObject = collider.attachedRigidbody;
                 grabbedObject.GetComponent<Collider>().enabled = false;  // Désactiver le collider pendant l'attrape
@@ -109,7 +109,7 @@ public class S_PlayerGrabAndThrow : MonoBehaviour
         bool hasGrabbableObjects = false;
         foreach (var collider in colliders)
         {
-            if (collider != null && collider.GetComponent<Rigidbody>() != null && !collider.GetComponent<Rigidbody>().isKinematic)
+            if (collider != null && collider.GetComponent<Rigidbody>() != null && !collider.GetComponent<Rigidbody>().isKinematic && collider.GetComponent<S_PlayerGrabAndThrow>() == null)
             {
                 hasGrabbableObjects = true;
                 break;
