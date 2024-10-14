@@ -18,12 +18,15 @@ public class S_Old_MainMenu : MonoBehaviour
 
     void Start()
     {
-        
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         // Créer un bouton pour chaque éléments présent dans la liste
         foreach (string levelName in level)
         {
             CreateButton(levelName);
         }
+        
 
     }
 
