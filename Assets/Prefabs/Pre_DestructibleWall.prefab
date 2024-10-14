@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 4717b199010ca4cb3a8a7a465ec457d2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -146,13 +146,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 925b2853b8d6fe04ba10af1d445e7b8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyTouchingObject: 0
   destructionEffect: {fileID: 2014564717100583912, guid: de8051323aef0554fb4a4ee3dd46ebed, type: 3}
   shatterPrefab: {fileID: 0}
-  additionalPrefab: {fileID: 119670325412316827, guid: 45cad6e4d7b17be4795387c37ed5fc88, type: 3}
   numberOfShatterPieces: 0
   shatterForce: 10
+  additionalPrefab: {fileID: 119670325412316827, guid: 45cad6e4d7b17be4795387c37ed5fc88, type: 3}
+  additionalPrefabSpawnRound: 1
+  destroyTouchingObject: 0
   DestroyTag: Growing
   regrowThreshold: 3
-  additionalPrefabSpawnRound: 1
   destroyPiecesOnReset: 1
