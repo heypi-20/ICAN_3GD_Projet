@@ -132,8 +132,14 @@ public class S_ZoneResetSysteme : MonoBehaviour
                 respawnableObject.respawnLocation.rotation
             );
         }
+        
         else
         {
+            if (!respawnableObject.shouldRespawn)
+            {
+                respawnableObject.currentInstance= respawnableObject.prefabToRespawn;
+            }
+            
             // Déplacer l'objet à sa position initiale
             if (respawnableObject.currentInstance != null)
             {
