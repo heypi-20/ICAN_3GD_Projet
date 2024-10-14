@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6582941016571943572}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Cultivable
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -116,10 +116,10 @@ GameObject:
   - component: {fileID: 527283867264360133}
   - component: {fileID: 1501028411679781694}
   - component: {fileID: 3918822148479038404}
-  - component: {fileID: 263472974306390222}
+  - component: {fileID: 2864019119128342194}
   m_Layer: 0
   m_Name: Pre_CultivableCube
-  m_TagString: Cultivable
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -135,7 +135,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5801800058434493559}
   m_Father: {fileID: 0}
@@ -188,7 +188,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &263472974306390222
+--- !u!114 &2864019119128342194
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -197,17 +197,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 7726342321974323781}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ef12ec4d3ffa83489458fe2b32993f9, type: 3}
+  m_Script: {fileID: 11500000, guid: 75dc319975730d14690cc44a42e88120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  growthTag: Player
-  growingStateTag: Growing
-  isGrowing: 0
-  visualizeRange: 1
-  growingColor: {r: 0.7325116, g: 0.8773585, b: 0.7325116, a: 1}
-  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  growingTag: Growing
   growthPrefab: {fileID: 1453220878777448802}
-  growthRange: {x: 1, y: 0.32, z: 1}
+  growthRange: {x: 1, y: 0, z: 1}
   growthPerCycle: 1
   destroyAllOnHit: 1
-  destroyAmountPerHit: 0
+  destroyAmountPerHit: 1
+  isGrowing: 0
+  ColorDefault: {r: 0.8962264, g: 0.8962264, b: 0.8962264, a: 1}
+  ColorGrowUp: {r: 0.9176471, g: 1, b: 0.8431373, a: 1}

@@ -4,225 +4,217 @@ using UnityEngine;
 
 public class S_CultivableCube : MonoBehaviour
 {
-    public string growthTag = "Player";  // Tag qui déclenche la croissance
-    public string growingStateTag = "Growing";  // Tag assigné lors de la croissance
-    public bool isGrowing = false;  // Indique si le cube est en mode croissance
-    public bool visualizeRange = true;  // Option de visualisation dans la scène
-    public Color growingColor = Color.green;  // Couleur lorsque le cube est en mode croissance
-    public Color defaultColor = Color.white;  // Couleur par défaut lorsque le cube n'est pas en mode croissance
+    [Tooltip("Tag attribué au cube lorsque la croissance est active")]
+    public string growingTag = "Growing";
 
-    [Space (20)]
-    [Header ("Gameplay Settings")]
-    public GameObject growthPrefab;  // Préfabriqué à générer pendant la croissance
-    public Vector3 growthRange = new Vector3(2f, 1f, 2f);  // Plage de croissance autour et au-dessus
-    public int growthPerCycle = 1;  // Nombre de blocs générés par cycle
-    public bool destroyAllOnHit = true;  // Détermine si tous les blocs sont détruits en une seule fois
-    public int destroyAmountPerHit = 1;  // Nombre de blocs à détruire par coup si destroyAllOnHit est faux
+    [Tooltip("Prefab à générer lors de la croissance")]
+    public GameObject growthPrefab;
 
-    
-    
+    [Tooltip("Plage de croissance autour et au-dessus du cube")]
+    public Vector3 growthRange = new Vector3(2f, 1f, 2f);
 
+    [Tooltip("Nombre de blocs générés par cycle de croissance")]
+    public int growthPerCycle = 1;
+
+    [Tooltip("Détermine si tous les blocs sont détruits en une seule fois lors d'un coup")]
+    public bool destroyAllOnHit = true;
+
+    [Tooltip("Nombre de blocs à détruire par coup si destroyAllOnHit est faux")]
+    public int destroyAmountPerHit = 1;
+
+    public bool isGrowing = false; // Indique si le cube est en train de croître
+
+    public Color ColorDefault; // Couleur par défaut du cube
+    public Color ColorGrowUp; // Couleur lorsque le cube est en croissance
     private Vector3 currentGrowthCenter; // La position actuelle du dernier point de croissance
-    private Rigidbody rb;  // Référence au composant Rigidbody pour gérer la physique
-
+    private Rigidbody rb; // Référence au composant Rigidbody pour gérer la physique
+    private List<GameObject> growthInstances = new List<GameObject>(); // Liste des préfabs générés lors de la croissance
     private float collisionCooldown = 1.0f; // Délai de refroidissement (en secondes)
-    private bool isCooldown = false;  // Indique si le refroidissement est actif
+    private bool isCooldown = false; // Indique si le refroidissement est actif
 
-    // S'abonner à l'événement de réinitialisation lors de l'activation
     void OnEnable()
     {
-        S_ZoneResetSysteme.OnZoneReset += Grow;
+        S_ZoneResetSysteme.OnZoneReset += Grow; // S'abonner à l'événement de reset de zone
     }
 
-    // Se désabonner de l'événement de réinitialisation lors de la désactivation
     void OnDisable()
     {
-        S_ZoneResetSysteme.OnZoneReset -= Grow;
+        S_ZoneResetSysteme.OnZoneReset -= Grow; // Se désabonner de l'événement de reset de zone
     }
 
     void Start()
     {
-        // Obtenir le Rigidbody pour gérer le déplacement physique
-        rb = GetComponent<Rigidbody>();
-
+        rb = GetComponent<Rigidbody>(); // Obtenir le Rigidbody pour gérer le déplacement physique
         if (rb == null)
         {
-            rb = gameObject.AddComponent<Rigidbody>();  // Si le Rigidbody n'existe pas, en ajouter un
+            rb = gameObject.AddComponent<Rigidbody>(); // Si le Rigidbody n'existe pas, en ajouter un
         }
-        
+        SetCubeColor(ColorDefault); // Mettre la couleur par défaut
 
-        SetCubeColor(defaultColor);  // Mettre la couleur par défaut
         if (isGrowing)
         {
-            EnterGrowingState();
+            StartGrowth(); // Démarrer la croissance si déjà activée
         }
     }
 
-    // Détecter la collision avec un objet ayant le bon tag pour démarrer la croissance ou réinitialiser
     void OnCollisionEnter(Collision collision)
     {
-        if (!isCooldown && collision.gameObject.CompareTag(growthTag))
+        if (!isCooldown && collision.gameObject.GetComponent<ThrownByThePlayer>() != null) // Vérifier si l'objet en collision a le bon composant
         {
             if (isGrowing)
             {
                 if (destroyAllOnHit)
                 {
-                    ResetGrowth();  // Tout détruire d'un coup
+                    ResetGrowth(); // Tout détruire d'un coup
                 }
                 else
                 {
-                    DestroyGrowthBlocks(destroyAmountPerHit);  // Détruire un certain nombre de blocs
+                    DestroyGrowthBlocks(destroyAmountPerHit); // Détruire un certain nombre de blocs
                 }
             }
             else
             {
-                // Démarrer la croissance si elle n'est pas active
-                isGrowing = true;
-                EnterGrowingState();
+                StartGrowth(); // Démarrer la croissance si elle n'est pas active
             }
-            Destroy(collision.gameObject);
-            // Activer le refroidissement pour empêcher les collisions rapides
-            StartCoroutine(CollisionCooldownCoroutine());
+            Destroy(collision.gameObject); // Détruire l'objet en collision
+            StartCoroutine(CollisionCooldownCoroutine()); // Activer le refroidissement pour empêcher les collisions rapides
         }
     }
 
-    public void EnterGrowingState()
+    private void StartGrowth()
     {
-        rb.isKinematic = true;  // Désactiver le mouvement physique lors de la croissance
-        currentGrowthCenter = transform.position;
-        SetTagsAndActiveCollider(growingStateTag);  // Ajouter le tag "Growing" à l'objet et ses enfants
-        SetCubeColor(growingColor);  // Changer la couleur en mode croissance
-        Debug.Log("Cube in growing mode.");
+        EnableChildColliders(); // Activer les colliders des enfants
+        AssignTagToChildren(growingTag); // Assigner le tag aux enfants
+        StartCoroutine(WaitUntilStoppedAndGrow()); // Attendre l'arrêt du cube avant de croître
     }
 
-    // Coroutine pour gérer le délai de refroidissement des collisions
-    private IEnumerator CollisionCooldownCoroutine()
+    private void EnableChildColliders()
     {
-        isCooldown = true;
-        yield return new WaitForSeconds(collisionCooldown);
-        isCooldown = false;
-    }
-
-    // Changer la couleur de tous les enfants uniquement
-    private void SetCubeColor(Color color)
-    {
-        // Parcourir tous les enfants et changer leur couleur
-        foreach (Transform child in transform)
+        foreach (Transform child in transform) // Parcourir tous les enfants
         {
-            Renderer childRenderer = child.GetComponent<Renderer>();
-            if (childRenderer != null)
+            Collider childCollider = child.GetComponent<Collider>(); // Obtenir le collider de l'enfant
+            if (childCollider != null)
             {
-                childRenderer.material.color = color;
+                childCollider.enabled = true; // Activer le collider de l'enfant
             }
         }
+    }
+
+    private void DisableChildColliders()
+    {
+        foreach (Transform child in transform) // Parcourir tous les enfants
+        {
+            Collider childCollider = child.GetComponent<Collider>(); // Obtenir le collider de l'enfant
+            if (childCollider != null)
+            {
+                childCollider.enabled = false; // Désactiver le collider de l'enfant
+            }
+        }
+    }
+
+    private IEnumerator WaitUntilStoppedAndGrow()
+    {
+        yield return new WaitForSeconds(0.1f); // Attendre un court délai
+        yield return new WaitUntil(() => rb.velocity.sqrMagnitude < 0.01f); // Attendre que la vitesse du Rigidbody soit presque nulle
+        rb.isKinematic = true; // Désactiver le mouvement physique lors de la croissance
+        isGrowing = true; // Définir le cube comme étant en croissance
+        gameObject.tag = growingTag; // Assigner le tag de croissance
+        currentGrowthCenter = transform.position; // Définir le centre de croissance actuel
+        SetCubeColor(ColorGrowUp); // Changer la couleur en mode croissance
+    }
+
+    public void Grow()
+    {
+        if (!isGrowing) return; // Ne rien faire si le cube ne croît pas
+
+        for (int i = 0; i < growthPerCycle; i++) // Générer le nombre de blocs par cycle
+        {
+            Vector3 randomPosition = currentGrowthCenter + new Vector3(
+                Random.Range(-growthRange.x, growthRange.x), // Calculer une position aléatoire dans la plage de croissance
+                Random.Range(0, growthRange.y), // Seulement vers le haut
+                Random.Range(-growthRange.z, growthRange.z)
+            );
+
+            GameObject newGrowth = Instantiate(growthPrefab, randomPosition, Quaternion.identity, this.transform); // Instancier le prefab de croissance
+            growthInstances.Add(newGrowth); // Ajouter le nouvel objet à la liste
+            currentGrowthCenter = newGrowth.transform.position; // Mettre à jour le centre de croissance
+        }
+    }
+
+    private void ResetGrowth()
+    {
+        DisableChildColliders(); // Désactiver les colliders des enfants
+        RemoveTagFromChildren(); // Retirer le tag de croissance des enfants
+        Debug.Log("Reset of the cube and deleting branches."); // Log pour déboguer
+        isGrowing = false; // Définir le cube comme n'étant plus en croissance
+        rb.isKinematic = false; // Réactiver le mouvement physique
+        gameObject.tag = "Untagged"; // Retirer le tag de croissance du cube
+        SetCubeColor(ColorDefault); // Revenir à la couleur par défaut
+
+        foreach (GameObject growth in growthInstances) // Détruire tous les blocs générés
+        {
+            Destroy(growth);
+        }
+        growthInstances.Clear(); // Vider la liste des blocs générés
     }
 
     private void DestroyGrowthBlocks(int amount)
     {
-        int blocksToDestroy = Mathf.Min(amount, transform.childCount - 1);  // S'assurer de ne pas détruire le centre
-
-        for (int i = transform.childCount - 1; i > 0 && blocksToDestroy > 0; i--)
+        int blocksToDestroy = Mathf.Min(amount, growthInstances.Count); // Déterminer le nombre de blocs à détruire
+        for (int i = 0; i < blocksToDestroy; i++)
         {
-            Destroy(transform.GetChild(i).gameObject);
-            blocksToDestroy--;
+            int lastIndex = growthInstances.Count - 1; // Obtenir l'index du dernier bloc
+            Destroy(growthInstances[lastIndex]); // Détruire le dernier bloc
+            growthInstances.RemoveAt(lastIndex); // Retirer le bloc de la liste
         }
 
-        // Si un seul bloc reste, réinitialiser la croissance
-        if (transform.childCount <= 1)
+        if (growthInstances.Count == 0) // Si tous les blocs sont détruits, réinitialiser la croissance
         {
             ResetGrowth();
         }
     }
 
-    // Croissance du cube à chaque reset
-    public void Grow()
+    private IEnumerator CollisionCooldownCoroutine()
     {
-        if (!isGrowing) return;
-
-        // Utiliser le dernier enfant comme centre de croissance
-        if (transform.childCount > 0)
-        {
-            currentGrowthCenter = transform.GetChild(transform.childCount - 1).position;
-        }
-
-        // Générer plusieurs préfabriqués selon le nombre de "growthPerCycle"
-        for (int i = 0; i < growthPerCycle; i++)
-        {
-            // Définir un point de croissance aléatoire dans la plage définie
-            Vector3 randomPosition = currentGrowthCenter + new Vector3(
-                Random.Range(-growthRange.x, growthRange.x),
-                Random.Range(0, growthRange.y),  // Seulement vers le haut
-                Random.Range(-growthRange.z, growthRange.z)
-            );
-
-            // Générer le préfabriqué à la nouvelle position
-            GameObject newGrowth = Instantiate(growthPrefab, randomPosition, Quaternion.identity, this.transform);
-
-            // Mettre à jour le centre de croissance à la nouvelle position
-            currentGrowthCenter = newGrowth.transform.position;
-
-            //Debug.Log("Nouveau préfabriqué généré à : " + randomPosition);
-        }
-        SetCubeColor(growingColor);
+        isCooldown = true; // Activer le cooldown des collisions
+        yield return new WaitForSeconds(collisionCooldown); // Attendre la fin du délai de refroidissement
+        isCooldown = false; // Désactiver le cooldown
     }
 
-    // Réinitialiser la croissance en détruisant tous les enfants sauf le centre
-    private void ResetGrowth()
+    private void SetCubeColor(Color color)
     {
-        Debug.Log("Reset of the cube and deleting branches.");
-
-        // Parcourir les enfants et détruire tous sauf le premier enfant
-        for (int i = transform.childCount - 1; i > 0; i--)
+        foreach (Transform child in transform) // Parcourir tous les enfants
         {
-            Destroy(transform.GetChild(i).gameObject);
-        }
-
-        // Remettre le cube à l'état de départ
-        isGrowing = false;
-        rb.isKinematic = false;  // Autoriser de nouveau le mouvement physique
-        RemoveTagsAndDeactiveCollider();  // Retirer le tag "Growing" de l'objet et de ses enfants
-        SetCubeColor(defaultColor);  // Revenir à la couleur par défaut
-    }
-
-    // Activer le mode croissance
-    private void SetTagsAndActiveCollider(string tag)
-    {
-        gameObject.tag = tag;
-        foreach (Transform child in transform)
-        {
-            child.gameObject.tag = tag;
-            Collider childCollider = child.GetComponent<Collider>();
-            if (childCollider != null)
+            Renderer childRenderer = child.GetComponent<Renderer>(); // Obtenir le renderer de l'enfant
+            if (childRenderer != null)
             {
-                childCollider.enabled = true;  // Activer le collider lors de la croissance
+                childRenderer.material.color = color; // Changer la couleur du matériel
             }
         }
     }
 
-    // Désactiver le mode croissance et remettre à l'état de départ
-    private void RemoveTagsAndDeactiveCollider()
+    private void AssignTagToChildren(string tag)
     {
-        gameObject.tag = "Cultivable";
-        foreach (Transform child in transform)
+        gameObject.tag = tag; // Assigner le tag au cube
+        foreach (Transform child in transform) // Parcourir tous les enfants
         {
-            child.gameObject.tag = "Cultivable";
-            Collider childCollider = child.GetComponent<Collider>();
-            if (childCollider != null)
-            {
-                childCollider.enabled = false;  // Désactiver le collider lors de la réinitialisation
-            }
+            child.tag = tag; // Assigner le tag à chaque enfant
         }
     }
 
-    // Visualiser la plage de croissance dans la scène avec des Gizmos
+    private void RemoveTagFromChildren()
+    {
+        gameObject.tag = "Untagged"; // Retirer le tag du cube
+        foreach (Transform child in transform) // Parcourir tous les enfants
+        {
+            child.tag = "Untagged"; // Retirer le tag de chaque enfant
+        }
+    }
+
     private void OnDrawGizmos()
     {
-        if (visualizeRange)
-        {
-            Vector3 gizmoCenter = currentGrowthCenter == Vector3.zero ? transform.position : currentGrowthCenter;
-            gizmoCenter += new Vector3(0, growthRange.y / 2, 0);
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireCube(gizmoCenter, growthRange);
-        }
+        Gizmos.color = Color.green; // Définir la couleur des Gizmos
+        Vector3 gizmoCenter = currentGrowthCenter == Vector3.zero ? transform.position : currentGrowthCenter; // Déterminer le centre des Gizmos
+        Gizmos.DrawWireCube(gizmoCenter, growthRange); // Dessiner un cube filaire représentant la plage de croissance
     }
 }

@@ -1,181 +1,239 @@
-ï»¿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class S_DestructibleWall : MonoBehaviour
 {
-    public string targetTag = "Player"; // Tag de l'objet qui dÃ©clenche la dÃ©sactivation du mur
-    public string rangeTag = "Enemy"; // Tag pour la dÃ©tection dans la portÃ©e
-    public GameObject destructionEffect; // L'effet de particule lors de la dÃ©sactivation du mur
-    public GameObject resetPrefab; // Le prefab Ã  gÃ©nÃ©rer lors de la rÃ©initialisation
+    [Header("Prefab to spawn")]
+    [Tooltip("L'effet de particule lors de la destruction du mur")]
+    public GameObject destructionEffect;
+
+    [Space(10)]
+    [Tooltip("Le prefab à générer lors de la destruction (effet de débris ou encore plus)")]
+    public GameObject shatterPrefab;
+
+    [Tooltip("Nombre de préfabs à générer lors de la destruction")]
+    public int numberOfShatterPieces = 5;
+
+    [Tooltip("La force appliquée aux préfabs lors de la destruction")]
+    public float shatterForce = 10f;
+
+    [Space(10)]
+    [Tooltip("Le prefab supplémentaire à générer lors de la destruction (Neutral Cube par exemple)")]
+    public GameObject additionalPrefab;
+
+    [Tooltip("Le nombre de réinitialisations avant de générer le prefab supplémentaire")]
+    public int additionalPrefabSpawnRound = 1;
+
     [Space(20)]
-    [Header("Gameplay Settings")]
-    public int regrowThreshold = 3; // Nombre de rÃ©initialisations avant la rÃ©gÃ©nÃ©ration du mur
-    public int hitPoints = 3; // Nombre de coups que le mur peut encaisser avant d'Ãªtre dÃ©sactivÃ©
-    [Tooltip("DÃ©truire le cube en touchant le mur ? Ou alors dÃ©truire le cube lorsque le mur est dÃ©truit")]
-    public bool DestroyCubeOnHit=true;
+    [Header("Destroy")]
+    [Tooltip("Détruire l'objet qui touche le mur")] 
+    public bool destroyTouchingObject = false;
 
+    [Tooltip("Tag des objets qui doivent détruire le mur")] 
+    public string DestroyTag = "Growing";
 
-    private int currentHits = 0; // Compteur des coups actuels sur le mur
-    private Vector3 destroyedWallPosition;
-    private bool hasResetPrefab = false;
-    private int currentResetRound = 0;
+    [Tooltip("Nombre de réinitialisations avant la régénération du mur")] 
+    public int regrowThreshold = 3;
 
-    private GameObject activeEffect;
-    private GameObject wallChild; // RÃ©fÃ©rence au sous-objet (mur)
-    private Collider wallCollider; // Collider du sous-objet (mur)
-    private float detectionInterval = 0.1f; // FrÃ©quence de la dÃ©tection de la portÃ©e
-    private float nextDetectionTime = 0f; // Prochaine fois pour la dÃ©tection
+    [Tooltip("Choix de détruire ou non les morceaux de débris lors de la réinitialisation")] 
+    public bool destroyPiecesOnReset = true;
 
-    // S'abonner Ã  l'Ã©vÃ©nement de rÃ©initialisation lors de l'activation
+    private int currentResetRound = 0; // Compteur pour suivre le nombre de réinitialisations
+    private bool wasDestroyed = false; // Indique si le mur a été détruit
+    private Vector3 originalPosition; // Position initiale du mur
+    private Quaternion originalRotation; // Rotation initiale du mur
+    private Vector3 savedColliderSize; // Taille initiale du collider du mur
+    private GameObject activeEffect; // Référence à l'effet de destruction actif
+    private List<GameObject> shatterPieces = new List<GameObject>(); // Liste des morceaux de débris générés lors de la destruction
+    private bool additionalPrefabGenerated = false; // Indique si le prefab supplémentaire a déjà été généré
+
+    // S'abonner à l'événement de réinitialisation lors de l'activation de l'objet
     void OnEnable()
     {
-        S_ZoneResetSysteme.OnZoneReset += ResetDestroyedWall;
+        S_ZoneResetSysteme.OnZoneReset += ResetDestroyedWall; // Ajouter la méthode ResetDestroyedWall à l'événement OnZoneReset
     }
 
-    // Se dÃ©sabonner de l'Ã©vÃ©nement de rÃ©initialisation lors de la dÃ©sactivation
+    // Se désabonner de l'événement de réinitialisation lors de la désactivation de l'objet
     void OnDisable()
     {
-        S_ZoneResetSysteme.OnZoneReset -= ResetDestroyedWall;
+        S_ZoneResetSysteme.OnZoneReset -= ResetDestroyedWall; // Retirer la méthode ResetDestroyedWall de l'événement OnZoneReset
     }
 
     void Start()
     {
-        // Assigner le premier enfant comme Ã©tant le mur Ã  dÃ©sactiver/rÃ©activer
-        if (transform.childCount > 0)
+        // Sauvegarder la position, la rotation initiales et la taille du collider du mur
+        originalPosition = transform.position; // Sauvegarde de la position initiale
+        originalRotation = transform.rotation; // Sauvegarde de la rotation initiale
+        Collider collider = GetComponent<Collider>(); // Récupérer le collider du mur
+        if (collider != null)
         {
-            wallChild = transform.GetChild(0).gameObject;
-            wallCollider = wallChild.GetComponent<Collider>(); // RÃ©cupÃ©rer le collider du mur
+            savedColliderSize = collider.bounds.size; // Sauvegarder la taille du collider si elle existe
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        // Appeler la dÃ©tection de portÃ©e Ã  intervalles rÃ©guliers
-        if (Time.time >= nextDetectionTime && wallChild.activeSelf)
-        {
-            DetectInRange();
-            nextDetectionTime = Time.time + detectionInterval; // Mettre Ã  jour l'heure de la prochaine dÃ©tection
-        }
+        DetectGrowingObjects(); // Appeler la méthode pour détecter les objets en croissance autour du mur
     }
 
-    // DÃ©tection dans la portÃ©e autour du mur
-    private void DetectInRange()
-    {
-        if (wallCollider == null) return;
-
-        // Utiliser un box collider pour crÃ©er une zone de dÃ©tection basÃ©e sur la taille du collider du mur
-        Collider[] hitColliders = Physics.OverlapBox(wallCollider.bounds.center, wallCollider.bounds.extents, Quaternion.identity);
-
-        foreach (var hitCollider in hitColliders)
-        {
-            if (hitCollider.CompareTag(rangeTag))
-            {
-                Debug.Log("Objet with 'Enemy' tag detected in range.");
-                DisableWall();
-                return; // ArrÃªter de vÃ©rifier si un objet est trouvÃ©
-            }
-        }
-    }
-
-    // DÃ©clenchÃ© lors de la collision avec un objet ayant le bon tag
     void OnCollisionEnter(Collision collision)
     {
-        // VÃ©rifier si l'objet en collision a le bon tag
-        if (collision.gameObject.CompareTag(targetTag))
+        // Vérifier si l'objet en collision a le composant spécifique et si le mur n'est pas déjà détruit
+        if (collision.gameObject.GetComponent<ThrownByThePlayer>() != null && !wasDestroyed)
         {
-            
-            // VÃ©rifier si le collider en collision appartient bien au sous-objet (mur)
-            if (collision.contacts[0].thisCollider.gameObject == wallChild)
+            DestroyWall(); // Détruire le mur
+            // Choix de détruire l'objet qui touche le mur
+            if (destroyTouchingObject)
             {
-
-                // IncrÃ©menter le compteur de coups
-                currentHits++;
-                // Si le nombre de coups atteint ou dÃ©passe hitPoints, dÃ©sactiver le mur
-                if (currentHits >= hitPoints)
-                {
-                    
-                    DisableWall();
-                    Destroy(collision.gameObject);
-                    Debug.Log("The 'under-obj' (wall) got deactivated after getting hit multiple times.");
-                }
-                else
-                {
-                    Debug.Log($"The wall got hit {currentHits} time. {hitPoints - currentHits} hits before deactivation.");
-                }
+                Destroy(collision.gameObject); // Détruire l'objet en collision
             }
-            if (DestroyCubeOnHit)
-            {
-                Destroy(collision.gameObject);
-            }
-            
         }
     }
 
-    // DÃ©sactiver le mur et gÃ©nÃ©rer un effet de particule
-    private void DisableWall()
+    // Logique pour détruire le mur
+    private void DestroyWall()
     {
-        if (wallChild == null) return;
+        wasDestroyed = true; // Indiquer que le mur est maintenant détruit
+        additionalPrefabGenerated = false; // Réinitialiser le statut du prefab supplémentaire
 
-        destroyedWallPosition = wallChild.transform.position;
+        // Désactiver le MeshRenderer, Collider et Rigidbody du mur
+        MeshRenderer meshRenderer = GetComponent<MeshRenderer>(); // Récupérer le MeshRenderer
+        Collider collider = GetComponent<Collider>(); // Récupérer le collider
+        Rigidbody rigidbody = GetComponent<Rigidbody>(); // Récupérer le Rigidbody
 
-        // DÃ©sactiver le sous-objet (mur) au lieu de le dÃ©truire
-        wallChild.SetActive(false);
+        if (meshRenderer != null) meshRenderer.enabled = false; // Désactiver le MeshRenderer si présent
+        if (collider != null) collider.enabled = false; // Désactiver le collider si présent
+        if (rigidbody != null) rigidbody.detectCollisions = false; // Désactiver la détection des collisions si Rigidbody présent
 
-        // GÃ©nÃ©rer les particules si nÃ©cessaire
-        if (destructionEffect != null)
+        // Générer l'effet de destruction ou les morceaux de débris
+        if (shatterPrefab != null)
         {
-            Destroy(activeEffect);
-            activeEffect = Instantiate(destructionEffect, destroyedWallPosition, Quaternion.identity);
+            GenerateShatterPieces(); // Appeler la méthode pour générer les morceaux de débris
+        }
+        else if (destructionEffect != null)
+        {
+            activeEffect = Instantiate(destructionEffect, transform.position, Quaternion.identity); // Générer l'effet de destruction
         }
     }
 
-    // RÃ©initialiser le sous-objet dÃ©sactivÃ©
+    // Générer les morceaux de débris
+    private void GenerateShatterPieces()
+    {
+        for (int i = 0; i < numberOfShatterPieces; i++)
+        {
+            GameObject piece = Instantiate(shatterPrefab, transform.position, Random.rotation); // Générer un morceau de débris avec une rotation aléatoire
+            Rigidbody pieceRb = piece.GetComponent<Rigidbody>(); // Récupérer le Rigidbody du morceau de débris
+            if (pieceRb != null)
+            {
+                pieceRb.AddExplosionForce(shatterForce, transform.position, 5f); // Ajouter une force d'explosion aux morceaux de débris
+            }
+            shatterPieces.Add(piece); // Ajouter le morceau de débris à la liste des morceaux
+        }
+    }
+
+    // Réinitialiser le mur
     public void ResetDestroyedWall()
     {
-        // Ignorer si le mur n'est pas dÃ©sactivÃ©
-        if (wallChild.activeSelf)
+        // Ne réinitialiser que si le mur a été détruit
+        if (GetComponent<MeshRenderer>().enabled)
         {
-            Debug.Log("The wall is already actif, reset ignored.");
-            return;
+            Debug.Log("Le mur n'est pas détruit, pas besoin de réinitialiser."); // Afficher un message dans la console si le mur n'est pas détruit
+            return; // Sortir de la méthode
+        }
+        currentResetRound++; // Incrémenter le compteur de réinitialisations
+
+        // Générer un prefab supplémentaire après un certain nombre de réinitialisations
+        if (wasDestroyed && !additionalPrefabGenerated && currentResetRound >= additionalPrefabSpawnRound && additionalPrefab != null)
+        {
+            Instantiate(additionalPrefab, transform.position, Quaternion.identity); // Générer le prefab supplémentaire
+            additionalPrefabGenerated = true; // Indiquer que le prefab supplémentaire a été généré
         }
 
-        currentResetRound++;
-        currentHits = 0; // RÃ©initialiser le compteur de coups
-
-        // GÃ©nÃ©rer le resetPrefab uniquement la premiÃ¨re fois
-        if (!hasResetPrefab&&resetPrefab!=null)
+        // Vérifier si des objets avec le tag "DestroyTag" sont présents
+        if (AreDestroyTagObjectsPresent())
         {
-            Instantiate(resetPrefab, destroyedWallPosition, Quaternion.identity);
-            hasResetPrefab = true;
+            Debug.Log("Des objets avec le tag 'DestroyTag' sont toujours présents, réinitialisation du mur reportée."); // Afficher un message dans la console
+            return; // Sortir de la méthode
         }
 
-        // Si le mur doit Ãªtre rÃ©activÃ© aprÃ¨s un certain nombre de rÃ©initialisations
-        if (currentResetRound >= regrowThreshold)
+        // Si le mur doit être réactivé après un certain nombre de réinitialisations
+        if (wasDestroyed && currentResetRound >= regrowThreshold)
         {
-            // RÃ©activer le sous-objet (mur)
-            wallChild.SetActive(true);
+            // Réactiver le MeshRenderer, Collider, et Rigidbody du mur
+            MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+            Collider collider = GetComponent<Collider>();
+            Rigidbody rigidbody = GetComponent<Rigidbody>();
 
-            // DÃ©truire l'effet de particule si prÃ©sent
+            if (meshRenderer != null) meshRenderer.enabled = true; // Réactiver le MeshRenderer
+            if (collider != null) collider.enabled = true; // Réactiver le collider
+            if (rigidbody != null) rigidbody.detectCollisions = true; // Réactiver la détection des collisions du Rigidbody
+
+            // Réinitialiser la position et la rotation du mur
+            transform.position = originalPosition;
+            transform.rotation = originalRotation;
+
+            // Détruire l'effet de destruction
             if (activeEffect != null)
             {
-                Destroy(activeEffect);
-                 
+                Destroy(activeEffect); // Détruire l'effet de particule
             }
 
-            // RÃ©initialiser les variables
+            // Détruire les morceaux de débris si nécessaire
+            if (destroyPiecesOnReset)
+            {
+                foreach (GameObject piece in shatterPieces)
+                {
+                    Destroy(piece); // Détruire chaque morceau de débris
+                }
+                shatterPieces.Clear(); // Vider la liste des morceaux de débris
+            }
+
+            // Réinitialiser le compteur de réinitialisations
             currentResetRound = 0;
-            hasResetPrefab = false; // RÃ©initialiser pour permettre la gÃ©nÃ©ration de resetPrefab Ã  nouveau
+            wasDestroyed = false; // Indiquer que le mur est rétabli
         }
     }
 
-    // Visualiser la zone de dÃ©tection avec des Gizmos
+    // Détecter les objets avec le tag "Growing" autour du mur
+    private void DetectGrowingObjects()
+    {
+        Vector3 detectionCenter = transform.position; // Centre de détection correspondant à la position actuelle du mur
+        Vector3 detectionSize = savedColliderSize; // Taille de la zone de détection
+
+        Collider[] hitColliders = Physics.OverlapBox(detectionCenter, detectionSize / 2, transform.rotation); // Récupérer tous les colliders dans la zone de détection
+        foreach (var hitCollider in hitColliders)
+        {
+            if (hitCollider.CompareTag(DestroyTag) && !wasDestroyed)
+            {
+                DestroyWall(); // Détruire le mur si un objet avec le tag correct est détecté
+                break; // Arrêter la boucle après avoir détruit le mur
+            }
+        }
+    }
+
+    // Vérifier si des objets avec le tag "DestroyTag" sont présents autour du mur
+    private bool AreDestroyTagObjectsPresent()
+    {
+        Vector3 detectionCenter = transform.position; // Centre de détection correspondant à la position actuelle du mur
+        Vector3 detectionSize = savedColliderSize; // Taille de la zone de détection
+
+        Collider[] hitColliders = Physics.OverlapBox(detectionCenter, detectionSize / 2, transform.rotation); // Récupérer tous les colliders dans la zone de détection
+        foreach (var hitCollider in hitColliders)
+        {
+            if (hitCollider.CompareTag(DestroyTag))
+            {
+                return true; // Renvoie vrai si des objets avec le tag correct sont présents
+            }
+        }
+        return false; // Renvoie faux si aucun objet avec le tag correct n'est présent
+    }
+
+    // Visualiser la zone de détection avec des Gizmos
     private void OnDrawGizmos()
     {
-        if (wallCollider != null)
-        {
-            Gizmos.color = Color.red; // DÃ©finir la couleur du Gizmo
-            Gizmos.DrawWireCube(wallCollider.bounds.center, wallCollider.bounds.size); // Dessiner le Gizmo autour du mur
-        }
+        Gizmos.color = Color.red; // Couleur des Gizmos
+        Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one); // Configurer la matrice de transformation des Gizmos
+        Gizmos.DrawWireCube(Vector3.zero, savedColliderSize); // Dessiner un cube autour de la zone de détection
     }
 }
