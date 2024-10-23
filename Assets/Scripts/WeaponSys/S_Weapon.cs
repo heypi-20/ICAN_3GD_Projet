@@ -1,48 +1,33 @@
-using System;
 using UnityEngine;
 
-public class S_Weapon : MonoBehaviour
+public abstract class S_Weapon : MonoBehaviour
 {
     [Header("Weapon properties")]
+    [Tooltip("The object to shoot")]
     public GameObject projectile;
+    [Tooltip("Where the projectile is shot from")]
     public Transform shootPoint;
+    [Tooltip("Weapon's damage")]
     public int weaponDmg;
-    public float projectileSpeed = 100f;
-
-    [Header("Keybindings")] [Tooltip("Touche pour tirer")]
-    public KeyCode shootKey;
-
-    public KeyCode defaultShootKey = KeyCode.E;
-
-    private S_Ammo ammo;
+    [Tooltip("Weapon's ammo")]
+    public int ammo;
+    
+    // Timer for the fire rate
+    protected float timer;
 
     private void Start()
     {
-        ammo = GetComponent<S_Ammo>();
-
-        if (shootKey == KeyCode.None) {
-            shootKey = defaultShootKey;
-            
-            if (defaultShootKey == KeyCode.None) {
-                Debug.LogError("No default key selected");
-            }
-        }
     }
 
     private void Update()
     {
-        if (ammo.ammo > 0) {
-            Fire();
-        }
+        timer += Time.deltaTime;
     }
 
-    public void Fire()
+    public virtual void Fire()
     {
-        if (Input.GetKeyDown(shootKey)) {
-            GameObject newProjectile = Instantiate(projectile, shootPoint.transform.position, transform.rotation);
-            newProjectile.SetActive(true);
-            newProjectile.GetComponent<Rigidbody>().velocity = transform.forward * projectileSpeed;
-            ammo.ammo--;
+        if (ammo <= 0) {
+            Debug.Log("No ammo");
         }
     }
 }

@@ -1,31 +1,21 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class S_Ammo : MonoBehaviour
 {
-    public uint ammo = 0;
-
-    private S_PlayerController player;
+    private S_WeaponSys weaponSys;
 
     // Start is called before the first frame update
     void Start()
     {
-        player = GetComponent<S_PlayerController>();
+        weaponSys = GetComponent<S_WeaponSys>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
+    // Get a ammo when colliding with an object that has the "Cube" Tag
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.tag == "Cube") {
+        if (other.gameObject.CompareTag("Cube")) {
             Destroy(other.gameObject);
-            ammo++;
+            weaponSys.currentWeapon.ammo++;
         }
     }
 }
