@@ -4,6 +4,9 @@ public class S_ToggleWall : MonoBehaviour
 {
     [Tooltip("Number of round to toggle the wall")]
     public int roundToToggle = 1;
+
+    [Tooltip("If the body is actif on start of the game")]
+    public bool wallStateOnStart = true;
     
     [Header("Read-only properties")]
     [SerializeField] private bool toggle; // Wall body active state
@@ -15,7 +18,8 @@ public class S_ToggleWall : MonoBehaviour
     void Start()
     {
         wallObject = transform.GetChild(0).gameObject;
-        toggle = wallObject.activeSelf;
+        wallObject.SetActive(wallStateOnStart);
+        toggle = wallStateOnStart;
     }
 
     // Update is called once per frame

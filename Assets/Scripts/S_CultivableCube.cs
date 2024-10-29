@@ -11,8 +11,8 @@ public class S_CultivableCube : MonoBehaviour
     public GameObject growthPrefab;
 
     [Tooltip("Plage de croissance autour et au-dessus du cube")]
-    public Vector3 growthRange = new Vector3(2f, 1f, 2f);
-
+    public Vector3 growthRangeUp = new Vector3(2f, 1f, 2f);
+    public Vector3 growthRangeDown = new Vector3(2f, 1f, 2f);
     [Tooltip("Nombre de blocs générés par cycle de croissance")]
     public int growthPerCycle = 1;
 
@@ -130,9 +130,9 @@ public class S_CultivableCube : MonoBehaviour
         for (int i = 0; i < growthPerCycle; i++) // Générer le nombre de blocs par cycle
         {
             Vector3 randomPosition = currentGrowthCenter + new Vector3(
-                Random.Range(-growthRange.x, growthRange.x), // Calculer une position aléatoire dans la plage de croissance
-                Random.Range(0, growthRange.y), // Seulement vers le haut
-                Random.Range(-growthRange.z, growthRange.z)
+                Random.Range(growthRangeDown.x, growthRangeUp.x), // Calculer une position aléatoire dans la plage de croissance
+                Random.Range(growthRangeDown.y, growthRangeUp.y), // Seulement vers le haut
+                Random.Range(growthRangeDown.z, growthRangeUp.z)
             );
 
             GameObject newGrowth = Instantiate(growthPrefab, randomPosition, Quaternion.identity, this.transform); // Instancier le prefab de croissance
@@ -215,6 +215,7 @@ public class S_CultivableCube : MonoBehaviour
     {
         Gizmos.color = Color.green; // Définir la couleur des Gizmos
         Vector3 gizmoCenter = currentGrowthCenter == Vector3.zero ? transform.position : currentGrowthCenter; // Déterminer le centre des Gizmos
-        Gizmos.DrawWireCube(gizmoCenter, growthRange); // Dessiner un cube filaire représentant la plage de croissance
+        Gizmos.DrawWireCube(gizmoCenter, growthRangeUp);
+        // Dessiner un cube filaire représentant la plage de croissance
     }
 }
