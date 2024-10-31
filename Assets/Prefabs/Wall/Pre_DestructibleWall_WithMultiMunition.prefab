@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &119670325412316827
+--- !u!1 &409980514380615915
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,50 +8,49 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8737818059364399118}
-  - component: {fileID: 3221734075901674113}
-  - component: {fileID: 9003202258787001176}
-  - component: {fileID: 6374998394204220103}
-  - component: {fileID: 1756188954653321340}
-  - component: {fileID: 5863501487008531296}
-  - component: {fileID: 6032447307392906666}
-  m_Layer: 6
-  m_Name: Pre_Projectile
-  m_TagString: Projectile
+  - component: {fileID: 1374710214129947815}
+  - component: {fileID: 9203299511955758449}
+  - component: {fileID: 1667558270201921798}
+  - component: {fileID: 6603733423192538911}
+  - component: {fileID: 4974539686399838827}
+  - component: {fileID: 7080113460072525310}
+  m_Layer: 0
+  m_Name: Pre_DestructibleWall_WithMultiMunition
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8737818059364399118
+--- !u!4 &1374710214129947815
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 119670325412316827}
+  m_GameObject: {fileID: 409980514380615915}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
-  m_ConstrainProportionsScale: 1
+  m_LocalPosition: {x: -21.49, y: 1.4199996, z: -0.6100006}
+  m_LocalScale: {x: 3.1742702, y: 6.4112635, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &3221734075901674113
+--- !u!33 &9203299511955758449
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 119670325412316827}
+  m_GameObject: {fileID: 409980514380615915}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &9003202258787001176
+--- !u!23 &1667558270201921798
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 119670325412316827}
+  m_GameObject: {fileID: 409980514380615915}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -65,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b92789ece8dc360449979673cde73408, type: 2}
+  - {fileID: 2100000, guid: b7ef598d4e93c654794e19a3c7a7bc46, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -87,34 +86,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6374998394204220103
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 119670325412316827}
-  m_Material: {fileID: 13400000, guid: 305dc0f21ce4f74478a63768ee5f7377, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &1756188954653321340
+--- !u!54 &6603733423192538911
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 119670325412316827}
+  m_GameObject: {fileID: 409980514380615915}
   serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
@@ -131,37 +109,50 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &5863501487008531296
-MonoBehaviour:
+--- !u!65 &4974539686399838827
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 119670325412316827}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e43e9c424345654e9187515d5ce5165, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  minSpeed: 0
---- !u!114 &6032447307392906666
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 119670325412316827}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b266017f53bcc64a9d1ffabf0b2346e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxCollisionCount: 3
-  destructibleLayerMask:
+  m_GameObject: {fileID: 409980514380615915}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 1
-  detectionDistance: 1
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7080113460072525310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409980514380615915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 925b2853b8d6fe04ba10af1d445e7b8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destructionEffect: {fileID: 2014564717100583912, guid: de8051323aef0554fb4a4ee3dd46ebed, type: 3}
+  shatterPrefab: {fileID: 548090981952654651, guid: a17a46ad1bf41a647bb2a81e18fae7d2, type: 3}
+  numberOfShatterPieces: 4
+  shatterForce: 3
+  additionalPrefab: {fileID: 0}
+  additionalPrefabSpawnRound: 1
+  destroyTouchingObject: 0
+  DestroyTag: Player
+  regrowThreshold: 3
+  destroyPiecesOnReset: 0
