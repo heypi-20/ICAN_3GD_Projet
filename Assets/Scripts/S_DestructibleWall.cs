@@ -201,7 +201,7 @@ public class S_DestructibleWall : MonoBehaviour
         Vector3 detectionCenter = transform.position; // Centre de détection correspondant à la position actuelle du mur
         Vector3 detectionSize = savedColliderSize; // Taille de la zone de détection
 
-        Collider[] hitColliders = Physics.OverlapBox(detectionCenter, detectionSize / 2, transform.rotation); // Récupérer tous les colliders dans la zone de détection
+        Collider[] hitColliders = Physics.OverlapBox(detectionCenter, detectionSize / 2, Quaternion.identity); // Récupérer tous les colliders dans la zone de détection
         foreach (var hitCollider in hitColliders)
         {
             if (hitCollider.CompareTag(DestroyTag) && !wasDestroyed)
@@ -218,7 +218,7 @@ public class S_DestructibleWall : MonoBehaviour
         Vector3 detectionCenter = transform.position; // Centre de détection correspondant à la position actuelle du mur
         Vector3 detectionSize = savedColliderSize; // Taille de la zone de détection
 
-        Collider[] hitColliders = Physics.OverlapBox(detectionCenter, detectionSize / 2, transform.rotation); // Récupérer tous les colliders dans la zone de détection
+        Collider[] hitColliders = Physics.OverlapBox(detectionCenter, detectionSize / 2, Quaternion.identity); // Récupérer tous les colliders dans la zone de détection
         foreach (var hitCollider in hitColliders)
         {
             if (hitCollider.CompareTag(DestroyTag))
@@ -233,7 +233,7 @@ public class S_DestructibleWall : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red; // Couleur des Gizmos
-        Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one); // Configurer la matrice de transformation des Gizmos
+        Gizmos.matrix = Matrix4x4.TRS(transform.position, Quaternion.identity, Vector3.one); // Configurer la matrice de transformation des Gizmos
         Gizmos.DrawWireCube(Vector3.zero, savedColliderSize); // Dessiner un cube autour de la zone de détection
     }
 }
