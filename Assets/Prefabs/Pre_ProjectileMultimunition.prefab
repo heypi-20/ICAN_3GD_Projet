@@ -14,10 +14,10 @@ GameObject:
   - component: {fileID: 6374998394204220103}
   - component: {fileID: 1756188954653321340}
   - component: {fileID: 5863501487008531296}
-  - component: {fileID: -1909954444555319408}
+  - component: {fileID: 6032447307392906666}
   m_Layer: 6
-  m_Name: Pre_Projectile
-  m_TagString: Untagged
+  m_Name: Pre_ProjectileMultimunition
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minSpeed: 0
---- !u!114 &-1909954444555319408
+--- !u!114 &6032447307392906666
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -157,6 +157,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 119670325412316827}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6207e037bee4a7245ad4bd9117e2be27, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b266017f53bcc64a9d1ffabf0b2346e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxCollisionCount: 3
+  destructibleLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  detectionDistance: 1
