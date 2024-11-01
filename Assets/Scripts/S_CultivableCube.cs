@@ -111,6 +111,7 @@ public class S_CultivableCube : MonoBehaviour
             }
         }
     }
+    private bool isGrowingProcessFinished = false;
 
     private IEnumerator WaitUntilStoppedAndGrow()
     {
@@ -121,12 +122,18 @@ public class S_CultivableCube : MonoBehaviour
         gameObject.tag = growingTag; // Assigner le tag de croissance
         currentGrowthCenter = transform.position; // Définir le centre de croissance actuel
         SetCubeColor(ColorGrowUp); // Changer la couleur en mode croissance
+        isGrowingProcessFinished=true;
+        Debug.Log("Done");
     }
 
     public void Grow()
     {
-        if (!isGrowing&& rb.isKinematic != true) return; // Ne rien faire si le cube ne croît pas
-        Debug.Log("RRR");
+        if (!(isGrowing && isGrowingProcessFinished))
+        {
+            Debug.Log("NotReady");
+            return;
+        } 
+        
 
         for (int i = 0; i < growthPerCycle; i++) // Générer le nombre de blocs par cycle
         {
