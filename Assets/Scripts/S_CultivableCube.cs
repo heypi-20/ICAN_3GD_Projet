@@ -63,7 +63,7 @@ public class S_CultivableCube : MonoBehaviour
         {
             if (isGrowing)
             {
-                if (destroyAllOnHit)
+                if (destroyAllOnHit&&isGrowingProcessFinished)
                 {
                     ResetGrowth(); // Tout détruire d'un coup
                 }
@@ -176,7 +176,7 @@ public class S_CultivableCube : MonoBehaviour
             growthInstances.RemoveAt(lastIndex); // Retirer le bloc de la liste
         }
 
-        if (growthInstances.Count == 0) // Si tous les blocs sont détruits, réinitialiser la croissance
+        if (growthInstances.Count == 0 && isGrowingProcessFinished) // Si tous les blocs sont détruits, réinitialiser la croissance
         {
             ResetGrowth();
         }
