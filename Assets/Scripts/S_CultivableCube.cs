@@ -125,7 +125,8 @@ public class S_CultivableCube : MonoBehaviour
 
     public void Grow()
     {
-        if (!isGrowing) return; // Ne rien faire si le cube ne croît pas
+        if (!isGrowing&& rb.isKinematic != true) return; // Ne rien faire si le cube ne croît pas
+        Debug.Log("RRR");
 
         for (int i = 0; i < growthPerCycle; i++) // Générer le nombre de blocs par cycle
         {

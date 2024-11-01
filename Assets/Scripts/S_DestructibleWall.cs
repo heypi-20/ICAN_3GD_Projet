@@ -204,7 +204,7 @@ public class S_DestructibleWall : MonoBehaviour
         Collider[] hitColliders = Physics.OverlapBox(detectionCenter, detectionSize / 2, Quaternion.identity); // Récupérer tous les colliders dans la zone de détection
         foreach (var hitCollider in hitColliders)
         {
-            if (hitCollider.CompareTag(DestroyTag) && !wasDestroyed)
+            if (!string.IsNullOrEmpty(DestroyTag)&& hitCollider.CompareTag(DestroyTag) && !wasDestroyed)
             {
                 DestroyWall(); // Détruire le mur si un objet avec le tag correct est détecté
                 break; // Arrêter la boucle après avoir détruit le mur
@@ -221,7 +221,7 @@ public class S_DestructibleWall : MonoBehaviour
         Collider[] hitColliders = Physics.OverlapBox(detectionCenter, detectionSize / 2, Quaternion.identity); // Récupérer tous les colliders dans la zone de détection
         foreach (var hitCollider in hitColliders)
         {
-            if (hitCollider.CompareTag(DestroyTag))
+            if (!string.IsNullOrEmpty(DestroyTag) && hitCollider.CompareTag(DestroyTag))
             {
                 return true; // Renvoie vrai si des objets avec le tag correct sont présents
             }
