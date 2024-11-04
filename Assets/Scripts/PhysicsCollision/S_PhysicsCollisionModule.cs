@@ -4,7 +4,7 @@ using System;
 [RequireComponent(typeof(Rigidbody))] // Exige un Rigidbody sur le GameObject pour fonctionner correctement
 public class S_PhysicsCollisionModule : MonoBehaviour
 {
-    public enum OverlapType { Box, Sphere, Capsule } // Définition des types d'overlap possibles
+    public enum OverlapType { BOX, SPHERE, CAPSULE } // Définition des types d'overlap possibles
 
     [Header("Collision Settings")] // Paramètres de collision
     public bool useCollision = false; // Utiliser la détection de collision
@@ -15,7 +15,7 @@ public class S_PhysicsCollisionModule : MonoBehaviour
 
     [Space(1)]
     [Header("OverlapType Settings")] // Paramètres du type d'overlap
-    public OverlapType overlapType = OverlapType.Box; // Type d'overlap utilisé (Box, Sphere, Capsule)
+    public OverlapType overlapType = OverlapType.BOX; // Type d'overlap utilisé (Box, Sphere, Capsule)
     public bool withScaleSize = true; // Utiliser l'échelle de l'objet pour déterminer la taille de l'overlap
     public bool ignoreChildren = false; // Ignorer les objets enfants lors de la détection
 
@@ -77,13 +77,13 @@ public class S_PhysicsCollisionModule : MonoBehaviour
     {
         switch (overlapType) // Choisir le type d'overlap à effectuer
         {
-            case OverlapType.Box:
+            case OverlapType.BOX:
                 PerformBoxCast(); // Effectuer un BoxCast
                 break;
-            case OverlapType.Sphere:
+            case OverlapType.SPHERE:
                 PerformSphereCast(); // Effectuer un SphereCast
                 break;
-            case OverlapType.Capsule:
+            case OverlapType.CAPSULE:
                 PerformCapsuleCast(); // Effectuer un CapsuleCast
                 break;
         }
@@ -221,18 +221,18 @@ public class S_PhysicsCollisionModule : MonoBehaviour
 
             switch (overlapType) // Choisir le type de Gizmo à dessiner
             {
-                case OverlapType.Box:
+                case OverlapType.BOX:
                     Vector3 boxSize = withScaleSize ? transform.lossyScale : customSize; // Déterminer la taille de la box
                     Vector3 boxCenter = withScaleSize ? transform.position : transform.TransformPoint(customOffset); // Déterminer le centre de la box
                     Gizmos.matrix = Matrix4x4.TRS(boxCenter, transform.rotation, boxSize); // Définir la matrice de transformation des Gizmos
                     Gizmos.DrawWireCube(Vector3.zero, Vector3.one); // Dessiner la box
                     break;
-                case OverlapType.Sphere:
+                case OverlapType.SPHERE:
                     Vector3 sphereCenter = transform.TransformPoint(customOffset); // Déterminer le centre de la sphère
                     float radius = withScaleSize ? Mathf.Max(transform.lossyScale.x, transform.lossyScale.y, transform.lossyScale.z) / 2 : sphereRadius; // Déterminer le rayon de la sphère
                     Gizmos.DrawWireSphere(sphereCenter, radius); // Dessiner la sphère
                     break;
-                case OverlapType.Capsule:
+                case OverlapType.CAPSULE:
                     Vector3 point1 = transform.TransformPoint(capsulePoint1 + customOffset); // Déterminer le point 1 de la capsule
                     Vector3 point2 = transform.TransformPoint(capsulePoint2 + customOffset); // Déterminer le point 2 de la capsule
                     float capsuleRadius = withScaleSize ? Mathf.Max(transform.lossyScale.x, transform.lossyScale.y, transform.lossyScale.z) / 2 : this.capsuleRadius; // Déterminer le rayon de la capsule
