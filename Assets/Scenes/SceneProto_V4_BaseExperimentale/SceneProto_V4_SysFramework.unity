@@ -374,13 +374,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 832118980}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &921189483
 GameObject:
   m_ObjectHideFlags: 0
@@ -395,6 +395,7 @@ GameObject:
   - component: {fileID: 921189486}
   - component: {fileID: 921189485}
   - component: {fileID: 921189484}
+  - component: {fileID: 921189490}
   m_Layer: 0
   m_Name: Cube_TestPhysicsCollision
   m_TagString: Untagged
@@ -414,8 +415,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8e56040794c0914e84ca85088ee48ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useCollision: 0
-  collisionCooldown: 1
+  useCollision: 1
+  collisionCooldown: 0
   usePhysicCast: 0
   physicCastCooldown: 1
   overlapType: 0
@@ -432,7 +433,7 @@ MonoBehaviour:
   physicCastTags: []
   physicCastLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   physicTargetComponentNames: []
 --- !u!54 &921189485
 Rigidbody:
@@ -542,11 +543,25 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.17, y: 4.38, z: -6.42}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 6.0853, y: 0.67956465, z: 6.0853}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &921189490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921189483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13438051b8329234e866c4ce6cbd086c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AdditionalDamage: 100
+  DamageMultiplier: 2
 --- !u!1 &1362475034
 GameObject:
   m_ObjectHideFlags: 0
