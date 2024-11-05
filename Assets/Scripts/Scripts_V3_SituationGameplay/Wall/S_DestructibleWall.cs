@@ -90,7 +90,7 @@ public class S_DestructibleWall : MonoBehaviour
             }
         }
     }
-
+    
     // Logique pour détruire le mur
     private void DestroyWall()
     {
@@ -105,7 +105,9 @@ public class S_DestructibleWall : MonoBehaviour
         if (meshRenderer != null) meshRenderer.enabled = false; // Désactiver le MeshRenderer si présent
         if (collider != null) collider.enabled = false; // Désactiver le collider si présent
         if (rigidbody != null) rigidbody.detectCollisions = false; // Désactiver la détection des collisions si Rigidbody présent
-
+        
+        WakeUpSurroundingObjects(collider);
+        
         // Générer l'effet de destruction ou les morceaux de débris
         if (shatterPrefab != null)
         {
@@ -114,6 +116,30 @@ public class S_DestructibleWall : MonoBehaviour
         else if (destructionEffect != null)
         {
             activeEffect = Instantiate(destructionEffect, transform.position, Quaternion.identity); // Générer l'effet de destruction
+        }
+    }
+    private void WakeUpSurroundingObjects(Collider collider)
+    {
+        float radius = 1f; 
+
+        
+        if (collider != null)
+        {
+            radius = collider.bounds.extents.magnitude * 1.5f; 
+        }
+
+        Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
+        foreach (Collider nearbyObject in colliders)
+        {
+            
+            if (nearbyObject.gameObject != gameObject)
+            {
+                Rigidbody rb = nearbyObject.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.WakeUp(); 
+                }
+            }
         }
     }
 
