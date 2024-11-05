@@ -103,10 +103,11 @@ public class S_DestructibleWall : MonoBehaviour
         Rigidbody rigidbody = GetComponent<Rigidbody>(); // Récupérer le Rigidbody
 
         if (meshRenderer != null) meshRenderer.enabled = false; // Désactiver le MeshRenderer si présent
+        WakeUpSurroundingObjects(collider);
         if (collider != null) collider.enabled = false; // Désactiver le collider si présent
         if (rigidbody != null) rigidbody.detectCollisions = false; // Désactiver la détection des collisions si Rigidbody présent
         
-        WakeUpSurroundingObjects(collider);
+        
         
         // Générer l'effet de destruction ou les morceaux de débris
         if (shatterPrefab != null)
@@ -125,7 +126,7 @@ public class S_DestructibleWall : MonoBehaviour
         
         if (collider != null)
         {
-            radius = collider.bounds.extents.magnitude * 1.5f; 
+            radius = collider.bounds.extents.magnitude * 10f; 
         }
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
