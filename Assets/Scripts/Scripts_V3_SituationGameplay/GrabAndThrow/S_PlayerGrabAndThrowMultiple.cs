@@ -16,6 +16,7 @@ public class S_PlayerGrabAndThrowMultiple : MonoBehaviour
     public float throwForce = 10f;
     [Tooltip("L'angle à appliquer pour ajouter un arc lors du lancer (degrés)")]
     public float throwAngle = 45f;
+    public LayerMask grabLayerMask;
 
     [Header("Keybinds")]
     [Tooltip("La touche utilisée pour attraper")]
@@ -86,7 +87,7 @@ public class S_PlayerGrabAndThrowMultiple : MonoBehaviour
             return;
         }
 
-        Collider[] colliders = Physics.OverlapBox(transform.position + transform.forward * grabBoxDistance / 2, grabBoxSize / 2, transform.rotation);
+        Collider[] colliders = Physics.OverlapBox(transform.position + transform.forward * grabBoxDistance / 2, grabBoxSize / 2, transform.rotation, grabLayerMask);
         foreach (var collider in colliders)
         {
             if (collider != null && collider.GetComponent<Rigidbody>() != null && !collider.GetComponent<Rigidbody>().isKinematic && collider.GetComponent<S_PlayerGrabAndThrowMultiple>() == null)

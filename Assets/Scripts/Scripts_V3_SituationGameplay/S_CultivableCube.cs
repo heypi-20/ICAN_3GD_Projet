@@ -29,7 +29,7 @@ public class S_CultivableCube : MonoBehaviour
     private Vector3 currentGrowthCenter; // La position actuelle du dernier point de croissance
     private Rigidbody rb; // Référence au composant Rigidbody pour gérer la physique
     private List<GameObject> growthInstances = new List<GameObject>(); // Liste des préfabs générés lors de la croissance
-    private float collisionCooldown = 1.0f; // Délai de refroidissement (en secondes)
+    private float collisionCooldown = 0.01f; // Délai de refroidissement (en secondes)
     private bool isCooldown = false; // Indique si le refroidissement est actif
 
     void OnEnable()
@@ -176,7 +176,7 @@ public class S_CultivableCube : MonoBehaviour
             growthInstances.RemoveAt(lastIndex); // Retirer le bloc de la liste
         }
 
-        if (growthInstances.Count == 0 && isGrowingProcessFinished) // Si tous les blocs sont détruits, réinitialiser la croissance
+        if (growthInstances.Count <= 0 && isGrowingProcessFinished) // Si tous les blocs sont détruits, réinitialiser la croissance
         {
             ResetGrowth();
         }
