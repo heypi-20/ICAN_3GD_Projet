@@ -7715,6 +7715,34 @@ PrefabInstance:
       propertyPath: isGrowing
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6202044520182510909, guid: 2e40e3134baaf3449a8f20383516df8f, type: 3}
+      propertyPath: growthPerCycle
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 6202044520182510909, guid: 2e40e3134baaf3449a8f20383516df8f, type: 3}
+      propertyPath: growthRangeUp.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6202044520182510909, guid: 2e40e3134baaf3449a8f20383516df8f, type: 3}
+      propertyPath: growthRangeUp.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6202044520182510909, guid: 2e40e3134baaf3449a8f20383516df8f, type: 3}
+      propertyPath: growthRangeUp.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6202044520182510909, guid: 2e40e3134baaf3449a8f20383516df8f, type: 3}
+      propertyPath: growthRangeDown.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6202044520182510909, guid: 2e40e3134baaf3449a8f20383516df8f, type: 3}
+      propertyPath: growthRangeDown.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6202044520182510909, guid: 2e40e3134baaf3449a8f20383516df8f, type: 3}
+      propertyPath: growthRangeDown.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6257644520971557862, guid: 2e40e3134baaf3449a8f20383516df8f, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
       value: 0
@@ -11495,11 +11523,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4678227914593688516, guid: e25da31d60be4e649b3ee6778ac105e1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 30.6
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4678227914593688516, guid: e25da31d60be4e649b3ee6778ac105e1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.2
+      value: -19.8
       objectReference: {fileID: 0}
     - target: {fileID: 4678227914593688516, guid: e25da31d60be4e649b3ee6778ac105e1, type: 3}
       propertyPath: m_LocalRotation.w
@@ -15626,7 +15654,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6202044520182510909, guid: 2e40e3134baaf3449a8f20383516df8f, type: 3}
       propertyPath: growthPerCycle
-      value: 20
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 6202044520182510909, guid: 2e40e3134baaf3449a8f20383516df8f, type: 3}
       propertyPath: growthRangeUp.x
@@ -15655,6 +15683,10 @@ PrefabInstance:
     - target: {fileID: 6257644520971557862, guid: 2e40e3134baaf3449a8f20383516df8f, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8184902580134403419, guid: 2e40e3134baaf3449a8f20383516df8f, type: 3}
+      propertyPath: m_Constraints
+      value: 122
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -22919,6 +22951,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 59532783}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1940098478 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6214890355207192094, guid: 9f2c23d0e30662143a78588f605f4a6b, type: 3}
+  m_PrefabInstance: {fileID: 9089831861731861746}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1952761346
 GameObject:
   m_ObjectHideFlags: 0
@@ -27471,7 +27508,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4264883597576138992, guid: 9f2c23d0e30662143a78588f605f4a6b, type: 3}
       propertyPath: respawnableObjects.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4264883597576138992, guid: 9f2c23d0e30662143a78588f605f4a6b, type: 3}
       propertyPath: respawnableObjects.Array.data[0].shouldRespawn
@@ -27479,7 +27516,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4264883597576138992, guid: 9f2c23d0e30662143a78588f605f4a6b, type: 3}
       propertyPath: respawnableObjects.Array.data[2].shouldRespawn
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4264883597576138992, guid: 9f2c23d0e30662143a78588f605f4a6b, type: 3}
       propertyPath: respawnableObjects.Array.data[3].shouldRespawn
@@ -27506,17 +27543,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4264883597576138992, guid: 9f2c23d0e30662143a78588f605f4a6b, type: 3}
+      propertyPath: respawnableObjects.Array.data[2].currentInstance
+      value: 
+      objectReference: {fileID: 804980627}
+    - target: {fileID: 4264883597576138992, guid: 9f2c23d0e30662143a78588f605f4a6b, type: 3}
       propertyPath: respawnableObjects.Array.data[2].destroyPrevious
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4264883597576138992, guid: 9f2c23d0e30662143a78588f605f4a6b, type: 3}
       propertyPath: respawnableObjects.Array.data[2].prefabToRespawn
       value: 
-      objectReference: {fileID: 7726342321974323781, guid: 8dc7decb38e98034296abf0d59466bc6, type: 3}
+      objectReference: {fileID: 804980627}
     - target: {fileID: 4264883597576138992, guid: 9f2c23d0e30662143a78588f605f4a6b, type: 3}
       propertyPath: respawnableObjects.Array.data[2].respawnLocation
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1940098478}
     - target: {fileID: 4264883597576138992, guid: 9f2c23d0e30662143a78588f605f4a6b, type: 3}
       propertyPath: respawnableObjects.Array.data[3].destroyPrevious
       value: 1
@@ -27530,7 +27571,15 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 410903005}
     - target: {fileID: 4264883597576138992, guid: 9f2c23d0e30662143a78588f605f4a6b, type: 3}
+      propertyPath: respawnableObjects.Array.data[2].destroyPlayerItem
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4264883597576138992, guid: 9f2c23d0e30662143a78588f605f4a6b, type: 3}
       propertyPath: respawnableObjects.Array.data[3].destroyPlayerItem
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4264883597576138992, guid: 9f2c23d0e30662143a78588f605f4a6b, type: 3}
+      propertyPath: respawnableObjects.Array.data[2].respawnAfterRounds
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6214890355207192094, guid: 9f2c23d0e30662143a78588f605f4a6b, type: 3}
