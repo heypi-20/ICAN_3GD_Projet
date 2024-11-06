@@ -5,39 +5,20 @@ using System;
 
 public class S_DamageModule : MonoBehaviour
 {
-    // Public fields for configuring damage calculation
-    public float AdditionalDamage = 0f;   // Extra damage value added to base damage
-    public float DamageMultiplier = 1f;   // Multiplier applied to base damage
+    // Champs publics pour configurer le calcul des dégâts
+    public float AdditionalDamage = 0f;   // Valeur de dégâts supplémentaires ajoutée aux dégâts de base
+    public float DamageMultiplier = 1f;   // Multiplicateur appliqué aux dégâts de base
 
-    // Event that triggers after damage is calculated
+    // Événement déclenché après le calcul des dégâts
     public event Action<float> OnDamage;
 
-    //public S_PhysicsCollisionModule TouchEventScript;
-
-    //private void OnEnable()
-    //{
-    //    if (TouchEventScript != null)
-    //    {
-    //        TouchEventScript.OnTouch += () => ReceiveDamage(10f);
-    //    }
-    //}
-
-    //private void OnDisable()
-    //{
-    //    if (TouchEventScript != null)
-    //    {
-    //        TouchEventScript.OnTouch -= () => ReceiveDamage(10f);
-    //    }
-    //}
-
-
-    // Method to handle receiving damage
+    // Méthode pour gérer la réception des dégâts
     public void ReceiveDamage(float baseDamage)
     {
-        // Calculate final damage using AdditionalDamage and DamageMultiplier
+        // Calculer les dégâts finaux en utilisant AdditionalDamage et DamageMultiplier
         float finalDamage = (baseDamage + AdditionalDamage) * DamageMultiplier;
         Debug.Log("FinalDamage:" + finalDamage);
-        // Trigger the OnDamage event with the calculated damage value
+        // Déclencher l'événement OnDamage avec la valeur des dégâts calculés
         OnDamage?.Invoke(finalDamage);
     }
 }
