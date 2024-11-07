@@ -394,11 +394,14 @@ GameObject:
   - component: {fileID: 921189487}
   - component: {fileID: 921189486}
   - component: {fileID: 921189485}
-  - component: {fileID: 921189490}
-  - component: {fileID: 921189494}
   - component: {fileID: 921189492}
   - component: {fileID: 921189491}
+  - component: {fileID: 921189497}
+  - component: {fileID: 921189496}
+  - component: {fileID: 921189495}
+  - component: {fileID: 921189494}
   - component: {fileID: 921189493}
+  - component: {fileID: 921189498}
   m_Layer: 0
   m_Name: Cube_TestPhysicsCollision
   m_TagString: Untagged
@@ -519,19 +522,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &921189490
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 921189483}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 160af5a1bae29b24f8a12cf99aa63686, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  baseDamage: 0
 --- !u!114 &921189491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -541,11 +531,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 921189483}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13438051b8329234e866c4ce6cbd086c, type: 3}
+  m_Script: {fileID: 11500000, guid: bbc70242d3564504090285e5cfb72a0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AdditionalDamage: 50
-  DamageMultiplier: 1
+  dropItems:
+  - item: {fileID: 1028358064}
+    quantity: 5
+    explosionForce: 2
+    explosionRadius: 1
 --- !u!114 &921189492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -587,11 +580,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 921189483}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab9973c587a216849a7bc6643247e188, type: 3}
+  m_Script: {fileID: 11500000, guid: 107b1b1e76fe5bf4eae072ba866256c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentHealth: 100
-  maxHealthLimit: 100
 --- !u!114 &921189494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -604,6 +595,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e2fac8d532463841990881903a2cd33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &921189495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921189483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13438051b8329234e866c4ce6cbd086c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AdditionalDamage: 50
+  DamageMultiplier: 1
+--- !u!114 &921189496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921189483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8c40c83917e44845ad2d7932a0ba897, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &921189497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921189483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab9973c587a216849a7bc6643247e188, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHealth: 100
+  maxHealthLimit: 100
+--- !u!114 &921189498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921189483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 160af5a1bae29b24f8a12cf99aa63686, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseDamage: 10
 --- !u!1 &1028358064
 GameObject:
   m_ObjectHideFlags: 0
@@ -617,9 +661,6 @@ GameObject:
   - component: {fileID: 1028358066}
   - component: {fileID: 1028358065}
   - component: {fileID: 1028358069}
-  - component: {fileID: 1028358072}
-  - component: {fileID: 1028358071}
-  - component: {fileID: 1028358070}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -740,46 +781,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1028358070
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1028358064}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e2fac8d532463841990881903a2cd33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1028358071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1028358064}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13438051b8329234e866c4ce6cbd086c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AdditionalDamage: 0
-  DamageMultiplier: 1
---- !u!114 &1028358072
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1028358064}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab9973c587a216849a7bc6643247e188, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentHealth: 100
-  maxHealthLimit: 100
 --- !u!1 &1362475034
 GameObject:
   m_ObjectHideFlags: 0
