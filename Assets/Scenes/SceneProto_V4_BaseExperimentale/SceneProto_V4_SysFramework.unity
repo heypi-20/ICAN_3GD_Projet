@@ -170,10 +170,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resetKey: 114
-  maxResetCount: 9999
-  resetCooldown: 0
+  maxResetCount: 3
+  resetCooldown: 5
   allowResetRecovery: 1
-  recoveryTime: 10
+  recoveryTime: 60
 --- !u!114 &51126516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,7 +186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 412bae7add40e21449e4d78203817d15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resetCountdown: 1
+  resetCountdown: 30
   maxSystemResets: -1
 --- !u!114 &51126517
 MonoBehaviour:
@@ -831,9 +831,9 @@ MonoBehaviour:
   maxRespawnCount: -1
   respawnTime: -1
   respawnWithSysResetCount: -1
-  respawnWithPlayerResetCount: 5
+  respawnWithPlayerResetCount: -1
   respawnOriginalPosition: 1
-  resetManager: {fileID: 0}
+  resetManager: {fileID: 51126513}
 --- !u!1 &1019183325
 GameObject:
   m_ObjectHideFlags: 0
