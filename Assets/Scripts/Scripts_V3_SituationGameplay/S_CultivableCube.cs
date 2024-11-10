@@ -15,7 +15,7 @@ public class S_CultivableCube : MonoBehaviour
     public Vector3 growthRangeDown = new Vector3(2f, 1f, 2f);
     [Tooltip("Nombre de blocs générés par cycle de croissance")]
     public int growthPerCycle = 1;
-    public bool DestoryTouchingObj=false;
+    public bool DestoryTouchingObj=true;
     [Tooltip("Détermine si tous les blocs sont détruits en une seule fois lors d'un coup")]
     public bool destroyAllOnHit = true;
 
