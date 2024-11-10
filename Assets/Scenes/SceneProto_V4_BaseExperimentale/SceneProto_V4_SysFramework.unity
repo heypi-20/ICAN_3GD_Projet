@@ -832,6 +832,9 @@ GameObject:
   - component: {fileID: 51126517}
   - component: {fileID: 51126518}
   - component: {fileID: 51126519}
+  - component: {fileID: 51126520}
+  - component: {fileID: 51126522}
+  - component: {fileID: 51126521}
   m_Layer: 0
   m_Name: ResetManager
   m_TagString: Untagged
@@ -883,7 +886,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 412bae7add40e21449e4d78203817d15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resetCountdown: 30
+  resetCountdown: 1
   maxSystemResets: -1
 --- !u!114 &51126517
 MonoBehaviour:
@@ -926,6 +929,45 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerResetCompressionTimes: 10
+  random: 0
+  randomNumber: {x: 1, y: 10}
+--- !u!114 &51126520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 51126513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 807927352db486848baa8a3e1f5984e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &51126521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 51126513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88c13c3d16513e24585614ddb6aa022d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &51126522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 51126513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6ea355eee1bfb647a2101f9f2399c60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  systemResetCompressionTimes: 10
   random: 0
   randomNumber: {x: 1, y: 10}
 --- !u!1 &126216320
