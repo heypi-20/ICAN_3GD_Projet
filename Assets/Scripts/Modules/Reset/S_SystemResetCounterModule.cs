@@ -15,7 +15,7 @@ public class S_SystemResetCounterModule : MonoBehaviour
         systemResetModule = GetComponent<S_SystemResetModule>();
         if (systemResetModule != null)
         {
-            systemResetModule.SystemeResetEvent += OnSystemReset;
+            systemResetModule.SystemResetEvent += OnSystemReset;
         }
 
         // Initialiser le texte du compteur si la référence est définie

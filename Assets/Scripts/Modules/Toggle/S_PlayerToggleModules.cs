@@ -12,31 +12,21 @@ public class S_PlayerToggleModules : MonoBehaviour
 
     public List<ToggleObjectGroup> toggleGroups = new List<ToggleObjectGroup>(); // Différents groupes d'objets avec des intervalles de basculement distincts
 
-    private S_PlayerResetCounterModule playerResetCounterModule;
-    private int previousResetCount = 0;
+    private int currentResetCount = 0;
 
-    private void Start()
+    public void IncrementResetCount()
     {
-        // Obtenir la référence au module de compteur de réinitialisations du joueur
-        playerResetCounterModule = GetComponent<S_PlayerResetCounterModule>();
-        if (playerResetCounterModule != null)
-        {
-            previousResetCount = playerResetCounterModule.PlayerResetCount;
-        }
-    }
+        // Incrémenter le compteur de réinitialisations
+        currentResetCount++;
 
-    private void OnPlayerReset()
-    {
         // Vérifier si le nombre de réinitialisations a atteint l'intervalle de basculement pour chaque groupe
-        int resetDifference = playerResetCounterModule.PlayerResetCount - previousResetCount;
         foreach (ToggleObjectGroup group in toggleGroups)
         {
-            if (resetDifference >= group.resetInterval)
+            if (currentResetCount % group.resetInterval == 0)
             {
                 ToggleObjectsState(group);
             }
         }
-        previousResetCount = playerResetCounterModule.PlayerResetCount; // Mettre à jour le compteur précédent
     }
 
     private void ToggleObjectsState(ToggleObjectGroup group)

@@ -831,10 +831,9 @@ GameObject:
   - component: {fileID: 51126516}
   - component: {fileID: 51126517}
   - component: {fileID: 51126518}
-  - component: {fileID: 51126519}
-  - component: {fileID: 51126520}
-  - component: {fileID: 51126522}
-  - component: {fileID: 51126521}
+  - component: {fileID: 51126523}
+  - component: {fileID: 51126524}
+  - component: {fileID: 51126525}
   m_Layer: 0
   m_Name: ResetManager
   m_TagString: Untagged
@@ -870,9 +869,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resetKey: 114
-  maxResetCount: 3
-  resetCooldown: 5
-  allowResetRecovery: 1
+  maxResetCount: 999
+  resetCooldown: 0.1
+  allowResetRecovery: 0
   recoveryTime: 60
 --- !u!114 &51126516
 MonoBehaviour:
@@ -916,7 +915,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resetCountText: {fileID: 1019183327}
   SystemResetCount: 0
---- !u!114 &51126519
+--- !u!114 &51126523
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -925,13 +924,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 51126513}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9966a94b4a862f42b8ad4c93a15b25a, type: 3}
+  m_Script: {fileID: 11500000, guid: 54d0324ae3d722a43a42e74e062348be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerResetCompressionTimes: 10
-  random: 0
-  randomNumber: {x: 1, y: 10}
---- !u!114 &51126520
+  toggleGroups:
+  - toggleObjects:
+    - {fileID: 264092607}
+    - {fileID: 49280055}
+    resetInterval: 3
+  - toggleObjects:
+    - {fileID: 1746273663}
+    - {fileID: 1575982306}
+    resetInterval: 1
+--- !u!114 &51126524
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -940,10 +945,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 51126513}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 807927352db486848baa8a3e1f5984e4, type: 3}
+  m_Script: {fileID: 11500000, guid: bf138c5ec7c03634dbfe3f03dd89e72b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &51126521
+--- !u!114 &51126525
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -952,24 +957,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 51126513}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88c13c3d16513e24585614ddb6aa022d, type: 3}
+  m_Script: {fileID: 11500000, guid: 15be19cf45f6e584fb2c90cb57a79fcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &51126522
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 51126513}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6ea355eee1bfb647a2101f9f2399c60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  systemResetCompressionTimes: 10
-  random: 0
-  randomNumber: {x: 1, y: 10}
 --- !u!1 &126216320
 GameObject:
   m_ObjectHideFlags: 0
