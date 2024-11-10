@@ -21,8 +21,7 @@ public class S_PlayerController : MonoBehaviour
     public float jumpForce = 5f;
     [Tooltip("Force gravitationnelle supplémentaire appliquée pour des chutes plus réalistes")]
     public float extraGravity = 2f;
-    [Tooltip("Le nombre maximum de sauts autorisés")]
-    public int maxJumps = 2;
+    
 
     [Header("Keybinds")]
     [Tooltip("La touche utilisée pour sauter")]
@@ -33,6 +32,7 @@ public class S_PlayerController : MonoBehaviour
     public S_GroundCheck groundCheck;
 
     private bool isJumping = false;  // Indique si le joueur est en train de sauter
+    
     private int currentJumps = 0;    // Le nombre actuel de sauts effectués
     private Rigidbody rb;  // Référence au Rigidbody du joueur
     private float horizontalInput;  // Entrée horizontale de déplacement
@@ -82,7 +82,7 @@ public class S_PlayerController : MonoBehaviour
         verticalInput = Input.GetAxisRaw("Vertical");
 
         // Gérer l'entrée pour le saut, seulement si le nombre de sauts autorisés n'est pas atteint
-        if (Input.GetKeyDown(jumpKey) && currentJumps < maxJumps)
+        if (Input.GetKeyDown(jumpKey)&&groundCheck.IsGrounded)
         {
             isJumping = true;
         }
