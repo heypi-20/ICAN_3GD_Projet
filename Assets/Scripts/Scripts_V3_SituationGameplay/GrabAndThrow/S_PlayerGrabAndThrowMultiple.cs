@@ -19,6 +19,11 @@ public class S_PlayerGrabAndThrowMultiple : MonoBehaviour
     public LayerMask grabLayerMask;
 
     [Header("Keybinds")]
+    public bool autoGrab;
+    public float grabCooldown = 1f;
+    private float grabTimer = 0f;
+
+
     [Tooltip("La touche utilisée pour attraper")]
     public KeyCode grabKey = KeyCode.E;
     [Tooltip("La touche utilisée pour lancer un par un")]
@@ -42,6 +47,16 @@ public class S_PlayerGrabAndThrowMultiple : MonoBehaviour
         if (Input.GetKeyDown(grabKey))
         {
             TryGrabObject();  // Tenter d'attraper un objet
+        }
+        if (autoGrab && grabTimer <= 0f)
+        {
+            TryGrabObject();
+            grabTimer = grabCooldown; 
+        }
+        
+        if (grabTimer > 0f)
+        {
+            grabTimer -= Time.deltaTime;
         }
 
         if (toggleThrowMode)
