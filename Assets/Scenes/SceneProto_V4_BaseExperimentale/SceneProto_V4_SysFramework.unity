@@ -831,6 +831,7 @@ GameObject:
   - component: {fileID: 51126516}
   - component: {fileID: 51126517}
   - component: {fileID: 51126518}
+  - component: {fileID: 51126519}
   m_Layer: 0
   m_Name: ResetManager
   m_TagString: Untagged
@@ -912,6 +913,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resetCountText: {fileID: 1019183327}
   SystemResetCount: 0
+--- !u!114 &51126519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 51126513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9966a94b4a862f42b8ad4c93a15b25a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerResetCompressionTimes: 10
+  random: 0
+  randomNumber: {x: 1, y: 10}
 --- !u!1 &126216320
 GameObject:
   m_ObjectHideFlags: 0
