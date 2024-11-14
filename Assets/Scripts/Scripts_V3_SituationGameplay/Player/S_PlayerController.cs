@@ -75,6 +75,7 @@ public class S_PlayerController : MonoBehaviour
         }
     }
 
+
     // Gérer les entrées utilisateur
     private void HandleInput()
     {
@@ -141,22 +142,18 @@ public class S_PlayerController : MonoBehaviour
     }
 
     // Gérer la rotation du joueur en fonction de la position de la souris
-    private void RotatePlayer()
+    void RotatePlayer()
     {
-        // Obtenir la position de la souris dans le monde
+        Plane groundPlane = new Plane(Vector3.up, transform.position);
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        if (groundPlane.Raycast(ray, out float enter))
         {
-            // Calculer la direction vers laquelle le joueur doit se tourner
-            Vector3 directionToLook = hit.point - transform.position;
-            directionToLook.y = 0f;  // S'assurer que la rotation est seulement sur le plan horizontal
+            Vector3 hitPoint = ray.GetPoint(enter);
+            Vector3 directionToLook = hitPoint - transform.position;
+            directionToLook.y = 0f;  
 
-            // Calculer la rotation cible
             Quaternion targetRotation = Quaternion.LookRotation(directionToLook);
-
-            // Appliquer une rotation lissée vers la direction cible
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
     }

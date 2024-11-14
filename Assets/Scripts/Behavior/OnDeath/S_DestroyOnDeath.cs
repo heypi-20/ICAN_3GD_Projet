@@ -35,7 +35,6 @@ public class S_DestroyOnDeath : MonoBehaviour
 
     private void HandleOnDeath()
     {
-        Debug.Log("Événement OnDeath détecté. Destruction de l'objet...");
 
         if (destructionModule != null)
         {

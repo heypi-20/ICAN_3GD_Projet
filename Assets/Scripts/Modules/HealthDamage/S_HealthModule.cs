@@ -29,7 +29,6 @@ public class S_HealthModule : MonoBehaviour
 
     public void Die()
     {
-        Debug.Log("Die");  // Afficher un message de détection de mort
         OnDeath?.Invoke();  // Déclencher l'événement OnDeath si des abonnés sont présents
     }
 }

@@ -69,7 +69,6 @@ public class S_PhysicsCollisionModule : MonoBehaviour
     }
     public void InvokeOnTouchEvent()
     {
-        Debug.Log("Touch"); // Afficher un message de détection
         OnTouch?.Invoke(); // Déclencher l'événement OnTouch si des abonnés sont présents
     }
 

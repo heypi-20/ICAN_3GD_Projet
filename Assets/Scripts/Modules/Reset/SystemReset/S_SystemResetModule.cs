@@ -52,7 +52,6 @@ public class S_SystemResetModule : MonoBehaviour
     public void InvokeSystemeResetEvent()
     {
         // Invoquer l'événement de reset système
-        Debug.Log("System Reset");
         SystemResetEvent?.Invoke();
     }
 }

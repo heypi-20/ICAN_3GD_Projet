@@ -35,7 +35,6 @@ public class S_RespawnOnDestroyed : MonoBehaviour
 
     private void HandleOnDestroyed()
     {
-        Debug.Log("Événement OnDestroyed détecté. Lancer le processus de respawn...");
 
         if (respawnModule != null)
         {

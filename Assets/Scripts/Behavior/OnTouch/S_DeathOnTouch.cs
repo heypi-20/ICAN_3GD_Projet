@@ -34,7 +34,6 @@ public class S_DeathOnTouch : MonoBehaviour
 
     private void HandleOnTouch()
     {
-        Debug.Log("OnTouch event detected. Triggering death...");
 
         if (healthModule != null)
         {
