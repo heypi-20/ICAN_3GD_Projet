@@ -2423,9 +2423,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c365d72c6dda754fb3d14e22f78a0f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  growingEveryXTime: 5
-  growingEveryXCalls: -1
-  growingCount: 100
+  growingEveryXTime: -1
+  growingEveryXCalls: 3
+  growingCount: 999
   growthWithCurve: 1
   growthCurve:
     serializedVersion: 2
@@ -2433,8 +2433,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0
-      outSlope: 0
+      inSlope: 2
+      outSlope: 2
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -2442,8 +2442,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 2
-      outSlope: 2
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -2451,7 +2451,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  growthDuration: 3
+  growthDuration: 1
 --- !u!43 &690316554
 Mesh:
   m_ObjectHideFlags: 0

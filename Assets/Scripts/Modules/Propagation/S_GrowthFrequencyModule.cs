@@ -15,7 +15,6 @@ public class S_GrowthFrequencyModule : MonoBehaviour
     public event Action GrowthRequest; // Événement pour demander la croissance
 
     private int currentCallCount = 0; // Compteur d'appels
-    private bool isGrowing = false;
 
     private void Update()
     {
@@ -27,9 +26,14 @@ public class S_GrowthFrequencyModule : MonoBehaviour
 
     public void StartGrowth()
     {
-        if (growingEveryXTime > -1 && !isGrowing)
+        if (growingEveryXTime > -1)
         {
-            InvokeRepeating(nameof(GrowthByTime), 0f, growingEveryXTime);
+            InvokeRepeating(nameof(GrowthByTime), growingEveryXTime, growingEveryXTime);
+            
+        }
+        else
+        {
+            StartGrowthByCall();
         }
     }
 
@@ -40,50 +44,43 @@ public class S_GrowthFrequencyModule : MonoBehaviour
         {
             currentCallCount = 0;
             StartCoroutine(InvokeGrowthRequestWithCurve(growingCount, growthDuration));
+            
         }
     }
 
     public void InvokeGrowthRequestEvent()
     {
-        Debug.Log("==== Growth Request Event Triggered ====");
+        Debug.Log("111111");
         GrowthRequest?.Invoke();
     }
 
     private void GrowthByTime()
     {
-        if (!isGrowing)
-        {
-            StartCoroutine(InvokeGrowthRequestWithCurve(growingCount, growthDuration));
-        }
+        StartCoroutine(InvokeGrowthRequestWithCurve(growingCount, growthDuration));
     }
 
     private IEnumerator InvokeGrowthRequestWithCurve(int count, float duration)
     {
-        isGrowing = true;
         float startTime = Time.time;
+        float elapsedTime = 0f;
         int growthCompleted = 0;
 
         while (growthCompleted < count)
         {
-            float elapsedTime = Time.time - startTime;
             float progress = Mathf.Clamp01(elapsedTime / duration);
             float rate = growthWithCurve && growthCurve != null ? growthCurve.Evaluate(progress) : 1f;
 
-            int growthToProcess = Mathf.CeilToInt(rate * count * Time.deltaTime / duration);
+            int growthToProcess = Mathf.CeilToInt(rate * count / (duration / Time.deltaTime));
             growthToProcess = Mathf.Min(growthToProcess, count - growthCompleted);
-
-            if (growthToProcess == 0) growthToProcess = 1; // Ensure at least one growth per iteration
 
             for (int i = 0; i < growthToProcess; i++)
             {
                 InvokeGrowthRequestEvent();
                 growthCompleted++;
-                if (growthCompleted >= count) break;
             }
 
+            elapsedTime = Time.time - startTime;
             yield return null; // Attendre une frame pour éviter de bloquer Unity
         }
-
-        isGrowing = false;
     }
 }
