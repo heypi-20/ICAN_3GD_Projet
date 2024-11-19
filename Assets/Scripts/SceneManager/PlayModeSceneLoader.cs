@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[InitializeOnLoad]
 public static class PlayModeSceneLoader
 {
     private static SceneData[] _scenes;
