@@ -11,17 +11,21 @@ public class S_PlayerController : MonoBehaviour
     public float groundDrag = 5f;
     [Tooltip("Le multiplicateur de mouvement en l'air")]
     public float airMultiplier = 0.4f;
-
     [Header("Rotation")]
     [Tooltip("La vitesse de rotation du joueur en fonction de la position de la souris")]
     public float rotationSpeed = 1200f;
+    [Tooltip("Utiliser la souris pour contrôler la direction au lieu de RotatePlayer")]
+    public bool FPSOption = false;
+    [Tooltip("La limite de rotation verticale vers le haut")]
+    public float maxLookUpAngle = 60f;
+    [Tooltip("La limite de rotation verticale vers le bas")]
+    public float maxLookDownAngle = -60f;
 
     [Header("Jump Settings")]
     [Tooltip("La force du saut")]
     public float jumpForce = 5f;
     [Tooltip("Force gravitationnelle supplémentaire appliquée pour des chutes plus réalistes")]
     public float extraGravity = 2f;
-    
 
     [Header("Keybinds")]
     [Tooltip("La touche utilisée pour sauter")]
@@ -32,23 +36,36 @@ public class S_PlayerController : MonoBehaviour
     public S_GroundCheck groundCheck;
 
     private bool isJumping = false;  // Indique si le joueur est en train de sauter
-    
+
     private int currentJumps = 0;    // Le nombre actuel de sauts effectués
     private Rigidbody rb;  // Référence au Rigidbody du joueur
     private float horizontalInput;  // Entrée horizontale de déplacement
     private float verticalInput;  // Entrée verticale de déplacement
     private Vector3 moveDirection;  // La direction dans laquelle le joueur se déplace
+    private float verticalRotation = 0f;  // Rotation verticale actuelle de la caméra
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+
+        // Initialiser l'état du curseur
+        UpdateCursorState();
     }
 
     void Update()
     {
         HandleInput();  // Gérer les entrées utilisateur
-        RotatePlayer();  // Gérer la rotation du joueur
+
+        if (!FPSOption)
+        {
+            RotatePlayer();  // Gérer la rotation du joueur si l'option est désactivée
+        }
+        else
+        {
+            RotateWithCamera();  // Gérer la rotation du joueur pour qu'elle suive la caméra en mode FPS
+        }
+
         SpeedControl();  // Contrôler la vitesse de déplacement
 
         // Appliquer le drag au sol
@@ -75,7 +92,6 @@ public class S_PlayerController : MonoBehaviour
         }
     }
 
-
     // Gérer les entrées utilisateur
     private void HandleInput()
     {
@@ -83,17 +99,34 @@ public class S_PlayerController : MonoBehaviour
         verticalInput = Input.GetAxisRaw("Vertical");
 
         // Gérer l'entrée pour le saut, seulement si le nombre de sauts autorisés n'est pas atteint
-        if (Input.GetKeyDown(jumpKey)&&groundCheck.IsGrounded)
+        if (Input.GetKeyDown(jumpKey) && groundCheck.IsGrounded)
         {
             isJumping = true;
+        }
+
+        // Gérer la rotation avec la souris si l'option est activée
+        if (FPSOption)
+        {
+            RotateWithMouse();
+            UpdateCursorState();  // Mettre à jour l'état du curseur en fonction du mode FPS
         }
     }
 
     // Déplacer le joueur
     private void MovePlayer()
     {
-        // Calculer la direction du mouvement
-        moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
+        if (FPSOption)
+        {
+            // Déplacement dans la direction de la caméra (FPS-style)
+            moveDirection = Camera.main.transform.forward * verticalInput + Camera.main.transform.right * horizontalInput;
+            moveDirection.y = 0f;  // Empêcher le déplacement vertical
+            moveDirection.Normalize();
+        }
+        else
+        {
+            // Déplacement traditionnel
+            moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
+        }
 
         // Appliquer la force de déplacement au sol
         if (groundCheck.IsGrounded)
@@ -124,7 +157,7 @@ public class S_PlayerController : MonoBehaviour
     private void Jump()
     {
         // Réinitialiser la vitesse sur l'axe Y
-        rb.velocity = new Vector3(rb.velocity.x*0.5f, 0f, rb.velocity.z*0.5f);
+        rb.velocity = new Vector3(rb.velocity.x * 0.5f, 0f, rb.velocity.z * 0.5f);
 
         // Appliquer la force du saut
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
@@ -151,10 +184,49 @@ public class S_PlayerController : MonoBehaviour
         {
             Vector3 hitPoint = ray.GetPoint(enter);
             Vector3 directionToLook = hitPoint - transform.position;
-            directionToLook.y = 0f;  
+            directionToLook.y = 0f;
 
             Quaternion targetRotation = Quaternion.LookRotation(directionToLook);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
+    }
+
+    // Gérer la rotation du joueur directement avec la souris (FPS-style)
+    void RotateWithMouse()
+    {
+        float mouseX = Input.GetAxis("Mouse X") * rotationSpeed * Time.deltaTime;
+        float mouseY = -Input.GetAxis("Mouse Y") * rotationSpeed * Time.deltaTime;
+
+        // Rotation horizontale
+        transform.Rotate(0, mouseX, 0);
+
+        // Rotation verticale
+        verticalRotation += mouseY;
+        verticalRotation = Mathf.Clamp(verticalRotation, maxLookDownAngle, maxLookUpAngle);
+
+        Camera.main.transform.localEulerAngles = new Vector3(verticalRotation, Camera.main.transform.localEulerAngles.y, 0);
+    }
+
+    // Gérer la rotation du joueur pour qu'elle suive la caméra en mode FPS
+    void RotateWithCamera()
+    {
+        Vector3 cameraForward = Camera.main.transform.forward;
+        cameraForward.y = 0f;  // Ne conserver que la rotation horizontale
+        transform.rotation = Quaternion.LookRotation(cameraForward);
+    }
+
+    // Mettre à jour l'état du curseur en fonction du mode FPS
+    void UpdateCursorState()
+    {
+        if (FPSOption)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
     }
 }
