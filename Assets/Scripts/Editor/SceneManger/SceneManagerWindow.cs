@@ -29,7 +29,6 @@ public class SceneManagerWindow : EditorWindow
 
     private void OnGUI()
     {
-
         LoadAllAssetsOfType<SceneData>(out scenes);
         foreach(var scene in scenes) {
             SerializedObject so = new SerializedObject(scene);
@@ -54,11 +53,11 @@ public class SceneManagerWindow : EditorWindow
             so.ApplyModifiedProperties();
         }
         
-        checkSceneData = GUILayout.Toggle(checkSceneData, "Check If SceneData ?");
-
-        if (Event.current.type == EventType.Repaint && checkSceneData) {
-            CheckIfSceneDataExist();
-        }
+        // checkSceneData = GUILayout.Toggle(checkSceneData, "Check If SceneData ?");
+        //
+        // // if (Event.current.type == EventType.Repaint && checkSceneData) {
+        // //     CheckIfSceneDataExist();
+        // // }
     }
     private static void LoadAllAssetsOfType<T>(out T[] assets) where T : Object
     {
