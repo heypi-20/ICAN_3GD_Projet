@@ -49,11 +49,17 @@ public class S_PhysicsCollisionModule : MonoBehaviour
     private float lastPhysicCastTime = -Mathf.Infinity; // Dernier temps de PhysicCast
     private bool hasCollided = false; // Indique si une collision a eu lieu
 
+    /// <summary>
+    /// Initialiser la référence au Rigidbody attaché à cet objet.
+    /// </summary>
     private void Awake()
     {
         rb = GetComponent<Rigidbody>(); // Récupérer le Rigidbody attaché à cet objet
     }
 
+    /// <summary>
+    /// Mettre à jour l'état chaque frame, effectuer un PhysicCast si activé et nécessaire.
+    /// </summary>
     private void Update()
     {
         if (usePhysicCast && ShouldPerformPhysicCast()) // Si PhysicCast est activé et qu'on doit effectuer une détection
@@ -63,15 +69,20 @@ public class S_PhysicsCollisionModule : MonoBehaviour
             lastPhysicCastTime = Time.time; // Mettre à jour le temps de la dernière détection
         }
     }
-    private bool ShouldPerformPhysicCast()
-    {
-        return Time.time >= lastPhysicCastTime + physicCastCooldown; // Vérifier si le cooldown est écoulé
-    }
+
+    /// <summary>
+    /// Déclencher l'événement OnTouch si des abonnés sont présents.
+    /// </summary>
     public void InvokeOnTouchEvent()
     {
         OnTouch?.Invoke(); // Déclencher l'événement OnTouch si des abonnés sont présents
     }
 
+    #region PhysicCastMethodes
+
+    /// <summary>
+    /// Effectuer le PhysicCast en fonction du type d'overlap sélectionné.
+    /// </summary>
     private void PerformPhysicCast()
     {
         switch (overlapType) // Choisir le type d'overlap à effectuer
@@ -88,13 +99,9 @@ public class S_PhysicsCollisionModule : MonoBehaviour
         }
     }
 
-    private bool CheckConditions(GameObject obj, string[] tags, string[] componentNames)
-    {
-        bool tagCondition = tags == null || tags.Length == 0 || CheckTags(obj, tags); // Vérifier si les tags correspondent
-        bool componentCondition = componentNames == null || componentNames.Length == 0 || CheckComponentsByName(obj, componentNames); // Vérifier si les composants correspondent
-        return tagCondition && componentCondition; // Retourner vrai si toutes les conditions sont remplies
-    }
-
+    /// <summary>
+    /// Effectuer un BoxCast pour détecter les objets dans une zone de forme rectangulaire.
+    /// </summary>
     private void PerformBoxCast()
     {
         Vector3 boxSize = withScaleSize ? transform.lossyScale : customSize; // Déterminer la taille de la box
@@ -121,6 +128,9 @@ public class S_PhysicsCollisionModule : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Effectuer un SphereCast pour détecter les objets dans une zone de forme sphérique.
+    /// </summary>
     private void PerformSphereCast()
     {
         Vector3 sphereCenter = transform.TransformPoint(customOffset); // Déterminer le centre de la sphère
@@ -147,6 +157,9 @@ public class S_PhysicsCollisionModule : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Effectuer un CapsuleCast pour détecter les objets dans une zone de forme cylindrique.
+    /// </summary>
     private void PerformCapsuleCast()
     {
         Vector3 point1 = transform.TransformPoint(capsulePoint1 + customOffset); // Déterminer le point 1 de la capsule
@@ -173,7 +186,13 @@ public class S_PhysicsCollisionModule : MonoBehaviour
             }
         }
     }
+    #endregion
 
+    #region CollisionMethodes
+
+    /// <summary>
+    /// Gérer la détection de collision lorsqu'un objet entre en contact avec celui-ci.
+    /// </summary>
     private void OnCollisionEnter(Collision collision)
     {
         if (useCollision && Time.time >= lastCollisionTime + collisionCooldown &&
@@ -183,7 +202,31 @@ public class S_PhysicsCollisionModule : MonoBehaviour
             lastCollisionTime = Time.time; // Mettre à jour le temps de la dernière collision
         }
     }
+    #endregion
 
+    #region ConditionCheckers
+
+    /// <summary>
+    /// Vérifier les conditions sur l'objet cible, incluant les tags et les composants spécifiés.
+    /// </summary>
+    private bool CheckConditions(GameObject obj, string[] tags, string[] componentNames)
+    {
+        bool tagCondition = tags == null || tags.Length == 0 || CheckTags(obj, tags); // Vérifier si les tags correspondent
+        bool componentCondition = componentNames == null || componentNames.Length == 0 || CheckComponentsByName(obj, componentNames); // Vérifier si les composants correspondent
+        return tagCondition && componentCondition; // Retourner vrai si toutes les conditions sont remplies
+    }
+
+    /// <summary>
+    /// Déterminer si un PhysicCast doit être effectué en fonction du cooldown.
+    /// </summary>
+    private bool ShouldPerformPhysicCast()
+    {
+        return Time.time >= lastPhysicCastTime + physicCastCooldown; // Vérifier si le cooldown est écoulé
+    }
+
+    /// <summary>
+    /// Vérifier si l'objet a un des tags spécifiés.
+    /// </summary>
     private bool CheckTags(GameObject obj, string[] tags)
     {
         if (tags == null || tags.Length == 0) return true; // Si aucun tag n'est spécifié, retourner vrai
@@ -198,6 +241,9 @@ public class S_PhysicsCollisionModule : MonoBehaviour
         return false; // Aucun tag ne correspond
     }
 
+    /// <summary>
+    /// Vérifier si l'objet a un des composants spécifiés par leur nom.
+    /// </summary>
     private bool CheckComponentsByName(GameObject obj, string[] componentNames)
     {
         if (componentNames == null || componentNames.Length == 0) return true; // Si aucun composant n'est spécifié, retourner vrai
@@ -211,7 +257,13 @@ public class S_PhysicsCollisionModule : MonoBehaviour
         }
         return false; // Aucun composant ne correspond
     }
+    #endregion
 
+    #region DrawGizmos
+
+    /// <summary>
+    /// Dessiner les Gizmos dans l'éditeur pour représenter visuellement les différents types d'overlap.
+    /// </summary>
     private void OnDrawGizmos()
     {
         if (usePhysicCast)
@@ -241,4 +293,5 @@ public class S_PhysicsCollisionModule : MonoBehaviour
             }
         }
     }
+    #endregion
 }
