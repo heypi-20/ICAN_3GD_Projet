@@ -25,7 +25,7 @@ public class SceneManagerWindow : EditorWindow
     private string[] scenesGUIDs;
     private string missingScene;
     
-    private bool checkSceneData = false;
+    // private bool checkSckeneData = false;
 
     private void OnGUI()
     {
@@ -33,32 +33,44 @@ public class SceneManagerWindow : EditorWindow
         foreach(var scene in scenes) {
             SerializedObject so = new SerializedObject(scene);
             so.Update();
-            
+
             EditorGUILayout.BeginHorizontal("Box");
+            
+            if (scene.isPersistant && scene.isOpen) {
+                GUI.color = Color.cyan;
+            } else if (scene.isPersistant) {
+                GUI.color = Color.red;
+            } else if (scene.isOpen) {
+                GUI.color = Color.green;
+            } else {
+                GUI.color = Color.white;
+            }
             
             EditorGUILayout.LabelField(scene.sceneRef.Name);
 
             scene.isPersistant = GUILayout.Toggle(scene.isPersistant, "Persistant");
             so.FindProperty("isPersistant").boolValue = scene.isPersistant;
-            
+
             GUI.enabled = false;
             scene.isOpen = GUILayout.Toggle(SceneManager.GetSceneByName(scene.sceneRef.Name).isLoaded, "isOpen ?");
             GUI.enabled = true;
             so.FindProperty("isOpen").boolValue = scene.isOpen;
-            
+
             OpenScene(scene.sceneRef.Path);
             CloseScene(scene);
-            EditorGUILayout.EndHorizontal();
             
+            EditorGUILayout.EndHorizontal();
+
             so.ApplyModifiedProperties();
         }
-        
-        // checkSceneData = GUILayout.Toggle(checkSceneData, "Check If SceneData ?");
-        //
-        // // if (Event.current.type == EventType.Repaint && checkSceneData) {
-        // //     CheckIfSceneDataExist();
-        // // }
     }
+        
+    // checkSceneData = GUILayout.Toggle(checkSceneData, "Check If SceneData ?");
+    //
+    // // if (Event.current.type == EventType.Repaint && checkSceneData) {
+    // //     CheckIfSceneDataExist();
+    // // }
+
     private static void LoadAllAssetsOfType<T>(out T[] assets) where T : Object
     {
         string[] guids = AssetDatabase.FindAssets("t:"+typeof(T));
@@ -79,10 +91,10 @@ public class SceneManagerWindow : EditorWindow
             var scenePath = AssetDatabase.GUIDToAssetPath(scenesGUIDs[i]);
             var sceneName = System.IO.Path.GetFileNameWithoutExtension(scenePath);
 
-            if (!System.IO.File.Exists( "Assets/Data/SceneDatas" + sceneName + ".asset")) {
+            if (!System.IO.File.Exists( "Assets/Common/Data/SceneDatas" + sceneName + ".asset")) {
                 SceneData newScene = ScriptableObject.CreateInstance<SceneData>();
                 newScene.sceneRef = SceneReference.FromScenePath(scenePath);
-                AssetDatabase.CreateAsset(newScene, "Assets/Data/SceneDatas" + sceneName + ".asset");
+                AssetDatabase.CreateAsset(newScene, "Assets/Common/Data/SceneDatas" + sceneName + ".asset");
             }
         }
     }
