@@ -12,23 +12,36 @@ public class S_GrowthFrequencyModule : MonoBehaviour
 
     private int currentCallCount = 0; // Compteur d'appels
     private bool isWaitingForTime = false; // Indicateur pour savoir si le module attend la fin du délai de croissance
-
+    private bool SeedIsActive = false;
     private void Update()
     {
         if (Input.GetKeyUp(KeyCode.Q))
         {
-            StartGrowth();
+            UnlockGrowth();
         }
+    }
+
+    public void UnlockGrowth()
+    {
+        Debug.Log("UnlockGrowthRequest");
+        SeedIsActive = true;
+        StartGrowth();
+    }
+    public void LockGrowth()
+    {
+        SeedIsActive = false;
+        StopGrowthByTime();
     }
 
     public void StartGrowth()
     {
-        if (growingEveryXCalls > -1 && !isWaitingForTime)
+        if (growingEveryXCalls > -1 && !isWaitingForTime && SeedIsActive)
         {
             StartGrowthByCall();
         }
-        else if (growingEveryXTime > -1)
+        else if (growingEveryXTime > -1 && SeedIsActive)
         {
+            Debug.Log("GrowthRequest");
             InvokeRepeating(nameof(GrowthByTime), growingEveryXTime, growingEveryXTime);
         }
     }
@@ -60,6 +73,7 @@ public class S_GrowthFrequencyModule : MonoBehaviour
     private IEnumerator WaitForGrowthTime()
     {
         yield return new WaitForSeconds(growingEveryXTime);
+        
         StartCoroutine(InvokeGrowthRequest(growingCount));
         isWaitingForTime = false;
     }

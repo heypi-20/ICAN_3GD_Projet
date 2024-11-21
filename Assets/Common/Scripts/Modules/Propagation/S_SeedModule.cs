@@ -52,7 +52,7 @@ public class S_SeedModule : MonoBehaviour
         ActivateSeed();
     }
 
-    private void ActivateSeed()
+    public void ActivateSeed()
     {
         if (seedActived) return; // Si déjà activé, ne rien faire
         if (activeKinematic)
@@ -63,6 +63,17 @@ public class S_SeedModule : MonoBehaviour
         UpdateSeedColor();
         SeedIsActive?.Invoke();
         Debug.Log("Seed has been activated.");
+    }
+    public void DeactivateSeed()
+    {
+        if (!seedActived) return; // Si déjà désactivé, ne rien faire
+        if (activeKinematic)
+        {
+            seedRb.isKinematic = false;
+        }
+        seedActived = false;
+        UpdateSeedColor();
+        Debug.Log("Seed has been deactivated.");
     }
 
     private void UpdateSeedColor()
