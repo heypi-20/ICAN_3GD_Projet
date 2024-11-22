@@ -34,8 +34,6 @@ public class SceneManagerWindow : EditorWindow
             SerializedObject so = new SerializedObject(scene);
             so.Update();
 
-            EditorGUILayout.BeginHorizontal("Box");
-            
             if (scene.isPersistant && scene.isOpen) {
                 GUI.color = Color.cyan;
             } else if (scene.isPersistant) {
@@ -45,6 +43,7 @@ public class SceneManagerWindow : EditorWindow
             } else {
                 GUI.color = Color.white;
             }
+            EditorGUILayout.BeginHorizontal("Box");
             
             EditorGUILayout.LabelField(scene.sceneRef.Name);
 
