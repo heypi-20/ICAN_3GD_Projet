@@ -8,7 +8,7 @@ public class S_DestructionModule : MonoBehaviour
     public GameObject destructionEffectPrefab; // Prefab de l'effet de destruction (ex. particules)
     public float destructionEffectLifetime = 2f; // Durée de vie de l'effet de destruction
     public bool useEffectLifetimeForTemporary = true; // Utiliser la durée de vie de l'effet uniquement pour la destruction temporaire
-
+    private bool isDestroyed=false;
     // Déclaration d'un événement public
     public event Action OnDestroyed;
 
@@ -16,6 +16,13 @@ public class S_DestructionModule : MonoBehaviour
     public void DestroyObject()
     {
         // Déclenche l'événement de destruction
+        Renderer renderer = GetComponent<Renderer>();
+        if (renderer.enabled == true)
+        {
+            isDestroyed = false;
+        }
+
+        if(isDestroyed)return;
         OnDestroyed?.Invoke();
         destructionEffect(); // Générer l'effet de destruction
 
@@ -74,6 +81,7 @@ public class S_DestructionModule : MonoBehaviour
 
         Rigidbody rb = GetComponent<Rigidbody>();
         if (rb != null) rb.isKinematic = true;
+        isDestroyed=true;
 
         // Désactivation d'autres composants si nécessaire
     }
@@ -81,6 +89,7 @@ public class S_DestructionModule : MonoBehaviour
     // Coroutine pour détruire l'effet de destruction lorsque l'objet est réactivé
     private IEnumerator DestroyEffectOnReactivation(GameObject effectInstance)
     {
+        
         yield return null; // Attendre une frame pour s'assurer que l'objet a bien été désactivé
         Renderer renderer = GetComponent<Renderer>();
         while (renderer == null || !renderer.enabled)

@@ -71,6 +71,11 @@ public class S_RespawnModule : MonoBehaviour
                 isRespawning = true;
                 StartCoroutine(RespawnCoroutine());
             }
+            else if (respawnTime > 0)
+            {
+                isRespawning = true;
+                StartCoroutine(RespawnCoroutine());
+            }
             yield return null; // Attendre la prochaine frame avant de vérifier à nouveau
         }
     }

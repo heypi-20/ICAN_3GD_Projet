@@ -6,7 +6,7 @@ using VFolders.Libs;
 public class S_SeedRevertModule : MonoBehaviour
 {
     public int minChildCount = 1; // Nombre minimum d'enfants avant de déclencher le retour à la forme de graine
-    public float checkInterval = 1.0f; // Intervalle de temps pour vérifier le nombre d'enfants
+    public float checkInterval = 0.1f; // Intervalle de temps pour vérifier le nombre d'enfants
     public event Action OnRevertToSeed;
 
    

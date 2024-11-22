@@ -5,14 +5,15 @@ using UnityEngine;
 
 public class S_GrowthModeModule : MonoBehaviour
 {
-    public Vector3 growthDirection = Vector3.right; // Direction de croissance (X, Y, Z)
+    public Vector3 growthDirection = Vector3.forward; // Direction de croissance (X, Y, Z)
     public float growthDistance = 1.0f; // Distance entre chaque objet de croissance
     public float randomGrowthFactor = 0.0f; // Facteur aléatoire pour la croissance (0 signifie pas de randomisation)
     public GameObject growthPrefab; // Préfab de l'objet de croissance
     public int initialPoolSize = 10; // Taille initiale de la pool d'objets
     public int maxPoolSize = 20; // Taille maximale de la pool d'objets
-    public bool stopGrowingAtMaxPoolSize = true; // Arrêter de croître une fois la taille maximale atteinte
+    //public bool stopGrowingAtMaxPoolSize = true; // Arrêter de croître une fois la taille maximale atteinte
     public bool enableObstacleAvoidance = true; // Activer l'évitement des obstacles
+    [HideInInspector]
     public int maxAttemptsToAvoidObstacle = 3; // Nombre maximum de tentatives pour éviter un obstacle
 
     private ObjectPool<Transform> growthPool;
@@ -51,11 +52,6 @@ public class S_GrowthModeModule : MonoBehaviour
             if (lastGrowthPoint == null)
             {
                 lastGrowthPoint = branches.Count > 0 ? branches[branches.Count - 1] : this.transform;
-            }
-            if (stopGrowingAtMaxPoolSize && growthPool.CurrentSize >= maxPoolSize)
-            {
-                Debug.LogWarning("Max pool size reached. Growth halted.");
-                return;
             }
 
             Vector3 growthOffset = CalculateGrowthOffset();
