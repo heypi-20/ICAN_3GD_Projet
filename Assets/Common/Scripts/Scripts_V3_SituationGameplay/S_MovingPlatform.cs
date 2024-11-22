@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class S_MovingPlatform : MonoBehaviour
@@ -10,10 +11,21 @@ public class S_MovingPlatform : MonoBehaviour
     private float t = 0f; // Paramètre de progression (de 0 à 1)
 
     private bool StopForASec = true;
+    private bool PlayerIsOn = false;
+    public Vector3 Origin;
 
+    private void Start()
+    {
+        Origin = gameObject.transform.position;
+    }
     private void Update()
     {
-        if(StopForASec)
+        if(PlayerIsOn!)
+        {
+            transform.position = Origin;
+        }
+
+        if(StopForASec && PlayerIsOn)
         {
             // Lerp entre le point A et B en fonction de t
             t += Time.deltaTime * vitesse; // Incrementation de t selon le temps écoulé
@@ -36,7 +48,17 @@ public class S_MovingPlatform : MonoBehaviour
             }
         }        
     }
-
+    private void FixedUpdate()
+    {
+        PlayerIsOn = false;
+    }
+    private void OnCollisionStay(Collision collision)
+    {
+        if(collision.collider.CompareTag("Player"))
+        {
+            PlayerIsOn = true;
+        }
+    }
     IEnumerator MovePlat()
     {
         yield return new WaitForSeconds(1);
