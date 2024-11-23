@@ -10,7 +10,9 @@ public class S_GrowthModeModule : MonoBehaviour
     public float randomGrowthFactor = 0.0f; // Facteur aléatoire pour la croissance (0 signifie pas de randomisation)
     public GameObject growthPrefab; // Préfab de l'objet de croissance
     public int initialPoolSize = 10; // Taille initiale de la pool d'objets
-    public int maxPoolSize = 20; // Taille maximale de la pool d'objets
+    [HideInInspector]
+    public int maxPoolSize = 100; // Taille maximale de la pool d'objets
+    public int maxGrowNumber;
     //public bool stopGrowingAtMaxPoolSize = true; // Arrêter de croître une fois la taille maximale atteinte
     public bool enableObstacleAvoidance = true; // Activer l'évitement des obstacles
     [HideInInspector]
@@ -22,6 +24,7 @@ public class S_GrowthModeModule : MonoBehaviour
     private int currentAttemptCount = 0; // Compteur de tentatives actuelles
     private Vector3 lastTriedDirection = Vector3.zero; // Dernière direction essayée pour éviter les obstacles
     private bool canGrow = true; // Indique si la croissance est encore possible
+    private int currentGrowCount;
 
     private void Start()
     {
@@ -40,13 +43,26 @@ public class S_GrowthModeModule : MonoBehaviour
         {
             StartCoroutine(RefillPool());
         }
-
+        
         // Nettoyer les branches qui ont été détruites (si elles sont null)
         branches.RemoveAll(branch => branch == null);
+        currentGrowCount = branches.Count-1;
     }
 
     public void Grow()
     {
+        if (branches.Count <=1)
+        {
+            currentGrowCount = 0;
+        }
+        if (maxGrowNumber > -1)
+        {
+            if (CheckMaxGrowing())
+            {
+                return;
+            }
+        }
+        
         if (growthPool != null && canGrow)
         {
             if (lastGrowthPoint == null)
@@ -72,6 +88,20 @@ public class S_GrowthModeModule : MonoBehaviour
                     branches.Add(newGrowth); // Ajouter la nouvelle branche à la liste
                 }
             }
+        }
+    }
+
+
+
+    private bool CheckMaxGrowing()
+    {
+        if (currentGrowCount >= maxGrowNumber)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
