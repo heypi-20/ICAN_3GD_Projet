@@ -1,126 +1,88 @@
-﻿using UnityEditor;
+﻿using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
-[CanEditMultipleObjects]
-public class GameObjectScriptManager : EditorWindow
+public class ScriptInspectorWindow : EditorWindow
 {
-    #region Variables
+    private GameObject selectedGameObject; // GameObject sélectionné
+    private Vector2 scrollPosition;       // Pour la barre de défilement
+    private Editor[] scriptEditors;       // Éditeurs pour chaque script
 
-    private GameObject _selectedGO;
-    private Vector2 scrollPosition;
-    private Texture2D windowIcon;
-    private bool[] foldout; // Tableau pour les foldouts
-
-    #endregion
-
-    [MenuItem("Tools/ScriptManager")]
-    private static void ShowWindow()
+    [MenuItem("Tools/Script Inspector")]
+    public static void ShowWindow()
     {
-        var window = GetWindow<GameObjectScriptManager>();
-        window.titleContent = new GUIContent("Script Manager", window.windowIcon); // ToDo : Get Game Object Name by Selection
+        var window = GetWindow<ScriptInspectorWindow>();
+        window.titleContent = new GUIContent("Script Inspector");
         window.Show();
     }
 
-    private void OnEnable()
+    private void OnSelectionChange()
     {
-        windowIcon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Editor/Icons/Icon1.png");
+        // Mettre à jour lorsque la sélection change
+        selectedGameObject = Selection.activeGameObject;
+        UpdateScriptEditors();
+    }
+
+    private void UpdateScriptEditors()
+    {
+        // Nettoyer les éditeurs précédents
+        if (scriptEditors != null)
+        {
+            foreach (var editor in scriptEditors)
+            {
+                DestroyImmediate(editor);
+            }
+        }
+
+        if (selectedGameObject != null)
+        {
+            // Filtrer pour ne garder que les scripts (MonoBehaviour)
+            Component[] components = selectedGameObject.GetComponents<Component>();
+            var scripts = System.Array.FindAll(components, c => c is MonoBehaviour);
+
+            // Créer un éditeur pour chaque script
+            scriptEditors = new Editor[scripts.Length];
+            for (int i = 0; i < scripts.Length; i++)
+            {
+                scriptEditors[i] = Editor.CreateEditor(scripts[i]);
+            }
+        }
+        else
+        {
+            scriptEditors = null;
+        }
     }
 
     private void OnGUI()
     {
-        _selectedGO = Selection.activeGameObject; // Récupérer l'objet sélectionné
-        bool hasScript = false; 
-
-        if (_selectedGO == null)
+        if (selectedGameObject == null)
         {
-            GUILayout.Label("No GameObject selected.");
+            GUILayout.Label("No GameObject selected.", EditorStyles.boldLabel);
+            return;
         }
-        else
+        
+        EditorGUILayout.LabelField("Parametre d'affichage", EditorStyles.boldLabel);
+
+        // Zone défilable
+        scrollPosition = GUILayout.BeginScrollView(scrollPosition);
+
+        if (scriptEditors != null)
         {
-            GUILayout.Label($"Selected: {_selectedGO.name}", EditorStyles.boldLabel); // J'affiche le nom du GO
-
-            // Début du Scroll
-            scrollPosition = GUILayout.BeginScrollView(scrollPosition);
-
-            // Récupérer tous les composants de l'objet
-            Component[] components = _selectedGO.GetComponents<Component>();
-
-            int scriptCount = 0;
-            foreach (Component component in components)
+            foreach (var editor in scriptEditors)
             {
-                if (component is MonoBehaviour)
-                {
-                    scriptCount++; // Compter le nombre de scripts attachés
-                }
+                if (editor == null) continue;
+
+                EditorGUILayout.BeginVertical("box");
+                editor.OnInspectorGUI(); // Afficher le script avec le même affichage que l'inspecteur
+                EditorGUILayout.EndVertical();
             }
-
-            // Initialiser le tableau foldout uniquement une fois que le nombre de scripts est connu
-            if (foldout == null || foldout.Length != scriptCount)
-            {
-                foldout = new bool[scriptCount];
-            }
-
-            int index = 0; // Index pour chaque script
-
-            // Parcourir les composants et afficher ceux qui sont des scripts
-            foreach (Component component in components)
-            {
-                if (component is MonoBehaviour script)
-                {
-                    hasScript = true;
-                    EditorGUILayout.BeginVertical("Box");
-                    GUILayout.Label($"Script: {script?.GetType().Name ?? "Unknown"}", EditorStyles.boldLabel);
-                    GUI.enabled = false;
-                    EditorGUILayout.ObjectField("Script Reference", script, typeof(MonoBehaviour), true);
-                    GUI.enabled = true;
-                    // Afficher le Foldout pour chaque script
-                    foldout[index] = EditorGUILayout.Foldout(foldout[index], "Show Properties");
-                    EditorGUILayout.EndVertical();
-
-                    if (foldout[index])
-                    {
-                        EditorGUILayout.BeginVertical("Box");
-
-                        // Créer un SerializedObject pour afficher ses propriétés
-                        SerializedObject serializedObject = new SerializedObject(script);
-                        SerializedProperty property = serializedObject.GetIterator();
-
-                        bool hasProperties = false;
-
-                        // Parcourir les propriétés
-                        property.NextVisible(true); // Sauter la propriété de base (Nom du script)
-                        while (property.NextVisible(false))
-                        {
-                            hasProperties = true;
-
-                            // Afficher la propriété
-                            GUILayout.BeginHorizontal();
-                            GUILayout.Label(property.displayName, GUILayout.Width(200)); // Nom de la propriété
-                            EditorGUILayout.PropertyField(property, GUIContent.none); // Valeur éditable
-                            GUILayout.EndHorizontal();
-                        }
-
-                        if (!hasProperties)
-                        {
-                            GUILayout.Label("This script has no properties.", EditorStyles.helpBox);
-                        }
-
-                        serializedObject.ApplyModifiedProperties(); // Appliquer les modifications
-                        EditorGUILayout.EndVertical();
-                    }
-
-                    index++; // Incrémenter l'index
-                }
-            }
-
-            if (!hasScript)
-            {
-                EditorGUILayout.HelpBox("This Game Object has no script.", MessageType.Info);
-            }
-
-            GUILayout.EndScrollView();
         }
 
+        GUILayout.EndScrollView();
+        
         this.Repaint();
     }
+    
 }
+
+
