@@ -8,14 +8,23 @@ public class PlantPropa : MonoBehaviour
     public float Chornotarget = 3f;
     private int Growth;
     public bool CanGrow = true;
+    public float growthRate = 0.5f;
     // Update is called once per frame
     void Update()
     {
         _Chrono -= Time.deltaTime;
-        
-        if(_Chrono < 0 && CanGrow)
+
+        if (_Chrono < 0 && CanGrow)
         {
-            gameObject.transform.localScale = new Vector3(gameObject.transform.localScale.x * 1.5f, 0.4f, gameObject.transform.localScale.z * 1.5f);
+            // Calcul de la taille cible.
+            Vector3 targetScale = new Vector3(
+                gameObject.transform.localScale.x + growthRate,
+                0.4f,
+                gameObject.transform.localScale.z + growthRate
+            );
+            StartCoroutine(Growing(targetScale, 0.5f)); // 0.5f est la durée de l'animation.
+
+            // Réinitialisation du chronomètre et incrémentation logique.
             _Chrono = Chornotarget;
             Growth += 1;
         }
@@ -32,5 +41,21 @@ public class PlantPropa : MonoBehaviour
                 Growth -= 1;
             }
         }
+    }
+
+    IEnumerator Growing(Vector3 targetScale, float duration)
+    {
+        Vector3 initialScale = gameObject.transform.localScale;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / duration;
+            gameObject.transform.localScale = Vector3.Lerp(initialScale, targetScale, t);
+            yield return null;
+        }
+
+        gameObject.transform.localScale = targetScale;
     }
 }
