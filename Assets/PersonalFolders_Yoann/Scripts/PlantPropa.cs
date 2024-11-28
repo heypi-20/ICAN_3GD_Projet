@@ -25,7 +25,8 @@ public class PlantPropa : MonoBehaviour
         if(collision.collider.CompareTag("Seed"))
         {
             CanGrow = false;
-            for(int i = Growth; i >= 0; i--)
+            Destroy(gameObject);
+            for(int i = Growth; i > 0; i--)
             {
                 Instantiate(collision.gameObject);
                 Growth -= 1;
