@@ -15,7 +15,11 @@ public class NPCJump : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        rb.AddForce(Vector3.up * _force, ForceMode.Impulse);
-        rb.AddTorque(new Vector3(Random.Range(-1f,1f),0,Random.Range(-1f,1f)) * _force, ForceMode.Impulse);
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            rb.AddForce(Vector3.up * _force, ForceMode.Impulse);
+            rb.AddTorque(new Vector3(Random.Range(-1f,1f),0,Random.Range(-1f,1f)) * _force, ForceMode.Impulse);
+            // rb.AddForce(transform.forward * _force, ForceMode.Impulse);
+        }
     }
 }
