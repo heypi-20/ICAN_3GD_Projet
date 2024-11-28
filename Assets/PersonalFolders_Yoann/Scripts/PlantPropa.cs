@@ -11,9 +11,12 @@ public class PlantPropa : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        _Chrono -= Time.deltaTime;
+        
         if(_Chrono < 0 && CanGrow)
         {
             gameObject.transform.localScale = new Vector3(gameObject.transform.localScale.x * 1.5f, 0.4f, gameObject.transform.localScale.z * 1.5f);
+            _Chrono = Chornotarget;
             Growth += 1;
         }
     }
