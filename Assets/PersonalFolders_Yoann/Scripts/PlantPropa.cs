@@ -22,14 +22,14 @@ public class PlantPropa : MonoBehaviour
                 0.4f,
                 gameObject.transform.localScale.z + growthRate
             );
-            StartCoroutine(Growing(targetScale, 0.5f)); // 0.5f est la durée de l'animation.
+            StartCoroutine(Growing(targetScale, 0.5f)); // 0.5f est la durï¿½e de l'animation.
 
-            // Réinitialisation du chronomètre et incrémentation logique.
+            // Rï¿½initialisation du chronomï¿½tre et incrï¿½mentation logique.
             _Chrono = Chornotarget;
             Growth += 1;
         }
     }
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionStay(Collision collision)
     {
         if(collision.collider.CompareTag("Seed"))
         {
