@@ -17,11 +17,9 @@ public class Trampoline : MonoBehaviour
     public float _scaleMax = 2f;
     public float _growthFactor;
 
-    void Start()
-    {
-        
-    }
-    
+    public bool _onlyUp;
+    public Transform Top;
+    public Transform Bottom;
     private void Update()
     {
         if (gameObject.transform.localScale.magnitude <= _scaleMax)
@@ -36,14 +34,30 @@ public class Trampoline : MonoBehaviour
     {
         other.transform.position = _replacePoint.position;
         
-        if (_forceEqualScale)
+        if(_onlyUp == true)
         {
-            other.rigidbody.AddForce(Vector3.up * _forceScale, ForceMode.Impulse);
-        }
-        else
-        {
-            other.rigidbody.AddForce(Vector3.up * _forceBounce, ForceMode.Impulse);
+            if (_forceEqualScale)
+            {
+                other.rigidbody.AddForce(Vector3.up * _forceScale, ForceMode.Impulse);
+            }
+            else
+            {
+                other.rigidbody.AddForce(Vector3.up * _forceBounce, ForceMode.Impulse);
+            }
         }
 
+        if(_onlyUp == false)
+        {
+            Vector3 direction = Top.position - Bottom.position;
+            Debug.Log(direction);
+            if (_forceEqualScale)
+            {
+                other.rigidbody.AddForce(direction * _forceScale, ForceMode.Impulse);
+            }
+            else
+            {
+                other.rigidbody.AddForce(direction * _forceBounce, ForceMode.Impulse);
+            }
+        }
     }
 }
