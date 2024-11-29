@@ -59,7 +59,7 @@ public class S_PlayerController : MonoBehaviour
 
         if (!FPSOption)
         {
-            RotatePlayer();  // Gérer la rotation du joueur si l'option est désactivée
+            // RotatePlayer();  // Gérer la rotation du joueur si l'option est désactivée
         }
         else
         {
@@ -107,7 +107,7 @@ public class S_PlayerController : MonoBehaviour
         // Gérer la rotation avec la souris si l'option est activée
         if (FPSOption)
         {
-            RotateWithMouse();
+            // RotateWithMouse();
             UpdateCursorState();  // Mettre à jour l'état du curseur en fonction du mode FPS
         }
     }
@@ -118,14 +118,18 @@ public class S_PlayerController : MonoBehaviour
         if (FPSOption)
         {
             // Déplacement dans la direction de la caméra (FPS-style)
-            moveDirection = Camera.main.transform.forward * verticalInput + Camera.main.transform.right * horizontalInput;
-            moveDirection.y = 0f;  // Empêcher le déplacement vertical
-            moveDirection.Normalize();
+            // moveDirection = Camera.main.transform.forward * verticalInput + Camera.main.transform.right * horizontalInput;
+            // moveDirection.y = 0f;  // Empêcher le déplacement vertical
+            // moveDirection.Normalize();
+            moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
+
         }
         else
         {
             // Déplacement traditionnel
             moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10f);
         }
 
         // Appliquer la force de déplacement au sol
@@ -180,7 +184,7 @@ public class S_PlayerController : MonoBehaviour
         Plane groundPlane = new Plane(Vector3.up, transform.position);
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (groundPlane.Raycast(ray, out float enter))
+        if (groundPlane.Raycast(ray, out float enter))  
         {
             Vector3 hitPoint = ray.GetPoint(enter);
             Vector3 directionToLook = hitPoint - transform.position;
@@ -210,9 +214,7 @@ public class S_PlayerController : MonoBehaviour
     // Gérer la rotation du joueur pour qu'elle suive la caméra en mode FPS
     void RotateWithCamera()
     {
-        Vector3 cameraForward = Camera.main.transform.forward;
-        cameraForward.y = 0f;  // Ne conserver que la rotation horizontale
-        transform.rotation = Quaternion.LookRotation(cameraForward);
+        transform.forward = Camera.main.transform.forward;
     }
 
     // Mettre à jour l'état du curseur en fonction du mode FPS
