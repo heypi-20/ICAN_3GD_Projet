@@ -118,10 +118,10 @@ public class S_PlayerController : MonoBehaviour
         if (FPSOption)
         {
             // Déplacement dans la direction de la caméra (FPS-style)
-            // moveDirection = Camera.main.transform.forward * verticalInput + Camera.main.transform.right * horizontalInput;
-            // moveDirection.y = 0f;  // Empêcher le déplacement vertical
-            // moveDirection.Normalize();
-            moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
+            moveDirection = Camera.main.transform.forward * verticalInput + Camera.main.transform.right * horizontalInput;
+            moveDirection.y = 0f;  // Empêcher le déplacement vertical
+            moveDirection.Normalize();
+            // moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
 
         }
         else
