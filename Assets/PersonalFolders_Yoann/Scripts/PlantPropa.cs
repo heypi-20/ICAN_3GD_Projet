@@ -14,7 +14,7 @@ public class PlantPropa : MonoBehaviour
     {
         _Chrono -= Time.deltaTime;
 
-        if (_Chrono < 0 && CanGrow)
+        if (_Chrono < 0 && CanGrow && gameObject.transform.localScale.magnitude < 15)
         {
             // Calcul de la taille cible.
             Vector3 targetScale = new Vector3(
