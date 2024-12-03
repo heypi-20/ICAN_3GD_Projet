@@ -32,7 +32,7 @@ public class Trampoline : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        other.transform.position = _replacePoint.position;
+        //other.transform.position = _replacePoint.position;
         
         if(_onlyUp == true)
         {
