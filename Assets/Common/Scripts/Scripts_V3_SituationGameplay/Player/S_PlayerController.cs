@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class S_PlayerController : MonoBehaviour
 {
@@ -121,8 +119,6 @@ public class S_PlayerController : MonoBehaviour
             moveDirection = Camera.main.transform.forward * verticalInput + Camera.main.transform.right * horizontalInput;
             moveDirection.y = 0f;  // Empêcher le déplacement vertical
             moveDirection.Normalize();
-            // moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
-
         }
         else
         {
