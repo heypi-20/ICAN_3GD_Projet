@@ -17,7 +17,7 @@ public class Gun_Simple : MonoBehaviour
     void Update()
     {
         // Détection de l'entrée utilisateur
-        if (Input.GetMouseButtonDown(0) && Time.time > lastShootTime + cooldown)
+        if (Input.GetMouseButton(0) && Time.time > lastShootTime + cooldown)
         {
             Shoot();
             lastShootTime = Time.time;
