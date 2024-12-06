@@ -112,9 +112,14 @@ public class S_PlayerMultiCam : MonoBehaviour
             moveDirection.y = 0f;
             moveDirection.Normalize();
         } else {
-            moveDirection = new Vector3(h, 0f, v).normalized;
-            Quaternion lookRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10f);
+            moveDirection = transform.forward * v + transform.right * h;
+            moveDirection.y = 0f;
+            moveDirection.Normalize();
+            
+            if (moveDirection != Vector3.zero) {
+                Quaternion lookRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10f);
+            }
         }
 
         if (groundCheck.IsGrounded) {
@@ -143,7 +148,14 @@ public class S_PlayerMultiCam : MonoBehaviour
 
     private void Rotation()
     {
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(Camera.main.transform.forward), rotateSpeed * Time.deltaTime);
+        // transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(Camera.main.transform.forward), rotateSpeed * Time.deltaTime);
+
+        switch(cameraType) {
+            case CameraType.FPS:
+                break;
+            case CameraType.TPS:
+                break;
+        }
     }
 
     private void ActivateCamera()
