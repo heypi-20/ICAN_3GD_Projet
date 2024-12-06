@@ -16,6 +16,7 @@ public class Gun_Simple : MonoBehaviour
 
     private float lastShootTime; // Temps du dernier tir
     public GameObject cross;
+    public Vector3 force = new Vector3(0, 5, 10);
 
     void Update()
     {
@@ -29,7 +30,11 @@ public class Gun_Simple : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Instantiate(Jump_Noeud,weaponMuzzle.position, weaponMuzzle.rotation);
+            GameObject grenade = Instantiate(Jump_Noeud, weaponMuzzle.position, weaponMuzzle.rotation);
+
+            // Assigner la force depuis le script de lancement
+            attention_grenade grenadeScript = grenade.GetComponent<attention_grenade>();
+            grenadeScript.addforce = force;
         }
 
         if (Input.GetMouseButtonDown(1))

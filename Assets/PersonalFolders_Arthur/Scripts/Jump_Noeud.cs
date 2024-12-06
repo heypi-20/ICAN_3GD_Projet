@@ -6,6 +6,7 @@ using UnityEngine;
 public class Jump_Noeud : MonoBehaviour
 {
     public S_PlayerController PlayerController;
+    private GameObject Player;
     public float Jump_force;
     
     public float time_to_survive;
@@ -30,7 +31,11 @@ public class Jump_Noeud : MonoBehaviour
             Debug.Log("timer end");
             time_to_survive = 0;
         }
+        
     }
 
-    
+    private void Start()
+    {
+        Player = GameObject.FindWithTag("Player");
+    }
 }
