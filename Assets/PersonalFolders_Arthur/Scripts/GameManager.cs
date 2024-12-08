@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public int EP_Cross = 3;
     public int EP_AddShoot = 3;
     public int EP_ReduceShoot = 1;
+    public int EP_UsedJump_Noeud = 5;
 
     [Header("Références UI")]
     public Text energyText; // Pour un UI Text classique
@@ -37,6 +38,12 @@ public class GameManager : MonoBehaviour
     public void AddEnergyPointOnCross()
     {
         energyPoints = energyPoints + EP_Cross; // Incrémente les points d'énergie
+        UpdateEnergyUI(); // Met à jour l'UI
+        Debug.Log("Points d'énergie : " + energyPoints);
+    }
+    public void UsedNoeud_Jump()
+    {
+        energyPoints = energyPoints - EP_Cross; // Incrémente les points d'énergie
         UpdateEnergyUI(); // Met à jour l'UI
         Debug.Log("Points d'énergie : " + energyPoints);
     }

@@ -10,15 +10,37 @@ public class Jump_Noeud : MonoBehaviour
     public float Jump_force;
     
     public float time_to_survive;
+
+    public Boolean Add_Jump = true;
     
     private void OnTriggerStay(Collider other)
     {
-        PlayerController.jumpForce = Jump_force;
+
+        if (Add_Jump == false)
+        {
+            PlayerController.jumpForce = Jump_force;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (Add_Jump == true)
+        {
+            PlayerController.jumpForce += Jump_force;
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        PlayerController.jumpForce = 0;
+        if (Add_Jump == true)
+        {
+            PlayerController.jumpForce -= Jump_force;
+        }
+
+        if (Add_Jump == false)
+        {
+            PlayerController.jumpForce = 0;
+        }
     }
 
     private void FixedUpdate()

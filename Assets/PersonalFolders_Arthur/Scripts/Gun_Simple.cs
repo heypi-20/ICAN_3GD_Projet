@@ -28,12 +28,13 @@ public class Gun_Simple : MonoBehaviour
             GameManager.instance.AddEnergyPointOnShoot();
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && GameManager.instance.energyPoints >= 0.1)
         {
             GameObject grenade = Instantiate(Jump_Noeud, weaponMuzzle.position, weaponMuzzle.rotation);
 
             // Assigner la force depuis le script de lancement
             attention_grenade grenadeScript = grenade.GetComponent<attention_grenade>();
+            GameManager.instance.UsedNoeud_Jump();
             grenadeScript.addforce = force;
         }
 
