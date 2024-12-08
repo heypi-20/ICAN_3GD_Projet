@@ -1,7 +1,4 @@
-using System;
-using Cinemachine.Examples;
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(S_GroundCheck))]
 public class S_PlayerMultiCam : MonoBehaviour
@@ -48,7 +45,6 @@ public class S_PlayerMultiCam : MonoBehaviour
     {
         groundCheck = GetComponent<S_GroundCheck>();
         rb = GetComponent<Rigidbody>();
-        // rb.freezeRotation = true;
 
         ActivateCamera();
         UpdateCursorState();
@@ -78,7 +74,7 @@ public class S_PlayerMultiCam : MonoBehaviour
         if (groundCheck.IsGrounded)
         {
             rb.drag = groundDrag;
-            currentJumps = 0;  // Réinitialiser les sauts lorsque le joueur touche le sol
+            currentJumps = 0;
         } else
         {
             rb.drag = 0;
@@ -100,30 +96,27 @@ public class S_PlayerMultiCam : MonoBehaviour
         Movement();
         ApplyExtraGravity();
 
-        if (isJumping) {
-            isJumping = false;
-        }
+        Jump();
     }
 
     private void Movement()
     {
         if (cameraType == CameraType.FPS) {
-            moveDirection = Camera.main.transform.forward * v + Camera.main.transform.right * h;
-            moveDirection.y = 0f;
-            moveDirection.Normalize();
+            if (Camera.main != null) {
+                moveDirection = Camera.main.transform.forward * v + Camera.main.transform.right * h;
+                moveDirection.y = 0f;
+                moveDirection.Normalize();
+            }
         } else {
             moveDirection = transform.forward * v + transform.right * h;
             moveDirection.y = 0f;
             moveDirection.Normalize();
-            
-            if (moveDirection != Vector3.zero) {
-                Quaternion lookRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10f);
-            }
         }
 
         if (groundCheck.IsGrounded) {
             rb.AddForce(moveDirection * moveSpeed * 10f);
+        } else {
+            rb.AddForce(moveDirection * moveSpeed * 10f * airMultiplier);
         }
     }
     
@@ -148,13 +141,26 @@ public class S_PlayerMultiCam : MonoBehaviour
 
     private void Rotation()
     {
-        // transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(Camera.main.transform.forward), rotateSpeed * Time.deltaTime);
-
         switch(cameraType) {
             case CameraType.FPS:
                 break;
             case CameraType.TPS:
+                if (moveDirection != Vector3.zero) {
+                    Quaternion lookRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10f);
+                }
                 break;
+        }
+    }
+    
+    private void Jump()
+    {
+        if (isJumping) {
+            rb.velocity = new Vector3(rb.velocity.x * 0.5f, 0f, rb.velocity.z * 0.5f);
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            currentJumps++;
+            
+            isJumping = false;
         }
     }
 
