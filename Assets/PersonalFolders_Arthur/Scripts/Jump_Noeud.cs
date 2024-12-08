@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class Jump_Noeud : MonoBehaviour
 {
-    public S_PlayerController PlayerController;
-    private GameObject Player;
+    private S_PlayerController PlayerController;
+    private GameObject playerObject;
     public float Jump_force;
     
     public float time_to_survive;
@@ -36,6 +36,18 @@ public class Jump_Noeud : MonoBehaviour
 
     private void Start()
     {
-        Player = GameObject.FindWithTag("Player");
+        GameObject playerObject = GameObject.FindWithTag("Player");
+        if (playerObject != null)
+        {
+            PlayerController = playerObject.GetComponent<S_PlayerController>();
+            if (PlayerController == null)
+            {
+                Debug.LogError("Le script S_PlayerController n'est pas attaché à l'objet avec le tag 'Player'.");
+            }
+        }
+        else
+        {
+            Debug.LogError("Aucun objet avec le tag 'Player' n'a été trouvé dans la scène.");
+        }
     }
 }
