@@ -11,7 +11,7 @@ public class Jump_Noeud : MonoBehaviour
     
     public float time_to_survive;
 
-    public Boolean Add_Jump = true;
+    public bool Add_Jump = true;
     
     private void OnTriggerStay(Collider other)
     {
@@ -26,6 +26,7 @@ public class Jump_Noeud : MonoBehaviour
     {
         if (Add_Jump == true)
         {
+            Debug.Log("111111111111111");
             PlayerController.jumpForce += Jump_force;
         }
     }
@@ -34,6 +35,7 @@ public class Jump_Noeud : MonoBehaviour
     {
         if (Add_Jump == true)
         {
+            Debug.Log("222");
             PlayerController.jumpForce -= Jump_force;
         }
 
@@ -58,7 +60,7 @@ public class Jump_Noeud : MonoBehaviour
 
     private void Start()
     {
-        GameObject playerObject = GameObject.FindWithTag("Player");
+        S_PlayerController playerObject = FindObjectOfType<S_PlayerController>();
         if (playerObject != null)
         {
             PlayerController = playerObject.GetComponent<S_PlayerController>();
