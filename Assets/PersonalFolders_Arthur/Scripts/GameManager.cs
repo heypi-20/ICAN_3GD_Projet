@@ -29,6 +29,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void Update()
+    {
+        if ((Input.GetKeyDown(KeyCode.Space)))
+        {
+            if (energyPoints <= 0) return;
+            UsedNoeud_Jump();
+        }
+
+    }
+
     public void AddEnergyPointOnDestroy()
     {
         energyPoints = energyPoints + EP_AddShoot; // Incrémente les points d'énergie
