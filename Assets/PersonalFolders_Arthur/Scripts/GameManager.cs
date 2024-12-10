@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
     }
     
 
-    private void UpdateEnergyUI()
+    public void UpdateEnergyUI()
     {
         // Mets à jour le texte en fonction du type utilisé
         if (energyText != null)
