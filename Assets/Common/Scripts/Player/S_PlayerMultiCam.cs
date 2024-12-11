@@ -18,10 +18,7 @@ public class S_PlayerMultiCam : MonoBehaviour
     public float moveSpeed = 5f;
     public float groundDrag = 10f;
     public float airMultiplier = 0.08f;
-
-    [Header("Rotation Settings")]
-    public float rotateSpeed = 1200f;
-
+    
     [Header("Jump Settings")]
     public float jumpForce = 7f;
     public float extraGravity = 1.5f;
@@ -119,7 +116,7 @@ public class S_PlayerMultiCam : MonoBehaviour
             rb.AddForce(moveDirection * moveSpeed * 10f * airMultiplier);
         }
     }
-    
+        
     private void SpeedControl()
     {
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
@@ -143,6 +140,7 @@ public class S_PlayerMultiCam : MonoBehaviour
     {
         switch(cameraType) {
             case CameraType.FPS:
+                transform.rotation = Quaternion.Euler(0, Quaternion.LookRotation(Camera.main.transform.forward).eulerAngles.y, 0);
                 break;
             case CameraType.TPS:
                 if (moveDirection != Vector3.zero) {
