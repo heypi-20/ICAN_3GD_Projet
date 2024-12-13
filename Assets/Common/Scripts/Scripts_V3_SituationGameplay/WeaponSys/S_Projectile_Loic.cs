@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class S_Projectile : S_Weapon
+public class S_Projectile_Loic : S_Weapon
 {
     [Header("This weapon's properties")]
     public float fireRate;

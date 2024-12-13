@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody))] // Exige un Rigidbody sur le GameObject pour fonctionner correctement
 public class S_PhysicsCollisionModule : MonoBehaviour
@@ -43,7 +44,6 @@ public class S_PhysicsCollisionModule : MonoBehaviour
     public string[] physicTargetComponentNames; // Noms des composants cibles à vérifier lors de PhysicCast
 
     public event Action OnTouch; // Événement déclenché lorsqu'une collision est détectée
-
     private Rigidbody rb; // Référence au Rigidbody
     private float lastCollisionTime = -Mathf.Infinity; // Dernier temps de collision
     private float lastPhysicCastTime = -Mathf.Infinity; // Dernier temps de PhysicCast
@@ -75,7 +75,7 @@ public class S_PhysicsCollisionModule : MonoBehaviour
     /// </summary>
     public void InvokeOnTouchEvent()
     {
-        OnTouch?.Invoke(); // Déclencher l'événement OnTouch si des abonnés sont présents
+        OnTouch?.Invoke(); 
     }
 
     #region PhysicCastMethodes
