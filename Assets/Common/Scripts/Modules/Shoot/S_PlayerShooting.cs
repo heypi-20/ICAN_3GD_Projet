@@ -70,7 +70,7 @@ public class S_PlayerShooting : MonoBehaviour
 
             if (projectileScript != null)
             {
-                projectileScript.Initialize(projectileSpeed, projectileLifetime, maxCollisions);
+                projectileScript.Initialize(projectileLifetime, maxCollisions);
             }
 
             Rigidbody rb = projectile.GetComponent<Rigidbody>();

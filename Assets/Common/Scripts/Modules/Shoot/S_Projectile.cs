@@ -4,16 +4,14 @@ using UnityEngine;
 
 public class S_Projectile : MonoBehaviour
 {
-    private float speed;
     private float lifetime;
     private int maxCollisions;
 
     private int currentCollisions = 0;
     private float lifeTimer;
 
-    public void Initialize(float projectileSpeed, float projectileLifetime, int projectileMaxCollisions)
+    public void Initialize(float projectileLifetime, int projectileMaxCollisions)
     {
-        speed = projectileSpeed;
         lifetime = projectileLifetime;
         maxCollisions = projectileMaxCollisions;
 

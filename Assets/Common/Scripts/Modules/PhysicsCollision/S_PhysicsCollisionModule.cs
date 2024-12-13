@@ -40,10 +40,11 @@ public class S_PhysicsCollisionModule : MonoBehaviour
     public string[] collisionTags; // Tags à vérifier lors des collisions
     public string[] collisionTargetComponentNames; // Noms des composants cibles à vérifier lors des collisions
     public string[] physicCastTags; // Tags à vérifier lors de PhysicCast
-    public LayerMask physicCastLayers; // Couches à vérifier lors de PhysicCast
+    public LayerMask physicCastLayers=~0; // Couches à vérifier lors de PhysicCast
     public string[] physicTargetComponentNames; // Noms des composants cibles à vérifier lors de PhysicCast
 
     public event Action OnTouch; // Événement déclenché lorsqu'une collision est détectée
+    public UnityEvent OnTouchCalled;
     private Rigidbody rb; // Référence au Rigidbody
     private float lastCollisionTime = -Mathf.Infinity; // Dernier temps de collision
     private float lastPhysicCastTime = -Mathf.Infinity; // Dernier temps de PhysicCast
@@ -76,6 +77,7 @@ public class S_PhysicsCollisionModule : MonoBehaviour
     public void InvokeOnTouchEvent()
     {
         OnTouch?.Invoke(); 
+        OnTouchCalled?.Invoke();
     }
 
     #region PhysicCastMethodes

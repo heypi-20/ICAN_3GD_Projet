@@ -7,21 +7,23 @@ public class S_JumpModule : MonoBehaviour
 {
     [Header("Jump Settings")]
     public float jumpForce = 5f; // Base jump force
-    public int maxJumps = 2; // Maximum number of jumps allowed
+    public int maxJumps = 2; // Base maximum number of jumps allowed
     public float extraGravity = 2f; // Additional gravity multiplier
 
     [Header("Energy Settings")]
     public float energyConsumption = 10f; // Energy consumed per jump
     public float energyBonusMultiplier = 0.1f; // Bonus force per 10% of current energy
+    public float energyPerExtraJump = 50f; // Energy required to gain one additional jump
 
     [Header("Key Bindings")]
     public KeyCode jumpKey = KeyCode.Space; // Key for jumping
 
     private Rigidbody rb;
     private int currentJumps;
+    private int dynamicMaxJumps;
     private S_GroundCheck groundCheck;
     private S_EnergyStorage energyStorage; // Reference to energy storage system
-
+    private float bonusJumpForce;
     private void Start()
     {
         InitializeComponents();
@@ -30,6 +32,7 @@ public class S_JumpModule : MonoBehaviour
     private void Update()
     {
         HandleJumpInput();
+        UpdateDynamicMaxJumps();
     }
 
     private void FixedUpdate()
@@ -54,11 +57,12 @@ public class S_JumpModule : MonoBehaviour
         }
 
         currentJumps = 0;
+        dynamicMaxJumps = maxJumps; // Start with the base max jumps
     }
 
     private void HandleJumpInput()
     {
-        if (Input.GetKeyDown(jumpKey) && (groundCheck.IsGrounded || currentJumps < maxJumps - 1))
+        if (Input.GetKeyDown(jumpKey) && (groundCheck.IsGrounded || currentJumps < dynamicMaxJumps - 1))
         {
             if (HasSufficientEnergy())
             {
@@ -97,6 +101,7 @@ public class S_JumpModule : MonoBehaviour
         ResetVerticalVelocity();
         float bonusForce = CalculateEnergyBonus();
         ApplyJumpForce(bonusForce);
+        bonusJumpForce = bonusForce;
         DeductEnergy();
         currentJumps++;
     }
@@ -129,6 +134,15 @@ public class S_JumpModule : MonoBehaviour
         if (energyStorage != null)
         {
             energyStorage.currentEnergy = Mathf.Max(0, energyStorage.currentEnergy - energyConsumption);
+        }
+    }
+
+    private void UpdateDynamicMaxJumps()
+    {
+        if (energyStorage != null)
+        {
+            int additionalJumps = Mathf.FloorToInt(energyStorage.currentEnergy / energyPerExtraJump);
+            dynamicMaxJumps = maxJumps + additionalJumps;
         }
     }
 }
