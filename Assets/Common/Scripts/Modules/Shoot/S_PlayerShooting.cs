@@ -14,9 +14,14 @@ public class S_PlayerShooting : MonoBehaviour
     public float energyConsumptionPerShot = 5f; // Energy consumed per shot
 
     [Header("References")]
-    public S_EnergyStorage energyStorage; // Reference to the energy storage system
+    private S_EnergyStorage energyStorage; // Reference to the energy storage system
 
     private float nextFireTime = 0f; // Time when the player can fire next
+
+    public void Start()
+    {
+        energyStorage = GetComponent<S_EnergyStorage>();
+    }
 
     private void Update()
     {
@@ -25,16 +30,20 @@ public class S_PlayerShooting : MonoBehaviour
 
     private void HandleShootingInput()
     {
-        if (Input.GetButton("Fire1") && Time.time >= nextFireTime)
+        if (Input.GetButton("Fire1")) // Continuously check for shooting input
         {
-            if (HasEnoughEnergy())
+            if (Time.time >= nextFireTime) // Ensure cooldown has passed
             {
-                Shoot();
-                ConsumeEnergy();
-            }
-            else
-            {
-                Debug.Log("Not enough energy to shoot!");
+                if (HasEnoughEnergy())
+                {
+                    Shoot();
+                    ConsumeEnergy();
+                    nextFireTime = Time.time + (1f / fireRate); // Reset cooldown timer
+                }
+                else
+                {
+                    Debug.Log("Not enough energy to shoot!");
+                }
             }
         }
     }
@@ -54,8 +63,6 @@ public class S_PlayerShooting : MonoBehaviour
 
     private void Shoot()
     {
-        nextFireTime = Time.time + 1f / fireRate;
-
         if (projectilePrefab != null && shootingPoint != null)
         {
             GameObject projectile = Instantiate(projectilePrefab, shootingPoint.position, shootingPoint.rotation);

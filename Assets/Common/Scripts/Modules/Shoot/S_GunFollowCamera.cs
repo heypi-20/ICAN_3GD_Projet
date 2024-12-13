@@ -5,7 +5,7 @@ using UnityEngine;
 public class S_GunFollowCamera : MonoBehaviour
 {
     [Header("Camera Reference")]
-    public Transform cameraTransform; // Reference to the camera
+    public Camera mainCamera; // Reference to the main camera
 
     [Header("Center Point Settings")]
     public float distanceFromCamera = 1f; // Distance from the camera to the center point
@@ -18,16 +18,19 @@ public class S_GunFollowCamera : MonoBehaviour
 
     private void AlignWithCameraCenter()
     {
-        if (cameraTransform == null)
+        if (mainCamera == null)
         {
-            Debug.LogError("Camera Transform is not assigned!");
+            Debug.LogError("Main Camera is not assigned!");
             return;
         }
 
-        // Calculate the position at the center point in front of the camera
-        transform.position = cameraTransform.position + cameraTransform.forward * distanceFromCamera;
+        // Calculate the center point in front of the camera
+        Vector3 centerPoint = mainCamera.transform.position + mainCamera.transform.forward * distanceFromCamera;
 
-        // Align rotation to match the camera, with optional rotation offset
-        transform.rotation = cameraTransform.rotation * Quaternion.Euler(rotationOffset);
+        // Align the position of the object to the calculated center point
+        transform.position = centerPoint;
+
+        // Align the rotation of the object to match the camera's rotation, with an optional offset
+        transform.rotation = mainCamera.transform.rotation * Quaternion.Euler(rotationOffset);
     }
 }
