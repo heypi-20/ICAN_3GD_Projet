@@ -18,13 +18,8 @@ public class S_PlayerMultiCam : MonoBehaviour
     public float moveSpeed = 5f;
     public float groundDrag = 10f;
     public float airMultiplier = 0.08f;
-    
-    [Header("Jump Settings")]
-    public float jumpForce = 7f;
+    public float maxSlopeAngle = 40f;
     public float extraGravity = 1.5f;
-    
-    [Header("Keybinds")]
-    public KeyCode jumpKey = KeyCode.Space;
     
     private S_GroundCheck groundCheck;
     private Rigidbody rb;
@@ -36,6 +31,7 @@ public class S_PlayerMultiCam : MonoBehaviour
     private Vector3 moveDirection;
     private bool isJumping = false;
     private int currentJumps = 0;
+    private RaycastHit slopeHit;
 
     // Start is called before the first frame update
     void Start()
@@ -67,6 +63,10 @@ public class S_PlayerMultiCam : MonoBehaviour
         PlayerInputs();
         SpeedControl();
         Rotation();
+
+        if (!OnSlope()) {
+            Debug.Log(groundCheck.IsGrounded);
+        }
         
         if (groundCheck.IsGrounded)
         {
@@ -82,18 +82,12 @@ public class S_PlayerMultiCam : MonoBehaviour
     {
         h = Input.GetAxisRaw("Horizontal");
         v = Input.GetAxisRaw("Vertical");
-
-        if (Input.GetKeyDown(jumpKey) && groundCheck.IsGrounded) {
-            isJumping = true;
-        }
     }
 
     private void FixedUpdate()
     {
         Movement();
         ApplyExtraGravity();
-
-        Jump();
     }
 
     private void Movement()
@@ -110,22 +104,48 @@ public class S_PlayerMultiCam : MonoBehaviour
             moveDirection.Normalize();
         }
 
-        if (groundCheck.IsGrounded) {
+        if (OnSlope() && groundCheck.IsGrounded) {
+            rb.AddForce(GetSlopeMoveDirection(moveDirection) * moveSpeed * 10f);
+        } else if (groundCheck.IsGrounded) {
             rb.AddForce(moveDirection * moveSpeed * 10f);
         } else {
             rb.AddForce(moveDirection * moveSpeed * 10f * airMultiplier);
         }
+
+        rb.useGravity = !OnSlope();
     }
         
     private void SpeedControl()
     {
-        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-        if (flatVel.magnitude > moveSpeed)
+        if (OnSlope())
         {
-            Vector3 limitedVel = flatVel.normalized * moveSpeed;
-            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+            if (rb.velocity.magnitude > moveSpeed)
+                rb.velocity = rb.velocity.normalized * moveSpeed;
+        } else {
+            Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+            if (flatVel.magnitude > moveSpeed)
+            {
+                Vector3 limitedVel = flatVel.normalized * moveSpeed;
+                rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+            }
         }
+    }
+    
+    public bool OnSlope()
+    {
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, 2f))
+        {
+            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+            return angle < maxSlopeAngle && angle != 0;
+        }
+
+        return false;
+    }
+    
+    public Vector3 GetSlopeMoveDirection(Vector3 direction)
+    {
+        return Vector3.ProjectOnPlane(direction, slopeHit.normal).normalized;
     }
     
     private void ApplyExtraGravity()
@@ -148,17 +168,6 @@ public class S_PlayerMultiCam : MonoBehaviour
                     transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10f);
                 }
                 break;
-        }
-    }
-    
-    private void Jump()
-    {
-        if (isJumping) {
-            rb.velocity = new Vector3(rb.velocity.x * 0.5f, 0f, rb.velocity.z * 0.5f);
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            currentJumps++;
-            
-            isJumping = false;
         }
     }
 
