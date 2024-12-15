@@ -511,7 +511,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1495878436608479089}
   m_Layer: 3
-  m_Name: CatchPoint
+  m_Name: AttackPoint
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -526,7 +526,7 @@ Transform:
   m_GameObject: {fileID: 5001198565130871298}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.998}
+  m_LocalPosition: {x: 0, y: 0, z: 0.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -799,6 +799,7 @@ GameObject:
   - component: {fileID: 5701320688647864664}
   - component: {fileID: 6339451607326441254}
   - component: {fileID: 1375396670299757319}
+  - component: {fileID: 3681321924822835040}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -910,9 +911,24 @@ MonoBehaviour:
   moveSpeed: 10
   groundDrag: 10
   airMultiplier: 0.08
-  jumpForce: 7
+  maxSlopeAngle: 40
   extraGravity: 1.5
-  jumpKey: 32
+--- !u!114 &3681321924822835040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5819802099871703641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec4088ba698d472d9d7552f909fe11da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackKey: 101
+  attackPoint: {fileID: 1495878436608479089}
+  range: 1
+  attackCD: 0.5
 --- !u!1 &6036149043654311399
 GameObject:
   m_ObjectHideFlags: 3

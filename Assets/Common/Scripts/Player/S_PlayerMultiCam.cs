@@ -63,10 +63,6 @@ public class S_PlayerMultiCam : MonoBehaviour
         PlayerInputs();
         SpeedControl();
         Rotation();
-
-        if (!OnSlope()) {
-            Debug.Log(groundCheck.IsGrounded);
-        }
         
         if (groundCheck.IsGrounded)
         {
