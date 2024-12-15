@@ -1,76 +1,77 @@
 ﻿using System;
-using Unity.VisualScripting;
 using UnityEngine;
+using DG.Tweening;
 
 public class S_MeleeAttack : MonoBehaviour
 {
     [Header("Attack Settings")]
     public KeyCode attackKey = KeyCode.E;
     public Transform attackPoint;
-    public bool showGizmos = true;
+    public GameObject attackObject;
 
     [Header("Attack Properties")]
-    [Range(0.1f, 1.5f)]
-    public float range = 1f;
-    public float attackCD = 0.2f;
-    
-    private S_PlayerMultiCam p;
-    private RaycastHit attackHit;
+    public float attackCD = 0.5f;
+    public float attackDuration = 0.3f;
+    public float swingAngle = 180f; // Default to full swing for clarity
 
-    private bool canAttack;
-    private float timer;
-
-    private void Start()
-    {
-        p = GetComponent<S_PlayerMultiCam>();
-    }
+    private bool canAttack = true;
+    private bool isAttacking = false;
+    private float timer = 0f;
+    private Tween attackTween;
 
     private void Update()
     {
         AttackCooldown();
-        
-        if (Input.GetKeyDown(attackKey) && canAttack) {
+
+        if (Input.GetKeyDown(attackKey) && canAttack)
+        {
             Attack();
+        }
+
+        // Ensure the attack object always follows the attack point
+        if (isAttacking && attackObject.activeSelf)
+        {
+            attackObject.transform.position = attackPoint.position;
         }
     }
 
     private void Attack()
     {
-        if (Physics.SphereCast(attackPoint.position, GetComponent<CapsuleCollider>().height / 2, Camera.main.transform.forward * range, out attackHit, range)) {
-            Debug.Log("attackHit");
+        if (isAttacking)
+        {
+            attackTween?.Kill(); // Interrupt current animation
         }
-        
+
         canAttack = false;
+        isAttacking = true;
+
+        // Activate attack object
+        attackObject.SetActive(true);
+        attackObject.transform.position = attackPoint.position;
+
+        // Perform swing animation relative to attackPoint's orientation
+        Quaternion startRotation = attackPoint.rotation * Quaternion.Euler(0, -swingAngle / 2, 0);
+        Quaternion endRotation = attackPoint.rotation * Quaternion.Euler(0, swingAngle / 2, 0);
+
+        attackObject.transform.rotation = startRotation;
+        attackTween = attackObject.transform.DORotateQuaternion(endRotation, attackDuration)
+            .SetEase(Ease.OutQuad)
+            .OnComplete(() =>
+            {
+                isAttacking = false;
+                attackObject.SetActive(false); // Deactivate after animation
+            });
     }
 
     private void AttackCooldown()
     {
-        timer += Time.deltaTime;
-        
-        if (timer >= attackCD) {
-            timer = 0;
-            canAttack = true;
-        }
-    }
-
-    private void OnDrawGizmos()
-    {
-        if (showGizmos) {
-            Gizmos.DrawWireSphere(attackPoint.position, range);
-        
-            if (Physics.SphereCast(attackPoint.position, GetComponent<CapsuleCollider>().height / 2, Camera.main.transform.forward * range, out attackHit, range)) {
-                Gizmos.color = Color.green;
-                Vector3 sphereCastMidpoint = attackPoint.position + (Camera.main.transform.forward * attackHit.distance);
-                Gizmos.DrawWireSphere(sphereCastMidpoint, GetComponent<CapsuleCollider>().height / 2);
-                Gizmos.DrawSphere(attackHit.point, 0.1f);
-                Debug.DrawLine(attackPoint.position, sphereCastMidpoint, Color.green);
-            }
-            else
+        if (!canAttack)
+        {
+            timer += Time.deltaTime;
+            if (timer >= attackCD)
             {
-                Gizmos.color = Color.red;
-                Vector3 sphereCastMidpoint = attackPoint.position + (Camera.main.transform.forward * (range - (GetComponent<CapsuleCollider>().height / 2)));
-                Gizmos.DrawWireSphere(sphereCastMidpoint, GetComponent<CapsuleCollider>().height / 2);
-                Debug.DrawLine(attackPoint.position, sphereCastMidpoint, Color.red);
+                timer = 0;
+                canAttack = true;
             }
         }
     }

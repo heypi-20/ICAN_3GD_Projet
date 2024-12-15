@@ -219,6 +219,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   physicTargetComponentNames:
   - S_Projectile
+  - Blade
   OnTouchCalled:
     m_PersistentCalls:
       m_Calls:
@@ -249,6 +250,9 @@ MonoBehaviour:
   jumpForce: 10
   trackingForce: 5
   enableTracking: 1
+  target: {fileID: 0}
+  idleThreshold: 2
+  activationForce: 5
 --- !u!114 &3494829920662574433
 MonoBehaviour:
   m_ObjectHideFlags: 0
