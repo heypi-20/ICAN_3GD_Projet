@@ -6129,7 +6129,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c22777d6e868e4f2fb421913386b154e, type: 2}
+  - {fileID: 2100000, guid: c6febd709b56648c293143b559ca2250, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6363,7 +6363,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 342292310}
-  m_VersionIndex: 1754
+  m_VersionIndex: 1758
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -7081,7 +7081,7 @@ PrefabInstance:
       objectReference: {fileID: 520713629}
     - target: {fileID: 4048505797762340208, guid: c495e646cc5c09e4e923d98b111ff958, type: 3}
       propertyPath: m_VersionIndex
-      value: 3908
+      value: 3911
       objectReference: {fileID: 0}
     - target: {fileID: 5639306989339550967, guid: c495e646cc5c09e4e923d98b111ff958, type: 3}
       propertyPath: m_Mesh
@@ -7090,7 +7090,7 @@ PrefabInstance:
     - target: {fileID: 6368342214521377717, guid: c495e646cc5c09e4e923d98b111ff958, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 1109713818}
+      objectReference: {fileID: 520713629}
     - target: {fileID: 8475537471508029388, guid: c495e646cc5c09e4e923d98b111ff958, type: 3}
       propertyPath: m_LocalPosition.x
       value: 18.300001
@@ -9665,6 +9665,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1846598116}
   - component: {fileID: 1846598115}
+  - component: {fileID: 1846598117}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -9749,6 +9750,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &1846598117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1846598114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1001 &1850175780
 PrefabInstance:
   m_ObjectHideFlags: 0
