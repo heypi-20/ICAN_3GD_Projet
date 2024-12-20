@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class S_JumpModule : MonoBehaviour
+public class S_MultiJumpModule : MonoBehaviour
 {
     [Header("Jump Settings")]
     public float jumpForce = 5f; // Base jump force

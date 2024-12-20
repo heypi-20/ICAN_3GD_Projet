@@ -7080,10 +7080,10 @@ GameObject:
   - component: {fileID: 5932087618885227281}
   - component: {fileID: 6339451607994789964}
   - component: {fileID: 1375396672041817197}
-  - component: {fileID: 8041624407378514729}
   - component: {fileID: 8041624407378514730}
   - component: {fileID: 8041624407378514731}
   - component: {fileID: 8041624407378514732}
+  - component: {fileID: 8041624407378514733}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -7406,25 +7406,6 @@ Transform:
   - {fileID: 1167903319}
   m_Father: {fileID: 1127936760862728844}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8041624407378514729
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5819802099199421747}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f8960624262f2745b75d9cfa900e90e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  jumpForce: 10
-  maxJumps: 1
-  extraGravity: 2
-  energyConsumption: 15
-  energyBonusMultiplier: 0.1
-  energyPerExtraJump: 50
-  jumpKey: 32
 --- !u!114 &8041624407378514730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7483,6 +7464,25 @@ MonoBehaviour:
   attackCD: 0.2
   attackDuration: 0.3
   swingAngle: 175
+--- !u!114 &8041624407378514733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5819802099199421747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cbf1991bb8802d48993cdd4ea440e48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseJumpForce: 10
+  extraGravity: 2
+  baseEnergyConsumption: 30
+  energyConsumptionMultiplier: 1.25
+  energyHeightMultiplier: 0.1
+  bonusHeightMultiplier: 0.01
+  jumpKey: 32
 --- !u!114 &8282678349494469352
 MonoBehaviour:
   m_ObjectHideFlags: 0
