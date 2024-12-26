@@ -858,6 +858,7 @@ GameObject:
   - component: {fileID: 6574655698200558490}
   - component: {fileID: 4344215721986807814}
   - component: {fileID: 994425223614931824}
+  - component: {fileID: 5054989090677693829}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -910,7 +911,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &8056911405321678317
 MonoBehaviour:
@@ -944,16 +945,18 @@ MonoBehaviour:
   cameraType: 0
   cams:
   - {fileID: 1162405639016197811}
-  baseSpeed: 5
+  baseSpeed: 15
   groundDrag: 10
   airMultiplier: 0.08
   maxSlopeAngle: 40
   extraGravity: 0
+  enableEnergyBoost: 0
   energyPercentageIncrease: 0.1
   multiplier: 0.1
-  energyConsumptionRate: 2
-  enableEnergyBoost: 1
-  enableEnergyConsumption: 1
+  enableEnergyConsumptionForMovement: 0
+  energyConsumptionRate: 3
+  enableEnergyBonusConsumption: 0
+  energyConsumptionBonusPercentage: 0.05
 --- !u!114 &3225247153209439170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -968,7 +971,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isUnlimitedStorage: 0
   maxEnergy: 2000
-  currentEnergy: 0
+  currentEnergy: 50
   detectionRadius: 10
   targetScriptName: EnergyType
   energyGainPerObject: 25
@@ -1031,3 +1034,21 @@ MonoBehaviour:
   energyHeightMultiplier: 0.1
   bonusHeightMultiplier: 0.01
   jumpKey: 32
+--- !u!114 &5054989090677693829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9070199602630873588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbbb69c49ba9b304c9311fcfea42af4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprintKey: 304
+  sprintSpeed: 65
+  energyPercentage: 0.1
+  energyMultiplier: 1
+  lerpSpeed: 0
+  sprintEnergyConsumptionRate: 30
