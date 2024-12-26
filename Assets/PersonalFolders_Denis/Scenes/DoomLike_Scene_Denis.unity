@@ -11307,11 +11307,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7ffcda2ccc95748469e58c3af6c7c58f, type: 3}
---- !u!1 &5819802099199421747 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9070199602630873588, guid: e7b2cab81761cd84394c671f3615b37e, type: 3}
-  m_PrefabInstance: {fileID: 6735655708124441160}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6735655708124441160
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11321,40 +11316,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1601667505542962829, guid: e7b2cab81761cd84394c671f3615b37e, type: 3}
-      propertyPath: baseSpeed
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 1601667505542962829, guid: e7b2cab81761cd84394c671f3615b37e, type: 3}
-      propertyPath: m_Enabled
+      propertyPath: enableEnergyBoost
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1601667505542962829, guid: e7b2cab81761cd84394c671f3615b37e, type: 3}
-      propertyPath: enableEnergyBoost
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1601667505542962829, guid: e7b2cab81761cd84394c671f3615b37e, type: 3}
-      propertyPath: energyConsumptionRate
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1601667505542962829, guid: e7b2cab81761cd84394c671f3615b37e, type: 3}
-      propertyPath: enableEnergyConsumption
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1601667505542962829, guid: e7b2cab81761cd84394c671f3615b37e, type: 3}
       propertyPath: enableEnergyBonusConsumption
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1601667505542962829, guid: e7b2cab81761cd84394c671f3615b37e, type: 3}
       propertyPath: energyConsumptionBonusPercentage
-      value: 0.05
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 1601667505542962829, guid: e7b2cab81761cd84394c671f3615b37e, type: 3}
       propertyPath: enableEnergyConsumptionForMovement
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3225247153209439170, guid: e7b2cab81761cd84394c671f3615b37e, type: 3}
-      propertyPath: currentEnergy
-      value: 50
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3225247153209439170, guid: e7b2cab81761cd84394c671f3615b37e, type: 3}
       propertyPath: energyDisplay
@@ -11404,36 +11379,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player_V2
       objectReference: {fileID: 0}
-    - target: {fileID: 8338176399011050674, guid: e7b2cab81761cd84394c671f3615b37e, type: 3}
-      propertyPath: m_Constraints
-      value: 112
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 9070199602630873588, guid: e7b2cab81761cd84394c671f3615b37e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8041624407378514734}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e7b2cab81761cd84394c671f3615b37e, type: 3}
---- !u!114 &8041624407378514734
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5819802099199421747}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbbb69c49ba9b304c9311fcfea42af4a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sprintKey: 304
-  sprintSpeed: 65
-  energyPercentage: 0.1
-  energyMultiplier: 1
-  lerpSpeed: 0
-  sprintEnergyConsumptionRate: 30
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
