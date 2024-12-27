@@ -5,15 +5,11 @@ using UnityEngine;
 public class S_Projectile : MonoBehaviour
 {
     private float lifetime;
-    private int maxCollisions;
-
-    private int currentCollisions = 0;
     private float lifeTimer;
 
-    public void Initialize(float projectileLifetime, int projectileMaxCollisions)
+    public void InitializeProjectile(float projectileLifetime)
     {
         lifetime = projectileLifetime;
-        maxCollisions = projectileMaxCollisions;
 
         lifeTimer = lifetime;
     }
@@ -30,18 +26,4 @@ public class S_Projectile : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        // Increment collision count
-        currentCollisions++;
-
-        // Check if the projectile has reached its maximum collisions
-        if (currentCollisions >= maxCollisions)
-        {
-            Destroy(gameObject);
-        }
-
-        // Handle collision effects here (e.g., apply damage, trigger effects)
-        Debug.Log($"Projectile collided with {other.name}");
-    }
 }

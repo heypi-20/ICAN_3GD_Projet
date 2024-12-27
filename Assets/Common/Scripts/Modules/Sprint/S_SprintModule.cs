@@ -7,7 +7,6 @@ public class S_SprintModule : MonoBehaviour
     public float sprintSpeed = 65f; // Base sprint speed (without energy factor)
     public float energyPercentage; // Percentage of current energy to use (e.g., 0.1 for 10%)
     public float energyMultiplier; // Multiplier for the energy factor
-    public float lerpSpeed;
     public float sprintEnergyConsumptionRate; // Energy consumed per second while sprinting
 
     // References to other components
