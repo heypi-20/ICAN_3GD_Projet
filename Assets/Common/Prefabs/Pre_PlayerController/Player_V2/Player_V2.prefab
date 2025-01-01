@@ -10,9 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1048516364749221059}
   - component: {fileID: 2985380216943049368}
-  - component: {fileID: 1159094109115724422}
   - component: {fileID: 2538362514806486791}
-  - component: {fileID: 1869060122537471741}
+  - component: {fileID: 1204743039622828568}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -47,19 +46,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1159094109115724422
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 200308188626840443}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36d1163fa822e8b418a0a603ec078d5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Damping: 0
 --- !u!114 &2538362514806486791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,7 +108,7 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_ApplyBeforeBody: 0
---- !u!114 &1869060122537471741
+--- !u!114 &1204743039622828568
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,14 +117,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 200308188626840443}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Script: {fileID: 11500000, guid: fa7155796051b734daa718462081dc5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_NoiseProfile: {fileID: 11400000, guid: 90a11b0bd26895e4ab6d8538b8d1e699, type: 2}
-  m_PivotOffset: {x: 0, y: 0, z: 0}
-  m_AmplitudeGain: 0.5
-  m_FrequencyGain: 1
-  mNoiseOffsets: {x: -499.06262, y: -781.15894, z: -264.63113}
+  m_BindingMode: 4
+  m_FollowOffset: {x: 0, y: 0, z: 0}
+  m_XDamping: 0
+  m_YDamping: 0
+  m_ZDamping: 0
+  m_AngularDampingMode: 0
+  m_PitchDamping: 0
+  m_YawDamping: 0
+  m_RollDamping: 0
+  m_AngularDamping: 0
 --- !u!1 &587119488040687717
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,7 +498,7 @@ MonoBehaviour:
   m_StreamingVersion: 20170927
   m_Priority: 10
   m_StandbyUpdate: 1
-  m_LookAt: {fileID: 0}
+  m_LookAt: {fileID: 8552070623922781999}
   m_Follow: {fileID: 5177018270677341976}
   m_Lens:
     FieldOfView: 70
@@ -950,12 +941,12 @@ MonoBehaviour:
   airMultiplier: 0.08
   maxSlopeAngle: 40
   extraGravity: 0
-  enableEnergyBoost: 1
+  enableEnergyBoost: 0
   energyPercentageIncrease: 0.1
   multiplier: 0.1
-  enableEnergyConsumptionForMovement: 1
+  enableEnergyConsumptionForMovement: 0
   energyConsumptionRate: 3
-  enableEnergyBonusConsumption: 1
+  enableEnergyBonusConsumption: 0
   energyConsumptionBonusPercentage: 0.1
 --- !u!114 &3225247153209439170
 MonoBehaviour:
@@ -976,7 +967,7 @@ MonoBehaviour:
   targetScriptName: EnergyType
   energyGainPerObject: 25
   playerTransform: {fileID: 8552070623922781999}
-  pullSpeed: 10
+  pullSpeed: 30
   energyDisplay: {fileID: 0}
 --- !u!114 &6574655698200558490
 MonoBehaviour:
@@ -992,11 +983,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 1069020167021631076, guid: b167b673b10f72a4a83b536cafce9b14, type: 3}
   shootingPoint: {fileID: 2276488413916546043}
-  fireRate: 20
-  projectileSpeed: 120
+  baseFireRate: 1
+  maxFireRate: 20
+  projectileSpeed: 65
   projectileLifetime: 5
-  maxCollisions: 2
-  energyConsumptionPerShot: 5
+  baseEnergyConsumptionPerShot: 5
+  minEnergyConsumption: 0.1
+  maxEnergyConsumption: 10
+  fireRatePercentage: 0.1
+  fireRateMultiplier: 0.1
+  energyConsumptionPercentage: 0.01
+  energyConsumptionMultiplier: 0.1
 --- !u!114 &4344215721986807814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1047,8 +1044,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sprintKey: 304
-  sprintSpeed: 65
+  sprintSpeed: 35
   energyPercentage: 0.1
   energyMultiplier: 1
-  lerpSpeed: 0
   sprintEnergyConsumptionRate: 30

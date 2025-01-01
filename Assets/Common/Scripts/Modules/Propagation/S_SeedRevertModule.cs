@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-using VFolders.Libs;
 
 public class S_SeedRevertModule : MonoBehaviour
 {
