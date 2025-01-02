@@ -90,10 +90,10 @@ public class S_PlayerMultiCam : MonoBehaviour
                 ConsumeEnergy();
             }
             PlayerInputs();
-            SpeedControl(moveSpeed);
+            SpeedControl();
             Rotation();
         }
-        if(enableEnergyConsumptionForMovement&& energyStorage.currentEnergy <= 0)
+        if (enableEnergyConsumptionForMovement && energyStorage.currentEnergy <= 0)
         {
             moveSpeed = 0f;
         }
@@ -184,7 +184,7 @@ public class S_PlayerMultiCam : MonoBehaviour
         rb.useGravity = !OnSlope();
     }
 
-    private void SpeedControl(float moveSpeed)
+    private void SpeedControl()
     {
         if (OnSlope())
         {
