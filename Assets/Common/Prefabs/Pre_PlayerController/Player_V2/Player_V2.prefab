@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1048516364749221059}
   - component: {fileID: 2985380216943049368}
   - component: {fileID: 2538362514806486791}
-  - component: {fileID: 1204743039622828568}
+  - component: {fileID: 2261788951042514822}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -62,7 +62,7 @@ MonoBehaviour:
   m_VerticalAxis:
     Value: 0
     m_SpeedMode: 1
-    m_MaxSpeed: 1
+    m_MaxSpeed: 2
     m_AccelTime: 0.1
     m_DecelTime: 0.1
     m_InputAxisName: Mouse Y
@@ -86,7 +86,7 @@ MonoBehaviour:
   m_HorizontalAxis:
     Value: 0
     m_SpeedMode: 1
-    m_MaxSpeed: 1
+    m_MaxSpeed: 2
     m_AccelTime: 0.1
     m_DecelTime: 0.1
     m_InputAxisName: Mouse X
@@ -108,7 +108,7 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_ApplyBeforeBody: 0
---- !u!114 &1204743039622828568
+--- !u!114 &2261788951042514822
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -117,19 +117,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 200308188626840443}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa7155796051b734daa718462081dc5f, type: 3}
+  m_Script: {fileID: 11500000, guid: 36d1163fa822e8b418a0a603ec078d5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BindingMode: 4
-  m_FollowOffset: {x: 0, y: 0, z: 0}
-  m_XDamping: 0
-  m_YDamping: 0
-  m_ZDamping: 0
-  m_AngularDampingMode: 0
-  m_PitchDamping: 0
-  m_YawDamping: 0
-  m_RollDamping: 0
-  m_AngularDamping: 0
+  m_Damping: 0
 --- !u!1 &587119488040687717
 GameObject:
   m_ObjectHideFlags: 0
@@ -966,7 +957,6 @@ MonoBehaviour:
   detectionRadius: 10
   targetScriptName: EnergyType
   energyGainPerObject: 25
-  playerTransform: {fileID: 8552070623922781999}
   pullSpeed: 30
   energyDisplay: {fileID: 0}
 --- !u!114 &6574655698200558490
