@@ -15,14 +15,14 @@ public class S_PlayerMultiCam : MonoBehaviour
     public CameraType cameraType;
     public GameObject[] cams;
 
-    [Header("Speed and Movement Mechanics")]
+    [Header("Speed and Movement Settings")]
     public float baseSpeed = 5f;
     public float groundDrag = 10f;
     public float airMultiplier = 0.08f;
     public float maxSlopeAngle = 40f;
     public float extraGravity = 1.5f;
 
-    [Header("Energy Mechanics")]
+    [Header("Energy Related Settings")]
     public bool enableEnergyBoost = true; // Toggle for speed boost from energy
     public float energyPercentageIncrease = 0.01f; // Speed boost per unit of energy
     public float multiplier = 1f; // Multiplier for energy boost
