@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,13 +17,18 @@ public class S_EnergyStorage : MonoBehaviour
     public float energyGainPerObject = 10f; // Energy gained per absorbed object
 
     [Header("Player Settings")]
-    public Transform playerTransform; // The player's transform
     public float pullSpeed = 5f; // Speed at which objects are pulled towards the player
 
     [Header("UI Settings")]
     public TextMeshProUGUI energyDisplay; // TextMeshPro to display energy value
 
+    private Transform playerTransform; // The player's transform
     private HashSet<GameObject> pullingObjects = new HashSet<GameObject>(); // Track objects being pulled
+
+    private void Start()
+    {
+        playerTransform = GetComponent<Transform>();
+    }
 
     private void Update()
     {
