@@ -33,10 +33,11 @@ public class S_PlayerMultiCam : MonoBehaviour
     public float energyConsumptionBonusPercentage = 0.01f; // Additional consumption based on current energy percentage
     
     
-
-    private float moveSpeed = 0f;
+    [HideInInspector]
+    public float moveSpeed = 0f;
 
     private S_GroundCheck groundCheck;
+    private S_PlayerSpeedController playerSpeedController;
     private S_EnergyStorage energyStorage;
     private Rigidbody rb;
 
@@ -52,6 +53,7 @@ public class S_PlayerMultiCam : MonoBehaviour
     void Start()
     {
         groundCheck = GetComponent<S_GroundCheck>();
+        playerSpeedController = GetComponent<S_PlayerSpeedController>();
         energyStorage = GetComponent<S_EnergyStorage>();
         rb = GetComponent<Rigidbody>();
 
@@ -81,8 +83,6 @@ public class S_PlayerMultiCam : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        moveSpeed = CalculateMoveSpeed();
-
         if (IsInputPressed())
         {
             if (enableEnergyConsumptionForMovement)
@@ -90,7 +90,7 @@ public class S_PlayerMultiCam : MonoBehaviour
                 ConsumeEnergy();
             }
             PlayerInputs();
-            SpeedControl();
+            playerSpeedController.SpeedControl();
             Rotation();
         }
         if (enableEnergyConsumptionForMovement && energyStorage.currentEnergy <= 0)
@@ -112,15 +112,7 @@ public class S_PlayerMultiCam : MonoBehaviour
         }
     }
 
-    private float CalculateMoveSpeed()
-    {
-        if (enableEnergyBoost && energyStorage != null)
-        {
-            float energyBoost = energyStorage.currentEnergy * energyPercentageIncrease * multiplier;
-            return baseSpeed + energyBoost;
-        }
-        return baseSpeed;
-    }
+    
 
     private void PlayerInputs()
     {
@@ -184,24 +176,7 @@ public class S_PlayerMultiCam : MonoBehaviour
         rb.useGravity = !OnSlope();
     }
 
-    private void SpeedControl()
-    {
-        if (OnSlope())
-        {
-            if (rb.velocity.magnitude > moveSpeed)
-                rb.velocity = rb.velocity.normalized * moveSpeed;
-        }
-        else
-        {
-            Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-            if (flatVel.magnitude > moveSpeed)
-            {
-                Vector3 limitedVel = flatVel.normalized * moveSpeed;
-                rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
-            }
-        }
-    }
+    
 
     public bool OnSlope()
     {
