@@ -5,8 +5,10 @@ using UnityEngine;
 public class S_myCharacterController : MonoBehaviour
 {
     public float speed = 12f;
-    [Range(0f, 1f)]
-    public float friction = 0.5f;
+    [Range(0, 1)]
+    public float accelerationRate = 0.1f;
+    [Range(0, 1)]
+    public float decelerationRate = 0.1f;
     public float gravity = -9.81f;
     public float groundCheckDistance = 0.4f;
     public float groundCheckRadius = 0.2f;
@@ -14,80 +16,157 @@ public class S_myCharacterController : MonoBehaviour
 
     private CharacterController controller;
     private Vector3 inputDirection;
+    private Vector3 smoothInputDirection;
     public Vector3 velocity;
 
+    private bool isGrounded; // Indique si le joueur est au sol
+    private float timeSinceAirborne; // Temps écoulé depuis que le joueur a quitté le sol
+    private bool hasResetVelocity; // Indique si la vitesse verticale a déjà été réinitialisée
+    private float airborneThreshold = 0.05f; // Temps limite avant la réinitialisation de la vitesse après avoir quitté le sol
+
+
+
     [SerializeField]
-    private float currentSpeed;  // 实时速度监控
+    private float currentSpeed;
 
     private void Start()
     {
-        initialized();
+        InitializeController();
     }
 
     private void Update()
     {
-        playerMovement();
-
-        if (GroundCheck() && velocity.y < 0)
-        {
-            velocity.y = -speed;
-        }
-        else if (!GroundCheck())
-        {
-            addGravity();
-        }
+        HandlePlayerMovement();
+        HandleGravity();
+        UpdateCurrentSpeed();
     }
 
-    private void initialized()
+    // Initialiser le contrôleur et les variables nécessaires
+    private void InitializeController()
     {
         controller = GetComponent<CharacterController>();
+        smoothInputDirection = Vector3.zero;
     }
 
-    private void playerMovement()
+    // Gérer le mouvement du joueur
+    private void HandlePlayerMovement()
+    {
+        RetrieveInputDirection();
+        ApplyInputSmoothing();
+        MovePlayer();
+    }
+
+    // Récupérer la direction d'entrée basée sur les axes horizontaux et verticaux
+    private void RetrieveInputDirection()
     {
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
-
-        // 获取玩家输入方向
         inputDirection = transform.right * x + transform.forward * z;
-
-        // 归一化输入方向
-        if (inputDirection.magnitude > 1f)
+        if(inputDirection.magnitude > 1f)
         {
             inputDirection.Normalize();
         }
-
-        // 计算并更新实时速度
-        currentSpeed = (inputDirection * speed).magnitude;
-
-        // 移动角色
-        controller.Move(speedResult(inputDirection));
     }
 
-    private Vector3 speedResult(Vector3 direction)
+    // Appliquer une transition fluide entre les directions d'entrée
+    private void ApplyInputSmoothing()
     {
-        return direction * speed * Time.deltaTime;
+        if (inputDirection.magnitude > 0f)
+        {
+            // Transition vers la direction cible (accélération)
+            smoothInputDirection = Vector3.Lerp(smoothInputDirection, inputDirection, Time.deltaTime / accelerationRate);
+        }
+        else
+        {
+            // Transition vers zéro (décélération)
+            smoothInputDirection = Vector3.Lerp(smoothInputDirection, Vector3.zero, Time.deltaTime / decelerationRate);
+
+            // Si la magnitude est très faible, définir explicitement à zéro
+            if (smoothInputDirection.magnitude < 0.00001)
+            {
+                smoothInputDirection = Vector3.zero;
+            }
+        }
+
+        if (smoothInputDirection.magnitude > 1f)
+        {
+            smoothInputDirection.Normalize();
+        }
     }
 
-    private void applyFriction()
+    // Déplacer le joueur en utilisant la direction lissée
+    private void MovePlayer()
     {
-        // TODO: 实现摩擦力逻辑
+        controller.Move(smoothInputDirection * speed * Time.deltaTime);
     }
 
-    private void addGravity()
+    // Gérer la gravité pour les mouvements verticaux
+    private void HandleGravity()
+    {
+        if (GroundCheck())
+        {
+            // Lorsque le joueur touche le sol
+            if (!isGrounded)
+            {
+                // Si le joueur vient d'atterrir, appliquer une gravité spéciale
+                isGrounded = true;
+                velocity.y = -speed; // Réinitialiser la vitesse
+                timeSinceAirborne = 0f; // Réinitialiser le chronomètre
+                hasResetVelocity = false; // Réinitialiser le drapeau de réinitialisation
+            }
+            else
+            {
+                // Si le joueur reste au sol, maintenir la vitesse
+                velocity.y = -speed;
+            }
+        }
+        else
+        {
+            // Lorsque le joueur quitte le sol
+            if (isGrounded)
+            {
+                // Si le joueur vient de quitter le sol, démarrer le chronomètre
+                isGrounded = false;
+                timeSinceAirborne = 0f;
+            }
+
+            // Mettre à jour le temps écoulé depuis que le joueur a quitté le sol
+            timeSinceAirborne += Time.deltaTime;
+
+            // Si le joueur est en l'air depuis plus longtemps que le seuil et que la vitesse n'a pas encore été réinitialisée
+            if (timeSinceAirborne > airborneThreshold && !hasResetVelocity)
+            {
+                velocity.y = 0; // Réinitialiser la vitesse verticale
+                hasResetVelocity = true; // Marquer comme réinitialisé
+            }
+
+            // Appliquer la gravité en continu
+            AddGravityEffect();
+        }
+    }
+
+    // Ajouter l'effet de gravité au vecteur de vitesse
+    private void AddGravityEffect()
     {
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
     }
 
+    // Vérifier si le joueur est au sol
     private bool GroundCheck()
     {
         return Physics.SphereCast(transform.position, groundCheckRadius, Vector3.down, out RaycastHit hit, groundCheckDistance, groundLayer);
     }
 
+    // Mettre à jour la vitesse actuelle pour surveiller le déplacement du joueur
+    private void UpdateCurrentSpeed()
+    {
+        currentSpeed = smoothInputDirection.magnitude * speed;
+    }
+
+    // Dessiner les Gizmos pour visualiser la détection du sol
     private void OnDrawGizmos()
     {
-        // 可视化地面检测
         Gizmos.color = GroundCheck() ? Color.green : Color.red;
         Gizmos.DrawWireSphere(transform.position + Vector3.down * groundCheckDistance, groundCheckRadius);
     }
