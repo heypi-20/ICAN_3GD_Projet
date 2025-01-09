@@ -5,7 +5,8 @@ public class EnhancedLevelDesign : EditorWindow
 {
     #region Variables
     
-    public float[] personnalIncrement;
+    private GameObject selectedGO; // GameObject sélectionné dans la scène
+    private GameObject newGO; // GameObject sélectionné pour remplacer
 
     private Vector3 moveSnap;
     private float rotationSnap;
@@ -20,8 +21,7 @@ public class EnhancedLevelDesign : EditorWindow
     private int fieldSnapSize = 40;
 
     #endregion
-
-
+    
     [MenuItem("Tools/Enhanced Level Design")]
     private static void ShowWindow()
     {
@@ -70,8 +70,30 @@ public class EnhancedLevelDesign : EditorWindow
         }
     }
     
+    private void ReplaceSelectedGameObject()
+    {
+        // Instancier le nouveau GameObject à la position de l'ancien
+        GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(newGO);
+        if (instance != null)
+        {
+            instance.transform.position = selectedGO.transform.position;
+            instance.transform.rotation = selectedGO.transform.rotation;
+            instance.transform.localScale = selectedGO.transform.localScale;
+
+            // Supprimer l'ancien GameObject
+            Undo.DestroyObjectImmediate(selectedGO);
+            // Enregistrer l'opération
+            Undo.RegisterCreatedObjectUndo(instance, "Replace GameObject");
+            // Sélectionner le nouvel objet
+            Selection.activeGameObject = instance;
+        }
+    }
+    
     private void OnGUI()
     {
+        #region Snap Settings
+        GUILayout.BeginVertical("box");
+        
         GUILayout.Label("Snap Settings", EditorStyles.boldLabel);
         // width = EditorGUILayout.Slider("Size", width, 0f, 100f);
         
@@ -148,12 +170,59 @@ public class EnhancedLevelDesign : EditorWindow
         rotationSnap = EditorGUILayout.FloatField("Rotation", rotationSnap);
         scaleSnap = EditorGUILayout.FloatField("Scale", scaleSnap);
         
+        GUILayout.Label("Manual Action");
+        GUILayout.BeginHorizontal();
+        
         GUILayout.Label($"Current Snap Values:\nMove: {EditorSnapSettings.move}\nRotate: {EditorSnapSettings.rotate}\nScale: {EditorSnapSettings.scale}", EditorStyles.helpBox);
         
-        GUILayout.Space(10);
+        GUILayout.BeginVertical();
+                
+        if(GUILayout.Button("Reload Snap Settings", GUILayout.Width(200)))
+        {
+            LoadSnapSettings();
+        }        
+                
+        if(GUILayout.Button("Save Snap Settings", GUILayout.Width(200)))
+        {
+            SaveSnapSettings();
+        }
+        
+        GUILayout.EndVertical();
+                
+        GUILayout.EndHorizontal();
+        
+        GUILayout.EndVertical();
+
+        #endregion
+        
+        #region Change Game Object
+        GUILayout.BeginVertical("box");
+        EditorGUILayout.LabelField("Replace Selected GameObject", EditorStyles.boldLabel);
+        
+        selectedGO = Selection.activeGameObject;
+        if (selectedGO != null)
+        {
+            EditorGUILayout.LabelField("Selected GameObject : " + selectedGO.name, EditorStyles.helpBox);
+        }
+        else
+        {
+            EditorGUILayout.LabelField("No Selected GameObject.", EditorStyles.helpBox);
+        }
+        
+        // Champ pour sélectionner le nouveau GameObject
+        newGO = (GameObject)EditorGUILayout.ObjectField("Object to Instantiate", newGO, typeof(GameObject), false);
+        
+        // Bouton pour effectuer le remplacement
+        if (GUILayout.Button("Replace") && selectedGO != null && newGO != null)
+        {
+            ReplaceSelectedGameObject();
+        }
+
+        GUILayout.EndVertical();
+        #endregion
 
         #region Button
-
+        GUILayout.BeginVertical("box");
                 GUILayout.Label("Button", EditorStyles.boldLabel);
                 
                 GUILayout.Label("Shortcut");
@@ -167,35 +236,14 @@ public class EnhancedLevelDesign : EditorWindow
                 GUILayout.EndHorizontal();
                 
                 GUILayout.Space(5);
-                GUILayout.Label("Manual Action");
-                GUILayout.BeginHorizontal();
                 
-                if(GUILayout.Button("Reload Snap Settings"))
-                {
-                    LoadSnapSettings();
-                }        
-                
-                if(GUILayout.Button("Save Snap Settings"))
-                {
-                    SaveSnapSettings();
-                }
-                
-                GUILayout.EndHorizontal();
+        GUILayout.EndVertical();
 
         #endregion
-        
-        for (int i = 0; i < personnalIncrement.Length; i++)
-        {
-            
-            EditorGUILayout.FloatField("Personnal Increment", personnalIncrement[i]);
-            if (GUILayout.Button("increment"))
-            {
-                // Action lorsque le bouton est cliqué
-                Debug.Log(personnalIncrement[i] + " clicked!");
-            }
-        }
 
         #region Appel de Fonction
+        
+        // Todo : Mettre des fonction qui ne doivent s'appeller automatiquement
 
         #endregion
         
