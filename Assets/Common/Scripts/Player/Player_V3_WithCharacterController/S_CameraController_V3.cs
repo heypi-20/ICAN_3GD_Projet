@@ -1,29 +1,37 @@
+﻿using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class S_CameraController_V3 : MonoBehaviour
 {
-    public float mouseSensitivity = 100f;
-    public Transform playerBody;
-    float xRotation = 0f;
+    [Header("Paramètres du mouvement du joueur")]
+    public Transform playerBody;  // Transform du joueur
+    public Transform cameraTransform;  // Transform de la caméra
 
     private void Start()
     {
+        // Verrouille le curseur de la souris au centre de l'écran
         Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()
     {
-        cameraMovement();
+        // Synchronise instantanément l'orientation du joueur avec la direction de la caméra
+        AlignerJoueurAvecCamera();
     }
-    void cameraMovement()
+
+    /// <summary>
+    /// Ajuste immédiatement la rotation du joueur pour qu'il fasse toujours face à la direction de la caméra
+    /// </summary>
+    void AlignerJoueurAvecCamera()
     {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
-        xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-        playerBody.Rotate(Vector3.up * mouseX);
+        // Récupère la direction avant de la caméra, en ignorant la rotation verticale
+        Vector3 cameraForward = cameraTransform.forward;
+        cameraForward.y = 0f;  // Ignore l'axe Y pour garder une rotation horizontale
+        cameraForward.Normalize();
+
+        // Applique directement la rotation cible au joueur
+        playerBody.rotation = Quaternion.LookRotation(cameraForward);
     }
 }
