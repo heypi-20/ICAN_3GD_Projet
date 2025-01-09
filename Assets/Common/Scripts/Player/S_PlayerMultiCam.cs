@@ -80,7 +80,6 @@ public class S_PlayerMultiCam : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (IsInputPressed())
