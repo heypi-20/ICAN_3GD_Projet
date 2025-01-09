@@ -60,17 +60,15 @@ public class S_SprintModule : MonoBehaviour
 
     private void HandleSprintInput()
     {
-        if (Input.GetKeyDown(sprintKey))
+        if (Input.GetKey(sprintKey))
         {
-            TryToggleSprint();
-        }
-
-        if (isSprinting)
-        {
+            isSprinting = true;
             CalculateSprintSpeed();
         }
         else
         {
+ 
+            isSprinting = false;
             ResetToSavedBaseSpeed();
         }
 
