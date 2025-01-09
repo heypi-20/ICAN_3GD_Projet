@@ -12,7 +12,7 @@ public class ScriptInspectorWindow : EditorWindow
     public static void ShowWindow()
     {
         var window = GetWindow<ScriptInspectorWindow>();
-        window.titleContent = new GUIContent("Script Inspector");
+        window.titleContent = new GUIContent("Script Inspector", EditorGUIUtility.IconContent("Handle").image);
         window.Show();
     }
 

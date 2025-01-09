@@ -1,20 +1,23 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class EnhancedLevelDesign : EditorWindow
 {
     #region Variables
-
-
-    private float width;
+    
+    public float[] personnalIncrement;
 
     private Vector3 moveSnap;
     private float rotationSnap;
     private float scaleSnap;
     
     private bool linkMoveSnapValues = false; // Contrôle si les valeurs de Move Snap sont identiques
-    private bool snapEnabled;
+
+    #endregion
+
+    #region Propreté de l'editor
+
+    private int fieldSnapSize = 40;
 
     #endregion
 
@@ -23,7 +26,7 @@ public class EnhancedLevelDesign : EditorWindow
     private static void ShowWindow()
     {
         var window = GetWindow<EnhancedLevelDesign>();
-        window.titleContent = new GUIContent("Enhanced Level Design");
+        window.titleContent = new GUIContent("Enhanced Level Design", EditorGUIUtility.IconContent("d_MainStageView").image);
         window.Show();
     }
 
@@ -31,9 +34,6 @@ public class EnhancedLevelDesign : EditorWindow
     {
         // Charger les valeurs actuelles des Snap Settings
         LoadSnapSettings();
-        
-        // Récupère l'état actuel du snap de la grille au lancement de la fenêtre
-        snapEnabled = EditorPrefs.GetBool("SceneView.gridSnap", false);
     }
 
     private void LoadSnapSettings()
@@ -69,50 +69,6 @@ public class EnhancedLevelDesign : EditorWindow
             selectedObject.transform.position = roundedPosition; // Met l'objet a la pos Arrondi
         }
     }
-
-    private void ActivateSnap()
-    {
-        // Applique le snap à toutes les vues de scène
-        foreach (SceneView sceneView in SceneView.sceneViews)
-        {
-            // Activer/désactiver le snap de la grille
-            
-        }
-    }
-    
-    private void HandleMouseWheel()
-    {
-        // Si un événement de molette est détecté
-        if (Event.current.type == EventType.ScrollWheel)
-        {
-            float delta = Event.current.delta.y;  // Ajuste la vitesse de la molette si nécessaire
-
-            // Modifier la valeur en fonction du champ actif
-            if (linkMoveSnapValues)
-            {
-                moveSnap.x += delta; // Modifie X, Y et Z de manière liée
-                moveSnap.y = moveSnap.x;
-                moveSnap.z = moveSnap.x;
-            }
-            else
-            {
-                if (GUI.GetNameOfFocusedControl() == "Move X") // Vérifier si le champ X est actif
-                    moveSnap.x += delta;
-                else if (GUI.GetNameOfFocusedControl() == "Move Y") // Vérifier si le champ Y est actif
-                    moveSnap.y += delta;
-                else if (GUI.GetNameOfFocusedControl() == "Move Z") // Vérifier si le champ Z est actif
-                    moveSnap.z += delta;
-            }
-
-            // Limiter les valeurs minimales pour éviter de petites valeurs indésirables
-            moveSnap.x = Mathf.Max(0.1f, moveSnap.x);
-            moveSnap.y = Mathf.Max(0.1f, moveSnap.y);
-            moveSnap.z = Mathf.Max(0.1f, moveSnap.z);
-
-            // Réactualiser l'interface
-            Event.current.Use(); // Consommer l'événement de la molette
-        }
-    }
     
     private void OnGUI()
     {
@@ -130,10 +86,7 @@ public class EnhancedLevelDesign : EditorWindow
             linkMoveSnapValues = !linkMoveSnapValues; // Inverser l'état de linkMoveSnapValues lors du clic
         }
         
-        float originalLabelWidth = EditorGUIUtility.fieldWidth;
-        EditorGUIUtility.fieldWidth = 0;
-        moveSnap.x = EditorGUILayout.FloatField("X", moveSnap.x); // Activer l'édition pour X
-
+        moveSnap.x = EditorGUILayout.FloatField(GUIContent.none, moveSnap.x, GUILayout.Width(fieldSnapSize)); // Activer l'édition pour X
         
         if (linkMoveSnapValues) // Synchroniser Y et Z dès que X est modifié et que le mode Link est activé
         {
@@ -143,19 +96,15 @@ public class EnhancedLevelDesign : EditorWindow
 
         // Désactiver l'édition pour Y et Z si linkMoveSnapValues est activé
         GUI.enabled = !linkMoveSnapValues;
-        moveSnap.y = EditorGUILayout.FloatField("Y", moveSnap.y);
-        moveSnap.z = EditorGUILayout.FloatField("Z", moveSnap.z);
+        moveSnap.y = EditorGUILayout.FloatField(GUIContent.none, moveSnap.y, GUILayout.Width(fieldSnapSize));
+        moveSnap.z = EditorGUILayout.FloatField(GUIContent.none, moveSnap.z, GUILayout.Width(fieldSnapSize));
         GUI.enabled = true;
-        EditorGUIUtility.fieldWidth = originalLabelWidth;
 
         SaveSnapSettings();
-        EditorGUILayout.EndHorizontal();
 
         #endregion
         
         #region Snap Préféfinie
-        GUILayout.BeginHorizontal();
-        EditorGUILayout.PrefixLabel("Snap Préféfinie", EditorStyles.boldLabel);
         
         if(GUILayout.Button("0.25", GUILayout.Width(50)))
         {
@@ -203,13 +152,6 @@ public class EnhancedLevelDesign : EditorWindow
         
         GUILayout.Space(10);
 
-        #region Simple GO Placement
-
-        GameObject[] gameObjectBank;
-        
-
-        #endregion
-
         #region Button
 
                 GUILayout.Label("Button", EditorStyles.boldLabel);
@@ -241,10 +183,19 @@ public class EnhancedLevelDesign : EditorWindow
                 GUILayout.EndHorizontal();
 
         #endregion
+        
+        for (int i = 0; i < personnalIncrement.Length; i++)
+        {
+            
+            EditorGUILayout.FloatField("Personnal Increment", personnalIncrement[i]);
+            if (GUILayout.Button("increment"))
+            {
+                // Action lorsque le bouton est cliqué
+                Debug.Log(personnalIncrement[i] + " clicked!");
+            }
+        }
 
         #region Appel de Fonction
-
-        // HandleMouseWheel();
 
         #endregion
         
