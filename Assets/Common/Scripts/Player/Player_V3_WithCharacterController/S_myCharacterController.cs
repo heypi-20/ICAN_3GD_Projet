@@ -9,6 +9,7 @@ public class S_myCharacterController : MonoBehaviour
     public float accelerationRate = 0.1f;
     [Range(0, 1)]
     public float decelerationRate = 0.1f;
+    public float jumpHeight = 3f;
     public float gravity = -9.81f;
     public float groundCheckDistance = 0.4f;
     public float groundCheckRadius = 0.2f;
@@ -39,6 +40,16 @@ public class S_myCharacterController : MonoBehaviour
         HandlePlayerMovement();
         HandleGravity();
         UpdateCurrentSpeed();
+        Jump();
+    }
+
+    private void Jump()
+    {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            velocity.y = Mathf.Sqrt(jumpHeight *-2f* gravity);
+        }
+        
     }
 
     // Initialiser le contrôleur et les variables nécessaires
@@ -103,7 +114,7 @@ public class S_myCharacterController : MonoBehaviour
     // Gérer la gravité pour les mouvements verticaux
     private void HandleGravity()
     {
-        if (GroundCheck())
+        if (GroundCheck()&&velocity.y<0)
         {
             // Lorsque le joueur touche le sol
             if (!isGrounded)
