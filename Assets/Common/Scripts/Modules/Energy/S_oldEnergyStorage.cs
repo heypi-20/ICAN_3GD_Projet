@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class S_EnergyStorage : MonoBehaviour
+public class S_oldEnergyStorage : MonoBehaviour
 {
     [Header("Energy Settings")]
     public bool isUnlimitedStorage = false; // If true, energy storage is unlimited

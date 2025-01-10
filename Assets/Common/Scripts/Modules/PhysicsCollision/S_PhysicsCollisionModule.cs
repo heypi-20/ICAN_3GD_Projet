@@ -1,8 +1,6 @@
 using UnityEngine;
 using System;
 using UnityEngine.Events;
-
-[RequireComponent(typeof(Rigidbody))] // Exige un Rigidbody sur le GameObject pour fonctionner correctement
 public class S_PhysicsCollisionModule : MonoBehaviour
 {
     public enum OverlapType { BOX, SPHERE, CAPSULE } // Définition des types d'overlap possibles
@@ -45,19 +43,10 @@ public class S_PhysicsCollisionModule : MonoBehaviour
 
     public event Action OnTouch; // Événement déclenché lorsqu'une collision est détectée
     public UnityEvent OnTouchCalled;
-    private Rigidbody rb; // Référence au Rigidbody
     private float lastCollisionTime = -Mathf.Infinity; // Dernier temps de collision
     private float lastPhysicCastTime = -Mathf.Infinity; // Dernier temps de PhysicCast
     private bool hasCollided = false; // Indique si une collision a eu lieu
-
-    /// <summary>
-    /// Initialiser la référence au Rigidbody attaché à cet objet.
-    /// </summary>
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody>(); // Récupérer le Rigidbody attaché à cet objet
-    }
-
+    
     /// <summary>
     /// Mettre à jour l'état chaque frame, effectuer un PhysicCast si activé et nécessaire.
     /// </summary>

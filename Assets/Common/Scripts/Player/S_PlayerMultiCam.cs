@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(S_GroundCheck))]
-[RequireComponent(typeof(S_EnergyStorage))]
+[RequireComponent(typeof(S_oldEnergyStorage))]
 public class S_PlayerMultiCam : MonoBehaviour
 {
     public enum CameraType
@@ -38,7 +38,7 @@ public class S_PlayerMultiCam : MonoBehaviour
 
     private S_GroundCheck groundCheck;
     private S_PlayerSpeedController playerSpeedController;
-    private S_EnergyStorage energyStorage;
+    private S_oldEnergyStorage _oldEnergyStorage;
     private Rigidbody rb;
 
     // Player input axes
@@ -54,10 +54,10 @@ public class S_PlayerMultiCam : MonoBehaviour
     {
         groundCheck = GetComponent<S_GroundCheck>();
         playerSpeedController = GetComponent<S_PlayerSpeedController>();
-        energyStorage = GetComponent<S_EnergyStorage>();
+        _oldEnergyStorage = GetComponent<S_oldEnergyStorage>();
         rb = GetComponent<Rigidbody>();
 
-        if (energyStorage == null)
+        if (_oldEnergyStorage == null)
         {
             Debug.LogError("S_EnergyStorage component is not found on this GameObject.");
         }
@@ -92,7 +92,7 @@ public class S_PlayerMultiCam : MonoBehaviour
             playerSpeedController.SpeedControl();
             Rotation();
         }
-        if (enableEnergyConsumptionForMovement && energyStorage.currentEnergy <= 0)
+        if (enableEnergyConsumptionForMovement && _oldEnergyStorage.currentEnergy <= 0)
         {
             moveSpeed = 0f;
         }
@@ -129,9 +129,9 @@ public class S_PlayerMultiCam : MonoBehaviour
     {
         if (isMoving)
         {
-            float energyBonusConsumption = energyStorage.currentEnergy * energyConsumptionBonusPercentage;
+            float energyBonusConsumption = _oldEnergyStorage.currentEnergy * energyConsumptionBonusPercentage;
             float totalEnergyToConsume = (energyConsumptionRate + energyBonusConsumption) * Time.deltaTime;
-            energyStorage.currentEnergy = Mathf.Max(0, energyStorage.currentEnergy - totalEnergyToConsume);
+            _oldEnergyStorage.currentEnergy = Mathf.Max(0, _oldEnergyStorage.currentEnergy - totalEnergyToConsume);
         }
     }
 

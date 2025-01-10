@@ -23,13 +23,13 @@ public class S_PlayerShooting : MonoBehaviour
     public float energyConsumptionMultiplier = 5f; // Multiplier for energy consumption reduction based on current energy
 
     [Header("References")]
-    private S_EnergyStorage energyStorage; // Reference to the energy storage system
+    private S_oldEnergyStorage _oldEnergyStorage; // Reference to the energy storage system
 
     private float nextFireTime = 0f; // Time when the player can fire next
 
     private void Start()
     {
-        energyStorage = GetComponent<S_EnergyStorage>();
+        _oldEnergyStorage = GetComponent<S_oldEnergyStorage>();
     }
 
     private void Update()
@@ -59,14 +59,14 @@ public class S_PlayerShooting : MonoBehaviour
 
     private bool HasEnoughEnergy()
     {
-        return energyStorage != null && energyStorage.currentEnergy >= GetCurrentEnergyConsumption();
+        return _oldEnergyStorage != null && _oldEnergyStorage.currentEnergy >= GetCurrentEnergyConsumption();
     }
 
     private void ConsumeEnergy()
     {
-        if (energyStorage != null)
+        if (_oldEnergyStorage != null)
         {
-            energyStorage.currentEnergy = Mathf.Max(0, energyStorage.currentEnergy - GetCurrentEnergyConsumption());
+            _oldEnergyStorage.currentEnergy = Mathf.Max(0, _oldEnergyStorage.currentEnergy - GetCurrentEnergyConsumption());
         }
     }
 
@@ -96,9 +96,9 @@ public class S_PlayerShooting : MonoBehaviour
 
     private float GetCurrentFireRate()
     {
-        if (energyStorage != null)
+        if (_oldEnergyStorage != null)
         {
-            float energyFactor = energyStorage.currentEnergy * fireRatePercentage;
+            float energyFactor = _oldEnergyStorage.currentEnergy * fireRatePercentage;
             float fireRateBonus = energyFactor * fireRateMultiplier;
             return Mathf.Clamp(baseFireRate + fireRateBonus, baseFireRate, maxFireRate);
         }
@@ -108,9 +108,9 @@ public class S_PlayerShooting : MonoBehaviour
 
     private float GetCurrentEnergyConsumption()
     {
-        if (energyStorage != null)
+        if (_oldEnergyStorage != null)
         {
-            float energyFactor = energyStorage.currentEnergy * energyConsumptionPercentage;
+            float energyFactor = _oldEnergyStorage.currentEnergy * energyConsumptionPercentage;
             float consumptionReduction = energyFactor * energyConsumptionMultiplier;
             float energyConsumption = baseEnergyConsumptionPerShot - consumptionReduction;
             return Mathf.Clamp(energyConsumption, minEnergyConsumption, maxEnergyConsumption);

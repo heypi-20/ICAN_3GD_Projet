@@ -46,6 +46,7 @@ public class S_myCharacterController : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             velocity.y = Mathf.Sqrt(jumpHeight *-2f* gravity);
+
         }
         
     }

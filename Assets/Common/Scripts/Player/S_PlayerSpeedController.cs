@@ -4,13 +4,13 @@ using UnityEngine;
 public class S_PlayerSpeedController : MonoBehaviour
 {
     private S_PlayerMultiCam pc;
-    private S_EnergyStorage energyStorage;
+    private S_oldEnergyStorage _oldEnergyStorage;
     private Rigidbody rb;
 
     private void Start()
     {
         pc = GetComponent<S_PlayerMultiCam>();
-        energyStorage = GetComponent<S_EnergyStorage>();
+        _oldEnergyStorage = GetComponent<S_oldEnergyStorage>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -21,9 +21,9 @@ public class S_PlayerSpeedController : MonoBehaviour
 
     private float CalculateMoveSpeed()
     {
-        if (pc.enableEnergyBoost && energyStorage != null)
+        if (pc.enableEnergyBoost && _oldEnergyStorage != null)
         {
-            float energyBoost = energyStorage.currentEnergy * pc.energyPercentageIncrease * pc.multiplier;
+            float energyBoost = _oldEnergyStorage.currentEnergy * pc.energyPercentageIncrease * pc.multiplier;
             return pc.baseSpeed + energyBoost;
         }
         return pc.baseSpeed;

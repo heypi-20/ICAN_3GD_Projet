@@ -22,7 +22,7 @@ public class S_MultiJumpModule : MonoBehaviour
     private int currentJumps;
     private int dynamicMaxJumps;
     private S_GroundCheck groundCheck;
-    private S_EnergyStorage energyStorage; // Reference to energy storage system
+    private S_oldEnergyStorage _oldEnergyStorage; // Reference to energy storage system
     private float bonusJumpForce;
     private void Start()
     {
@@ -45,13 +45,13 @@ public class S_MultiJumpModule : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         groundCheck = GetComponent<S_GroundCheck>();
-        energyStorage = GetComponent<S_EnergyStorage>();
+        _oldEnergyStorage = GetComponent<S_oldEnergyStorage>();
 
         if (groundCheck == null)
         {
             Debug.LogError("S_GroundCheck component is missing on this GameObject!");
         }
-        if (energyStorage == null)
+        if (_oldEnergyStorage == null)
         {
             Debug.LogError("S_EnergyStorage component is missing on this GameObject!");
         }
@@ -93,7 +93,7 @@ public class S_MultiJumpModule : MonoBehaviour
 
     private bool HasSufficientEnergy()
     {
-        return energyStorage != null && energyStorage.currentEnergy >= energyConsumption;
+        return _oldEnergyStorage != null && _oldEnergyStorage.currentEnergy >= energyConsumption;
     }
 
     private void Jump()
@@ -108,12 +108,12 @@ public class S_MultiJumpModule : MonoBehaviour
 
     private float CalculateEnergyBonus()
     {
-        if (energyStorage == null)
+        if (_oldEnergyStorage == null)
         {
             return 0f;
         }
 
-        float energyPercentage = energyStorage.currentEnergy / (energyStorage.maxEnergy > 0 ? energyStorage.maxEnergy : 1f);
+        float energyPercentage = _oldEnergyStorage.currentEnergy / (_oldEnergyStorage.maxEnergy > 0 ? _oldEnergyStorage.maxEnergy : 1f);
         return energyPercentage * energyBonusMultiplier * jumpForce;
     }
 
@@ -131,17 +131,17 @@ public class S_MultiJumpModule : MonoBehaviour
 
     private void DeductEnergy()
     {
-        if (energyStorage != null)
+        if (_oldEnergyStorage != null)
         {
-            energyStorage.currentEnergy = Mathf.Max(0, energyStorage.currentEnergy - energyConsumption);
+            _oldEnergyStorage.currentEnergy = Mathf.Max(0, _oldEnergyStorage.currentEnergy - energyConsumption);
         }
     }
 
     private void UpdateDynamicMaxJumps()
     {
-        if (energyStorage != null)
+        if (_oldEnergyStorage != null)
         {
-            int additionalJumps = Mathf.FloorToInt(energyStorage.currentEnergy / energyPerExtraJump);
+            int additionalJumps = Mathf.FloorToInt(_oldEnergyStorage.currentEnergy / energyPerExtraJump);
             dynamicMaxJumps = maxJumps + additionalJumps;
         }
     }

@@ -20,7 +20,7 @@ public class S_SuperJumpModule : MonoBehaviour
     private Rigidbody rb;
     private float currentEnergyCost;
     private S_GroundCheck groundCheck;
-    private S_EnergyStorage energyStorage; // Reference to energy storage system
+    private S_oldEnergyStorage _oldEnergyStorage; // Reference to energy storage system
 
     private void Start()
     {
@@ -42,13 +42,13 @@ public class S_SuperJumpModule : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         groundCheck = GetComponent<S_GroundCheck>();
-        energyStorage = GetComponent<S_EnergyStorage>();
+        _oldEnergyStorage = GetComponent<S_oldEnergyStorage>();
 
         if (groundCheck == null)
         {
             Debug.LogError("S_GroundCheck component is missing on this GameObject!");
         }
-        if (energyStorage == null)
+        if (_oldEnergyStorage == null)
         {
             Debug.LogError("S_EnergyStorage component is missing on this GameObject!");
         }
@@ -66,7 +66,7 @@ public class S_SuperJumpModule : MonoBehaviour
 
     private bool CanJump()
     {
-        return energyStorage != null && energyStorage.currentEnergy >= currentEnergyCost;
+        return _oldEnergyStorage != null && _oldEnergyStorage.currentEnergy >= currentEnergyCost;
     }
 
     private void ApplyExtraGravity()
@@ -103,13 +103,13 @@ public class S_SuperJumpModule : MonoBehaviour
 
     private float CalculateBonusJumpForce()
     {
-        if (energyStorage == null)
+        if (_oldEnergyStorage == null)
         {
             return 0f;
         }
 
         // Base jump force plus energy-based bonus
-        return baseJumpForce + ((energyStorage.currentEnergy * energyHeightMultiplier) * bonusHeightMultiplier);
+        return baseJumpForce + ((_oldEnergyStorage.currentEnergy * energyHeightMultiplier) * bonusHeightMultiplier);
     }
 
     private void ApplyJumpForce(float bonusForce)
@@ -119,9 +119,9 @@ public class S_SuperJumpModule : MonoBehaviour
 
     private void DeductEnergy()
     {
-        if (energyStorage != null)
+        if (_oldEnergyStorage != null)
         {
-            energyStorage.currentEnergy = Mathf.Max(0, energyStorage.currentEnergy - currentEnergyCost);
+            _oldEnergyStorage.currentEnergy = Mathf.Max(0, _oldEnergyStorage.currentEnergy - currentEnergyCost);
         }
     }
 

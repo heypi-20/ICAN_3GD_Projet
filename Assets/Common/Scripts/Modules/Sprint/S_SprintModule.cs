@@ -11,7 +11,7 @@ public class S_SprintModule : MonoBehaviour
 
     // References to other components
     private S_PlayerMultiCam playerMultiCam;
-    private S_EnergyStorage energyStorage;
+    private S_oldEnergyStorage _oldEnergyStorage;
 
     private float currentSprintSpeed;
     private bool isSprinting;
@@ -42,8 +42,8 @@ public class S_SprintModule : MonoBehaviour
             Debug.LogError("S_PlayerMultiCam script not found on the same GameObject.");
         }
 
-        energyStorage = GetComponent<S_EnergyStorage>();
-        if (energyStorage == null)
+        _oldEnergyStorage = GetComponent<S_oldEnergyStorage>();
+        if (_oldEnergyStorage == null)
         {
             Debug.LogError("S_EnergyStorage script not found on the same GameObject.");
         }
@@ -77,7 +77,7 @@ public class S_SprintModule : MonoBehaviour
 
     private void TryToggleSprint()
     {
-        if (energyStorage != null && energyStorage.currentEnergy > 0)
+        if (_oldEnergyStorage != null && _oldEnergyStorage.currentEnergy > 0)
         {
             isSprinting = !isSprinting;
         }
@@ -85,9 +85,9 @@ public class S_SprintModule : MonoBehaviour
 
     private void CalculateSprintSpeed()
     {
-        if (energyStorage != null && energyStorage.currentEnergy > 0)
+        if (_oldEnergyStorage != null && _oldEnergyStorage.currentEnergy > 0)
         {
-            float energyFactor = (energyStorage.currentEnergy * energyPercentage) * energyMultiplier;
+            float energyFactor = (_oldEnergyStorage.currentEnergy * energyPercentage) * energyMultiplier;
             currentSprintSpeed = sprintSpeed + energyFactor;
         }
         else
@@ -112,12 +112,12 @@ public class S_SprintModule : MonoBehaviour
 
     private void ConsumeEnergy()
     {
-        if (energyStorage != null && energyStorage.currentEnergy > 0)
+        if (_oldEnergyStorage != null && _oldEnergyStorage.currentEnergy > 0)
         {
-            energyStorage.currentEnergy -= sprintEnergyConsumptionRate * Time.deltaTime;
-            if (energyStorage.currentEnergy <= 0)
+            _oldEnergyStorage.currentEnergy -= sprintEnergyConsumptionRate * Time.deltaTime;
+            if (_oldEnergyStorage.currentEnergy <= 0)
             {
-                energyStorage.currentEnergy = 0;
+                _oldEnergyStorage.currentEnergy = 0;
                 isSprinting = false; // Stop sprinting when out of energy
                 ResetToSavedBaseSpeed();
             }
