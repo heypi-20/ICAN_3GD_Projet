@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using UnityEditor.ShortcutManagement;
 using UnityEngine;
 
 public class EnhancedLevelDesign : EditorWindow
@@ -13,6 +14,11 @@ public class EnhancedLevelDesign : EditorWindow
     private float scaleSnap;
     
     private bool linkMoveSnapValues = false; // Contrôle si les valeurs de Move Snap sont identiques
+    
+    private float[] increment; // Tableau de 1 float
+    private int nbIncrement; 
+    
+
 
     #endregion
 
@@ -50,24 +56,43 @@ public class EnhancedLevelDesign : EditorWindow
         EditorSnapSettings.rotate = rotationSnap;
         EditorSnapSettings.scale = scaleSnap;
     }
-
+    
     // Réinitialiser la position du GameObject sélectionné à l'unité
     private void ResetSelectedObjectToUnitPosition()
     {
         if (Selection.activeGameObject != null)// Vérifie si l'object est séléctionner
         {
-            GameObject selectedObject = Selection.activeGameObject;// Recupere le GO
+            selectedGO = Selection.activeGameObject;// Recupere le GO
             
-            Vector3 currentPosition = selectedObject.transform.position; // Arrondi chaque position
+            Vector3 currentPosition = selectedGO.transform.position; // Arrondi chaque position
             Vector3 roundedPosition = new Vector3(
                 Mathf.Round(currentPosition.x),
                 Mathf.Round(currentPosition.y),
                 Mathf.Round(currentPosition.z)
             );
             
-            Undo.RecordObject(selectedObject.transform, "Reset To Unit Position"); // Undo CTRL Z
-            selectedObject.transform.position = roundedPosition; // Met l'objet a la pos Arrondi
+            Undo.RecordObject(selectedGO.transform, "Reset To Unit Position"); // Undo CTRL Z
+            selectedGO.transform.position = roundedPosition; // Met l'objet a la pos Arrondi
         }
+    }
+    
+    // Fonction pour redimensionner le tableau tout en conservant les valeurs existantes
+    private void ResizeArray(ref float[] array, int newSize)
+    {
+        if (nbIncrement >= 1)
+        {
+            float[] newArray = new float[newSize];
+            for (int i = 0; i < Mathf.Min(array.Length, newArray.Length); i++)
+            {
+                newArray[i] = array[i];
+            }
+            array = newArray;
+        }
+    }
+
+    private void AltToCopy()
+    {
+        //Todo : Dupliquer le GO et le bouger grace a la Handle
     }
     
     private void ReplaceSelectedGameObject()
@@ -91,6 +116,7 @@ public class EnhancedLevelDesign : EditorWindow
     
     private void OnGUI()
     {
+        
         #region Snap Settings
         GUILayout.BeginVertical("box");
         
@@ -126,43 +152,60 @@ public class EnhancedLevelDesign : EditorWindow
 
         #endregion
         
+        GUILayout.EndHorizontal();
+       
         #region Snap Préféfinie
         
-        if(GUILayout.Button("0.25", GUILayout.Width(50)))
+        GUILayout.BeginHorizontal();
+
+        if (nbIncrement != increment.Length)
         {
-            moveSnap.x = 0.25f;
-            moveSnap.y = 0.25f;
-            moveSnap.z = 0.25f;
-        }  
+            ResizeArray(ref increment, nbIncrement);
+        }
         
-        if(GUILayout.Button("0.5", GUILayout.Width(50)))
+        int id = 1;
+
+        GUILayout.BeginVertical();
+        for (int i = 0; i < increment.Length; i++)
         {
-            moveSnap.x = 0.5f;
-            moveSnap.y = 0.5f;
-            moveSnap.z = 0.5f;
-        }  
+            if (nbIncrement > 0)
+            {
+                GUILayout.BeginHorizontal();
+                EditorGUILayout.PrefixLabel("Increment " + id, EditorStyles.boldLabel);
+                increment[i]  = EditorGUILayout.FloatField(increment[i],GUILayout.Width(100));
+                if (GUILayout.Button("Apply",GUILayout.Width(60)))
+                {
+                    moveSnap.x = increment[i];
+                    moveSnap.y = increment[i];
+                    moveSnap.z = increment[i];
+                    Debug.Log("Scale is now : " + increment[i] );
+                }
+                GUILayout.EndHorizontal();
+
+                id++;
+            }
+        }
         
-        if(GUILayout.Button("1", GUILayout.Width(50)))
+        GUILayout.EndVertical();
+
+        GUILayout.EndHorizontal();
+        
+        GUILayout.BeginHorizontal();
+        
+        GUI.enabled = false;
+        nbIncrement = EditorGUILayout.IntField(nbIncrement, GUILayout.Width(40));
+        GUI.enabled = true;
+
+        if (GUILayout.Button("Create New Increment", GUILayout.Width(150)) && nbIncrement < 10)
         {
-            moveSnap.x = 1f;
-            moveSnap.y = 1f;
-            moveSnap.z = 1f;
-        }  
+            nbIncrement++;
+        }        
         
-        if(GUILayout.Button("2", GUILayout.Width(50)))
+        if (GUILayout.Button("Delete Last Increment", GUILayout.Width(150)) && nbIncrement >= 1)
         {
-            moveSnap.x = 2f;
-            moveSnap.y = 2f;
-            moveSnap.z = 2f;
-        }  
-        
-        if(GUILayout.Button("5", GUILayout.Width(50)))
-        {
-            moveSnap.x = 5f;
-            moveSnap.y = 5f;
-            moveSnap.z = 5f;
-        }  
-        
+            nbIncrement--;
+        }
+
         GUILayout.EndHorizontal();
         
         #endregion
