@@ -40604,6 +40604,11 @@ GameObject:
   - component: {fileID: 1889046143}
   - component: {fileID: 1889046144}
   - component: {fileID: 1889046145}
+  - component: {fileID: 1889046148}
+  - component: {fileID: 1889046150}
+  - component: {fileID: 1889046149}
+  - component: {fileID: 1889046151}
+  - component: {fileID: 1889046152}
   m_Layer: 0
   m_Name: Player_V3
   m_TagString: Player
@@ -40680,6 +40685,127 @@ MonoBehaviour:
     m_Bits: 4294967295
   velocity: {x: 0, y: 0, z: 0}
   currentSpeed: 0
+--- !u!114 &1889046148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1889046139}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8e56040794c0914e84ca85088ee48ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useCollision: 0
+  collisionCooldown: 1
+  usePhysicCast: 1
+  physicCastCooldown: 1
+  overlapType: 2
+  withScaleSize: 0
+  ignoreChildren: 1
+  customSize: {x: 1, y: 1, z: 1}
+  customOffset: {x: 0, y: 0, z: 0}
+  sphereRadius: 1
+  capsulePoint1: {x: 0, y: -0.5, z: 0}
+  capsulePoint2: {x: 0, y: 0.5, z: 0}
+  capsuleRadius: 0.6
+  collisionTags: []
+  collisionTargetComponentNames: []
+  physicCastTags: []
+  physicCastLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  physicTargetComponentNames: []
+  OnTouchCalled:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: S_EnergyStorage, Assembly-CSharp
+        m_MethodName: RemoveEnergy
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 20
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1889046149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1889046139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 167f586d133250a4ab3d847653d3c68b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRadius: 15
+  pullSpeed: 70
+--- !u!114 &1889046150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1889046139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9077fe9c8aaf7bf48be7dda69cfc094c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxEnergy: 2000
+  currentEnergy: 0
+  energyDisplay: {fileID: 1594681160}
+--- !u!114 &1889046151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1889046139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 348839239e307c742b65162445ad9d72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: 1069020167021631076, guid: b167b673b10f72a4a83b536cafce9b14, type: 3}
+  shootingPoint: {fileID: 1405989396}
+  baseFireRate: 10
+  maxFireRate: 10
+  projectileSpeed: 80
+  projectileLifetime: 5
+  baseEnergyConsumptionPerShot: 0
+  minEnergyConsumption: 1
+  maxEnergyConsumption: 10
+  fireRatePercentage: 0.1
+  fireRateMultiplier: 0
+  energyConsumptionPercentage: 0.1
+  energyConsumptionMultiplier: 0
+--- !u!114 &1889046152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1889046139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e18a0e7dfafc64549ad385f8074eab7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isUnlimitedStorage: 0
+  maxEnergy: 9999999
+  currentEnergy: 9999999
+  detectionRadius: 0
+  targetScriptName: 
+  energyGainPerObject: 0
+  pullSpeed: 0
+  energyDisplay: {fileID: 0}
 --- !u!1 &1890337464
 GameObject:
   m_ObjectHideFlags: 0

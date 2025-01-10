@@ -43,7 +43,7 @@ public class S_myCharacterController : MonoBehaviour
 
     private void Jump()
     {
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             velocity.y = Mathf.Sqrt(jumpHeight *-2f* gravity);
 
@@ -115,43 +115,49 @@ public class S_myCharacterController : MonoBehaviour
     {
         if (GroundCheck()&&velocity.y<0)
         {
-            // Lorsque le joueur touche le sol
-            if (!_isGrounded)
-            {
-                // Si le joueur vient d'atterrir, appliquer une gravité spéciale
-                _isGrounded = true;
-                velocity.y = -speed; // Réinitialiser la vitesse
-                _timeSinceAirborne = 0f; // Réinitialiser le chronomètre
-                _hasResetVelocity = false; // Réinitialiser le drapeau de réinitialisation
-            }
-            else
-            {
-                // Si le joueur reste au sol, maintenir la vitesse
-                velocity.y = -speed;
-            }
+            // // Lorsque le joueur touche le sol
+            // if (!_isGrounded)
+            // {
+            //     // Si le joueur vient d'atterrir, appliquer une gravité spéciale
+            //     _isGrounded = true;
+            //     velocity.y = -speed; // Réinitialiser la vitesse
+            //     _timeSinceAirborne = 0f; // Réinitialiser le chronomètre
+            //     _hasResetVelocity = false; // Réinitialiser le drapeau de réinitialisation
+            // }
+            // else
+            // {
+            //     // Si le joueur reste au sol, maintenir la vitesse
+            //     velocity.y = -speed;
+            // }
+            velocity.y = -2;
         }
         else
         {
-            // Lorsque le joueur quitte le sol
-            if (_isGrounded)
-            {
-                // Si le joueur vient de quitter le sol, démarrer le chronomètre
-                _isGrounded = false;
-                _timeSinceAirborne = 0f;
-            }
-
-            // Mettre à jour le temps écoulé depuis que le joueur a quitté le sol
-            _timeSinceAirborne += Time.deltaTime;
-
-            // Si le joueur est en l'air depuis plus longtemps que le seuil et que la vitesse n'a pas encore été réinitialisée
-            if (_timeSinceAirborne > _airborneThreshold && !_hasResetVelocity)
-            {
-                velocity.y = 0; // Réinitialiser la vitesse verticale
-                _hasResetVelocity = true; // Marquer comme réinitialisé
-            }
+            // // Lorsque le joueur quitte le sol
+            // if (_isGrounded)
+            // {
+            //     // Si le joueur vient de quitter le sol, démarrer le chronomètre
+            //     _isGrounded = false;
+            //     _timeSinceAirborne = 0f;
+            // }
+            //
+            // // Mettre à jour le temps écoulé depuis que le joueur a quitté le sol
+            // _timeSinceAirborne += Time.deltaTime;
+            //
+            // // Si le joueur est en l'air depuis plus longtemps que le seuil et que la vitesse n'a pas encore été réinitialisée
+            // if (_timeSinceAirborne > _airborneThreshold && !_hasResetVelocity)
+            // {
+            //     velocity.y = 0; // Réinitialiser la vitesse verticale
+            //     _hasResetVelocity = true; // Marquer comme réinitialisé
+            // }
 
             // Appliquer la gravité en continu
             AddGravityEffect();
+        }
+
+        if (_controller.collisionFlags == CollisionFlags.Above)
+        {
+            velocity.y = -2;
         }
     }
 
