@@ -1,36 +1,50 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.Serialization;
 
 public class S_myCharacterController : MonoBehaviour
 {
     [Header("Movement Settings")]
-    public float speed = 12f;
+    public float moveSpeed = 12f;
     [Range(0, 1)]
-    public float accelerationRate = 0.02f;
+    public float accelerationTime = 0.02f;
+    public AnimationCurve accelerationCurve = AnimationCurve.Linear(0, 0, 1, 1);
     [Range(0, 1)]
-    public float decelerationRate = 0.02f;
-    
+    public float decelerationTime = 0.02f;
+    public AnimationCurve decelerationCurve = AnimationCurve.Linear(0, 1, 1, 0);
+    public float _directionLerpSpeed = 10f;
     [Header("Jump Settings")]
     public float jumpHeight = 3f;
+    
     [Header("Ground Settings")]
     public float gravity = -19.62f;
     public float groundCheckDistance = 0.59f;
     public float groundCheckRadius = 0.49f;
     public LayerMask groundLayer;
-
+    
     private CharacterController _controller;
+    
+    private float _inputHorizontal_X;
+    private float _inputVertical_Z;
     private Vector3 _inputDirection;
-    private Vector3 _smoothInputDirection;
+    
+    //Smoth Speed var
+    private float _accelerationTimer = 0f;
+    private float _decelerationTimer = 0f;
+    private Vector3 _smoothedDirection = Vector3.zero;
+    
+    
     public Vector3 velocity;
     
     private bool _isGrounded; // Indique si le joueur est au sol
     private float _timeSinceAirborne; // Temps écoulé depuis que le joueur a quitté le sol
     private bool _hasResetVelocity; // Indique si la vitesse verticale a déjà été réinitialisée
     private float _airborneThreshold = 0.05f; // Temps limite avant la réinitialisation de la vitesse après avoir quitté le sol
-
-
-
     [SerializeField]
     private float currentSpeed;
+    private Vector3 _lastMoveDirection = Vector3.zero; 
+
+
 
     private void Start()
     {
@@ -39,17 +53,77 @@ public class S_myCharacterController : MonoBehaviour
 
     private void Update()
     {
-        HandlePlayerMovement();
+        ControllerInput();
+        MovePlayer();
         HandleGravity();
-        UpdateCurrentSpeed();
         Jump();
     }
+    // Initialiser le contrôleur et les variables nécessaires
+    private void InitializeController()
+    {
+        _controller = GetComponent<CharacterController>();
 
+    }
     private void ControllerInput()
     {
+        //movement input
+        _inputHorizontal_X = Input.GetAxisRaw("Horizontal");
+        _inputVertical_Z = Input.GetAxisRaw("Vertical");
+    }
+    
+
+    private void MovePlayer()
+    {
+
+        _inputDirection = transform.right * _inputHorizontal_X + transform.forward * _inputVertical_Z;
+        _inputDirection.Normalize();
+        _smoothedDirection = Vector3.Lerp(_smoothedDirection, _inputDirection, Time.deltaTime * _directionLerpSpeed);
         
+        if (_inputDirection.magnitude > 0)
+        {
+            _lastMoveDirection = _smoothedDirection; 
+        }
+
+
+        SmoothSpeed();
+
+
+        if (currentSpeed > 0)
+        {
+            _controller.Move(_lastMoveDirection * (currentSpeed * Time.deltaTime));
+        }
     }
 
+    private void SmoothSpeed()
+    {
+        if (_inputDirection.magnitude > 0) 
+        {
+            _decelerationTimer = 0f;
+            _accelerationTimer += Time.deltaTime / accelerationTime;
+
+
+            float curveValue = accelerationCurve.Evaluate(Mathf.Clamp01(_accelerationTimer));
+            currentSpeed = curveValue * moveSpeed;
+        }
+        else 
+        {
+            _accelerationTimer = 0f;
+            _decelerationTimer += Time.deltaTime / decelerationTime;
+
+
+            float curveValue = decelerationCurve.Evaluate(Mathf.Clamp01(_decelerationTimer));
+            currentSpeed = curveValue * currentSpeed;
+
+
+            if (currentSpeed < 0.01f)
+            {
+                currentSpeed = 0f;
+            }
+        }
+    }
+
+    
+    
     private void Jump()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -59,66 +133,6 @@ public class S_myCharacterController : MonoBehaviour
         }
         
     }
-
-    // Initialiser le contrôleur et les variables nécessaires
-    private void InitializeController()
-    {
-        _controller = GetComponent<CharacterController>();
-        _smoothInputDirection = Vector3.zero;
-    }
-
-    // Gérer le mouvement du joueur
-    private void HandlePlayerMovement()
-    {
-        RetrieveInputDirection();
-        ApplyInputSmoothing();
-        MovePlayer();
-    }
-
-    // Récupérer la direction d'entrée basée sur les axes horizontaux et verticaux
-    private void RetrieveInputDirection()
-    {
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-        _inputDirection = transform.right * x + transform.forward * z;
-        if(_inputDirection.magnitude > 1f)
-        {
-            _inputDirection.Normalize();
-        }
-    }
-
-    // Appliquer une transition fluide entre les directions d'entrée
-    private void ApplyInputSmoothing()
-    {
-        if (_inputDirection.magnitude > 0f)
-        {
-            // Transition vers la direction cible (accélération)
-            _smoothInputDirection = Vector3.Lerp(_smoothInputDirection, _inputDirection, Time.deltaTime / accelerationRate);
-        }
-        else
-        {
-            // Transition vers zéro (décélération)
-            _smoothInputDirection = Vector3.Lerp(_smoothInputDirection, Vector3.zero, Time.deltaTime / decelerationRate);
-
-            // Si la magnitude est très faible, définir explicitement à zéro
-            if (_smoothInputDirection.magnitude < 0.00001)
-            {
-                _smoothInputDirection = Vector3.zero;
-            }
-        }
-
-        if (_smoothInputDirection.magnitude > 1f)
-        {
-            _smoothInputDirection.Normalize();
-        }
-    }
-
-    // Déplacer le joueur en utilisant la direction lissée
-    private void MovePlayer()
-    {
-        _controller.Move(_smoothInputDirection * (speed * Time.deltaTime));
-    }
-
     // Gérer la gravité pour les mouvements verticaux
     private void HandleGravity()
     {
@@ -183,11 +197,7 @@ public class S_myCharacterController : MonoBehaviour
         return Physics.SphereCast(transform.position, groundCheckRadius, Vector3.down, out RaycastHit hit, groundCheckDistance, groundLayer);
     }
 
-    // Mettre à jour la vitesse actuelle pour surveiller le déplacement du joueur
-    private void UpdateCurrentSpeed()
-    {
-        currentSpeed = _smoothInputDirection.magnitude * speed;
-    }
+
 
     // Dessiner les Gizmos pour visualiser la détection du sol
     private void OnDrawGizmos()
