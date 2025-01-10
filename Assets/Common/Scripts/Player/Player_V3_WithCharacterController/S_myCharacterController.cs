@@ -2,22 +2,26 @@
 
 public class S_myCharacterController : MonoBehaviour
 {
+    [Header("Movement Settings")]
     public float speed = 12f;
     [Range(0, 1)]
-    public float accelerationRate = 0.1f;
+    public float accelerationRate = 0.02f;
     [Range(0, 1)]
-    public float decelerationRate = 0.1f;
+    public float decelerationRate = 0.02f;
+    
+    [Header("Jump Settings")]
     public float jumpHeight = 3f;
-    public float gravity = -9.81f;
-    public float groundCheckDistance = 0.4f;
-    public float groundCheckRadius = 0.2f;
+    [Header("Ground Settings")]
+    public float gravity = -19.62f;
+    public float groundCheckDistance = 0.59f;
+    public float groundCheckRadius = 0.49f;
     public LayerMask groundLayer;
 
     private CharacterController _controller;
     private Vector3 _inputDirection;
     private Vector3 _smoothInputDirection;
     public Vector3 velocity;
-
+    
     private bool _isGrounded; // Indique si le joueur est au sol
     private float _timeSinceAirborne; // Temps écoulé depuis que le joueur a quitté le sol
     private bool _hasResetVelocity; // Indique si la vitesse verticale a déjà été réinitialisée
@@ -39,6 +43,11 @@ public class S_myCharacterController : MonoBehaviour
         HandleGravity();
         UpdateCurrentSpeed();
         Jump();
+    }
+
+    private void ControllerInput()
+    {
+        
     }
 
     private void Jump()
