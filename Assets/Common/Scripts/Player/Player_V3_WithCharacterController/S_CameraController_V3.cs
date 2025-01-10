@@ -1,7 +1,4 @@
-﻿using Cinemachine;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class S_CameraController_V3 : MonoBehaviour
 {
@@ -24,7 +21,7 @@ public class S_CameraController_V3 : MonoBehaviour
     /// <summary>
     /// Ajuste immédiatement la rotation du joueur pour qu'il fasse toujours face à la direction de la caméra
     /// </summary>
-    void AlignerJoueurAvecCamera()
+    private void AlignerJoueurAvecCamera()
     {
         // Récupère la direction avant de la caméra, en ignorant la rotation verticale
         Vector3 cameraForward = cameraTransform.forward;

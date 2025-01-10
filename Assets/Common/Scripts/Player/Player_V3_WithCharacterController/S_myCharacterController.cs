@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class S_myCharacterController : MonoBehaviour
 {
@@ -15,15 +13,15 @@ public class S_myCharacterController : MonoBehaviour
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
 
-    private CharacterController controller;
-    private Vector3 inputDirection;
-    private Vector3 smoothInputDirection;
+    private CharacterController _controller;
+    private Vector3 _inputDirection;
+    private Vector3 _smoothInputDirection;
     public Vector3 velocity;
 
-    private bool isGrounded; // Indique si le joueur est au sol
-    private float timeSinceAirborne; // Temps écoulé depuis que le joueur a quitté le sol
-    private bool hasResetVelocity; // Indique si la vitesse verticale a déjà été réinitialisée
-    private float airborneThreshold = 0.05f; // Temps limite avant la réinitialisation de la vitesse après avoir quitté le sol
+    private bool _isGrounded; // Indique si le joueur est au sol
+    private float _timeSinceAirborne; // Temps écoulé depuis que le joueur a quitté le sol
+    private bool _hasResetVelocity; // Indique si la vitesse verticale a déjà été réinitialisée
+    private float _airborneThreshold = 0.05f; // Temps limite avant la réinitialisation de la vitesse après avoir quitté le sol
 
 
 
@@ -55,8 +53,8 @@ public class S_myCharacterController : MonoBehaviour
     // Initialiser le contrôleur et les variables nécessaires
     private void InitializeController()
     {
-        controller = GetComponent<CharacterController>();
-        smoothInputDirection = Vector3.zero;
+        _controller = GetComponent<CharacterController>();
+        _smoothInputDirection = Vector3.zero;
     }
 
     // Gérer le mouvement du joueur
@@ -72,43 +70,43 @@ public class S_myCharacterController : MonoBehaviour
     {
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
-        inputDirection = transform.right * x + transform.forward * z;
-        if(inputDirection.magnitude > 1f)
+        _inputDirection = transform.right * x + transform.forward * z;
+        if(_inputDirection.magnitude > 1f)
         {
-            inputDirection.Normalize();
+            _inputDirection.Normalize();
         }
     }
 
     // Appliquer une transition fluide entre les directions d'entrée
     private void ApplyInputSmoothing()
     {
-        if (inputDirection.magnitude > 0f)
+        if (_inputDirection.magnitude > 0f)
         {
             // Transition vers la direction cible (accélération)
-            smoothInputDirection = Vector3.Lerp(smoothInputDirection, inputDirection, Time.deltaTime / accelerationRate);
+            _smoothInputDirection = Vector3.Lerp(_smoothInputDirection, _inputDirection, Time.deltaTime / accelerationRate);
         }
         else
         {
             // Transition vers zéro (décélération)
-            smoothInputDirection = Vector3.Lerp(smoothInputDirection, Vector3.zero, Time.deltaTime / decelerationRate);
+            _smoothInputDirection = Vector3.Lerp(_smoothInputDirection, Vector3.zero, Time.deltaTime / decelerationRate);
 
             // Si la magnitude est très faible, définir explicitement à zéro
-            if (smoothInputDirection.magnitude < 0.00001)
+            if (_smoothInputDirection.magnitude < 0.00001)
             {
-                smoothInputDirection = Vector3.zero;
+                _smoothInputDirection = Vector3.zero;
             }
         }
 
-        if (smoothInputDirection.magnitude > 1f)
+        if (_smoothInputDirection.magnitude > 1f)
         {
-            smoothInputDirection.Normalize();
+            _smoothInputDirection.Normalize();
         }
     }
 
     // Déplacer le joueur en utilisant la direction lissée
     private void MovePlayer()
     {
-        controller.Move(smoothInputDirection * speed * Time.deltaTime);
+        _controller.Move(_smoothInputDirection * (speed * Time.deltaTime));
     }
 
     // Gérer la gravité pour les mouvements verticaux
@@ -117,13 +115,13 @@ public class S_myCharacterController : MonoBehaviour
         if (GroundCheck()&&velocity.y<0)
         {
             // Lorsque le joueur touche le sol
-            if (!isGrounded)
+            if (!_isGrounded)
             {
                 // Si le joueur vient d'atterrir, appliquer une gravité spéciale
-                isGrounded = true;
+                _isGrounded = true;
                 velocity.y = -speed; // Réinitialiser la vitesse
-                timeSinceAirborne = 0f; // Réinitialiser le chronomètre
-                hasResetVelocity = false; // Réinitialiser le drapeau de réinitialisation
+                _timeSinceAirborne = 0f; // Réinitialiser le chronomètre
+                _hasResetVelocity = false; // Réinitialiser le drapeau de réinitialisation
             }
             else
             {
@@ -134,21 +132,21 @@ public class S_myCharacterController : MonoBehaviour
         else
         {
             // Lorsque le joueur quitte le sol
-            if (isGrounded)
+            if (_isGrounded)
             {
                 // Si le joueur vient de quitter le sol, démarrer le chronomètre
-                isGrounded = false;
-                timeSinceAirborne = 0f;
+                _isGrounded = false;
+                _timeSinceAirborne = 0f;
             }
 
             // Mettre à jour le temps écoulé depuis que le joueur a quitté le sol
-            timeSinceAirborne += Time.deltaTime;
+            _timeSinceAirborne += Time.deltaTime;
 
             // Si le joueur est en l'air depuis plus longtemps que le seuil et que la vitesse n'a pas encore été réinitialisée
-            if (timeSinceAirborne > airborneThreshold && !hasResetVelocity)
+            if (_timeSinceAirborne > _airborneThreshold && !_hasResetVelocity)
             {
                 velocity.y = 0; // Réinitialiser la vitesse verticale
-                hasResetVelocity = true; // Marquer comme réinitialisé
+                _hasResetVelocity = true; // Marquer comme réinitialisé
             }
 
             // Appliquer la gravité en continu
@@ -160,7 +158,7 @@ public class S_myCharacterController : MonoBehaviour
     private void AddGravityEffect()
     {
         velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+        _controller.Move(velocity * Time.deltaTime);
     }
 
     // Vérifier si le joueur est au sol
@@ -172,7 +170,7 @@ public class S_myCharacterController : MonoBehaviour
     // Mettre à jour la vitesse actuelle pour surveiller le déplacement du joueur
     private void UpdateCurrentSpeed()
     {
-        currentSpeed = smoothInputDirection.magnitude * speed;
+        currentSpeed = _smoothInputDirection.magnitude * speed;
     }
 
     // Dessiner les Gizmos pour visualiser la détection du sol
