@@ -23,6 +23,7 @@ public class S_myCharacterController : MonoBehaviour
     public LayerMask groundLayer;
     
     private CharacterController _controller;
+    private S_InputManager _inputManager;
     
     private float _inputHorizontal_X;
     private float _inputVertical_Z;
@@ -62,13 +63,14 @@ public class S_myCharacterController : MonoBehaviour
     private void InitializeController()
     {
         _controller = GetComponent<CharacterController>();
+        _inputManager = FindObjectOfType<S_InputManager>();
 
     }
     private void ControllerInput()
     {
         //movement input
-        _inputHorizontal_X = Input.GetAxisRaw("Horizontal");
-        _inputVertical_Z = Input.GetAxisRaw("Vertical");
+        _inputHorizontal_X = _inputManager.MoveInput.x;
+        _inputVertical_Z = _inputManager.MoveInput.y;
     }
     
 
