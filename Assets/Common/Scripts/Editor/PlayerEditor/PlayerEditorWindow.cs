@@ -1,8 +1,6 @@
-﻿using System;
-using System.IO;
+﻿using System.Net;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerEditorWindow : EditorWindow
 {
@@ -18,6 +16,9 @@ public class PlayerEditorWindow : EditorWindow
     private GameObject player;
 
     private MonoBehaviour[] modules;
+
+    private Editor moduleEditor;
+    private bool showEditor;
     
     private void OnGUI()
     {
@@ -27,8 +28,6 @@ public class PlayerEditorWindow : EditorWindow
         }
         
         player = FindObjectOfType<S_PlayerMultiCam>().gameObject;
-
-        
         
         if (GUILayout.Button("Change Window", GUILayout.Width(120))) {
             windowSwitch = !windowSwitch;
@@ -42,27 +41,43 @@ public class PlayerEditorWindow : EditorWindow
 
     private void ModulesWindow()
     {
-        GUILayout.Label("Modules Window", "Box");
+        GUILayout.Label("Modules Window", EditorStyles.boldLabel);
 
         modules = GetModules();
+        GUIStyle labelStyle;
         
-        foreach(MonoBehaviour module in modules) {
-            if (module.enabled) {
-                GUI.color = Color.green;
-            } else {
-                GUI.color = Color.red;
-            }
+        for (int i = 0; i < modules.Length; i++) {
+            if (modules[i].enabled)
+                labelStyle = LabelTextColor(Color.green);
+            else
+                labelStyle = LabelTextColor(Color.red);
             
-            GUILayout.BeginHorizontal();
+            EditorGUILayout.BeginHorizontal();
             
-            EditorGUILayout.LabelField(module.GetType().Name);
+            EditorGUILayout.LabelField(modules[i].GetType().Name, labelStyle);
             GUILayout.FlexibleSpace();
-            module.enabled = EditorGUILayout.Toggle(module.enabled);
+            modules[i].enabled = GUILayout.Toggle(modules[i].enabled, "Enable/Disable");
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Show Editor")) {
+                if (moduleEditor != null)
+                    DestroyImmediate(moduleEditor);
+                moduleEditor = Editor.CreateEditor(modules[i]);
+            }
+            EditorGUILayout.EndHorizontal();
             
-            GUILayout.EndHorizontal();
             Repaint();
         }
+        
+        if (moduleEditor == null)
+            return;
+        GUILayout.FlexibleSpace();
+        EditorGUILayout.BeginVertical("Box");
+        moduleEditor.OnInspectorGUI();
+        EditorGUILayout.EndVertical();
+        Repaint();
     }
+
+    #region Get Player's Modules
 
     private MonoBehaviour[] GetModules()
     {
@@ -70,7 +85,7 @@ public class PlayerEditorWindow : EditorWindow
         MonoBehaviour[] getModules = new MonoBehaviour[GetNbOfModules(scripts)];
         int i = 0;
         
-        foreach(var script in scripts) {
+        foreach (var script in scripts) {
             if (script.GetType().Name.Contains("Module")) {
                 getModules[i] = script;
                 i++;
@@ -83,12 +98,22 @@ public class PlayerEditorWindow : EditorWindow
     {
         int count = 0;
         
-        foreach(var script in scripts) {
+        foreach (var script in scripts) {
             if (script.GetType().Name.Contains("Module")) {
                 count++;
             }
         }
         return count;
+    }
+
+    #endregion
+
+    private GUIStyle LabelTextColor(Color color)
+    {
+        GUIStyle labelTextStyle = new GUIStyle(EditorStyles.textField);
+        labelTextStyle.normal.textColor = color;
+        
+        return labelTextStyle;
     }
 
     private void MonitorWindow()
