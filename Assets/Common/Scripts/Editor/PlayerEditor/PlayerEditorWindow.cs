@@ -18,13 +18,17 @@ public class PlayerEditorWindow : EditorWindow
     private GameObject player;
 
     private MonoBehaviour[] modules;
-    private bool modulesSwitch;
     
-    private int countModules = 0;
-
     private void OnGUI()
     {
+        if (FindObjectOfType<S_PlayerMultiCam>() == null) {
+            EditorGUILayout.LabelField("NO PLAYER FOUND");
+            return;
+        }
+        
         player = FindObjectOfType<S_PlayerMultiCam>().gameObject;
+
+        
         
         if (GUILayout.Button("Change Window", GUILayout.Width(120))) {
             windowSwitch = !windowSwitch;
@@ -52,6 +56,7 @@ public class PlayerEditorWindow : EditorWindow
             GUILayout.BeginHorizontal();
             
             EditorGUILayout.LabelField(module.GetType().Name);
+            GUILayout.FlexibleSpace();
             module.enabled = EditorGUILayout.Toggle(module.enabled);
             
             GUILayout.EndHorizontal();
