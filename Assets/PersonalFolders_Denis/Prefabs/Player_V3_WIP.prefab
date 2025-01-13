@@ -175,8 +175,8 @@ GameObject:
   - component: {fileID: 4985994317039901408}
   - component: {fileID: 6782021794382038130}
   - component: {fileID: 7104574253313524365}
-  - component: {fileID: 7183451163284036630}
-  - component: {fileID: 2806381435438533810}
+  - component: {fileID: 6485730304042450736}
+  - component: {fileID: 1118004707385828820}
   m_Layer: 0
   m_Name: Player_V3_WIP
   m_TagString: Player
@@ -225,7 +225,7 @@ CharacterController:
   m_Height: 2
   m_Radius: 0.5
   m_SlopeLimit: 45
-  m_StepOffset: 0.5
+  m_StepOffset: 0.3
   m_SkinWidth: 0.01
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
@@ -241,9 +241,68 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 172bc3e779ee5bf48946612aa1a9e6d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 12
-  accelerationRate: 0.02
-  decelerationRate: 0.02
+  moveSpeed: 12
+  AirControl: 5
+  accelerationTime: 0.1
+  accelerationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  decelerationTime: 0.3
+  decelerationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.9494244
+      value: 0.84673464
+      inSlope: -0.03201612
+      outSlope: -0.03201612
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.07663338
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _directionLerpSpeed: 10
   jumpHeight: 3
   gravity: -19.62
   groundCheckDistance: 0.59
@@ -313,7 +372,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxEnergy: 2000
-  currentEnergy: 0
+  currentEnergy: 2000
   energyDisplay: {fileID: 0}
 --- !u!114 &7104574253313524365
 MonoBehaviour:
@@ -329,7 +388,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   detectionRadius: 15
   pullSpeed: 70
---- !u!114 &7183451163284036630
+--- !u!114 &6485730304042450736
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -338,23 +397,68 @@ MonoBehaviour:
   m_GameObject: {fileID: 3537824144998860857}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 348839239e307c742b65162445ad9d72, type: 3}
+  m_Script: {fileID: 11500000, guid: 283c183890e441343a4917fb02e4b227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 1069020167021631076, guid: b167b673b10f72a4a83b536cafce9b14, type: 3}
-  shootingPoint: {fileID: 5493903007576385448}
-  baseFireRate: 10
-  maxFireRate: 10
-  projectileSpeed: 80
-  projectileLifetime: 5
-  baseEnergyConsumptionPerShot: 0
-  minEnergyConsumption: 1
-  maxEnergyConsumption: 10
-  fireRatePercentage: 0.1
-  fireRateMultiplier: 0
-  energyConsumptionPercentage: 0.1
-  energyConsumptionMultiplier: 0
---- !u!114 &2806381435438533810
+  minSprintSpeed: 30
+  maxSprintSpeed: 50
+  sprintSpeedPercentage: 0.01
+  sprintSpeedMultiplier: 3
+  accelerationTime: 0.5
+  accelerationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  decelerationTime: 0.5
+  decelerationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: -1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  minEnergyConsumptionRate: 2
+  maxEnergyConsumptionRate: 8
+  consumptionPercentage: 0.01
+  consumptionMultiplier: 1
+--- !u!114 &1118004707385828820
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -363,17 +467,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 3537824144998860857}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e18a0e7dfafc64549ad385f8074eab7e, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b11658d279e4e64ea6cf0f320c4fe17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isUnlimitedStorage: 0
-  maxEnergy: 9999999
-  currentEnergy: 9999999
-  detectionRadius: 0
-  targetScriptName: 
-  energyGainPerObject: 0
-  pullSpeed: 0
-  energyDisplay: {fileID: 0}
+  minSpeed: 5
+  maxSpeed: 20
+  speedPercentage: 0.0115
+  speedMultiplier: 1
+  minEnergyConsumptionRate: 20
+  maxEnergyConsumptionRate: 200
+  consumptionPercentage: 0.055
+  consumptionMultiplier: 2
 --- !u!1 &5900968552316707499
 GameObject:
   m_ObjectHideFlags: 0

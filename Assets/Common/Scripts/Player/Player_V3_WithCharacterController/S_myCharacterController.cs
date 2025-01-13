@@ -29,7 +29,7 @@ public class S_myCharacterController : MonoBehaviour
     
     private float _inputHorizontal_X;
     private float _inputVertical_Z;
-    private Vector3 _inputDirection;
+    public Vector3 _inputDirection{ get; private set; }
     
     //Smoth Speed var
     private float _accelerationTimer = 0f;

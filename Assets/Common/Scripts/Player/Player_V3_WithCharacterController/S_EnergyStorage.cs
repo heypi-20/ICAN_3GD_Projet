@@ -24,7 +24,7 @@ public class S_EnergyStorage : MonoBehaviour
     // Method to add energy
     public void AddEnergy(float amount)
     {
-        currentEnergy = Mathf.Clamp(currentEnergy + amount, 0, maxEnergy);
+        currentEnergy = Mathf.Clamp(currentEnergy + amount, -Mathf.Infinity, maxEnergy);
     }
 
     // Method to remove energy
