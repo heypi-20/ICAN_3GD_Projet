@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using Unity.VisualScripting;
+using UnityEditor;
 using UnityEditor.ShortcutManagement;
 using UnityEngine;
 
@@ -15,11 +16,8 @@ public class EnhancedLevelDesign : EditorWindow
     
     private bool linkMoveSnapValues = false; // Contrôle si les valeurs de Move Snap sont identiques
     
-    private float[] increment; // Tableau de 1 float
-    private int nbIncrement; 
-    
-
-
+    private float[] increment = new float[1]; // Tableau de 1 float
+    private int nbIncrement;
     #endregion
 
     #region Propreté de l'editor
@@ -76,7 +74,7 @@ public class EnhancedLevelDesign : EditorWindow
         }
     }
     
-    // Fonction pour redimensionner le tableau tout en conservant les valeurs existantes
+    // Fonction pour redimensionner le tableau 
     private void ResizeArray(ref float[] array, int newSize)
     {
         if (nbIncrement >= 1)
@@ -116,8 +114,7 @@ public class EnhancedLevelDesign : EditorWindow
     
     private void OnGUI()
     {
-        
-        #region Snap Settings
+        #region Snap Setting
         GUILayout.BeginVertical("box");
         
         GUILayout.Label("Snap Settings", EditorStyles.boldLabel);
@@ -163,7 +160,7 @@ public class EnhancedLevelDesign : EditorWindow
             ResizeArray(ref increment, nbIncrement);
         }
         
-        int id = 1;
+        int id = 1; // ← DEGUEU CA, A CHANGER !!!!! !!!!!! (la valeur est remis a UN tout le temps !!!!!)
 
         GUILayout.BeginVertical();
         for (int i = 0; i < increment.Length; i++)
@@ -182,6 +179,7 @@ public class EnhancedLevelDesign : EditorWindow
                 }
                 GUILayout.EndHorizontal();
 
+                // Le systeme d'ID pour les Prefix Label est Dégueu, A CHANGER !!!!!
                 id++;
             }
         }
@@ -193,7 +191,7 @@ public class EnhancedLevelDesign : EditorWindow
         GUILayout.BeginHorizontal();
         
         GUI.enabled = false;
-        nbIncrement = EditorGUILayout.IntField(nbIncrement, GUILayout.Width(40));
+        EditorGUILayout.IntField(nbIncrement, GUILayout.Width(40));
         GUI.enabled = true;
 
         if (GUILayout.Button("Create New Increment", GUILayout.Width(150)) && nbIncrement < 10)

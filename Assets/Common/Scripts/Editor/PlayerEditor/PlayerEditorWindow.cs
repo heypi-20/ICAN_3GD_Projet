@@ -45,26 +45,26 @@ public class PlayerEditorWindow : EditorWindow
 
         modules = GetModules();
         GUIStyle labelStyle;
-        
-        for (int i = 0; i < modules.Length; i++) {
-            if (modules[i].enabled)
+
+        foreach(MonoBehaviour module in modules) {
+            if (module.enabled)
                 labelStyle = LabelTextColor(Color.green);
             else
                 labelStyle = LabelTextColor(Color.red);
-            
+                        
             EditorGUILayout.BeginHorizontal();
-            
-            EditorGUILayout.LabelField(modules[i].GetType().Name, labelStyle);
+                        
+            EditorGUILayout.LabelField(module.GetType().Name, labelStyle);
             GUILayout.FlexibleSpace();
-            modules[i].enabled = GUILayout.Toggle(modules[i].enabled, "Enable/Disable");
+            module.enabled = GUILayout.Toggle(module.enabled, "Enable/Disable");
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Show Editor")) {
                 if (moduleEditor != null)
                     DestroyImmediate(moduleEditor);
-                moduleEditor = Editor.CreateEditor(modules[i]);
+                moduleEditor = Editor.CreateEditor(module);
             }
             EditorGUILayout.EndHorizontal();
-            
+                        
             Repaint();
         }
         
@@ -118,6 +118,8 @@ public class PlayerEditorWindow : EditorWindow
 
     private void MonitorWindow()
     {
-        GUILayout.Label("Monitor Window");
+        GUILayout.Label("Monitor Window", EditorStyles.boldLabel);
+        
+        
     }
 }
