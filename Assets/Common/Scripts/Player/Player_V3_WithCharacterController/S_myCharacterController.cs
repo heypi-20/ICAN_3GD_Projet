@@ -6,6 +6,8 @@ public class S_myCharacterController : MonoBehaviour
 {
     [Header("Movement Settings")]
     public float moveSpeed = 12f;
+
+    public float AirControl = 0.5f;
     [Range(0, 1)]
     public float accelerationTime = 0.02f;
     public AnimationCurve accelerationCurve = AnimationCurve.Linear(0, 0, 1, 1);
@@ -73,28 +75,42 @@ public class S_myCharacterController : MonoBehaviour
         _inputVertical_Z = _inputManager.MoveInput.y;
     }
     
-
+    private bool _wasGrounded;
+    private Vector3 _inertiaDirection;
     private void MovePlayer()
     {
+        // 获取输入方向
+        _inputDirection = (transform.right * _inputHorizontal_X + transform.forward * _inputVertical_Z);
 
-        _inputDirection = transform.right * _inputHorizontal_X + transform.forward * _inputVertical_Z;
-        _inputDirection.Normalize();
-        _smoothedDirection = Vector3.Lerp(_smoothedDirection, _inputDirection, Time.deltaTime * _directionLerpSpeed);
-        
-        if (_inputDirection.magnitude > 0)
+        // 地面移动逻辑
+        if (GroundCheck())
         {
-            _lastMoveDirection = _smoothedDirection; 
+            if (_inputDirection.magnitude > 0.1f)
+            {
+                _lastMoveDirection = _inputDirection;
+            }
+
+            SmoothSpeed();
+            _wasGrounded = true;
+        }
+        else
+        {
+            if (_wasGrounded)
+            {
+                _inertiaDirection = _lastMoveDirection;
+                _wasGrounded = false;
+            }
+
+            _inertiaDirection = _inputDirection.magnitude > 0.1f
+                ? Vector3.Lerp(_inertiaDirection, _inputDirection, AirControl * Time.deltaTime)
+                : _inertiaDirection;
         }
 
-
-        SmoothSpeed();
-
-
-        if (currentSpeed > 0)
-        {
-            _controller.Move(_lastMoveDirection * (currentSpeed * Time.deltaTime));
-        }
+        // 应用移动
+        Vector3 finalMoveDirection = GroundCheck() ? _lastMoveDirection : _inertiaDirection;
+        _controller.Move(finalMoveDirection * (currentSpeed * Time.deltaTime));
     }
+
 
     private void SmoothSpeed()
     {
