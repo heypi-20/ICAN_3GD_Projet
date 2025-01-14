@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -46,7 +47,7 @@ public class PlayerEditorWindow : EditorWindow
         modules = GetModules();
         GUIStyle labelStyle;
 
-        foreach(MonoBehaviour module in modules) {
+        foreach (MonoBehaviour module in modules) {
             if (module.enabled)
                 labelStyle = LabelTextColor(Color.green);
             else
@@ -64,16 +65,23 @@ public class PlayerEditorWindow : EditorWindow
                 moduleEditor = Editor.CreateEditor(module);
             }
             EditorGUILayout.EndHorizontal();
-                        
+            
             Repaint();
         }
+
+        if (moduleEditor != null) {
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.BeginVertical("Box");
+            moduleEditor.OnInspectorGUI();
+            EditorGUILayout.EndVertical();
+        }
         
-        if (moduleEditor == null)
-            return;
         GUILayout.FlexibleSpace();
-        EditorGUILayout.BeginVertical("Box");
-        moduleEditor.OnInspectorGUI();
-        EditorGUILayout.EndVertical();
+        EditorGUILayout.BeginHorizontal("Box");
+        SaveProfile();
+        LoadProfile();
+        EditorGUILayout.EndHorizontal();
+        
         Repaint();
     }
 
@@ -116,6 +124,38 @@ public class PlayerEditorWindow : EditorWindow
         return labelTextStyle;
     }
 
+    private void SaveProfile()
+    {
+        string profileName = String.Empty;
+        profileName = EditorGUILayout.TextField("Profile Name", profileName);
+        
+        if (GUILayout.Button("Save Profile", GUILayout.Width(100))) {
+            Debug.Log("Save");
+            if (profileName != String.Empty && !System.IO.File.Exists("Assets/Common/Data/PlayerProfiles" + profileName + ".asset")) {
+                PlayerProfile profile = CreateInstance<PlayerProfile>();
+                profile.isEnable = new List<bool>();
+                foreach (MonoBehaviour module in modules) {
+                    profile.isEnable.Add(module.enabled);
+                }
+                AssetDatabase.CreateAsset(profile, "Assets/Common/Data/PlayerProfiles" + profileName + ".asset");
+            } else if (profileName == String.Empty) {
+                PlayerProfile profile = CreateInstance<PlayerProfile>();
+                profile.isEnable = new List<bool>();
+                foreach (MonoBehaviour module in modules) {
+                    profile.isEnable.Add(module.enabled);
+                }
+                AssetDatabase.CreateAsset(profile, "Assets/Common/Data/PlayerProfiles/PlayerProfile.asset");
+            }
+        }
+    }
+
+    private void LoadProfile()
+    {
+        if (GUILayout.Button("Load Profile", GUILayout.Width(100))) {
+            Debug.Log("Load");
+        }
+    }
+    
     private void MonitorWindow()
     {
         GUILayout.Label("Monitor Window", EditorStyles.boldLabel);
