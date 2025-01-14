@@ -23,6 +23,7 @@ public class EnhancedLevelDesign : EditorWindow
     #region Propreté de l'editor
 
     private int fieldSnapSize = 40;
+    private Vector2 scrollPos;
 
     #endregion
     
@@ -114,6 +115,8 @@ public class EnhancedLevelDesign : EditorWindow
     
     private void OnGUI()
     {
+        scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
+        
         #region Snap Setting
         GUILayout.BeginVertical("box");
         
@@ -287,6 +290,8 @@ public class EnhancedLevelDesign : EditorWindow
         // Todo : Mettre des fonction qui ne doivent s'appeller automatiquement
 
         #endregion
+        
+        EditorGUILayout.EndScrollView();
         
         this.Repaint();
     }
