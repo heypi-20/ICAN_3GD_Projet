@@ -8,32 +8,37 @@ using UnityEditor;
 public class S_BasicSpeedControl_Module : MonoBehaviour
 {
     [Header("Speed Settings")]
-    public float minSpeed = 2f; // Minimum speed when energy is 0
-    public float maxSpeed = 12f; // Maximum speed when energy is at maximum
-    public float speedPercentage = 0.01f; // Percentage multiplier applied to current energy
-    public float speedMultiplier = 1f; // Final multiplier applied to the calculated speed
+    public float minSpeed = 2f;
+    public float maxSpeed = 12f;
+    public float speedPercentage = 0.01f;
+    public float speedMultiplier = 1f;
 
     [Header("Energy Consumption Settings")]
-    public float minEnergyConsumptionRate = 1f; // Minimum energy consumption rate per second
-    public float maxEnergyConsumptionRate = 5f; // Maximum energy consumption rate per second
-    public float consumptionPercentage = 0.01f; // Percentage multiplier applied to current energy
-    public float consumptionMultiplier = 1f; // Final multiplier applied to the calculated consumption rate
+    public float minEnergyConsumptionRate = 1f;
+    public float maxEnergyConsumptionRate = 5f;
+    public float consumptionPercentage = 0.01f;
+    public float consumptionMultiplier = 1f;
 
+    // Composant pour ajuster la vitesse de déplacement
     private S_myCharacterController _characterController;
+    // Composant pour vérifier et modifier l'énergie disponible
     private S_EnergyStorage _energyStorage;
+    // Référence au module de sprint pour vérifier l'état du sprint
     private S_BasicSprint_Module _basicSprint_Module;
-    
-    public float estimatedSpeedEnergyThreshold { get; private set; } // Speed threshold to reach max speed
-    public float estimatedConsumptionEnergyThreshold { get; private set; } // Energy threshold to reach max consumption rate
 
+    // Seuils d'énergie calculés pour atteindre les vitesses maximales
+    public float estimatedSpeedEnergyThreshold { get; private set; }
+    public float estimatedConsumptionEnergyThreshold { get; private set; }
+
+    // Mise à jour des seuils affichés dans l'inspecteur lorsque les valeurs changent
     private void OnValidate()
     {
-        // Calculate and display thresholds in the Editor
         EstimateEnergyThresholds(out float speedThreshold, out float consumptionThreshold);
         estimatedSpeedEnergyThreshold = speedThreshold;
         estimatedConsumptionEnergyThreshold = consumptionThreshold;
     }
 
+    // Initialisation des composants nécessaires
     private void Start()
     {
         _characterController = GetComponent<S_myCharacterController>();
@@ -41,6 +46,7 @@ public class S_BasicSpeedControl_Module : MonoBehaviour
         _basicSprint_Module ??= GetComponent<S_BasicSprint_Module>();
     }
 
+    // Vérification de la vitesse et consommation d'énergie à chaque frame
     private void Update()
     {
         if (!CheckSprintState())
@@ -48,14 +54,15 @@ public class S_BasicSpeedControl_Module : MonoBehaviour
             UpdateSpeedBasedOnEnergy();
             HandleEnergyConsumption();
         }
-        
     }
 
+    // Vérifie si le joueur est en train de sprinter pour éviter de modifier la vitesse normale
     private bool CheckSprintState()
     {
         return _basicSprint_Module != null && (_basicSprint_Module._isSprinting || _basicSprint_Module.IsSprintCoroutineRunning());
     }
 
+    // Met à jour la vitesse du personnage en fonction de l'énergie actuelle
     private void UpdateSpeedBasedOnEnergy()
     {
         float calculatedSpeed = (Mathf.Max(_energyStorage.currentEnergy, 0f) * speedPercentage) * speedMultiplier;
@@ -63,6 +70,7 @@ public class S_BasicSpeedControl_Module : MonoBehaviour
         _characterController.moveSpeed = calculatedSpeed;
     }
 
+    // Gère la consommation d'énergie lorsque le joueur se déplace
     private void HandleEnergyConsumption()
     {
         if (_characterController._inputDirection.magnitude > 0)
@@ -74,7 +82,7 @@ public class S_BasicSpeedControl_Module : MonoBehaviour
         }
     }
 
-    // Optional: Estimate at what energy level the max speed and max consumption rate will be reached
+    // Calcule les seuils d'énergie nécessaires pour atteindre la vitesse et la consommation maximales
     public void EstimateEnergyThresholds(out float speedEnergyThreshold, out float consumptionEnergyThreshold)
     {
         speedEnergyThreshold = maxSpeed / (speedPercentage * speedMultiplier);
