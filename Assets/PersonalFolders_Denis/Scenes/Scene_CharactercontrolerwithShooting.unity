@@ -1755,6 +1755,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 162573034}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &166521325 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3537824144998860857, guid: c1cf84b8e8ca71646b554a51afb54b6c, type: 3}
+  m_PrefabInstance: {fileID: 1629929321172668507}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &170229516
 GameObject:
   m_ObjectHideFlags: 0
@@ -12241,6 +12246,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 501278229}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &502534017 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5493903007576385448, guid: c1cf84b8e8ca71646b554a51afb54b6c, type: 3}
+  m_PrefabInstance: {fileID: 1629929321172668507}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &503018136
 Mesh:
   m_ObjectHideFlags: 0
@@ -18081,7 +18091,7 @@ GameObject:
   m_Layer: 0
   m_Name: spawner
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -18109,7 +18119,7 @@ Transform:
   m_GameObject: {fileID: 814422898}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 1.3951979, z: 29}
+  m_LocalPosition: {x: -17, y: 1.3951979, z: 38.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -39999,6 +40009,31 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3704457186694287697, guid: c1cf84b8e8ca71646b554a51afb54b6c, type: 3}
   m_PrefabInstance: {fileID: 1629929321172668507}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1889046151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 166521325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 348839239e307c742b65162445ad9d72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: 1069020167021631076, guid: b167b673b10f72a4a83b536cafce9b14, type: 3}
+  shootingPoint: {fileID: 502534017}
+  baseFireRate: 2
+  maxFireRate: 20
+  projectileSpeed: 75
+  projectileLifetime: 5
+  baseEnergyConsumptionPerShot: 5
+  minEnergyConsumption: 1
+  maxEnergyConsumption: 10
+  fireRatePercentage: 0.1
+  fireRateMultiplier: 2
+  energyConsumptionPercentage: 0.1
+  energyConsumptionMultiplier: 5
 --- !u!1 &1890337464
 GameObject:
   m_ObjectHideFlags: 0
@@ -41298,6 +41333,53 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1 &1964450178
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1964450180}
+  - component: {fileID: 1964450179}
+  m_Layer: 0
+  m_Name: spawner (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1964450179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1964450178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bad3785dce2aedc4a92578acd0ceac4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timer: 0
+  TimerTarget: 1
+  NPC: {fileID: 4751338823150613130, guid: 2860ae89b3adf054fb28d86036deb6a4, type: 3}
+--- !u!4 &1964450180
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1964450178}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 20.5, y: 1.3951979, z: 31.8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1978997979
 GameObject:
   m_ObjectHideFlags: 0
@@ -46246,6 +46328,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1118004707385828820, guid: c1cf84b8e8ca71646b554a51afb54b6c, type: 3}
+      propertyPath: maxEnergyConsumptionRate
+      value: 200
+      objectReference: {fileID: 0}
     - target: {fileID: 3537824144998860857, guid: c1cf84b8e8ca71646b554a51afb54b6c, type: 3}
       propertyPath: m_Name
       value: Player_V3
@@ -46290,9 +46376,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6221421456608387605, guid: c1cf84b8e8ca71646b554a51afb54b6c, type: 3}
+      propertyPath: m_Name
+      value: ShootingPoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 6782021794382038130, guid: c1cf84b8e8ca71646b554a51afb54b6c, type: 3}
+      propertyPath: maxEnergy
+      value: 4000
+      objectReference: {fileID: 0}
     - target: {fileID: 6782021794382038130, guid: c1cf84b8e8ca71646b554a51afb54b6c, type: 3}
       propertyPath: currentEnergy
-      value: 0
+      value: 2000
       objectReference: {fileID: 0}
     - target: {fileID: 6782021794382038130, guid: c1cf84b8e8ca71646b554a51afb54b6c, type: 3}
       propertyPath: energyDisplay
@@ -46301,7 +46395,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3537824144998860857, guid: c1cf84b8e8ca71646b554a51afb54b6c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1889046151}
   m_SourcePrefab: {fileID: 100100000, guid: c1cf84b8e8ca71646b554a51afb54b6c, type: 3}
 --- !u!1001 &2555296401435270674
 PrefabInstance:
@@ -46383,4 +46480,5 @@ SceneRoots:
   - {fileID: 1895748295}
   - {fileID: 506352821}
   - {fileID: 814422900}
+  - {fileID: 1964450180}
   - {fileID: 2019363970}

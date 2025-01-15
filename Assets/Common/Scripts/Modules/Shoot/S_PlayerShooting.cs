@@ -23,13 +23,13 @@ public class S_PlayerShooting : MonoBehaviour
     public float energyConsumptionMultiplier = 5f; // Multiplier for energy consumption reduction based on current energy
 
     [Header("References")]
-    private S_oldEnergyStorage _oldEnergyStorage; // Reference to the energy storage system
+    private S_EnergyStorage _oldEnergyStorage; // Reference to the energy storage system
 
     private float nextFireTime = 0f; // Time when the player can fire next
 
     private void Start()
     {
-        _oldEnergyStorage = GetComponent<S_oldEnergyStorage>();
+        _oldEnergyStorage = GetComponent<S_EnergyStorage>();
     }
 
     private void Update()
