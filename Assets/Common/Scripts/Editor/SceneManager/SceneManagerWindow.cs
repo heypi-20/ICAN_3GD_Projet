@@ -90,10 +90,10 @@ public class SceneManagerWindow : EditorWindow
             var scenePath = AssetDatabase.GUIDToAssetPath(scenesGUIDs[i]);
             var sceneName = System.IO.Path.GetFileNameWithoutExtension(scenePath);
 
-            if (!System.IO.File.Exists( "Assets/Common/Data/SceneDatas" + sceneName + ".asset")) {
+            if (!System.IO.File.Exists( "Assets/Common/Data/SceneDatas/" + sceneName + ".asset")) {
                 SceneData newScene = ScriptableObject.CreateInstance<SceneData>();
                 newScene.sceneRef = SceneReference.FromScenePath(scenePath);
-                AssetDatabase.CreateAsset(newScene, "Assets/Common/Data/SceneDatas" + sceneName + ".asset");
+                AssetDatabase.CreateAsset(newScene, "Assets/Common/Data/SceneDatas/" + sceneName + ".asset");
             }
         }
     }
