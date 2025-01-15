@@ -79,10 +79,9 @@ public class S_myCharacterController : MonoBehaviour
     private Vector3 _inertiaDirection;
     private void MovePlayer()
     {
-        // 获取输入方向
+        
         _inputDirection = (transform.right * _inputHorizontal_X + transform.forward * _inputVertical_Z);
-
-        // 地面移动逻辑
+        
         if (GroundCheck())
         {
             if (_inputDirection.magnitude > 0.1f)
@@ -106,7 +105,7 @@ public class S_myCharacterController : MonoBehaviour
                 : _inertiaDirection;
         }
 
-        // 应用移动
+        
         Vector3 finalMoveDirection = GroundCheck() ? _lastMoveDirection : _inertiaDirection;
         _controller.Move(finalMoveDirection * (currentSpeed * Time.deltaTime));
     }
