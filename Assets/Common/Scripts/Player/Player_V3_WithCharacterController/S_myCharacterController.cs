@@ -77,11 +77,13 @@ public class S_myCharacterController : MonoBehaviour
     
     private bool _wasGrounded;
     private Vector3 _inertiaDirection;
+    private float _airborneSpeed;
     private void MovePlayer()
     {
-        
+        // 获取输入方向
         _inputDirection = (transform.right * _inputHorizontal_X + transform.forward * _inputVertical_Z);
-        
+
+        // 地面移动逻辑
         if (GroundCheck())
         {
             if (_inputDirection.magnitude > 0.1f)
@@ -94,22 +96,30 @@ public class S_myCharacterController : MonoBehaviour
         }
         else
         {
+            // 离地瞬间保存惯性方向和速度
             if (_wasGrounded)
             {
-                _inertiaDirection = _lastMoveDirection;
+                // 如果没有输入方向，保持静止方向
+                _inertiaDirection = _inputDirection.magnitude > 0.1f ? _inputDirection : Vector3.zero;
+                _airborneSpeed = currentSpeed;
                 _wasGrounded = false;
             }
 
-            _inertiaDirection = _inputDirection.magnitude > 0.1f
-                ? Vector3.Lerp(_inertiaDirection, _inputDirection, AirControl * Time.deltaTime)
-                : _inertiaDirection;
+            // 空中移动逻辑
+            if (_inputDirection.magnitude > 0.1f)
+            {
+                _inertiaDirection = Vector3.Lerp(_inertiaDirection, _inputDirection, AirControl * Time.deltaTime);
+            }
+
+            // 更新空中速度
+            _airborneSpeed = Mathf.Lerp(_airborneSpeed, moveSpeed, AirControl * Time.deltaTime);
         }
 
-        
+        // 应用最终移动方向
         Vector3 finalMoveDirection = GroundCheck() ? _lastMoveDirection : _inertiaDirection;
-        _controller.Move(finalMoveDirection * (currentSpeed * Time.deltaTime));
+        float finalSpeed = GroundCheck() ? currentSpeed : _airborneSpeed;
+        _controller.Move(finalMoveDirection * (finalSpeed * Time.deltaTime));
     }
-
 
     private void SmoothSpeed()
     {
