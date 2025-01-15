@@ -6,5 +6,6 @@ using UnityEngine;
 public class PlayerProfile : ScriptableObject
 {
     public List<bool> isEnable;
-    public List<Editor> editors;
+    public Editor editor;
+
 }

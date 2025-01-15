@@ -20,7 +20,11 @@ public class PlayerEditorWindow : EditorWindow
 
     private Editor moduleEditor;
     private bool showEditor;
-    
+
+    private string profileName = String.Empty;
+    private PlayerProfile[] profiles;
+    private string[] profileNames;
+
     private void OnGUI()
     {
         if (FindObjectOfType<S_PlayerMultiCam>() == null) {
@@ -46,6 +50,13 @@ public class PlayerEditorWindow : EditorWindow
 
         modules = GetModules();
         GUIStyle labelStyle;
+        
+        LoadAllAssetsOfType<PlayerProfile>(out profiles);
+        profileNames = new string[profiles.Length];
+
+        for (int i = 0; i < profiles.Length; i++) {
+            profileNames[i] = profiles[i].name;
+        }
 
         foreach (MonoBehaviour module in modules) {
             if (module.enabled)
@@ -116,6 +127,8 @@ public class PlayerEditorWindow : EditorWindow
 
     #endregion
 
+    #region Utility Functions
+
     private GUIStyle LabelTextColor(Color color)
     {
         GUIStyle labelTextStyle = new GUIStyle(EditorStyles.textField);
@@ -123,37 +136,53 @@ public class PlayerEditorWindow : EditorWindow
         
         return labelTextStyle;
     }
+    
+    private static void LoadAllAssetsOfType<T>(out T[] assets) where T : UnityEngine.Object
+    {
+        string[] guids = AssetDatabase.FindAssets("t:"+typeof(T));
+        assets = new T[guids.Length];
 
+        for (int i = 0; i < guids.Length; i++)
+        {
+            string assetPath = AssetDatabase.GUIDToAssetPath(guids[i]);
+            assets[i] = AssetDatabase.LoadAssetAtPath<T>(assetPath);
+        }
+    }
+
+    #endregion
+    
     private void SaveProfile()
     {
-        string profileName = String.Empty;
         profileName = EditorGUILayout.TextField("Profile Name", profileName);
         
         if (GUILayout.Button("Save Profile", GUILayout.Width(100))) {
-            Debug.Log("Save");
-            if (profileName != String.Empty && !System.IO.File.Exists("Assets/Common/Data/PlayerProfiles" + profileName + ".asset")) {
+            if (profileName != String.Empty && !System.IO.File.Exists("Assets/Common/Data/PlayerProfiles/" + profileName + ".asset")) {
                 PlayerProfile profile = CreateInstance<PlayerProfile>();
                 profile.isEnable = new List<bool>();
                 foreach (MonoBehaviour module in modules) {
                     profile.isEnable.Add(module.enabled);
                 }
-                AssetDatabase.CreateAsset(profile, "Assets/Common/Data/PlayerProfiles" + profileName + ".asset");
+                AssetDatabase.CreateAsset(profile, "Assets/Common/Data/PlayerProfiles/" + profileName + ".asset");
+                profileName = String.Empty;
+                Debug.Log("Save");
             } else if (profileName == String.Empty) {
                 PlayerProfile profile = CreateInstance<PlayerProfile>();
                 profile.isEnable = new List<bool>();
                 foreach (MonoBehaviour module in modules) {
                     profile.isEnable.Add(module.enabled);
                 }
+                profile.editor = moduleEditor;
+
                 AssetDatabase.CreateAsset(profile, "Assets/Common/Data/PlayerProfiles/PlayerProfile.asset");
             }
         }
     }
-
+    
+    private int index = 0;
+        
     private void LoadProfile()
     {
-        if (GUILayout.Button("Load Profile", GUILayout.Width(100))) {
-            Debug.Log("Load");
-        }
+        index = EditorGUILayout.Popup(index, profileNames, GUILayout.Width(100));
     }
     
     private void MonitorWindow()
