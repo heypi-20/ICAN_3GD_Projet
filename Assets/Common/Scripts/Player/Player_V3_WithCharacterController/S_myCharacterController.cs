@@ -15,8 +15,6 @@ public class S_myCharacterController : MonoBehaviour
     public AnimationCurve decelerationCurve = AnimationCurve.Linear(0, 1, 1, 0);
     public float _directionLerpSpeed = 10f;
     
-    [Header("Jump Settings")]
-    public float jumpHeight = 3f; // ==== En cours de travail (WIP) ====
     
     [Header("Ground Settings")]
     public float gravity = -19.62f;
@@ -36,20 +34,11 @@ public class S_myCharacterController : MonoBehaviour
     
     // Accéder aux valeurs d'entrée dans d'autres scripts pour gérer la vitesse
     public Vector3 _inputDirection{ get; private set; }
-    
-    
+    [Header("Debugger")]
     // Actuellement utilisé pour appliquer la gravité et le saut ==== En cours de travail (WIP) ====
-    private Vector3 velocity;
-    
-    // Variables privées pour appliquer correctement la gravité ==== En cours de travail (WIP) ====
-    private bool _isGrounded; 
-    private float _timeSinceAirborne; 
-    private bool _hasResetVelocity; 
-    private float _airborneThreshold = 0.05f; 
-    
-    // Variables privées pour la logique de mouvement au sol du joueur
-    [SerializeField]
-    private float currentSpeed;
+    public Vector3 velocity;
+    // Variables pour la logique de mouvement au sol du joueur
+    public float currentSpeed;
     private Vector3 _lastMoveDirection = Vector3.zero; 
     
     // Variables privées pour la logique d'accélération et de décélération du joueur
@@ -75,7 +64,7 @@ public class S_myCharacterController : MonoBehaviour
         ControllerInput();
         MovePlayer();
         HandleGravity();
-        Jump();
+        //Jump();
     }
     
    
@@ -149,6 +138,16 @@ public class S_myCharacterController : MonoBehaviour
         Vector3 finalMoveDirection = GroundCheck() ? _lastMoveDirection : _inertiaDirection;
         float finalSpeed = GroundCheck() ? currentSpeed : _airborneSpeed;
         _controller.Move(finalMoveDirection * (finalSpeed * Time.deltaTime));
+        
+        /*
+         *TODO : Check Ground and input
+         * if (GroundCheck() && finalMoveDirection.magnitude > 0.1f)
+         * {
+         *  play feedback
+         * }
+         *
+         */
+        
     }
 
 
@@ -183,15 +182,15 @@ public class S_myCharacterController : MonoBehaviour
 
     
     // WIP===========================================================================================================
-    private void Jump()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            velocity.y = Mathf.Sqrt(jumpHeight *-2f* gravity);
-
-        }
-        
-    }
+    // private void Jump()
+    // {
+    //     if (Input.GetKeyDown(KeyCode.Space))
+    //     {
+    //         velocity.y = Mathf.Sqrt(jumpHeight *-2f* gravity);
+    //
+    //     }
+    //     
+    // }
     // Gérer la gravité pour les mouvements verticaux
     private void HandleGravity()
     {
@@ -251,7 +250,7 @@ public class S_myCharacterController : MonoBehaviour
     }
 
     // Vérifier si le joueur est au sol
-    private bool GroundCheck()
+    public bool GroundCheck()
     {
         return Physics.SphereCast(transform.position, groundCheckRadius, Vector3.down, out RaycastHit hit, groundCheckDistance, groundLayer);
     }

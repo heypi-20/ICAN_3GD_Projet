@@ -175,8 +175,8 @@ GameObject:
   - component: {fileID: 4985994317039901408}
   - component: {fileID: 6782021794382038130}
   - component: {fileID: 7104574253313524365}
-  - component: {fileID: 6485730304042450736}
   - component: {fileID: 1118004707385828820}
+  - component: {fileID: 6485730304042450736}
   m_Layer: 0
   m_Name: Player_V3_WIP
   m_TagString: Player
@@ -310,7 +310,6 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 4294967295
-  velocity: {x: 0, y: 0, z: 0}
   currentSpeed: 0
 --- !u!114 &4985994317039901408
 MonoBehaviour:
@@ -388,6 +387,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   detectionRadius: 15
   pullSpeed: 70
+--- !u!114 &1118004707385828820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3537824144998860857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11658d279e4e64ea6cf0f320c4fe17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minSpeed: 5
+  maxSpeed: 20
+  speedPercentage: 0.0115
+  speedMultiplier: 1
+  minEnergyConsumptionRate: 20
+  maxEnergyConsumptionRate: 200
+  consumptionPercentage: 0.055
+  consumptionMultiplier: 2
 --- !u!114 &6485730304042450736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -458,26 +477,6 @@ MonoBehaviour:
   maxEnergyConsumptionRate: 8
   consumptionPercentage: 0.01
   consumptionMultiplier: 1
---- !u!114 &1118004707385828820
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3537824144998860857}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b11658d279e4e64ea6cf0f320c4fe17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  minSpeed: 5
-  maxSpeed: 20
-  speedPercentage: 0.0115
-  speedMultiplier: 1
-  minEnergyConsumptionRate: 20
-  maxEnergyConsumptionRate: 200
-  consumptionPercentage: 0.055
-  consumptionMultiplier: 2
 --- !u!1 &5900968552316707499
 GameObject:
   m_ObjectHideFlags: 0

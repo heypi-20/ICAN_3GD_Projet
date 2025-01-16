@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class S_SuperJumpModule : MonoBehaviour
+public class S_Old_SuperJumpModule : MonoBehaviour
 {
     [Header("Jump Settings")]
     public float baseJumpForce = 5f; // Base jump force

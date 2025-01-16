@@ -5,10 +5,12 @@ using UnityEngine.InputSystem;
 public class S_InputManager : MonoBehaviour
 {
     private PlayerInputActions _playerInputActions;
+
+    [Header("Debugger")]
+    public Vector2 MoveInput;
+    public bool JumpInput;
+    public bool SprintInput; 
     
-    public Vector2 MoveInput { get; private set; }
-    public bool JumpInput { get; private set; }
-    public bool SprintInput { get; private set; }
 
     private void Awake()
     {
@@ -18,9 +20,9 @@ public class S_InputManager : MonoBehaviour
         _playerInputActions.Gameplay.Move.performed += ctx => MoveInput = ctx.ReadValue<Vector2>();
         _playerInputActions.Gameplay.Move.canceled += ctx => MoveInput = Vector2.zero;
         
-        //Jump action presse = true, release = false
+        //Jump action presse = true
         _playerInputActions.Gameplay.Jump.performed += ctx => JumpInput = true;
-        _playerInputActions.Gameplay.Jump.canceled += ctx => JumpInput = false;
+        
         
         //Sprint action presse = true, release = false
         _playerInputActions.Gameplay.Sprint.performed += ctx => SprintInput = true;

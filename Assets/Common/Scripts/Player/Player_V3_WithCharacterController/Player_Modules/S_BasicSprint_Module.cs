@@ -32,6 +32,8 @@ public class S_BasicSprint_Module : MonoBehaviour
     // Gestionnaire d'input pour détecter les actions du joueur
     private S_InputManager _inputManager;
 
+    private S_BasicSpeedControl_Module _basicSpeedControlModule;
+
     // Stocker la vitesse initiale avant le sprint
     private float _originalMoveSpeed;
     // Indicateur si le joueur est en sprint
@@ -86,6 +88,8 @@ public class S_BasicSprint_Module : MonoBehaviour
                 if (_currentCoroutine != null) StopCoroutine(_currentCoroutine);
                 _currentCoroutine = StartCoroutine(AccelerateToSprintSpeed());
                 _isSprinting = true;
+                
+                //TODO: Add FeedBack
             }
             HandleEnergyConsumption();
         }
@@ -95,6 +99,8 @@ public class S_BasicSprint_Module : MonoBehaviour
             if (_currentCoroutine != null) StopCoroutine(_currentCoroutine);
             _currentCoroutine = StartCoroutine(DecelerateToNormalSpeed());
             _isSprinting = false;
+            
+            //TODO: Add FeedBack
         }
     }
 
