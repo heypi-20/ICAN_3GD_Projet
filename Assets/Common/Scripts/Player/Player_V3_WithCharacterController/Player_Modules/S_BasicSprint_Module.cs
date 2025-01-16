@@ -135,7 +135,7 @@ public class S_BasicSprint_Module : MonoBehaviour
         while (timer < decelerationTime)
         {
             // Interpolation de la vitesse selon la courbe de décélération
-            _characterController.moveSpeed = Mathf.Lerp(startSpeed, _originalMoveSpeed, decelerationCurve.Evaluate(timer / decelerationTime));
+            _characterController.moveSpeed = Mathf.Lerp(_originalMoveSpeed, startSpeed, decelerationCurve.Evaluate(timer / decelerationTime));
             timer += Time.deltaTime;
             yield return null;
         }
