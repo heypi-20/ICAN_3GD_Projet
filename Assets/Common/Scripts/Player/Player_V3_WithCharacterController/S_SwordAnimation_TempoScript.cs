@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 using UnityEngine;
 using DG.Tweening;
 
-public class S_MeleeAttack : MonoBehaviour
+public class S_SwordAnimation_TempoScript : MonoBehaviour
 {
-    [Header("Attack Settings")]
-    public KeyCode attackKey = KeyCode.E;
+[Header("Attack Settings")]
     public Transform attackPoint;
     public GameObject attackObject;
 
@@ -18,12 +17,18 @@ public class S_MeleeAttack : MonoBehaviour
     private bool isAttacking = false;
     private float timer = 0f;
     private Tween attackTween;
+    private S_InputManager _inputManager;
+
+    private void Start()
+    {
+        _inputManager = FindObjectOfType<S_InputManager>();
+    }
 
     private void Update()
     {
         AttackCooldown();
 
-        if (Input.GetKeyDown(attackKey) && canAttack)
+        if (_inputManager.MeleeAttackInput && canAttack)
         {
             Attack();
         }

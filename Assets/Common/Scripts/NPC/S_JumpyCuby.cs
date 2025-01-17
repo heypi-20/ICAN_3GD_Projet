@@ -32,7 +32,7 @@ public class S_JumpyCuby : MonoBehaviour
         {
             Debug.LogError("Rigidbody component is missing on this GameObject!");
         }
-        S_PlayerShooting playerShooting = FindObjectOfType<S_PlayerShooting>();
+        S_myCharacterController playerShooting = FindObjectOfType<S_myCharacterController>();
         if (playerShooting != null)
         {
             target = playerShooting.transform;
@@ -92,6 +92,5 @@ public class S_JumpyCuby : MonoBehaviour
             Random.Range(-1f, 1f)).normalized;
 
         rb.AddForce(randomDirection * activationForce, ForceMode.Impulse);
-        Debug.Log("Activated movement due to idleness.");
     }
 }

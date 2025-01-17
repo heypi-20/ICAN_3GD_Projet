@@ -150,7 +150,7 @@ public class S_myCharacterController : MonoBehaviour
         
     }
 
-
+    private float _initialDecelerationSpeed=0f;
     private void SmoothSpeed()
     {
         if (_inputDirection.magnitude > 0) 
@@ -162,15 +162,19 @@ public class S_myCharacterController : MonoBehaviour
             // Utiliser une courbe d'accélération pour ajuster la vitesse de progression
             float curveValue = accelerationCurve.Evaluate(Mathf.Clamp01(_accelerationTimer));
             // Mettre à jour currentSpeed pour refléter un effet d'accélération plus fluide
-            currentSpeed = curveValue * moveSpeed;
+            currentSpeed = Mathf.Lerp(0f, moveSpeed, curveValue);
         }
         else 
         {
+            if (_decelerationTimer == 0f)
+            {
+                _initialDecelerationSpeed=currentSpeed;
+            }
             // Identique à la logique d'accélération
             _accelerationTimer = 0f;
             _decelerationTimer += Time.deltaTime / decelerationTime;
             float curveValue = decelerationCurve.Evaluate(Mathf.Clamp01(_decelerationTimer));
-            currentSpeed = curveValue * currentSpeed;
+            currentSpeed = Mathf.Lerp(0f, _initialDecelerationSpeed, curveValue);
             
             // Fixer la vitesse à zéro si elle devient très faible pour éviter des erreurs
             if (currentSpeed < 0.01f)

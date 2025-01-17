@@ -11,6 +11,7 @@ public class S_InputManager : MonoBehaviour
     public bool JumpInput;
     public bool SprintInput;
     public bool ShootInput;
+    public bool MeleeAttackInput;
     
 
     private void Awake()
@@ -32,6 +33,11 @@ public class S_InputManager : MonoBehaviour
         //Shoot Action
         _playerInputActions.Gameplay.Shoot.performed+= ctx => ShootInput = true;
         _playerInputActions.Gameplay.Shoot.canceled+=ctx=>ShootInput=false;
+        
+        //melee attack input
+        _playerInputActions.Gameplay.MeleeAttack.performed += ctx => MeleeAttackInput = true;
+        _playerInputActions.Gameplay.MeleeAttack.canceled += ctx => MeleeAttackInput = false;
+
     }
     
     private void OnEnable()
