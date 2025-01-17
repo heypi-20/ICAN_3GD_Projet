@@ -10,7 +10,7 @@ public class S_DropOnDeath : MonoBehaviour
 
     private void Awake()
     {
-        // Ajouter automatiquement et référencer S_HealthModule et S_DroppingModule
+        // Ajouter automatiquement et rï¿½fï¿½rencer S_HealthModule et S_DroppingModule
         healthModule = GetComponent<S_HealthModule>();
         droppingModule = GetComponent<S_DroppingModule>();
     }
@@ -19,7 +19,7 @@ public class S_DropOnDeath : MonoBehaviour
     {
         if (healthModule != null)
         {
-            // Écouter l'événement OnDeath du module de santé
+            // ï¿½couter l'ï¿½vï¿½nement OnDeath du module de santï¿½
             healthModule.OnDeath += HandleOnDeath;
         }
     }
@@ -28,23 +28,23 @@ public class S_DropOnDeath : MonoBehaviour
     {
         if (healthModule != null)
         {
-            // Supprimer l'écoute de l'événement OnDeath
+            // Supprimer l'ï¿½coute de l'ï¿½vï¿½nement OnDeath
             healthModule.OnDeath -= HandleOnDeath;
         }
     }
 
     private void HandleOnDeath()
     {
-        Debug.Log("Événement OnDeath détecté. Lâcher des objets...");
+        Debug.Log("ï¿½vï¿½nement OnDeath dï¿½tectï¿½. Lï¿½cher des objets...");
 
         if (droppingModule != null)
         {
-            // Appeler la méthode DropItems du module de largage
-            droppingModule.DropItems();
+            // Appeler la mï¿½thode DropItems du module de largage
+            droppingModule.DropItems(0f);
         }
         else
         {
-            Debug.LogWarning("Le module de largage n'est pas correctement assigné.");
+            Debug.LogWarning("Le module de largage n'est pas correctement assignï¿½.");
         }
     }
 }

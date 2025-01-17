@@ -10,16 +10,17 @@ public class S_DropOnDamage : MonoBehaviour
 
     private void Awake()
     {
-        // Ajouter automatiquement et référencer S_DamageModule et S_DroppingModule
+        // Ajouter automatiquement et rï¿½fï¿½rencer S_DamageModule et S_DroppingModule
         damageModule = GetComponent<S_DamageModule>();
         droppingModule = GetComponent<S_DroppingModule>();
+        
     }
 
     private void OnEnable()
     {
         if (damageModule != null)
         {
-            // Écouter l'événement OnDamage du module de dégâts
+            // ï¿½couter l'ï¿½vï¿½nement OnDamage du module de dï¿½gï¿½ts
             damageModule.OnDamage += HandleOnDamage;
         }
     }
@@ -28,23 +29,23 @@ public class S_DropOnDamage : MonoBehaviour
     {
         if (damageModule != null)
         {
-            // Supprimer l'écoute de l'événement OnDamage
+            // Supprimer l'ï¿½coute de l'ï¿½vï¿½nement OnDamage
             damageModule.OnDamage -= HandleOnDamage;
         }
     }
 
     private void HandleOnDamage(float damageAmount)
     {
-        Debug.Log("Événement OnDamage détecté. Lâcher des objets...");
+        Debug.Log("ï¿½vï¿½nement OnDamage dï¿½tectï¿½. Lï¿½cher des objets...");
 
         if (droppingModule != null)
         {
-            // Appeler la méthode DropItems du module de largage
-            droppingModule.DropItems();
+            // Appeler la mï¿½thode DropItems du module de largage
+            droppingModule.DropItems(0f);
         }
         else
         {
-            Debug.LogWarning("Le module de largage n'est pas correctement assigné.");
+            Debug.LogWarning("Le module de largage n'est pas correctement assignï¿½.");
         }
     }
 }

@@ -79,7 +79,7 @@ public class S_PlayerShooting : MonoBehaviour
 
             if (projectileScript != null)
             {
-                projectileScript.InitializeProjectile(projectileLifetime);
+                projectileScript.InitializeProjectile(projectileLifetime,0f);
             }
 
             Rigidbody rb = projectile.GetComponent<Rigidbody>();

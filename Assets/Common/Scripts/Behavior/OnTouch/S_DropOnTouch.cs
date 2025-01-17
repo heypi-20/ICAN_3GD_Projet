@@ -10,7 +10,7 @@ public class S_DropOnTouch : MonoBehaviour
 
     private void Awake()
     {
-        // Ajouter automatiquement et référencer S_PhysicsCollisionModule et S_DroppingModule
+        // Ajouter automatiquement et rï¿½fï¿½rencer S_PhysicsCollisionModule et S_DroppingModule
         collisionModule = GetComponent<S_PhysicsCollisionModule>();
         droppingModule = GetComponent<S_DroppingModule>();
     }
@@ -19,7 +19,7 @@ public class S_DropOnTouch : MonoBehaviour
     {
         if (collisionModule != null)
         {
-            // Écouter l'événement OnTouch du module de collision
+            // ï¿½couter l'ï¿½vï¿½nement OnTouch du module de collision
             collisionModule.OnTouch += HandleOnTouch;
         }
     }
@@ -28,23 +28,23 @@ public class S_DropOnTouch : MonoBehaviour
     {
         if (collisionModule != null)
         {
-            // Supprimer l'écoute de l'événement OnTouch
+            // Supprimer l'ï¿½coute de l'ï¿½vï¿½nement OnTouch
             collisionModule.OnTouch -= HandleOnTouch;
         }
     }
 
     private void HandleOnTouch()
     {
-        Debug.Log("Événement OnTouch détecté. Lâcher des objets...");
+        Debug.Log("ï¿½vï¿½nement OnTouch dï¿½tectï¿½. Lï¿½cher des objets...");
 
         if (droppingModule != null)
         {
-            // Appeler la méthode DropItems du module de largage
-            droppingModule.DropItems();
+            // Appeler la mï¿½thode DropItems du module de largage
+            droppingModule.DropItems(0f);
         }
         else
         {
-            Debug.LogWarning("Le module de largage n'est pas correctement assigné.");
+            Debug.LogWarning("Le module de largage n'est pas correctement assignï¿½.");
         }
     }
 }

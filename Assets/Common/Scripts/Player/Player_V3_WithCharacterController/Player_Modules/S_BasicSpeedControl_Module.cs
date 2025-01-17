@@ -54,7 +54,6 @@ public class S_BasicSpeedControl_Module : MonoBehaviour
             UpdateSpeedBasedOnEnergy();
             HandleEnergyConsumption();
         }
-        Debug.Log(CheckSprintState());
     }
 
     // Vérifie si le joueur est en train de sprinter pour éviter de modifier la vitesse normale

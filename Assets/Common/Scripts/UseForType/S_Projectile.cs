@@ -6,24 +6,27 @@ public class S_Projectile : MonoBehaviour
 {
     private float lifetime;
     private float lifeTimer;
+    private float bulletSpeed;
 
-    public void InitializeProjectile(float projectileLifetime)
+    public void InitializeProjectile(float projectileLifetime, float speed)
     {
         lifetime = projectileLifetime;
-
+        bulletSpeed = speed;
         lifeTimer = lifetime;
     }
 
     private void Update()
     {
-        // Reduce lifetime timer
-        lifeTimer -= Time.deltaTime;
 
+        lifeTimer -= Time.deltaTime;
+        transform.Translate(Vector3.forward * (bulletSpeed * Time.deltaTime), Space.Self);
         // Destroy the projectile if the lifetime has elapsed
         if (lifeTimer <= 0)
         {
             Destroy(gameObject);
         }
+        
+        
     }
 
 }

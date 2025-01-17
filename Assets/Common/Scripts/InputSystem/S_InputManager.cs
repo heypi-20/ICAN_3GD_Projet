@@ -9,7 +9,8 @@ public class S_InputManager : MonoBehaviour
     [Header("Debugger")]
     public Vector2 MoveInput;
     public bool JumpInput;
-    public bool SprintInput; 
+    public bool SprintInput;
+    public bool ShootInput;
     
 
     private void Awake()
@@ -27,6 +28,10 @@ public class S_InputManager : MonoBehaviour
         //Sprint action presse = true, release = false
         _playerInputActions.Gameplay.Sprint.performed += ctx => SprintInput = true;
         _playerInputActions.Gameplay.Sprint.canceled += ctx => SprintInput = false;
+        
+        //Shoot Action
+        _playerInputActions.Gameplay.Shoot.performed+= ctx => ShootInput = true;
+        _playerInputActions.Gameplay.Shoot.canceled+=ctx=>ShootInput=false;
     }
     
     private void OnEnable()

@@ -20,13 +20,13 @@ public class S_DroppingModule : MonoBehaviour
     private bool hasDropped = false; // Empêcher les chutes multiples dans une seule frame
 
     // Méthode pour faire tomber les objets, à appeler de l'extérieur
-    public void DropItems()
+    public void DropItems(float dropquantity)
     {
         if (hasDropped) return; // Si les objets ont déjà été lâchés, ne rien faire
 
         foreach (DropItem dropItem in dropItems)
         {
-            for (int i = 0; i < dropItem.quantity; i++)
+            for (int i = 0; i < dropquantity; i++)
             {
                 // Instancier l'objet à faire tomber
                 GameObject droppedItem = Instantiate(dropItem.item, transform.position, Random.rotation);

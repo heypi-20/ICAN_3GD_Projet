@@ -10,7 +10,7 @@ public class S_DropOnDestroyed : MonoBehaviour
 
     private void Awake()
     {
-        // Ajouter automatiquement et référencer S_DestructionModule et S_DroppingModule
+        // Ajouter automatiquement et rï¿½fï¿½rencer S_DestructionModule et S_DroppingModule
         destructionModule = GetComponent<S_DestructionModule>();
         droppingModule = GetComponent<S_DroppingModule>();
     }
@@ -19,7 +19,7 @@ public class S_DropOnDestroyed : MonoBehaviour
     {
         if (destructionModule != null)
         {
-            // Écouter l'événement OnDestroyed du module de destruction
+            // ï¿½couter l'ï¿½vï¿½nement OnDestroyed du module de destruction
             destructionModule.OnDestroyed += HandleOnDestroyed;
         }
     }
@@ -28,23 +28,23 @@ public class S_DropOnDestroyed : MonoBehaviour
     {
         if (destructionModule != null)
         {
-            // Supprimer l'écoute de l'événement OnDestroyed
+            // Supprimer l'ï¿½coute de l'ï¿½vï¿½nement OnDestroyed
             destructionModule.OnDestroyed -= HandleOnDestroyed;
         }
     }
 
     private void HandleOnDestroyed()
     {
-        Debug.Log("Événement OnDestroyed détecté. Lâcher des objets...");
+        Debug.Log("ï¿½vï¿½nement OnDestroyed dï¿½tectï¿½. Lï¿½cher des objets...");
 
         if (droppingModule != null)
         {
-            // Appeler la méthode DropItems du module de largage
-            droppingModule.DropItems();
+            // Appeler la mï¿½thode DropItems du module de largage
+            droppingModule.DropItems(0f);
         }
         else
         {
-            Debug.LogWarning("Le module de largage n'est pas correctement assigné.");
+            Debug.LogWarning("Le module de largage n'est pas correctement assignï¿½.");
         }
     }
 }
