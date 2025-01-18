@@ -125,12 +125,7 @@ public class S_FireRateGun_Module : MonoBehaviour
             Debug.DrawRay(shootPoint.position, shootDirection * raycastLength, Color.red, 1f);
         }
         GameObject projectile = Instantiate(bulletPrefab, spawnBulletPoint.position, shootPoint.rotation);
-        S_Projectile projectileScript = projectile.GetComponent<S_Projectile>();
 
-        if (projectileScript != null)
-        {
-            projectileScript.InitializeProjectile(5f,bulletSpeed);
-        }
     }
     private IEnumerator SimulateBullet(Vector3 shootDirection)
     {
