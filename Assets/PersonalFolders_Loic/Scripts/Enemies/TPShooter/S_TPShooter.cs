@@ -28,7 +28,7 @@ public class S_TPShooter : S_Enemy
 
     private void Start()
     {
-        player = FindObjectOfType<S_myCharacterController>().transform;
+        player = FindObjectOfType<S_CustomCharacterController>().transform;
     }
 
     // Update is called once per frame

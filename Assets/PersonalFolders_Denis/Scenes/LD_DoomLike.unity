@@ -3712,7 +3712,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.1
+  near clip plane: 0.01
   far clip plane: 1000
   field of view: 75
   orthographic: 0
@@ -5300,7 +5300,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &654842485
 Transform:
   m_ObjectHideFlags: 0
@@ -5430,6 +5430,11 @@ MonoBehaviour:
   maxEnergyConsumption: 10
   energyConsumptionPercentage: 0.025
   energyConsumptionMultiplier: 0.1
+  gunObject: {fileID: 1182654860}
+  recoilDistance: 0.1
+  recoilDuration: 0.1
+  recoilRotationAmount: 5
+  resetDuration: 0.2
 --- !u!114 &656172844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5443,9 +5448,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minJumpForce: 2
-  maxJumpForce: 7.5
+  maxJumpForce: 15
   jumpForcePercentage: 0.05
-  jumpForceMultiplier: 0.1
+  jumpForceMultiplier: 0.2
   baseEnergyConsumption: 65
   extraConsumptionMultiplier: 2
   jumpCooldown: 0.1
@@ -5461,10 +5466,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b11658d279e4e64ea6cf0f320c4fe17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minSpeed: 5
-  maxSpeed: 15
-  speedPercentage: 0.0115
-  speedMultiplier: 1
+  minSpeed: 15
+  maxSpeed: 30
+  speedPercentage: 0.015
+  speedMultiplier: 1.2
   minEnergyConsumptionRate: 20
   maxEnergyConsumptionRate: 120
   consumptionPercentage: 0.055
@@ -5481,8 +5486,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 283c183890e441343a4917fb02e4b227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minSprintSpeed: 30
-  maxSprintSpeed: 60
+  minSprintSpeed: 35
+  maxSprintSpeed: 75
   sprintSpeedPercentage: 0.011
   sprintSpeedMultiplier: 3
   accelerationTime: 1.2
@@ -5510,7 +5515,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  decelerationTime: 1.5
+  decelerationTime: 0.5
   decelerationCurve:
     serializedVersion: 2
     m_Curve:
@@ -14870,7 +14875,7 @@ MonoBehaviour:
   m_Lens:
     FieldOfView: 75
     OrthographicSize: 5
-    NearClipPlane: 0.1
+    NearClipPlane: 0.01
     FarClipPlane: 1000
     Dutch: 0
     ModeOverride: 0

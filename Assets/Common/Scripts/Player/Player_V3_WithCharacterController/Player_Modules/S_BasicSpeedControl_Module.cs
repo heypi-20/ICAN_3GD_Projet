@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[RequireComponent(typeof(S_myCharacterController))]
+[RequireComponent(typeof(S_CustomCharacterController))]
 [RequireComponent(typeof(S_EnergyStorage))]
 public class S_BasicSpeedControl_Module : MonoBehaviour
 {
@@ -20,7 +20,7 @@ public class S_BasicSpeedControl_Module : MonoBehaviour
     public float consumptionMultiplier = 1f;
 
     // Composant pour ajuster la vitesse de déplacement
-    private S_myCharacterController _characterController;
+    private S_CustomCharacterController _characterController;
     // Composant pour vérifier et modifier l'énergie disponible
     private S_EnergyStorage _energyStorage;
     // Référence au module de sprint pour vérifier l'état du sprint
@@ -41,7 +41,7 @@ public class S_BasicSpeedControl_Module : MonoBehaviour
     // Initialisation des composants nécessaires
     private void Start()
     {
-        _characterController = GetComponent<S_myCharacterController>();
+        _characterController = GetComponent<S_CustomCharacterController>();
         _energyStorage = GetComponent<S_EnergyStorage>();
         _basicSprint_Module ??= GetComponent<S_BasicSprint_Module>();
     }
