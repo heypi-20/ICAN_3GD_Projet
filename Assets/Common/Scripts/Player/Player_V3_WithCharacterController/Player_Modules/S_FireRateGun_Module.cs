@@ -33,8 +33,11 @@ public class S_FireRateGun_Module : MonoBehaviour
     public GameObject gunObject; // Référence à l'arme pour appliquer le recul
     public float recoilDistance = 0.1f; // Distance que l'arme recule pendant le tir
     public float recoilDuration = 0.1f; // Durée de l'animation de recul
-    public float recoilRotationAmount = 5f; // Angle de rotation de l'arme pour simuler le recul
     public float resetDuration = 0.2f; // Durée pour revenir à la position initiale
+    public float upwardRecoilMin = 2f; // Amplitude minimale pour l'élévation du canon
+    public float upwardRecoilMax = 5f; // Amplitude maximale pour l'élévation du canon
+    public float lateralRecoilMin = -1f; // Amplitude minimale pour le décalage latéral
+    public float lateralRecoilMax = 1f; // Amplitude maximale pour le décalage latéral
 
     private Vector3 _originalPosition; // Position initiale de l'arme
     private Quaternion _originalRotation; // Rotation initiale de l'arme
@@ -83,27 +86,29 @@ public class S_FireRateGun_Module : MonoBehaviour
         // Arrêter toute animation en cours sur l'arme pour éviter les superpositions
         DOTween.Kill(gunObject.transform);
 
-        // Mouvement de recul : déplacer l'arme vers l'arrière
+        // Déplacer l'arme vers l'arrière pour simuler le recul
         gunObject.transform.DOLocalMove(_originalPosition - gunObject.transform.forward * recoilDistance, recoilDuration)
             .SetEase(Ease.OutQuad);
 
-        // Rotation pour simuler le recul et l'effet de montée
+        // Simuler le recul avec une rotation, inclut l'élévation et le décalage latéral
         Vector3 recoilRotation = new Vector3(
-            _originalRotation.eulerAngles.x - Random.Range(2f, 5f), // Inclinaison vers le haut
-            _originalRotation.eulerAngles.y + Random.Range(-1f, 1f), // Déviation latérale légère
-            _originalRotation.eulerAngles.z); // Aucun changement sur l'axe Z
+            _originalRotation.eulerAngles.x + Random.Range(upwardRecoilMin, upwardRecoilMax), // Élève le canon sur l'axe X
+            _originalRotation.eulerAngles.y + Random.Range(lateralRecoilMin, lateralRecoilMax), // Décalage latéral sur l'axe Y
+            _originalRotation.eulerAngles.z); // Aucune modification sur l'axe Z
         gunObject.transform.DOLocalRotate(recoilRotation, recoilDuration)
             .SetEase(Ease.OutQuad);
 
-        // Retour à la position initiale après le recul et l'effet de montée
+        // Retour à la position initiale après le recul
         gunObject.transform.DOLocalMove(_originalPosition, resetDuration)
             .SetDelay(recoilDuration)
             .SetEase(Ease.InQuad);
 
+        // Retour à l'orientation initiale après le recul
         gunObject.transform.DOLocalRotate(_originalRotation.eulerAngles, resetDuration)
             .SetDelay(recoilDuration)
             .SetEase(Ease.InQuad);
     }
+
 
 
 
