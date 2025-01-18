@@ -24,15 +24,17 @@ public class PlayerEditorWindow : EditorWindow
     private string profileName = String.Empty;
     private PlayerProfile[] profiles;
     private string[] profileNames;
+    
+    private Vector2 scrollPosition;
 
     private void OnGUI()
     {
-        if (FindObjectOfType<S_PlayerMultiCam>() == null) {
+        if (FindObjectOfType<S_CustomCharacterController>() == null) {
             EditorGUILayout.LabelField("NO PLAYER FOUND");
             return;
         }
         
-        player = FindObjectOfType<S_PlayerMultiCam>().gameObject;
+        player = FindObjectOfType<S_CustomCharacterController>().gameObject;
         
         if (GUILayout.Button("Change Window", GUILayout.Width(120))) {
             windowSwitch = !windowSwitch;
@@ -82,9 +84,14 @@ public class PlayerEditorWindow : EditorWindow
 
         if (moduleEditor != null) {
             GUILayout.FlexibleSpace();
+            
+            scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+            
             EditorGUILayout.BeginVertical("Box");
             moduleEditor.OnInspectorGUI();
             EditorGUILayout.EndVertical();
+            
+            EditorGUILayout.EndScrollView();
         }
         
         GUILayout.FlexibleSpace();
