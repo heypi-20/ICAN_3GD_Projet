@@ -5431,10 +5431,13 @@ MonoBehaviour:
   energyConsumptionPercentage: 0.025
   energyConsumptionMultiplier: 0.1
   gunObject: {fileID: 1182654860}
-  recoilDistance: 0.1
+  recoilDistance: -0.1
   recoilDuration: 0.1
-  recoilRotationAmount: 5
   resetDuration: 0.2
+  upwardRecoilMin: 5
+  upwardRecoilMax: 15
+  lateralRecoilMin: -1
+  lateralRecoilMax: 1
 --- !u!114 &656172844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17809,12 +17812,12 @@ MonoBehaviour:
     m_SpeedMode: 1
     m_MaxSpeed: 1
     m_AccelTime: 0.1
-    m_DecelTime: 0.1
+    m_DecelTime: 0
     m_InputAxisName: Mouse Y
     m_InputAxisValue: 0
     m_InvertInput: 1
-    m_MinValue: -90
-    m_MaxValue: 90
+    m_MinValue: -89
+    m_MaxValue: 89
     m_Wrap: 0
     m_Recentering:
       m_enabled: 0
@@ -17833,7 +17836,7 @@ MonoBehaviour:
     m_SpeedMode: 1
     m_MaxSpeed: 1
     m_AccelTime: 0.1
-    m_DecelTime: 0.1
+    m_DecelTime: 0
     m_InputAxisName: Mouse X
     m_InputAxisValue: 0
     m_InvertInput: 0
