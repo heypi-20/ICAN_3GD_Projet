@@ -26,7 +26,7 @@ public class S_TPShooter : S_Enemy
 
     private void Start()
     {
-        player = FindObjectOfType<S_PlayerMultiCam>().transform;
+        player = FindObjectOfType<S_myCharacterController>().transform;
     }
 
     // Update is called once per frame
