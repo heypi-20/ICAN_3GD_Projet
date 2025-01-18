@@ -1,7 +1,9 @@
+
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using DG.Tweening; 
 
 [RequireComponent(typeof(Rigidbody))]
 public class S_TPShooter : S_Enemy
@@ -61,7 +63,9 @@ public class S_TPShooter : S_Enemy
         float randX = Random.Range(-minDist, maxDist);
         float randZ = Random.Range(-minDist, maxDist);
         
-        transform.position = new Vector3(transform.position.x + randX, transform.position.y, transform.position.z + randZ);
+        Vector3 targetPosition = new Vector3(transform.position.x + randX, transform.position.y, transform.position.z + randZ);
+        transform.DOMove(targetPosition, 0.1f) // '1f' correspond à la durée de l'animation en secondes
+            .SetEase(Ease.InOutQuad); 
     }
 
     private void Shoot()

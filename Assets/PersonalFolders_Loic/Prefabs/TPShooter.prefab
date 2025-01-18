@@ -150,6 +150,7 @@ GameObject:
   - component: {fileID: 2526466446658201058}
   - component: {fileID: 1086301208098852479}
   - component: {fileID: 2766124764621992074}
+  - component: {fileID: -2372724471767757237}
   m_Layer: 0
   m_Name: TPShooter
   m_TagString: Untagged
@@ -268,7 +269,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
@@ -288,11 +289,27 @@ MonoBehaviour:
   health: 0
   energyDrop: 0
   sprite: {fileID: 0}
-  teleportCd: 2
+  teleportCd: 1
   minDist: 5
-  maxDist: 5
-  fireRate: 1
-  range: 10
+  maxDist: 10
+  fireRate: 2
+  range: 50
   projectilePrefab: {fileID: 6221195541462812341, guid: e17719e394d7ac143b9ca9029c6adbc8, type: 3}
   shootPoint: {fileID: 8368840449676805666}
-  projectileSpeed: 10
+  projectileSpeed: 20
+--- !u!114 &-2372724471767757237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9022804584600836904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d5ad4347e567f6419fceb0bb6fb1b2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destroyForever: 0
+  destructionEffectPrefab: {fileID: 2014564717100583912, guid: de8051323aef0554fb4a4ee3dd46ebed, type: 3}
+  destructionEffectLifetime: 2
+  useEffectLifetimeForTemporary: 1
