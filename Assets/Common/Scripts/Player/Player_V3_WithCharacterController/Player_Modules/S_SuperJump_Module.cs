@@ -22,7 +22,7 @@ public class S_SuperJump_Module : MonoBehaviour
     private bool _isJumpOnCooldown = false;
     
     // Composant pour ajuster la vitesse de déplacement
-    private S_myCharacterController _characterController;
+    private S_CustomCharacterController _characterController;
     // Composant pour vérifier et modifier l'énergie disponible
     private S_EnergyStorage _energyStorage;
     // Gestionnaire d'input pour détecter les actions du joueur
@@ -36,7 +36,7 @@ public class S_SuperJump_Module : MonoBehaviour
     private void Start()
     {
         // Initialisation des composants
-        _characterController = GetComponent<S_myCharacterController>();
+        _characterController = GetComponent<S_CustomCharacterController>();
         _energyStorage = GetComponent<S_EnergyStorage>();
         _inputManager = FindObjectOfType<S_InputManager>();
         

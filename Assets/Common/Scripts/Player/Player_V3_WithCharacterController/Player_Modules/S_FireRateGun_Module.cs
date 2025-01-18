@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEditor;
+using DG.Tweening;
 
 [RequireComponent(typeof(S_EnergyStorage))]
 public class S_FireRateGun_Module : MonoBehaviour
@@ -28,6 +29,18 @@ public class S_FireRateGun_Module : MonoBehaviour
     public float energyConsumptionPercentage = 0.01f; // Multiplicateur en pourcentage appliqué à currentEnergy
     public float energyConsumptionMultiplier = 1f; // Multiplicateur final appliqué à la consommation calculée
 
+    [Header("Recoil Settings")]
+    public GameObject gunObject; // Référence à l'arme pour appliquer le recul
+    public float recoilDistance = 0.1f; // Distance que l'arme recule pendant le tir
+    public float recoilDuration = 0.1f; // Durée de l'animation de recul
+    public float recoilRotationAmount = 5f; // Angle de rotation de l'arme pour simuler le recul
+    public float resetDuration = 0.2f; // Durée pour revenir à la position initiale
+
+    private Vector3 _originalPosition; // Position initiale de l'arme
+    private Quaternion _originalRotation; // Rotation initiale de l'arme
+
+    
+    
     private S_InputManager _inputManager;
     private S_EnergyStorage _energyStorage;
     private float _fireCooldown;
@@ -38,6 +51,10 @@ public class S_FireRateGun_Module : MonoBehaviour
     {
         _inputManager = FindObjectOfType<S_InputManager>();
         _energyStorage = GetComponent<S_EnergyStorage>();
+        
+        //feedback
+        _originalPosition = gunObject.transform.localPosition;
+        _originalRotation = gunObject.transform.localRotation;
     }
 
     private void Update()
@@ -52,6 +69,7 @@ public class S_FireRateGun_Module : MonoBehaviour
             Shoot();
             UpdateFireCooldown();
             ConsumeEnergy();
+            ShootVFX();
         }
 
         if (_fireCooldown > 0f)
@@ -59,6 +77,35 @@ public class S_FireRateGun_Module : MonoBehaviour
             _fireCooldown -= Time.deltaTime;
         }
     }
+
+    private void ShootVFX()
+    {
+        // Arrêter toute animation en cours sur l'arme pour éviter les superpositions
+        DOTween.Kill(gunObject.transform);
+
+        // Mouvement de recul : déplacer l'arme vers l'arrière
+        gunObject.transform.DOLocalMove(_originalPosition - gunObject.transform.forward * recoilDistance, recoilDuration)
+            .SetEase(Ease.OutQuad);
+
+        // Rotation pour simuler le recul et l'effet de montée
+        Vector3 recoilRotation = new Vector3(
+            _originalRotation.eulerAngles.x - Random.Range(2f, 5f), // Inclinaison vers le haut
+            _originalRotation.eulerAngles.y + Random.Range(-1f, 1f), // Déviation latérale légère
+            _originalRotation.eulerAngles.z); // Aucun changement sur l'axe Z
+        gunObject.transform.DOLocalRotate(recoilRotation, recoilDuration)
+            .SetEase(Ease.OutQuad);
+
+        // Retour à la position initiale après le recul et l'effet de montée
+        gunObject.transform.DOLocalMove(_originalPosition, resetDuration)
+            .SetDelay(recoilDuration)
+            .SetEase(Ease.InQuad);
+
+        gunObject.transform.DOLocalRotate(_originalRotation.eulerAngles, resetDuration)
+            .SetDelay(recoilDuration)
+            .SetEase(Ease.InQuad);
+    }
+
+
 
     private void Shoot()
     {

@@ -32,7 +32,7 @@ public class S_JumpyCuby : MonoBehaviour
         {
             Debug.LogError("Rigidbody component is missing on this GameObject!");
         }
-        S_myCharacterController playerShooting = FindObjectOfType<S_myCharacterController>();
+        S_CustomCharacterController playerShooting = FindObjectOfType<S_CustomCharacterController>();
         if (playerShooting != null)
         {
             target = playerShooting.transform;
