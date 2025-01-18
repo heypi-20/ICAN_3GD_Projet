@@ -1629,7 +1629,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: 0
-  TimerTarget: 10
+  TimerTarget: 8
   NPC: {fileID: 5534188564840520030, guid: e081be6bbad2044448d092f9a6da15b3, type: 3}
 --- !u!1 &192421087
 GameObject:
@@ -2249,7 +2249,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: 0
-  TimerTarget: 10
+  TimerTarget: 8
   NPC: {fileID: 5534188564840520030, guid: e081be6bbad2044448d092f9a6da15b3, type: 3}
 --- !u!1 &257255743
 GameObject:
@@ -5430,6 +5430,11 @@ MonoBehaviour:
   maxEnergyConsumption: 10
   energyConsumptionPercentage: 0.025
   energyConsumptionMultiplier: 0.1
+  gunObject: {fileID: 0}
+  recoilDistance: 0.1
+  recoilDuration: 0.1
+  recoilRotationAmount: 5
+  resetDuration: 0.2
 --- !u!114 &656172844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5443,9 +5448,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minJumpForce: 2
-  maxJumpForce: 7.5
+  maxJumpForce: 20
   jumpForcePercentage: 0.05
-  jumpForceMultiplier: 0.1
+  jumpForceMultiplier: 0.2
   baseEnergyConsumption: 65
   extraConsumptionMultiplier: 2
   jumpCooldown: 0.1
@@ -5461,10 +5466,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b11658d279e4e64ea6cf0f320c4fe17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minSpeed: 5
-  maxSpeed: 15
+  minSpeed: 12
+  maxSpeed: 40
   speedPercentage: 0.0115
-  speedMultiplier: 1
+  speedMultiplier: 1.2
   minEnergyConsumptionRate: 20
   maxEnergyConsumptionRate: 120
   consumptionPercentage: 0.055
@@ -5481,8 +5486,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 283c183890e441343a4917fb02e4b227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minSprintSpeed: 30
-  maxSprintSpeed: 60
+  minSprintSpeed: 40
+  maxSprintSpeed: 80
   sprintSpeedPercentage: 0.011
   sprintSpeedMultiplier: 3
   accelerationTime: 1.2
@@ -9765,7 +9770,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: 0
-  TimerTarget: 10
+  TimerTarget: 8
   NPC: {fileID: 5534188564840520030, guid: e081be6bbad2044448d092f9a6da15b3, type: 3}
 --- !u!1 &1149673406
 GameObject:
@@ -9812,7 +9817,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: 0
-  TimerTarget: 10
+  TimerTarget: 8
   NPC: {fileID: 5534188564840520030, guid: e081be6bbad2044448d092f9a6da15b3, type: 3}
 --- !u!43 &1150902851
 Mesh:
@@ -12089,7 +12094,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: 0
-  TimerTarget: 10
+  TimerTarget: 8
   NPC: {fileID: 5534188564840520030, guid: e081be6bbad2044448d092f9a6da15b3, type: 3}
 --- !u!1 &1452823545
 GameObject:
@@ -12787,7 +12792,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: 0
-  TimerTarget: 10
+  TimerTarget: 8
   NPC: {fileID: 5534188564840520030, guid: e081be6bbad2044448d092f9a6da15b3, type: 3}
 --- !u!1 &1535804637
 GameObject:
@@ -15136,7 +15141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: 0
-  TimerTarget: 10
+  TimerTarget: 8
   NPC: {fileID: 5534188564840520030, guid: e081be6bbad2044448d092f9a6da15b3, type: 3}
 --- !u!4 &1831047465
 Transform:
