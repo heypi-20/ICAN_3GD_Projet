@@ -64,8 +64,13 @@ public class S_TPShooter : S_Enemy
         float randZ = Random.Range(-minDist, maxDist);
         
         Vector3 targetPosition = new Vector3(transform.position.x + randX, transform.position.y, transform.position.z + randZ);
-        transform.DOMove(targetPosition, 0.1f) // '1f' correspond à la durée de l'animation en secondes
-            .SetEase(Ease.InOutQuad); 
+        transform.DOMove(targetPosition, 0.1f).SetEase(Ease.InOutQuad);
+        
+        Vector3 targetScale = new Vector3(1.2f, 1.2f, 1.2f); // Augmenter légèrement la taille
+        // Créer l'animation
+        transform.DOScale(targetScale, 0.5f) // Durée pour atteindre la taille cible (0.25s aller)
+            .SetEase(Ease.InOutQuad)    // Easing fluide pour un effet agréable
+            .SetLoops(-1, LoopType.Yoyo);
     }
 
     private void Shoot()
