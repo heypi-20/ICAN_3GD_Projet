@@ -21,6 +21,7 @@ public class S_CountdownVFX : MonoBehaviour
 
     private void Start()
     {
+        this.enabled = false;
         // Initialisation du module
         _energyStorage = GetComponent<S_EnergyStorage>();
         ResetCountdown(); // Réinitialisation des paramètres
@@ -102,6 +103,7 @@ public class S_CountdownVFX : MonoBehaviour
         _textShakeTween?.Kill();
         _imageFadeTween?.Kill();
         countdownImage.color = new Color(countdownImage.color.r, countdownImage.color.g, countdownImage.color.b, 0f);
+        GetComponent<S_CountdownVFX>().enabled = false;
     }
 
     private void EndCountdown()
