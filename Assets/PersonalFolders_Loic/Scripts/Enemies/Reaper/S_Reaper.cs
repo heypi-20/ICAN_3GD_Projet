@@ -71,7 +71,7 @@ public class S_Reaper : S_Enemy
         }
         
         Vector3 moveDir = new Vector3(moveDistX, transform.position.y, moveDistZ);
-        Vector3 lookDir = new Vector3(player.position.x - transform.position.x, 0.5f, player.position.z - transform.position.z);
+        Vector3 lookDir = new Vector3(player.position.x - transform.position.x, transform.localScale.y/2, player.position.z - transform.position.z);
 
         transform.position = Vector3.MoveTowards(transform.position, moveDir, idleSpeed * Time.deltaTime);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookDir), rotationSpeed * Time.deltaTime);
@@ -82,20 +82,20 @@ public class S_Reaper : S_Enemy
         if (!isAttacking) {
             rotateTimer += Time.deltaTime;
 
-            Vector3 lookDir = new Vector3(player.position.x - transform.position.x, 0.5f, player.position.z - transform.position.z);
+            Vector3 lookDir = new Vector3(player.position.x - transform.position.x, transform.localScale.y/2, player.position.z - transform.position.z);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookDir), rotationSpeed * Time.deltaTime);
 
             if (rotateTimer >= 2f) {
-                attackPos = new Vector3(player.position.x, 0.5f, player.position.z);
+                attackPos = new Vector3(player.position.x * 2, transform.localScale.y/2, player.position.z * 2);
                 rotateTimer = 0f;
                 isAttacking = true;
             }
         } else if (isAttacking) {
             attackingTimer += Time.deltaTime;
 
-            if (attackingTimer >= attackTime / 2)
+            if (attackingTimer >= attackTime)
                 transform.position = Vector3.MoveTowards(transform.position, attackPos, attackingSpeed * Time.deltaTime);
-            if (attackingTimer >= attackTime) {
+            if (attackingTimer >= attackTime * 2) {
                 attackingTimer = 0f;
                 isAttacking = false;
                 canAttack = false;
