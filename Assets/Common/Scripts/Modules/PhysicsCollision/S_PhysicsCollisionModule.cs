@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 public class S_PhysicsCollisionModule : MonoBehaviour
 {
     public enum OverlapType { BOX, SPHERE, CAPSULE } // Définition des types d'overlap possibles
@@ -67,6 +68,10 @@ public class S_PhysicsCollisionModule : MonoBehaviour
     {
         OnTouch?.Invoke(); 
         OnTouchCalled?.Invoke();
+        if(GetComponent<S_EnergyStorage>().currentEnergy <= 0)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
     #region PhysicCastMethodes

@@ -31,12 +31,13 @@ public class S_EnergyStorage : MonoBehaviour
     {
         UpdateEnergyLevel();
         UpdateEnergyDisplay();
+        currentEnergy = Mathf.Clamp(currentEnergy, 0, maxEnergy);
     }
 
     // Méthode permettant d'ajouter de l'énergie
     public void AddEnergy(float amount)
     {
-        currentEnergy = Mathf.Clamp(currentEnergy + amount, -Mathf.Infinity, maxEnergy);
+        currentEnergy = Mathf.Clamp(currentEnergy + amount, 0, maxEnergy);
 
         // Si l'énergie redevient positive après la mort, réinitialise l'état
         if (hasDeathTriggered && currentEnergy > 0f)
