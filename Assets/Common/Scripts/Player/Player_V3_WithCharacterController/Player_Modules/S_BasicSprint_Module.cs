@@ -1,30 +1,30 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
-using UnityEditor;
 using DG.Tweening;
 
 [RequireComponent(typeof(S_CustomCharacterController))]
 [RequireComponent(typeof(S_EnergyStorage))]
 public class S_BasicSprint_Module : MonoBehaviour
 {
-    [Header("Sprint Settings")]
-    public float minSprintSpeed = 15f;
-    public float maxSprintSpeed = 25f;
-    public float sprintSpeedPercentage = 0.01f;
-    public float sprintSpeedMultiplier = 1f;
+    
+    [Serializable]
+    public class SprintLevel
+    {
+        public int level; // Correspond au niveau d'énergie dans S_EnergyStorage
+        public float sprintSpeed; // Vitesse de sprint pour ce niveau
+        public float energyConsumptionRate; // Consommation d'énergie pour ce niveau
+    }
+    [Header("Sprint Levels")]
+    public List<SprintLevel> sprintLevels; // Liste des niveaux de sprint
 
     [Header("Acceleration/Deceleration Settings")]
     public float accelerationTime = 0.5f;
     public AnimationCurve accelerationCurve = AnimationCurve.Linear(0, 0, 1, 1);
     public float decelerationTime = 0.5f;
     public AnimationCurve decelerationCurve = AnimationCurve.Linear(0, 1, 1, 0);
-
-    [Header("Energy Consumption Settings")]
-    public float minEnergyConsumptionRate = 2f;
-    public float maxEnergyConsumptionRate = 8f;
-    public float consumptionPercentage = 0.01f;
-    public float consumptionMultiplier = 1f;
 
     [Header("Camera Settings")]
     public CinemachineVirtualCamera cinemachineCamera; // Caméra du joueur pour ajuster le FOV
@@ -39,28 +39,12 @@ public class S_BasicSprint_Module : MonoBehaviour
     // Gestionnaire d'input pour détecter les actions du joueur
     private S_InputManager _inputManager;
 
-    private S_BasicSpeedControl_Module _basicSpeedControlModule;
-
     // Stocker la vitesse initiale avant le sprint
     private float _originalMoveSpeed;
     // Indicateur si le joueur est en sprint
     public bool _isSprinting { get; private set; }
-    // Vitesse de sprint calculée en fonction de l'énergie
-    private float _sprintSpeed;
     // Référence à la coroutine en cours pour éviter les doublons
     private Coroutine _currentCoroutine;
-
-    // Seuil de vitesse et consommation d'énergie affichés dans l'inspecteur
-    public float estimatedSprintSpeedThreshold { get; private set; }
-    public float estimatedConsumptionEnergyThreshold { get; private set; }
-
-    // Mise à jour des seuils lorsqu'une valeur est modifiée dans l'inspecteur
-    private void OnValidate()
-    {
-        EstimateEnergyThresholds(out float sprintThreshold, out float consumptionThreshold);
-        estimatedSprintSpeedThreshold = sprintThreshold;
-        estimatedConsumptionEnergyThreshold = consumptionThreshold;
-    }
 
     private void Start()
     {
@@ -68,24 +52,17 @@ public class S_BasicSprint_Module : MonoBehaviour
         _characterController = GetComponent<S_CustomCharacterController>();
         _energyStorage = GetComponent<S_EnergyStorage>();
         _inputManager = FindObjectOfType<S_InputManager>();
-        
+
         // Initialiser le FOV de la caméra
         if (cinemachineCamera != null)
         {
-            normalFOV=cinemachineCamera.m_Lens.FieldOfView;
+            normalFOV = cinemachineCamera.m_Lens.FieldOfView;
         }
-        
     }
 
     private void Update()
     {
         HandleSprint();
-    }
-
-    // Vérifie si une coroutine de sprint est en cours
-    public bool IsSprintCoroutineRunning()
-    {
-        return _currentCoroutine != null;
     }
 
     // Gérer le démarrage et l'arrêt du sprint
@@ -97,7 +74,7 @@ public class S_BasicSprint_Module : MonoBehaviour
             if (!_isSprinting)
             {
                 _originalMoveSpeed = _characterController.moveSpeed;
-                if (_currentCoroutine != null) StopCoroutine(_currentCoroutine);
+                if (IsSprintCoroutineRunning()) StopCoroutine(_currentCoroutine);
                 _currentCoroutine = StartCoroutine(AccelerateToSprintSpeed());
                 _isSprinting = true;
 
@@ -109,7 +86,7 @@ public class S_BasicSprint_Module : MonoBehaviour
         else if (_isSprinting)
         {
             // Arrêter le sprint si l'input n'est plus actif
-            if (_currentCoroutine != null) StopCoroutine(_currentCoroutine);
+            if (IsSprintCoroutineRunning()) StopCoroutine(_currentCoroutine);
             _currentCoroutine = StartCoroutine(DecelerateToNormalSpeed());
             _isSprinting = false;
 
@@ -117,26 +94,28 @@ public class S_BasicSprint_Module : MonoBehaviour
             UpdateCameraFOV(normalFOV);
         }
     }
+    // Vérifie si une coroutine de sprint est en cours
+    public bool IsSprintCoroutineRunning()
+    {
+        return _currentCoroutine != null;
+    }
 
     // Coroutine pour augmenter progressivement la vitesse jusqu'à la vitesse de sprint
     private IEnumerator AccelerateToSprintSpeed()
     {
         float timer = 0f;
-        _sprintSpeed = Mathf.Clamp(
-            (Mathf.Max(_energyStorage.currentEnergy, 0f) * sprintSpeedPercentage) * sprintSpeedMultiplier,
-            minSprintSpeed,
-            maxSprintSpeed
-        );
+        float targetSprintSpeed = GetCurrentSprintSpeed();
 
         while (timer < accelerationTime)
         {
             // Interpolation de la vitesse selon la courbe d'accélération
-            _characterController.moveSpeed = Mathf.Lerp(_originalMoveSpeed, _sprintSpeed, accelerationCurve.Evaluate(timer / accelerationTime));
             timer += Time.deltaTime;
+            float curveValue = accelerationCurve.Evaluate(Mathf.Clamp01(timer / accelerationTime));
+            _characterController.moveSpeed = Mathf.Lerp(_originalMoveSpeed, targetSprintSpeed, curveValue);
             yield return null;
         }
 
-        _characterController.moveSpeed = _sprintSpeed;
+        _characterController.moveSpeed = targetSprintSpeed;
         _currentCoroutine = null;
     }
 
@@ -148,8 +127,12 @@ public class S_BasicSprint_Module : MonoBehaviour
 
         while (timer < decelerationTime)
         {
-            // Interpolation de la vitesse selon la courbe de décélération
-            _characterController.moveSpeed = Mathf.Lerp(_originalMoveSpeed, startSpeed, decelerationCurve.Evaluate(timer / decelerationTime));
+            // Calculer la progression temporelle et l'obtenir via la courbe de décélération
+            float curveValue = decelerationCurve.Evaluate(Mathf.Clamp01(timer / decelerationTime));
+
+            // Interpoler entre la vitesse initiale et la vitesse normale à l'aide de la valeur de la courbe
+            _characterController.moveSpeed = Mathf.Lerp(startSpeed,_originalMoveSpeed , 1f - curveValue);
+
             timer += Time.deltaTime;
             yield return null;
         }
@@ -161,9 +144,8 @@ public class S_BasicSprint_Module : MonoBehaviour
     // Réduction de l'énergie pendant le sprint
     private void HandleEnergyConsumption()
     {
-        float calculatedConsumptionRate = (Mathf.Max(_energyStorage.currentEnergy, 0f) * consumptionPercentage) * consumptionMultiplier;
-        calculatedConsumptionRate = Mathf.Clamp(calculatedConsumptionRate, minEnergyConsumptionRate, maxEnergyConsumptionRate);
-        _energyStorage.currentEnergy -= calculatedConsumptionRate * Time.deltaTime;
+        float energyConsumptionRate = GetCurrentEnergyConsumptionRate();
+        _energyStorage.currentEnergy = Mathf.Max(0, _energyStorage.currentEnergy - energyConsumptionRate * Time.deltaTime);
     }
 
     private void UpdateCameraFOV(float targetFOV)
@@ -180,28 +162,19 @@ public class S_BasicSprint_Module : MonoBehaviour
         }
     }
 
-    // Estimation des seuils d'énergie nécessaires pour le sprint
-    public void EstimateEnergyThresholds(out float sprintSpeedThreshold, out float consumptionEnergyThreshold)
+    // Obtient la vitesse de sprint pour le niveau d'énergie actuel
+    private float GetCurrentSprintSpeed()
     {
-        sprintSpeedThreshold = maxSprintSpeed / (sprintSpeedPercentage * sprintSpeedMultiplier);
-        consumptionEnergyThreshold = maxEnergyConsumptionRate / (consumptionPercentage * consumptionMultiplier);
+        int currentLevel = _energyStorage.currentLevelIndex + 1; // Ajuste pour correspondre au niveau dans SprintLevel
+        SprintLevel level = sprintLevels.Find(l => l.level == currentLevel);
+        return level != null ? level.sprintSpeed : 0f;
+    }
+
+    // Obtient le taux de consommation d'énergie pour le niveau d'énergie actuel
+    private float GetCurrentEnergyConsumptionRate()
+    {
+        int currentLevel = _energyStorage.currentLevelIndex + 1;
+        SprintLevel level = sprintLevels.Find(l => l.level == currentLevel);
+        return level != null ? level.energyConsumptionRate : 0f;
     }
 }
-
-#if UNITY_EDITOR
-[CustomEditor(typeof(S_BasicSprint_Module))]
-public class S_BasicSprintModuleEditor : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        base.OnInspectorGUI();
-
-        S_BasicSprint_Module module = (S_BasicSprint_Module)target;
-
-        EditorGUILayout.Space();
-        EditorGUILayout.LabelField("Estimated Sprint Thresholds", EditorStyles.boldLabel);
-        EditorGUILayout.LabelField("Sprint Speed Threshold:", module.estimatedSprintSpeedThreshold.ToString("F2"));
-        EditorGUILayout.LabelField("Consumption Energy Threshold:", module.estimatedConsumptionEnergyThreshold.ToString("F2"));
-    }
-}
-#endif
