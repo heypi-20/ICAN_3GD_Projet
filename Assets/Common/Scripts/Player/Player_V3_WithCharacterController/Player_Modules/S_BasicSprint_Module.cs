@@ -1,7 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 using UnityEditor;
+using DG.Tweening;
 
 [RequireComponent(typeof(S_CustomCharacterController))]
 [RequireComponent(typeof(S_EnergyStorage))]
@@ -24,6 +25,12 @@ public class S_BasicSprint_Module : MonoBehaviour
     public float maxEnergyConsumptionRate = 8f;
     public float consumptionPercentage = 0.01f;
     public float consumptionMultiplier = 1f;
+
+    [Header("Camera Settings")]
+    public CinemachineVirtualCamera cinemachineCamera; // Caméra du joueur pour ajuster le FOV
+    public float sprintFOV = 90f; // FOV pendant le sprint
+    private float normalFOV = 60f; // FOV normal
+    public float fovTransitionTime = 0.2f; // Durée de transition du FOV
 
     // Composant pour ajuster la vitesse de déplacement
     private S_CustomCharacterController _characterController;
@@ -55,15 +62,20 @@ public class S_BasicSprint_Module : MonoBehaviour
         estimatedConsumptionEnergyThreshold = consumptionThreshold;
     }
 
-    
     private void Start()
     {
         // Initialisation des composants
         _characterController = GetComponent<S_CustomCharacterController>();
         _energyStorage = GetComponent<S_EnergyStorage>();
         _inputManager = FindObjectOfType<S_InputManager>();
+        
+        // Initialiser le FOV de la caméra
+        if (cinemachineCamera != null)
+        {
+            normalFOV=cinemachineCamera.m_Lens.FieldOfView;
+        }
+        
     }
-
 
     private void Update()
     {
@@ -88,8 +100,9 @@ public class S_BasicSprint_Module : MonoBehaviour
                 if (_currentCoroutine != null) StopCoroutine(_currentCoroutine);
                 _currentCoroutine = StartCoroutine(AccelerateToSprintSpeed());
                 _isSprinting = true;
-                
-                //TODO: Add FeedBack
+
+                // Ajouter le feedback FOV
+                UpdateCameraFOV(sprintFOV);
             }
             HandleEnergyConsumption();
         }
@@ -99,8 +112,9 @@ public class S_BasicSprint_Module : MonoBehaviour
             if (_currentCoroutine != null) StopCoroutine(_currentCoroutine);
             _currentCoroutine = StartCoroutine(DecelerateToNormalSpeed());
             _isSprinting = false;
-            
-            //TODO: Add FeedBack
+
+            // Ajouter le feedback FOV
+            UpdateCameraFOV(normalFOV);
         }
     }
 
@@ -150,6 +164,20 @@ public class S_BasicSprint_Module : MonoBehaviour
         float calculatedConsumptionRate = (Mathf.Max(_energyStorage.currentEnergy, 0f) * consumptionPercentage) * consumptionMultiplier;
         calculatedConsumptionRate = Mathf.Clamp(calculatedConsumptionRate, minEnergyConsumptionRate, maxEnergyConsumptionRate);
         _energyStorage.currentEnergy -= calculatedConsumptionRate * Time.deltaTime;
+    }
+
+    private void UpdateCameraFOV(float targetFOV)
+    {
+        if (cinemachineCamera != null)
+        {
+            DOTween.Kill(cinemachineCamera); // Arrête les animations FOV précédentes
+            DOTween.To(
+                () => cinemachineCamera.m_Lens.FieldOfView, // Getter pour le FOV actuel
+                x => cinemachineCamera.m_Lens.FieldOfView = x, // Setter pour appliquer le nouveau FOV
+                targetFOV, // Valeur cible
+                fovTransitionTime // Durée de la transition
+            ).SetEase(Ease.OutQuad);
+        }
     }
 
     // Estimation des seuils d'énergie nécessaires pour le sprint

@@ -75,6 +75,7 @@ public class S_PlayerShooting : MonoBehaviour
         if (projectilePrefab != null && shootingPoint != null)
         {
             GameObject projectile = Instantiate(projectilePrefab, shootingPoint.position, shootingPoint.rotation);
+            
             S_Projectile projectileScript = projectile.GetComponent<S_Projectile>();
 
             if (projectileScript != null)
