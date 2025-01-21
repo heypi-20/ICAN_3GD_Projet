@@ -15247,6 +15247,46 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 576700262486381634, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: sprintLevels.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 576700262486381634, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: sprintLevels.Array.data[0].level
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 576700262486381634, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: sprintLevels.Array.data[1].level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 576700262486381634, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: sprintLevels.Array.data[2].level
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 576700262486381634, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: sprintLevels.Array.data[0].sprintSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 576700262486381634, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: sprintLevels.Array.data[1].sprintSpeed
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 576700262486381634, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: sprintLevels.Array.data[2].sprintSpeed
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 576700262486381634, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: sprintLevels.Array.data[0].energyConsumptionRate
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 576700262486381634, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: sprintLevels.Array.data[1].energyConsumptionRate
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 576700262486381634, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: sprintLevels.Array.data[2].energyConsumptionRate
+      value: 200
+      objectReference: {fileID: 0}
     - target: {fileID: 2016573011363835608, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -15287,9 +15327,89 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2423315047553618094, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: groundCheckBufferTime
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4410070543301533539, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: maxEnergy
+      value: 9999
+      objectReference: {fileID: 0}
+    - target: {fileID: 4410070543301533539, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: currentEnergy
+      value: 9999
+      objectReference: {fileID: 0}
+    - target: {fileID: 4850487695686332704, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: jumpLevels.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4850487695686332704, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: jumpLevels.Array.data[0].level
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4850487695686332704, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: jumpLevels.Array.data[1].level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4850487695686332704, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: jumpLevels.Array.data[2].level
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4850487695686332704, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: jumpLevels.Array.data[0].jumpHeight
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4850487695686332704, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: jumpLevels.Array.data[1].jumpHeight
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4850487695686332704, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: jumpLevels.Array.data[2].jumpHeight
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4850487695686332704, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: jumpLevels.Array.data[0].maxJumpCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4850487695686332704, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: jumpLevels.Array.data[1].maxJumpCount
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4850487695686332704, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: jumpLevels.Array.data[2].maxJumpCount
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4850487695686332704, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: jumpLevels.Array.data[0].energyConsumption
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 4850487695686332704, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: jumpLevels.Array.data[1].energyConsumption
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 4850487695686332704, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: jumpLevels.Array.data[2].energyConsumption
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 5608158166862176388, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
       propertyPath: m_Name
       value: Pre_PlayerObjGroupe
+      objectReference: {fileID: 0}
+    - target: {fileID: 8283910488979405802, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: m_BackGroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8283910488979405802, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8283910488979405802, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8283910488979405802, guid: bfd87ac732c16694bb6c97c26b325405, type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
