@@ -22,7 +22,7 @@ public class S_EnergyStorage : MonoBehaviour
     [Header("UI Settings")]
     public TextMeshProUGUI energyDisplay; // Affichage de l'énergie et du niveau
 
-    private int currentLevelIndex = 0; // Index du niveau actuel
+    public int currentLevelIndex{ get; private set; } // Index du niveau actuel
     private float _graceTimer = 0f; // Temps de grâce restant
     private bool isGraceActive = false; // Indique si le temps de grâce est en cours
     private bool hasDeathTriggered = false; // Indique si la logique de mort a été déclenchée
@@ -32,6 +32,8 @@ public class S_EnergyStorage : MonoBehaviour
         UpdateEnergyLevel();
         UpdateEnergyDisplay();
         currentEnergy = Mathf.Clamp(currentEnergy, 0, maxEnergy);
+
+        
     }
 
     // Méthode permettant d'ajouter de l'énergie
@@ -107,19 +109,15 @@ public class S_EnergyStorage : MonoBehaviour
             _graceTimer -= Time.deltaTime;
             
             if (_graceTimer <= 0f)
-            {
+            { 
                 //Fin du compte à rebours : énergie négative, début du compte à rebours de mort.
                 if (currentEnergy <= 0f)
                 {
                     HandleDeath();
                 }
-                else
-                {
-                    //Fin du compte à rebours : énergie positive, ajustement au niveau correspondant.
-                    int newLevelIndex = FindLevelIndexForEnergy();
-                    SetNewLevel(newLevelIndex);
-                }
-
+                //Fin du compte à rebours : énergie positive, ajustement au niveau correspondant.
+                int newLevelIndex = FindLevelIndexForEnergy();
+                SetNewLevel(newLevelIndex);
                 ResetGracePeriod();
             }
         }
