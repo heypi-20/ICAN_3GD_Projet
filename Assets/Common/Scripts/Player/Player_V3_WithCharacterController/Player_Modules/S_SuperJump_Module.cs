@@ -1,161 +1,127 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+[RequireComponent(typeof(S_CustomCharacterController))]
+[RequireComponent(typeof(S_EnergyStorage))]
 public class S_SuperJump_Module : MonoBehaviour
 {
-    [Header("Jump Force Settings")]
-    public float minJumpForce = 3f;
-    public float maxJumpForce = 5f;
-    public float jumpForcePercentage;
-    public float jumpForceMultiplier;
     
-    [Header("Energy Consumption Settings")]
-    public float baseEnergyConsumption = 35f;      
-    public float extraConsumptionMultiplier = 2f;
+    [System.Serializable]
+    public class JumpLevel
+    {
+        public int level; // Niveau d'énergie requis pour ce saut
+        public float jumpHeight; // Hauteur du saut pour ce niveau
+        public float energyConsumption; // Consommation d'énergie pour ce niveau
+        public int maxJumpCount; // Nombre maximum de sauts permis pour ce niveau
+    }
+    [Header("Jump Settings")]
+    public List<JumpLevel> jumpLevels; // Liste des niveaux de saut
 
-    [Header("Jump Cooldown Settings")]
-    public float jumpCooldown = 1f;
-    
-    private float _currentJumpForce;
-    private float _currentEnergyConsumption; 
-    private bool _isJumpOnCooldown = false;
-    
-    // Composant pour ajuster la vitesse de déplacement
+    [Header("Jump Cooldown")]
+    public float jumpCooldown = 1f; // Temps de cooldown entre deux sauts
+
+    private int _currentJumpCount = 0; // Compteur de sauts utilisés
+    private bool _isJumpOnCooldown = false; // Indique si le saut est en cooldown
+
+    // Références aux composants nécessaires
     private S_CustomCharacterController _characterController;
-    // Composant pour vérifier et modifier l'énergie disponible
     private S_EnergyStorage _energyStorage;
-    // Gestionnaire d'input pour détecter les actions du joueur
     private S_InputManager _inputManager;
-
-    // ----------------------------------
-    // Seulement pour l'affichage dans l'Inspector
-    // ----------------------------------
-    public float estimatedMaxJumpEnergyThreshold { get; private set; }
 
     private void Start()
     {
-        // Initialisation des composants
+        // Initialisation des composants nécessaires
         _characterController = GetComponent<S_CustomCharacterController>();
         _energyStorage = GetComponent<S_EnergyStorage>();
         _inputManager = FindObjectOfType<S_InputManager>();
-        
-        // Initialisation de la consommation d'énergie à la valeur de base
-        _currentEnergyConsumption = baseEnergyConsumption;
     }
 
+    private bool leaveGround;
     private void Update()
     {
         // Vérifier si le joueur appuie sur la touche de saut
         if (_inputManager.JumpInput)
         {
-            // Tenter l'action de saut
-            AttemptJump();
-            // Réinitialiser l'input pour éviter plusieurs sauts dans la même frame
-            _inputManager.JumpInput = false;
+            AttemptJump(); // Tenter de sauter
+            _inputManager.JumpInput = false; // Réinitialiser l'input pour éviter plusieurs sauts dans la même frame
         }
+
+        // Réinitialiser le compteur de saut si le joueur est au sol
+        if (!_characterController.GroundCheck())
+        {
+            leaveGround = true;
+            
+        }
+
+        if (_characterController.GroundCheck()&&leaveGround)
+        {
+            ResetJumpCount();
+            leaveGround = false;
+        }
+        
     }
+
     /// <summary>
-    /// Tenter un saut, comprenant le check de cooldown et d'énergie
+    /// Tente un saut en fonction de l'état actuel (au sol, énergie disponible, etc.)
     /// </summary>
     private void AttemptJump()
     {
-        // Si on est en cooldown, on ne saute pas
+        // Si en cooldown, ne pas sauter
         if (_isJumpOnCooldown) return;
 
-        // Vérifier si le personnage est au sol
-        bool isOnGround = _characterController.GroundCheck();
-        if (isOnGround)
-        {
-            // Réinitialiser la consommation d'énergie si le joueur est au sol
-            _currentEnergyConsumption = baseEnergyConsumption;
-        }
-        else
-        {
-            // Si le joueur est en l'air, multiplier la consommation d'énergie
-            _currentEnergyConsumption *= extraConsumptionMultiplier;
-        }
-        
-        
-        // // Vérifier si l'énergie est suffisante
-        // if (_energyStorage.currentEnergy >= _currentEnergyConsumption)
-        // {
-        //
-        // }
-        // Retirer l'énergie
-        _energyStorage.RemoveEnergy(_currentEnergyConsumption); 
-        
-        //TODO : add FeedBack
-        
-        //
-        // Calculer la force de saut
-        CalculateBonusJumpForce();
+        // Vérifier si le joueur peut encore sauter (nombre de sauts restants)
+        JumpLevel currentLevel = GetCurrentJumpLevel();
+        if (currentLevel == null || _currentJumpCount >= currentLevel.maxJumpCount) return;
 
-        // Appliquer la vélocité de saut
-        _characterController.velocity.y = Mathf.Sqrt(_currentJumpForce * -2f * _characterController.gravity);
+        // Vérifier si l'énergie est suffisante pour sauter
+        if (_energyStorage.currentEnergy < currentLevel.energyConsumption)
+        {
+            return;
+        }
+
+        // Consommer l'énergie pour le saut
+        _energyStorage.RemoveEnergy(currentLevel.energyConsumption);
+
+        // Appliquer la force de saut
+        _characterController.velocity.y = Mathf.Sqrt(currentLevel.jumpHeight * -2f * _characterController.gravity);
+
+        // Incrémenter le compteur de sauts
+        _currentJumpCount++;
 
         // Lancer le cooldown
         StartCoroutine(JumpCooldownRoutine());
-        
 
+        // TODO : Ajouter un feedback visuel ou sonore ici
     }
 
     /// <summary>
-    /// Calculer la force de saut supplémentaire liée à l'énergie, 
-    /// en la limitant entre minJumpForce et maxJumpForce.
+    /// Obtient le niveau de saut correspondant au niveau d'énergie actuel
     /// </summary>
-    private void CalculateBonusJumpForce()
+    /// <returns>Le niveau de saut correspondant ou null si aucun niveau trouvé</returns>
+    private JumpLevel GetCurrentJumpLevel()
     {
-        _currentJumpForce = (_energyStorage.currentEnergy * jumpForcePercentage) * jumpForceMultiplier;
-        _currentJumpForce = Mathf.Clamp(_currentJumpForce, minJumpForce, maxJumpForce);
+        int currentLevelIndex = _energyStorage.currentLevelIndex + 1; // Ajuster pour correspondre aux niveaux (index 0 -> niveau 1)
+        return jumpLevels.Find(level => level.level == currentLevelIndex);
     }
 
     /// <summary>
-    /// Coroutine de cooldown de saut, attend un certain délai avant de réautoriser le saut.
+    /// Réinitialise le compteur de sauts lorsque le joueur touche le sol.
     /// </summary>
+    private void ResetJumpCount()
+    {
+        _currentJumpCount = 0;
+    }
+
+    /// <summary>
+    /// Coroutine gérant le cooldown après un saut
+    /// </summary>
+    /// <returns>Une IEnumerator pour le cooldown</returns>
     private IEnumerator JumpCooldownRoutine()
     {
         _isJumpOnCooldown = true;
         yield return new WaitForSeconds(jumpCooldown);
         _isJumpOnCooldown = false;
     }
-
-    // --------------------------------------------------------------------------------
-    // Calcule la quantité d'énergie approximative nécessaire pour atteindre maxJumpForce
-    // --------------------------------------------------------------------------------
-    private void OnValidate()
-    {
-        EstimateEnergyThresholdForMaxJump(out float threshold);
-        estimatedMaxJumpEnergyThreshold = threshold;
-    }
-
-    private void EstimateEnergyThresholdForMaxJump(out float threshold)
-    {
-        if (jumpForcePercentage <= 0f || jumpForceMultiplier <= 0f)
-        {
-            threshold = 0f;
-        }
-        else
-        {
-            threshold = maxJumpForce / (jumpForcePercentage * jumpForceMultiplier);
-        }
-    }
 }
-
-#if UNITY_EDITOR
-
-[CustomEditor(typeof(S_SuperJump_Module))]
-public class S_SuperJump_ModuleEditor : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        base.OnInspectorGUI();
-
-        S_SuperJump_Module module = (S_SuperJump_Module)target;
-
-        EditorGUILayout.Space();
-        EditorGUILayout.LabelField("Estimated Jump Thresholds", EditorStyles.boldLabel);
-        EditorGUILayout.LabelField("Max Jump Energy Threshold:", module.estimatedMaxJumpEnergyThreshold.ToString("F2"));
-    }
-}
-#endif

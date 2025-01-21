@@ -21,8 +21,10 @@ public class S_CustomCharacterController : MonoBehaviour
     public float groundCheckDistance = 0.59f;
     public float groundCheckRadius = 0.49f;
     public LayerMask groundLayer;
+    public float groundCheckBufferTime = 0.1f; // Durée du buffer avant de considérer que le joueur n'est plus au sol
     
-    
+    private float lastGroundedTime = 0f; // Dernière fois où le joueur était au sol
+
     // Composants
     private CharacterController _controller;
     private S_InputManager _inputManager;
@@ -183,59 +185,14 @@ public class S_CustomCharacterController : MonoBehaviour
             }
         }
     }
-
-    
-    // WIP===========================================================================================================
-    // private void Jump()
-    // {
-    //     if (Input.GetKeyDown(KeyCode.Space))
-    //     {
-    //         velocity.y = Mathf.Sqrt(jumpHeight *-2f* gravity);
-    //
-    //     }
-    //     
-    // }
-    // Gérer la gravité pour les mouvements verticaux
     private void HandleGravity()
     {
         if (GroundCheck()&&velocity.y<0)
         {
-            // // Lorsque le joueur touche le sol
-            // if (!_isGrounded)
-            // {
-            //     // Si le joueur vient d'atterrir, appliquer une gravité spéciale
-            //     _isGrounded = true;
-            //     velocity.y = -speed; // Réinitialiser la vitesse
-            //     _timeSinceAirborne = 0f; // Réinitialiser le chronomètre
-            //     _hasResetVelocity = false; // Réinitialiser le drapeau de réinitialisation
-            // }
-            // else
-            // {
-            //     // Si le joueur reste au sol, maintenir la vitesse
-            //     velocity.y = -speed;
-            // }
             velocity.y = -2;
         }
         else
         {
-            // // Lorsque le joueur quitte le sol
-            // if (_isGrounded)
-            // {
-            //     // Si le joueur vient de quitter le sol, démarrer le chronomètre
-            //     _isGrounded = false;
-            //     _timeSinceAirborne = 0f;
-            // }
-            //
-            // // Mettre à jour le temps écoulé depuis que le joueur a quitté le sol
-            // _timeSinceAirborne += Time.deltaTime;
-            //
-            // // Si le joueur est en l'air depuis plus longtemps que le seuil et que la vitesse n'a pas encore été réinitialisée
-            // if (_timeSinceAirborne > _airborneThreshold && !_hasResetVelocity)
-            // {
-            //     velocity.y = 0; // Réinitialiser la vitesse verticale
-            //     _hasResetVelocity = true; // Marquer comme réinitialisé
-            // }
-
             // Appliquer la gravité en continu
             AddGravityEffect();
         }
@@ -256,7 +213,16 @@ public class S_CustomCharacterController : MonoBehaviour
     // Vérifier si le joueur est au sol
     public bool GroundCheck()
     {
-        return Physics.SphereCast(transform.position, groundCheckRadius, Vector3.down, out RaycastHit hit, groundCheckDistance, groundLayer);
+        bool isGrounded = Physics.SphereCast(transform.position, groundCheckRadius, Vector3.down, out RaycastHit hit, groundCheckDistance, groundLayer);
+
+        if (isGrounded)
+        {
+            lastGroundedTime = Time.time; // Met à jour le dernier moment où le joueur était au sol
+            return true;
+        }
+
+        // Si le joueur était récemment au sol, considère qu'il est encore "au sol" pour un temps défini
+        return Time.time - lastGroundedTime <= groundCheckBufferTime;
     }
 
 
