@@ -86,7 +86,7 @@ public class S_Reaper : S_Enemy
             transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookDir), rotationSpeed * Time.deltaTime);
 
             if (rotateTimer >= 2f) {
-                attackPos = new Vector3(player.position.x * 2, transform.localScale.y/2, player.position.z * 2);
+                attackPos = new Vector3(player.position.x + transform.position.x, transform.localScale.y/2, player.position.z + transform.position.z);
                 rotateTimer = 0f;
                 isAttacking = true;
             }
