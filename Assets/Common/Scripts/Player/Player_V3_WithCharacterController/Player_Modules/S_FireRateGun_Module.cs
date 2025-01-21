@@ -124,7 +124,7 @@ public class S_FireRateGun_Module : MonoBehaviour
             PerformRaycast(shootPoint.position, shootDirection, raycastLength);
             Debug.DrawRay(shootPoint.position, shootDirection * raycastLength, Color.red, 1f);
         }
-        GameObject projectile = Instantiate(bulletPrefab, spawnBulletPoint.position, shootPoint.rotation,spawnBulletPoint.parent);
+        GameObject projectile = Instantiate(bulletPrefab, spawnBulletPoint.position, spawnBulletPoint.rotation,spawnBulletPoint.transform);
 
     }
     private IEnumerator SimulateBullet(Vector3 shootDirection)
