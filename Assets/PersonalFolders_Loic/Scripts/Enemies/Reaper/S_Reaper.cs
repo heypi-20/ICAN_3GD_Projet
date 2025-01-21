@@ -94,7 +94,7 @@ public class S_Reaper : S_Enemy
             attackingTimer += Time.deltaTime;
 
             if (attackingTimer >= attackTime / 2)
-                transform.position = Vector3.MoveTowards(transform.position, attackPos + , attackingSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, attackPos, attackingSpeed * Time.deltaTime);
             if (attackingTimer >= attackTime) {
                 attackingTimer = 0f;
                 isAttacking = false;
