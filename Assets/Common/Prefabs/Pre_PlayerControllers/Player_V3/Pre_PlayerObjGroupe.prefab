@@ -800,6 +800,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 4294967295
+  groundCheckBufferTime: 0.1
   velocity: {x: 0, y: 0, z: 0}
   currentSpeed: 0
 --- !u!114 &4630502985648573934
@@ -861,8 +862,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9077fe9c8aaf7bf48be7dda69cfc094c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxEnergy: 3000
-  currentEnergy: 5096.6
+  maxEnergy: 9999
+  currentEnergy: 9999
   energyLevels:
   - level: 1
     requiredEnergy: 0
@@ -922,10 +923,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 283c183890e441343a4917fb02e4b227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minSprintSpeed: 35
-  maxSprintSpeed: 75
-  sprintSpeedPercentage: 0.011
-  sprintSpeedMultiplier: 3
+  sprintLevels:
+  - level: 1
+    sprintSpeed: 30
+    energyConsumptionRate: 100
+  - level: 2
+    sprintSpeed: 45
+    energyConsumptionRate: 150
+  - level: 3
+    sprintSpeed: 60
+    energyConsumptionRate: 200
   accelerationTime: 1.2
   accelerationCurve:
     serializedVersion: 2
@@ -976,10 +983,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  minEnergyConsumptionRate: 20
-  maxEnergyConsumptionRate: 300
-  consumptionPercentage: 0.25
-  consumptionMultiplier: 0.85
   cinemachineCamera: {fileID: 3549855815833641105}
   sprintFOV: 120
   fovTransitionTime: 1
@@ -995,12 +998,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0077b4cb4e8f3bb4ab1e5b4572369ca6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minJumpForce: 2
-  maxJumpForce: 15
-  jumpForcePercentage: 0.05
-  jumpForceMultiplier: 0.2
-  baseEnergyConsumption: 65
-  extraConsumptionMultiplier: 2
+  jumpLevels:
+  - level: 1
+    jumpHeight: 5
+    energyConsumption: 35
+    maxJumpCount: 1
+  - level: 2
+    jumpHeight: 15
+    energyConsumption: 60
+    maxJumpCount: 2
+  - level: 3
+    jumpHeight: 15
+    energyConsumption: 60
+    maxJumpCount: 3
   jumpCooldown: 0.1
 --- !u!114 &3893865031024249114
 MonoBehaviour:
@@ -1645,6 +1655,22 @@ PrefabInstance:
       propertyPath: playerBody
       value: 
       objectReference: {fileID: 5308247836013824562}
+    - target: {fileID: 8901002794454354272, guid: 7067ff7a7cbfdaf408b2d5524a9e0440, type: 3}
+      propertyPath: m_BackGroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8901002794454354272, guid: 7067ff7a7cbfdaf408b2d5524a9e0440, type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8901002794454354272, guid: 7067ff7a7cbfdaf408b2d5524a9e0440, type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8901002794454354272, guid: 7067ff7a7cbfdaf408b2d5524a9e0440, type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8949782597656694507, guid: 7067ff7a7cbfdaf408b2d5524a9e0440, type: 3}
       propertyPath: m_Cameras.Array.data[0]
       value: 
