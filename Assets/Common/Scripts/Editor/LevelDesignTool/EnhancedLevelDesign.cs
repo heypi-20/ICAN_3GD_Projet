@@ -7,17 +7,15 @@ public class EnhancedLevelDesign : EditorWindow
 {
     #region Variables
     
-    private GameObject selectedGO; // GameObject sélectionné dans la scène
-    private GameObject newGO; // GameObject sélectionné pour remplacer
-
+    private GameObject selectedGO; 
+    private GameObject newGO;
+    
     private Vector3 moveSnap;
     private float rotationSnap;
     private float scaleSnap;
     
     private bool linkMoveSnapValues = false; // Contrôle si les valeurs de Move Snap sont identiques
     
-    private float[] increment = new float[1]; // Tableau de 1 float
-    private int nbIncrement;
     #endregion
 
     #region Propreté de l'editor
@@ -78,7 +76,7 @@ public class EnhancedLevelDesign : EditorWindow
     // Fonction pour redimensionner le tableau 
     private void ResizeArray(ref float[] array, int newSize)
     {
-        if (nbIncrement >= 1)
+        if (newSize >= 1)
         {
             float[] newArray = new float[newSize];
             for (int i = 0; i < Mathf.Min(array.Length, newArray.Length); i++)
@@ -87,11 +85,6 @@ public class EnhancedLevelDesign : EditorWindow
             }
             array = newArray;
         }
-    }
-
-    private void AltToCopy()
-    {
-        //Todo : Dupliquer le GO et le bouger grace a la Handle
     }
     
     private void ReplaceSelectedGameObject()
@@ -156,29 +149,32 @@ public class EnhancedLevelDesign : EditorWindow
        
         #region Snap Préféfinie
         
+        EnhancedLDSave ELDSaves = (EnhancedLDSave)AssetDatabase.LoadAssetAtPath("Assets/Common/Data/EnhancedLDSaves/Saves.asset", typeof(EnhancedLDSave));
+        
         GUILayout.BeginHorizontal();
 
-        if (nbIncrement != increment.Length)
+        if (ELDSaves.nbIncrement != ELDSaves.increment.Length)
         {
-            ResizeArray(ref increment, nbIncrement);
+            ELDSaves.nbIncrement = ELDSaves.increment.Length;
+            // ResizeArray(ref ELDSaves.increment, ELDSaves.nbIncrement);
         }
         
         int id = 1; // ← DEGUEU CA, A CHANGER !!!!! !!!!!! (la valeur est remis a UN tout le temps !!!!!)
 
         GUILayout.BeginVertical();
-        for (int i = 0; i < increment.Length; i++)
+        for (int i = 0; i < ELDSaves.increment.Length; i++)
         {
-            if (nbIncrement > 0)
+            if (ELDSaves.nbIncrement > 0)
             {
                 GUILayout.BeginHorizontal();
                 EditorGUILayout.PrefixLabel("Increment " + id, EditorStyles.boldLabel);
-                increment[i]  = EditorGUILayout.FloatField(increment[i],GUILayout.Width(100));
+                ELDSaves.increment[i]  = EditorGUILayout.FloatField(ELDSaves.increment[i],GUILayout.Width(100));
                 if (GUILayout.Button("Apply",GUILayout.Width(60)))
                 {
-                    moveSnap.x = increment[i];
-                    moveSnap.y = increment[i];
-                    moveSnap.z = increment[i];
-                    Debug.Log("Scale is now : " + increment[i] );
+                    moveSnap.x = ELDSaves.increment[i];
+                    moveSnap.y = ELDSaves.increment[i];
+                    moveSnap.z = ELDSaves.increment[i];
+                    Debug.Log("Scale is now : " + ELDSaves.increment[i] );
                 }
                 GUILayout.EndHorizontal();
 
@@ -194,18 +190,32 @@ public class EnhancedLevelDesign : EditorWindow
         GUILayout.BeginHorizontal();
         
         GUI.enabled = false;
-        EditorGUILayout.IntField(nbIncrement, GUILayout.Width(40));
+        EditorGUILayout.ObjectField("Save File", ELDSaves, typeof(ScriptableObject), false);
         GUI.enabled = true;
-
-        if (GUILayout.Button("Create New Increment", GUILayout.Width(150)) && nbIncrement < 10)
+                
+        if(GUILayout.Button("Reload Snap Settings", GUILayout.Width(200)))
         {
-            nbIncrement++;
+            LoadSnapSettings();
         }        
-        
-        if (GUILayout.Button("Delete Last Increment", GUILayout.Width(150)) && nbIncrement >= 1)
+                
+        if(GUILayout.Button("Save Snap Settings", GUILayout.Width(200)))
         {
-            nbIncrement--;
+            SaveSnapSettings();
         }
+        
+        // GUI.enabled = false;
+        // EditorGUILayout.IntField(ELDSaves.nbIncrement, GUILayout.Width(40));
+        // GUI.enabled = true;
+
+        // if (GUILayout.Button("Create New Increment", GUILayout.Width(150)) && ELDSaves.nbIncrement < 10)
+        // {
+        //     ELDSaves.nbIncrement++;
+        // }        
+        //
+        // if (GUILayout.Button("Delete Last Increment", GUILayout.Width(150)) && ELDSaves.nbIncrement >= 1)
+        // {
+        //     ELDSaves.nbIncrement--;
+        // }
 
         GUILayout.EndHorizontal();
         
@@ -219,19 +229,6 @@ public class EnhancedLevelDesign : EditorWindow
         
         GUILayout.Label($"Current Snap Values:\nMove: {EditorSnapSettings.move}\nRotate: {EditorSnapSettings.rotate}\nScale: {EditorSnapSettings.scale}", EditorStyles.helpBox);
         
-        GUILayout.BeginVertical();
-                
-        if(GUILayout.Button("Reload Snap Settings", GUILayout.Width(200)))
-        {
-            LoadSnapSettings();
-        }        
-                
-        if(GUILayout.Button("Save Snap Settings", GUILayout.Width(200)))
-        {
-            SaveSnapSettings();
-        }
-        
-        GUILayout.EndVertical();
                 
         GUILayout.EndHorizontal();
         
