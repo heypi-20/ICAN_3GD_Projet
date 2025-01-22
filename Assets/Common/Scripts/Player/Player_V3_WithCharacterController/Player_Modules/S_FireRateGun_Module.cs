@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using DG.Tweening;
@@ -6,28 +7,28 @@ using DG.Tweening;
 [RequireComponent(typeof(S_EnergyStorage))]
 public class S_FireRateGun_Module : MonoBehaviour
 {
-    [Header("Shoot Settings")]
-    public Transform shootPoint; // Point d'origine de la direction de tir
+    [System.Serializable]
+    public class FireRateLevel
+    {
+        public int level; // Niveau requis pour ce niveau de tir
+        public float fireRate; // Cadence de tir par seconde
+        public float damage; // Dégâts par tir
+        public float energyConsumption; // Consommation d'énergie par tir
+    }
 
+    [Header("Shooting Settings")]
+    public Transform shootPoint; // Point d'origine de la direction de tir
     public Transform spawnBulletPoint;
     public GameObject bulletPrefab;
     public LayerMask targetLayer; // Layer des cibles destructibles
     public LayerMask obstacleLayer; // Layer des obstacles
     public float raycastLength = 50f; // Longueur maximale de la portée du tir
+    public float raycastSpread = 5f; // Angle de déviation des rayons secondaires
     public bool simulateBulletSpeed = false; // Si vrai, simule une vitesse de balle
     public float bulletSpeed = 20f;
-    
-    [Header("Fire Rate Settings")]
-    public float minFireRate = 0.5f; // Cadence de tir minimale
-    public float maxFireRate = 2f; // Cadence de tir maximale
-    public float fireRatePercentage = 0.01f; // Multiplicateur en pourcentage appliqué à currentEnergy
-    public float fireRateMultiplier = 1f; // Multiplicateur final appliqué à la cadence calculée
 
-    [Header("Energy Consumption Settings")]
-    public float minEnergyConsumption = 5f; // Consommation d'énergie minimale par tir
-    public float maxEnergyConsumption = 15f; // Consommation d'énergie maximale par tir
-    public float energyConsumptionPercentage = 0.01f; // Multiplicateur en pourcentage appliqué à currentEnergy
-    public float energyConsumptionMultiplier = 1f; // Multiplicateur final appliqué à la consommation calculée
+    [Header("Fire Rate Levels")]
+    public List<FireRateLevel> fireRateLevels; // Liste des niveaux de tir
 
     [Header("Recoil Settings")]
     public GameObject gunObject; // Référence à l'arme pour appliquer le recul
@@ -42,20 +43,16 @@ public class S_FireRateGun_Module : MonoBehaviour
     private Vector3 _originalPosition; // Position initiale de l'arme
     private Quaternion _originalRotation; // Rotation initiale de l'arme
 
-    
-    
     private S_InputManager _inputManager;
     private S_EnergyStorage _energyStorage;
     private float _fireCooldown;
 
-    public float estimatedMaxFireRateThreshold { get; private set; } // Seuil énergétique pour atteindre la cadence maximale
-    public float estimatedMinEnergyConsumptionThreshold { get; private set; } // Seuil énergétique pour atteindre la consommation minimale
     private void Start()
     {
         _inputManager = FindObjectOfType<S_InputManager>();
         _energyStorage = GetComponent<S_EnergyStorage>();
-        
-        //feedback
+
+        // Initialisation des positions pour le recul
         _originalPosition = gunObject.transform.localPosition;
         _originalRotation = gunObject.transform.localRotation;
     }
@@ -69,9 +66,12 @@ public class S_FireRateGun_Module : MonoBehaviour
     {
         if (_inputManager.ShootInput && _fireCooldown <= 0f)
         {
-            Shoot();
-            UpdateFireCooldown();
-            ConsumeEnergy();
+            FireRateLevel currentLevel = GetCurrentFireRateLevel();
+            if (currentLevel == null) return;
+
+            Shoot(currentLevel);
+            UpdateFireCooldown(currentLevel);
+            ConsumeEnergy(currentLevel);
             ShootVFX();
         }
 
@@ -81,20 +81,143 @@ public class S_FireRateGun_Module : MonoBehaviour
         }
     }
 
+    private void Shoot(FireRateLevel currentLevel)
+    {
+        Vector3 shootDirection = shootPoint.forward;
+        if (simulateBulletSpeed)
+        {
+            StartCoroutine(SimulateBullet(shootDirection, currentLevel));
+        }
+        else
+        {
+            PerformSpreadRaycast(shootPoint.position, shootDirection, raycastLength, currentLevel.damage);
+        }
+
+        Instantiate(bulletPrefab, spawnBulletPoint.position, spawnBulletPoint.rotation, spawnBulletPoint.transform);
+    }
+
+    private IEnumerator SimulateBullet(Vector3 shootDirection, FireRateLevel currentLevel)
+    {
+        float traveledDistance = 0f;
+
+        while (traveledDistance < raycastLength)
+        {
+            Vector3 currentPosition = shootPoint.position + shootDirection * traveledDistance;
+
+            float step = bulletSpeed * Time.deltaTime;
+            traveledDistance += step;
+
+            // Effectuer un raycast dispersé pour chaque étape
+            if (PerformSpreadRaycast(currentPosition, shootDirection, step, currentLevel.damage))
+            {
+                yield break;
+            }
+
+            yield return null;
+        }
+    }
+
+    private bool PerformSpreadRaycast(Vector3 origin, Vector3 direction, float length, float damage)
+    {
+        // Définir les positions pour le raycast principal et les rayons auxiliaires
+        Vector3[] offsets = new Vector3[5];
+        offsets[0] = Vector3.zero; // Pas de décalage pour le raycast principal
+        offsets[1] = new Vector3(-raycastSpread, raycastSpread, 0); // Haut-gauche
+        offsets[2] = new Vector3(raycastSpread, raycastSpread, 0); // Haut-droite
+        offsets[3] = new Vector3(-raycastSpread, -raycastSpread, 0); // Bas-gauche
+        offsets[4] = new Vector3(raycastSpread, -raycastSpread, 0); // Bas-droite
+
+        HashSet<GameObject> hitTargets = new HashSet<GameObject>();
+
+        bool hitObstacle = false;
+
+        for (int i = 0; i < offsets.Length; i++)
+        {
+            Vector3 offsetOrigin = origin + shootPoint.TransformDirection(offsets[i]);
+
+            // Dessiner un raycast de debug (bleu par défaut)
+            Debug.DrawRay(offsetOrigin, direction * length, Color.blue, 1f);
+
+            // Si le raycast principal touche un obstacle, arrêter le tir
+            if (i == 0)
+            {
+                if (PerformRaycast(offsetOrigin, direction, length, damage, hitTargets, true))
+                {
+                    Debug.DrawRay(offsetOrigin, direction * length, Color.red, 1f); // Rouge si un obstacle est touché
+                    hitObstacle = true;
+                }
+            }
+            else
+            {
+                // Rayons auxiliaires ne détectent que les cibles
+                PerformRaycast(offsetOrigin, direction, length, damage, hitTargets, false);
+            }
+        }
+
+        return hitObstacle;
+    }
+
+    private bool PerformRaycast(Vector3 origin, Vector3 direction, float length, float damage, HashSet<GameObject> hitTargets, bool checkObstacle)
+    {
+        // Effectuer le raycast
+        if (Physics.Raycast(origin, direction, out RaycastHit hit, length))
+        {
+            // Si la cible appartient au layer cible
+            if ((1 << hit.collider.gameObject.layer & targetLayer) != 0)
+            {
+                var target = hit.collider.gameObject;
+
+                // Éviter les touches répétées sur la même cible
+                if (hitTargets.Add(target))
+                {
+                    // Appliquer les effets de destruction et de loot
+                    target.GetComponent<S_DestructionModule>()?.DestroyObject();
+                    target.GetComponent<S_DroppingModule>()?.DropItems(5f);
+                }
+
+                return true; // Une cible a été touchée
+            }
+
+            // Si un obstacle est touché (uniquement pour le raycast principal)
+            if (checkObstacle && (1 << hit.collider.gameObject.layer & obstacleLayer) != 0)
+            {
+                return true; // Obstacle touché
+            }
+        }
+
+        return false; // Rien n'a été touché
+    }
+
+    private void UpdateFireCooldown(FireRateLevel currentLevel)
+    {
+        _fireCooldown = 1f / currentLevel.fireRate;
+    }
+
+    private void ConsumeEnergy(FireRateLevel currentLevel)
+    {
+        _energyStorage.RemoveEnergy(currentLevel.energyConsumption);
+    }
+
+    private FireRateLevel GetCurrentFireRateLevel()
+    {
+        int currentLevelIndex = _energyStorage.currentLevelIndex + 1; // Ajustement pour correspondre aux niveaux
+        return fireRateLevels.Find(level => level.level == currentLevelIndex);
+    }
+
     private void ShootVFX()
     {
-        // Arrêter toute animation en cours sur l'arme pour éviter les superpositions
         DOTween.Kill(gunObject.transform);
 
-        // Déplacer l'arme vers l'arrière pour simuler le recul
+        // Appliquer un recul visuel à l'arme
         gunObject.transform.DOLocalMove(_originalPosition - gunObject.transform.forward * recoilDistance, recoilDuration)
             .SetEase(Ease.OutQuad);
 
-        // Simuler le recul avec une rotation, inclut l'élévation et le décalage latéral
+        // Appliquer une rotation pour simuler le recul
         Vector3 recoilRotation = new Vector3(
-            _originalRotation.eulerAngles.x + Random.Range(upwardRecoilMin, upwardRecoilMax), // Élève le canon sur l'axe X
-            _originalRotation.eulerAngles.y + Random.Range(lateralRecoilMin, lateralRecoilMax), // Décalage latéral sur l'axe Y
-            _originalRotation.eulerAngles.z); // Aucune modification sur l'axe Z
+            _originalRotation.eulerAngles.x + Random.Range(upwardRecoilMin, upwardRecoilMax),
+            _originalRotation.eulerAngles.y + Random.Range(lateralRecoilMin, lateralRecoilMax),
+            _originalRotation.eulerAngles.z);
+
         gunObject.transform.DOLocalRotate(recoilRotation, recoilDuration)
             .SetEase(Ease.OutQuad);
 
@@ -108,124 +231,4 @@ public class S_FireRateGun_Module : MonoBehaviour
             .SetDelay(recoilDuration)
             .SetEase(Ease.InQuad);
     }
-
-
-
-
-    private void Shoot()
-    {
-        Vector3 shootDirection = shootPoint.forward;
-        if (simulateBulletSpeed)
-        {
-            StartCoroutine(SimulateBullet(shootDirection));
-        }
-        else
-        {
-            PerformRaycast(shootPoint.position, shootDirection, raycastLength);
-            Debug.DrawRay(shootPoint.position, shootDirection * raycastLength, Color.red, 1f);
-        }
-        GameObject projectile = Instantiate(bulletPrefab, spawnBulletPoint.position, spawnBulletPoint.rotation,spawnBulletPoint.transform);
-
-    }
-    private IEnumerator SimulateBullet(Vector3 shootDirection)
-    {
-        float traveledDistance = 0f;
-
-        
-        while (traveledDistance < raycastLength)
-        {
-            Vector3 currentPosition = shootPoint.position + shootDirection * traveledDistance;
-
-            
-            float step = bulletSpeed * Time.deltaTime;
-            traveledDistance += step;
-            Debug.DrawRay(currentPosition, shootDirection * (bulletSpeed * Time.deltaTime), Color.blue, 1f);
-
-            
-            if (PerformRaycast(currentPosition, shootDirection, step))
-            {
-                yield break; 
-            }
-
-            yield return null; 
-        }
-    }
-    private bool PerformRaycast(Vector3 origin, Vector3 direction, float length)
-    {
-        if (Physics.Raycast(origin, direction, out RaycastHit hit, length))
-        {
-            if ((1 << hit.collider.gameObject.layer & targetLayer) != 0)
-            {
-                hit.collider.gameObject.GetComponent<S_DroppingModule>().DropItems(5f);
-                hit.collider.gameObject.GetComponent<S_DestructionModule>().DestroyObject();
-                return true; 
-            }
-
-            if ((1 << hit.collider.gameObject.layer & obstacleLayer) != 0)
-            {
-                
-                return true; 
-            }
-        }
-
-        return false; 
-    }
-
-    private void UpdateFireCooldown()
-    {
-        float calculatedFireRate = (Mathf.Max(_energyStorage.currentEnergy, 0f) * fireRatePercentage) * fireRateMultiplier;
-        calculatedFireRate = Mathf.Clamp(calculatedFireRate, minFireRate, maxFireRate);
-        _fireCooldown = 1f / calculatedFireRate;
-    }
-
-    private void ConsumeEnergy()
-    {
-
-        float calculatedConsumption = (Mathf.Max(_energyStorage.currentEnergy, 0f) * energyConsumptionPercentage) * energyConsumptionMultiplier;
-        calculatedConsumption = Mathf.Clamp(calculatedConsumption, minEnergyConsumption, maxEnergyConsumption);
-        _energyStorage.currentEnergy -= calculatedConsumption;
-    }
-    private void OnValidate()
-    {
-        EstimateEnergyThresholds();
-    }
-
-    private void EstimateEnergyThresholds()
-    {
-        if (fireRatePercentage > 0f && fireRateMultiplier > 0f)
-        {
-            estimatedMaxFireRateThreshold = maxFireRate / (fireRatePercentage * fireRateMultiplier);
-        }
-        else
-        {
-            estimatedMaxFireRateThreshold = 0f;
-        }
-
-        if (energyConsumptionPercentage > 0f && energyConsumptionMultiplier > 0f)
-        {
-            estimatedMinEnergyConsumptionThreshold = minEnergyConsumption / (energyConsumptionPercentage * energyConsumptionMultiplier);
-        }
-        else
-        {
-            estimatedMinEnergyConsumptionThreshold = 0f;
-        }
-    }
 }
-
-#if UNITY_EDITOR
-[CustomEditor(typeof(S_FireRateGun_Module))]
-public class S_FireRateGunModuleEditor : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        base.OnInspectorGUI();
-
-        S_FireRateGun_Module module = (S_FireRateGun_Module)target;
-
-        EditorGUILayout.Space();
-        EditorGUILayout.LabelField("Estimated Energy Thresholds", EditorStyles.boldLabel);
-        EditorGUILayout.LabelField("Max Fire Rate Threshold:", module.estimatedMaxFireRateThreshold.ToString("F2"));
-        EditorGUILayout.LabelField("Min Energy Consumption Threshold:", module.estimatedMinEnergyConsumptionThreshold.ToString("F2"));
-    }
-}
-#endif
