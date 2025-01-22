@@ -16052,14 +16052,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speedLevels:
   - level: 1
-    speed: 6
-    energyConsumptionRate: 100
+    speed: 10
+    energyConsumptionRate: 20
   - level: 2
     speed: 18
-    energyConsumptionRate: 200
+    energyConsumptionRate: 30
   - level: 3
+    speed: 24
+    energyConsumptionRate: 50
+  - level: 4
     speed: 30
-    energyConsumptionRate: 300
+    energyConsumptionRate: 80
 --- !u!114 &576700261943042116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16073,16 +16076,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sprintLevels:
-  - level: 1
-    sprintSpeed: 30
-    energyConsumptionRate: 100
   - level: 2
-    sprintSpeed: 45
-    energyConsumptionRate: 150
+    sprintSpeed: 20
+    energyConsumptionRate: 60
   - level: 3
+    sprintSpeed: 45
+    energyConsumptionRate: 100
+  - level: 4
     sprintSpeed: 60
-    energyConsumptionRate: 200
-  accelerationTime: 1.2
+    energyConsumptionRate: 160
+  accelerationTime: 0.5
   accelerationCurve:
     serializedVersion: 2
     m_Curve:
@@ -16784,7 +16787,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 12
   AirControl: 5
-  accelerationTime: 0.7
+  accelerationTime: 0.2
   accelerationCurve:
     serializedVersion: 2
     m_Curve:
@@ -16809,7 +16812,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  decelerationTime: 0.4
+  decelerationTime: 0.2
   decelerationCurve:
     serializedVersion: 2
     m_Curve:
@@ -16823,22 +16826,22 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 1
     - serializedVersion: 3
-      time: 0.7489538
-      value: 0.039168984
-      inSlope: -0.03812187
-      outSlope: -0.03812187
+      time: 0.36007002
+      value: 0.108489096
+      inSlope: -0.38813087
+      outSlope: -0.38813087
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33185875
-      outWeight: 0.12310823
+      inWeight: 0.24287243
+      outWeight: 0.24987017
     - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: -0.1692843
-      outSlope: -0.1692843
+      time: 1.0243053
+      value: 0.0012602201
+      inSlope: 0.008125815
+      outSlope: 0.008125815
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.10199744
+      inWeight: 0.34661147
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -17445,10 +17448,26 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 65
   raycastLength: 500
-  raycastSpread: 5
+  raycastSpread: 0.5
   simulateBulletSpeed: 0
   bulletSpeed: 200
-  fireRateLevels: []
+  fireRateLevels:
+  - level: 1
+    fireRate: 3
+    damage: 10
+    energyConsumption: 3
+  - level: 2
+    fireRate: 6
+    damage: 10
+    energyConsumption: 5
+  - level: 3
+    fireRate: 12
+    damage: 20
+    energyConsumption: 10
+  - level: 4
+    fireRate: 20
+    damage: 25
+    energyConsumption: 15
   gunObject: {fileID: 5929615787112841614}
   recoilDistance: -0.1
   recoilDuration: 0.1
@@ -17566,12 +17585,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackOrigin: {fileID: 3335772308198890921}
-  attackRange: 1.5
-  maxTargetsToDestroy: 5
+  attackLevels:
+  - level: 1
+    attackRange: 1.2
+    attackDamage: 10
+    maxTargetsToDestroy: 2
+    attackCooldown: 0.5
+    energyConsumption: 0
+  - level: 2
+    attackRange: 1.4
+    attackDamage: 10
+    maxTargetsToDestroy: 3
+    attackCooldown: 0.4
+    energyConsumption: 0
+  - level: 3
+    attackRange: 1.4
+    attackDamage: 15
+    maxTargetsToDestroy: 5
+    attackCooldown: 0.3
+    energyConsumption: 5
+  - level: 4
+    attackRange: 2
+    attackDamage: 30
+    maxTargetsToDestroy: 8
+    attackCooldown: 0.2
+    energyConsumption: 10
   targetLayer:
     serializedVersion: 2
     m_Bits: 512
-  attackCooldown: 0.4
+  currentAttackCD: 0
 --- !u!4 &4251734652497639293
 Transform:
   m_ObjectHideFlags: 0
@@ -17707,17 +17749,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9077fe9c8aaf7bf48be7dda69cfc094c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxEnergy: 9999
-  currentEnergy: 9999
+  maxEnergy: 4500
+  currentEnergy: 500
   energyLevels:
   - level: 1
     requiredEnergy: 0
     graceTimer: 1
   - level: 2
-    requiredEnergy: 1200
+    requiredEnergy: 800
     graceTimer: 1
   - level: 3
     requiredEnergy: 2000
+    graceTimer: 1
+  - level: 4
+    requiredEnergy: 4000
     graceTimer: 1
   energyDisplay: {fileID: 6232087544166950246}
 --- !u!1001 &4480635434259223551
@@ -17925,15 +17970,19 @@ MonoBehaviour:
   jumpLevels:
   - level: 1
     jumpHeight: 5
-    energyConsumption: 35
+    energyConsumption: 15
     maxJumpCount: 1
   - level: 2
-    jumpHeight: 15
-    energyConsumption: 60
-    maxJumpCount: 2
+    jumpHeight: 5
+    energyConsumption: 30
+    maxJumpCount: 1
   - level: 3
-    jumpHeight: 15
-    energyConsumption: 60
+    jumpHeight: 5
+    energyConsumption: 50
+    maxJumpCount: 2
+  - level: 4
+    jumpHeight: 10
+    energyConsumption: 70
     maxJumpCount: 3
   jumpCooldown: 0.1
 --- !u!1 &4910753759632636646
