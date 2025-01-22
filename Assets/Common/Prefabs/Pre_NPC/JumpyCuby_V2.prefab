@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 8835916565818471297}
   - component: {fileID: 8674827931849549472}
   - component: {fileID: 8413619443368152620}
-  - component: {fileID: 1492149361881770912}
   - component: {fileID: 4005124941193937177}
   - component: {fileID: 4975186047832559283}
   - component: {fileID: 5728500713689156915}
@@ -176,55 +175,6 @@ MonoBehaviour:
       - m_Target: {fileID: 4005124941193937177}
         m_TargetAssemblyTypeName: S_JumpyCuby, Assembly-CSharp
         m_MethodName: Jump
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &1492149361881770912
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5534188564840520030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8e56040794c0914e84ca85088ee48ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useCollision: 0
-  collisionCooldown: 0.1
-  usePhysicCast: 1
-  physicCastCooldown: 0
-  overlapType: 0
-  withScaleSize: 0
-  ignoreChildren: 0
-  customSize: {x: 1.2, y: 1.2, z: 1.2}
-  customOffset: {x: 0, y: 0, z: 0}
-  sphereRadius: 1
-  capsulePoint1: {x: 0, y: 0, z: 0}
-  capsulePoint2: {x: 0, y: 1, z: 0}
-  capsuleRadius: 1
-  collisionTags: []
-  collisionTargetComponentNames: []
-  physicCastTags: []
-  physicCastLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  physicTargetComponentNames:
-  - S_Projectile
-  - Blade
-  OnTouchCalled:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4975186047832559283}
-        m_TargetAssemblyTypeName: S_DestructionModule, Assembly-CSharp
-        m_MethodName: DestroyObject
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

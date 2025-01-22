@@ -68,8 +68,9 @@ public class S_PhysicsCollisionModule : MonoBehaviour
     {
         OnTouch?.Invoke(); 
         OnTouchCalled?.Invoke();
-        if(GetComponent<S_EnergyStorage>().currentEnergy <= 0)
+        if(GetComponent<S_EnergyStorage>()!=null&&GetComponent<S_EnergyStorage>().currentEnergy <= 0)
         {
+            
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }

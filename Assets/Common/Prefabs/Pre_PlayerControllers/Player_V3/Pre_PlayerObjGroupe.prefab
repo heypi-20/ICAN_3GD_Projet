@@ -779,7 +779,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8195897687343765395}
-  - {fileID: 446522504099778316}
   - {fileID: 5843122136908622031}
   m_Father: {fileID: 5308247836013824562}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1245,16 +1244,22 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 65
   raycastLength: 500
+  raycastSpread: 0.2
   simulateBulletSpeed: 0
-  bulletSpeed: 200
-  minFireRate: 1
-  maxFireRate: 20
-  fireRatePercentage: 0.015
-  fireRateMultiplier: 0.8
-  minEnergyConsumption: 4.5
-  maxEnergyConsumption: 10
-  energyConsumptionPercentage: 0.025
-  energyConsumptionMultiplier: 0.1
+  bulletSpeed: 20
+  fireRateLevels:
+  - level: 1
+    fireRate: 1
+    damage: 0
+    energyConsumption: 0
+  - level: 2
+    fireRate: 5
+    damage: 0
+    energyConsumption: 0
+  - level: 3
+    fireRate: 20
+    damage: 0
+    energyConsumption: 0
   gunObject: {fileID: 5929615786568430984}
   recoilDistance: -0.1
   recoilDuration: 0.1
@@ -1276,12 +1281,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackOrigin: {fileID: 3335772309785602479}
-  attackRange: 1.5
-  maxTargetsToDestroy: 5
+  attackLevels:
+  - level: 1
+    attackRange: 1.2
+    attackDamage: 10
+    maxTargetsToDestroy: 5
+    attackCooldown: 1
+    energyConsumption: 0
+  - level: 2
+    attackRange: 1.5
+    attackDamage: 10
+    maxTargetsToDestroy: 5
+    attackCooldown: 0.6
+    energyConsumption: 10
+  - level: 3
+    attackRange: 2
+    attackDamage: 10
+    maxTargetsToDestroy: 5
+    attackCooldown: 0.1
+    energyConsumption: 30
   targetLayer:
     serializedVersion: 2
     m_Bits: 512
-  attackCooldown: 0.4
+  currentAttackCD: 0
 --- !u!114 &3655990483297614957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2041,16 +2063,16 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8520624637392596969}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.2272301, y: -0.467, z: 2.729}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.059636444, w: 0.9982202}
+  m_LocalPosition: {x: 0.31307548, y: 2.9678528, z: 0.7854818}
+  m_LocalScale: {x: 0.35382074, y: 0.35382074, z: 0.35382074}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5131793453350059394}
   - {fileID: 5231269958680751317}
   - {fileID: 5199671734024714925}
   - {fileID: 7742065278884104390}
-  m_Father: {fileID: 6221603474127947542}
+  m_Father: {fileID: 2804955853645155729}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &401278032052847106
 MonoBehaviour:
@@ -2248,12 +2270,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 8209911807001052285, guid: 5d7fceee95b99b344bebd90047072d3d, type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 446522504099778316}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d7fceee95b99b344bebd90047072d3d, type: 3}
 --- !u!20 &1903493313097532074 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 5577939189640186694, guid: 5d7fceee95b99b344bebd90047072d3d, type: 3}
+  m_PrefabInstance: {fileID: 6269647532854954476}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2804955853645155729 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8209911807001052285, guid: 5d7fceee95b99b344bebd90047072d3d, type: 3}
   m_PrefabInstance: {fileID: 6269647532854954476}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &5440399086015268855 stripped
