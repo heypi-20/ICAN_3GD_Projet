@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -6,6 +7,5 @@ using UnityEngine;
 public class PlayerProfile : ScriptableObject
 {
     public List<bool> isEnable;
-    public Editor editor;
-
+    public List<ModuleProfile> moduleProfiles;
 }

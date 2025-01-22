@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEditor;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 public class PlayerEditorWindow : EditorWindow
@@ -160,27 +162,41 @@ public class PlayerEditorWindow : EditorWindow
     
     private void SaveProfile()
     {
-        profileName = EditorGUILayout.TextField("Profile Name", profileName);
+        profileName = EditorGUILayout.TextField("Profile Name (MUST ADD)", profileName);
         
         if (GUILayout.Button("Save Profile", GUILayout.Width(100))) {
             if (profileName != String.Empty && !System.IO.File.Exists("Assets/Common/Data/PlayerProfiles/" + profileName + ".asset")) {
-                PlayerProfile profile = CreateInstance<PlayerProfile>();
-                profile.isEnable = new List<bool>();
+                PlayerProfile playerProfile = CreateInstance<PlayerProfile>();
+                playerProfile.isEnable = new List<bool>();
+                playerProfile.moduleProfiles = new List<ModuleProfile>();
+                
                 foreach (MonoBehaviour module in modules) {
-                    profile.isEnable.Add(module.enabled);
+                    ModuleProfile moduleProfile = CreateInstance<ModuleProfile>();
+                    moduleProfile.fieldNames = new List<string>();
+                    moduleProfile.dataDictionary = new Dictionary<string, object>();
+                    
+                    FieldInfo[] fields = module.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+                    
+                    foreach (FieldInfo field in fields) {
+                        moduleProfile.fieldNames.Add(field.Name);
+                        moduleProfile.dataDictionary.Add(field.Name, field.GetValue(module));
+                    }
+                    
+                    playerProfile.isEnable.Add(module.enabled);
+                    playerProfile.moduleProfiles.Add(moduleProfile);
+                    foreach (KeyValuePair<string, object> kvp in moduleProfile.dataDictionary) {
+                        Debug.Log("Key = " + kvp.Key + ", Value = " + kvp.Value);
+                    }
+                    if (!System.IO.Directory.Exists("Assets/Common/Data/ModuleProfiles/ModuleProfiles1"))
+                        AssetDatabase.CreateFolder("Assets/Common/Data/ModuleProfiles", "ModuleProfiles1");
+                    AssetDatabase.CreateAsset(moduleProfile, "Assets/Common/Data/ModuleProfiles/ModuleProfiles1/" + module.GetType().Name + ".asset");
                 }
-                AssetDatabase.CreateAsset(profile, "Assets/Common/Data/PlayerProfiles/" + profileName + ".asset");
-                profileName = String.Empty;
-                Debug.Log("Save");
+                
+                AssetDatabase.CreateAsset(playerProfile, "Assets/Common/Data/PlayerProfiles/PlayerProfile.asset");
             } else if (profileName == String.Empty) {
-                PlayerProfile profile = CreateInstance<PlayerProfile>();
-                profile.isEnable = new List<bool>();
-                foreach (MonoBehaviour module in modules) {
-                    profile.isEnable.Add(module.enabled);
-                }
-                profile.editor = moduleEditor;
-
-                AssetDatabase.CreateAsset(profile, "Assets/Common/Data/PlayerProfiles/PlayerProfile.asset");
+                
+                profileName = "MUST ADD PROFILE NAME";
+                
             }
         }
     }
