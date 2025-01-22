@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8175709401633460015
+--- !u!1 &1413629798314923775
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,51 +8,49 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 174011907450130137}
-  - component: {fileID: 3767526171582514886}
-  - component: {fileID: 5811751548262111222}
-  - component: {fileID: 5750755014441970174}
-  - component: {fileID: 7618368825564416563}
-  - component: {fileID: 437899748912083301}
-  - component: {fileID: 9024008649155963199}
-  - component: {fileID: -3217383333990393362}
+  - component: {fileID: 8025714876950901999}
+  - component: {fileID: 8612007043603701478}
+  - component: {fileID: 8837931888319576333}
+  - component: {fileID: 5223909486438447047}
+  - component: {fileID: 5925619144256091820}
+  - component: {fileID: 6277027591789274301}
   m_Layer: 9
-  m_Name: Reaper
+  m_Name: EnergyBlock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &174011907450130137
+--- !u!4 &8025714876950901999
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8175709401633460015}
+  m_GameObject: {fileID: 1413629798314923775}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: -4}
-  m_LocalScale: {x: 15.4235, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0.5, z: -15}
+  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &3767526171582514886
+--- !u!33 &8612007043603701478
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8175709401633460015}
+  m_GameObject: {fileID: 1413629798314923775}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &5811751548262111222
+--- !u!23 &8837931888319576333
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8175709401633460015}
+  m_GameObject: {fileID: 1413629798314923775}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -66,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d2bb8260d1e3bb84ab15477f63146654, type: 2}
+  - {fileID: 2100000, guid: 44e126fc055b28c48aedc610cbbaf688, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -88,13 +86,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5750755014441970174
+--- !u!65 &5223909486438447047
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8175709401633460015}
+  m_GameObject: {fileID: 1413629798314923775}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -109,68 +107,29 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &7618368825564416563
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8175709401633460015}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 80
-  m_CollisionDetection: 0
---- !u!114 &437899748912083301
+--- !u!114 &5925619144256091820
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8175709401633460015}
+  m_GameObject: {fileID: 1413629798314923775}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d466421d98ca485781c4b96267b6f344, type: 3}
+  m_Script: {fileID: 11500000, guid: 6d5ad4347e567f6419fceb0bb6fb1b2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyName: 
-  health: 0
-  energyDrop: 0
-  sprite: {fileID: 0}
-  idleSpeed: 5
-  idleTime: 3
-  rotationSpeed: 200
-  minDistX: 5
-  maxDistX: 5
-  minDistZ: 5
-  maxDistZ: 5
-  attackingSpeed: 50
-  targetingSpeed: 2000
-  attackRange: 30
-  attackTime: 1
-  attackCd: 0
---- !u!114 &9024008649155963199
+  destroyForever: 1
+  destructionEffectPrefab: {fileID: 0}
+  destructionEffectLifetime: 2
+  useEffectLifetimeForTemporary: 1
+--- !u!114 &6277027591789274301
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8175709401633460015}
+  m_GameObject: {fileID: 1413629798314923775}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbc70242d3564504090285e5cfb72a0a, type: 3}
@@ -178,22 +137,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropItems:
   - item: {fileID: 284891634115185361, guid: 7ffcda2ccc95748469e58c3af6c7c58f, type: 3}
-    quantity: 2
+    quantity: 0
     explosionForce: 0
     explosionRadius: 0
---- !u!114 &-3217383333990393362
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8175709401633460015}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d5ad4347e567f6419fceb0bb6fb1b2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  destroyForever: 0
-  destructionEffectPrefab: {fileID: 0}
-  destructionEffectLifetime: 2
-  useEffectLifetimeForTemporary: 1
