@@ -1034,16 +1034,22 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 65
   raycastLength: 500
-  simulateBulletSpeed: 0
-  bulletSpeed: 200
-  minFireRate: 1
-  maxFireRate: 20
-  fireRatePercentage: 0.015
-  fireRateMultiplier: 0.8
-  minEnergyConsumption: 4.5
-  maxEnergyConsumption: 10
-  energyConsumptionPercentage: 0.025
-  energyConsumptionMultiplier: 0.1
+  raycastSpread: 0.2
+  simulateBulletSpeed: 1
+  bulletSpeed: 20
+  fireRateLevels:
+  - level: 1
+    fireRate: 1
+    damage: 0
+    energyConsumption: 0
+  - level: 2
+    fireRate: 5
+    damage: 0
+    energyConsumption: 0
+  - level: 3
+    fireRate: 20
+    damage: 0
+    energyConsumption: 0
   gunObject: {fileID: 5929615786568430984}
   recoilDistance: -0.1
   recoilDuration: 0.1
@@ -1065,12 +1071,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackOrigin: {fileID: 3335772309785602479}
-  attackRange: 1.5
-  maxTargetsToDestroy: 5
+  attackLevels:
+  - level: 1
+    attackRange: 1.2
+    attackDamage: 10
+    maxTargetsToDestroy: 5
+    attackCooldown: 1
+    energyConsumption: 0
+  - level: 2
+    attackRange: 1.5
+    attackDamage: 10
+    maxTargetsToDestroy: 5
+    attackCooldown: 0.6
+    energyConsumption: 10
+  - level: 3
+    attackRange: 2
+    attackDamage: 10
+    maxTargetsToDestroy: 5
+    attackCooldown: 0.1
+    energyConsumption: 30
   targetLayer:
     serializedVersion: 2
     m_Bits: 512
-  attackCooldown: 0.4
+  currentAttackCD: 0
 --- !u!114 &3655990483297614957
 MonoBehaviour:
   m_ObjectHideFlags: 0

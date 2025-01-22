@@ -18,14 +18,18 @@ public class S_SwordAnimation_TempoScript : MonoBehaviour
     private float timer = 0f;
     private Tween attackTween;
     private S_InputManager _inputManager;
+    private S_MeleeAttack_Module _melee;
 
     private void Start()
     {
         _inputManager = FindObjectOfType<S_InputManager>();
+        _melee = FindObjectOfType<S_MeleeAttack_Module>();
     }
 
     private void Update()
     {
+        attackCD = _melee.currentAttackCD;
+        attackDuration = _melee.currentAttackCD;
         AttackCooldown();
 
         if (_inputManager.MeleeAttackInput && canAttack)
