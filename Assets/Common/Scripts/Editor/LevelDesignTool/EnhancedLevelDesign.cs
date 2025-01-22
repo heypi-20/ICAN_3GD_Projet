@@ -13,6 +13,8 @@ public class EnhancedLevelDesign : EditorWindow
     private Vector3 moveSnap;
     private float rotationSnap;
     private float scaleSnap;
+
+    private bool showDropdown = false;
     
     private bool linkMoveSnapValues = false; // Contrôle si les valeurs de Move Snap sont identiques
     
@@ -74,9 +76,9 @@ public class EnhancedLevelDesign : EditorWindow
     }
     
     // Fonction pour redimensionner le tableau 
-    private void ResizeArray(ref float[] array, int newSize)
+    private void ResizeArray(ref float[] array, int newSize, int nbIncrement)
     {
-        if (newSize >= 1)
+        if (nbIncrement >= 1)
         {
             float[] newArray = new float[newSize];
             for (int i = 0; i < Mathf.Min(array.Length, newArray.Length); i++)
@@ -109,6 +111,16 @@ public class EnhancedLevelDesign : EditorWindow
     private void OnGUI()
     {
         scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
+        
+        selectedGO = Selection.activeGameObject;
+        if (selectedGO != null)
+        {
+            EditorGUILayout.LabelField("Selected GameObject : " + selectedGO.name, EditorStyles.helpBox);
+        }
+        else
+        {
+            EditorGUILayout.LabelField("No Selected GameObject.", EditorStyles.helpBox);
+        }
         
         #region Snap Setting
         GUILayout.BeginVertical("box");
@@ -160,38 +172,42 @@ public class EnhancedLevelDesign : EditorWindow
         }
         
         int id = 1; // ← DEGUEU CA, A CHANGER !!!!! !!!!!! (la valeur est remis a UN tout le temps !!!!!)
-
-        GUILayout.BeginVertical();
-        for (int i = 0; i < ELDSaves.increment.Length; i++)
+        
+        GUILayout.BeginVertical("box");
+        
+        showDropdown = EditorGUILayout.Foldout(showDropdown, "Incrément Prédéfinie", true, EditorStyles.foldoutHeader);
+        
+        if (showDropdown)
         {
-            if (ELDSaves.nbIncrement > 0)
+            for (int i = 0; i < ELDSaves.increment.Length; i++)
             {
-                GUILayout.BeginHorizontal();
-                EditorGUILayout.PrefixLabel("Increment " + id, EditorStyles.boldLabel);
-                ELDSaves.increment[i]  = EditorGUILayout.FloatField(ELDSaves.increment[i],GUILayout.Width(100));
-                if (GUILayout.Button("Apply",GUILayout.Width(60)))
+                if (ELDSaves.nbIncrement > 0)
                 {
-                    moveSnap.x = ELDSaves.increment[i];
-                    moveSnap.y = ELDSaves.increment[i];
-                    moveSnap.z = ELDSaves.increment[i];
-                    Debug.Log("Scale is now : " + ELDSaves.increment[i] );
-                }
-                GUILayout.EndHorizontal();
+                    GUILayout.BeginHorizontal();
+                    EditorGUILayout.PrefixLabel("Increment " + id, EditorStyles.boldLabel);
+                    ELDSaves.increment[i] = EditorGUILayout.FloatField(ELDSaves.increment[i], GUILayout.Width(100));
+                    if (GUILayout.Button("Apply", GUILayout.Width(60)))
+                    {
+                        moveSnap.x = ELDSaves.increment[i];
+                        moveSnap.y = ELDSaves.increment[i];
+                        moveSnap.z = ELDSaves.increment[i];
+                        Debug.Log("Scale is now : " + ELDSaves.increment[i]);
+                    }
 
-                // Le systeme d'ID pour les Prefix Label est Dégueu, A CHANGER !!!!!
-                id++;
+                    GUILayout.EndHorizontal();
+
+                    // Le systeme d'ID pour les Prefix Label est Dégueu, A CHANGER !!!!!
+                    id++;
+                }
             }
         }
-        
+
+
         GUILayout.EndVertical();
 
         GUILayout.EndHorizontal();
         
         GUILayout.BeginHorizontal();
-        
-        GUI.enabled = false;
-        EditorGUILayout.ObjectField("Save File", ELDSaves, typeof(ScriptableObject), false);
-        GUI.enabled = true;
                 
         if(GUILayout.Button("Reload Snap Settings", GUILayout.Width(200)))
         {
@@ -202,6 +218,21 @@ public class EnhancedLevelDesign : EditorWindow
         {
             SaveSnapSettings();
         }
+        
+        GUILayout.EndHorizontal();
+        
+        GUILayout.BeginHorizontal();
+
+        GUI.enabled = false;
+        EditorGUILayout.ObjectField(GUIContent.none, ELDSaves, typeof(ScriptableObject), false, GUILayout.Width(200));
+        GUI.enabled = true;
+
+        if (GUILayout.Button("Create New Saves", GUILayout.Width(200)))
+        {
+            //ToDo : Create New Save Assets & Load it
+        }
+        
+        GUILayout.EndHorizontal();
         
         // GUI.enabled = false;
         // EditorGUILayout.IntField(ELDSaves.nbIncrement, GUILayout.Width(40));
@@ -217,7 +248,7 @@ public class EnhancedLevelDesign : EditorWindow
         //     ELDSaves.nbIncrement--;
         // }
 
-        GUILayout.EndHorizontal();
+
         
         #endregion
         
@@ -239,16 +270,6 @@ public class EnhancedLevelDesign : EditorWindow
         #region Change Game Object
         GUILayout.BeginVertical("box");
         EditorGUILayout.LabelField("Replace Selected GameObject", EditorStyles.boldLabel);
-        
-        selectedGO = Selection.activeGameObject;
-        if (selectedGO != null)
-        {
-            EditorGUILayout.LabelField("Selected GameObject : " + selectedGO.name, EditorStyles.helpBox);
-        }
-        else
-        {
-            EditorGUILayout.LabelField("No Selected GameObject.", EditorStyles.helpBox);
-        }
         
         // Champ pour sélectionner le nouveau GameObject
         newGO = (GameObject)EditorGUILayout.ObjectField("Object to Instantiate", newGO, typeof(GameObject), false);
