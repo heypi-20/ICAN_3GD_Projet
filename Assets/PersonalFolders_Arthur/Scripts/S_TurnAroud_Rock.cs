@@ -6,7 +6,6 @@ public class S_TurnAroud_Rock : MonoBehaviour
     [Header("Orbit Settings")]
     public GameObject[] orbitObjects; // Tableau des objets à faire tourner
     public float orbitRadius = 5f; // Distance entre le centre et les objets
-    public float orbitSpeed = 10f; // Vitesse de rotation autour du centre
     public float selfRotationSpeed = 30f; // Vitesse de rotation sur eux-mêmes
 
     [Header("Pivot Settings")]
@@ -24,6 +23,13 @@ public class S_TurnAroud_Rock : MonoBehaviour
     public Ease scaleTransitionEase = Ease.InOutQuad; // Ease pour la transition de scale
     public float scaleTransitionSpeed = 1f; // Multiplicateur pour ajuster la vitesse de transition
 
+    [Header("Rotation Speeds")]
+    public float speedLevel0 = 50f; // Vitesse au niveau 0
+    public float speedLevel1 = 80f; // Vitesse au niveau 1
+    public float speedLevel2 = 130f; // Vitesse au niveau 2
+    public float speedLevel3 = 200f; // Vitesse au niveau 3
+
+    private float currentOrbitSpeed = 50f; // Vitesse actuelle de rotation
     private S_EnergyStorage _energystorage;
 
     void Start()
@@ -50,6 +56,9 @@ public class S_TurnAroud_Rock : MonoBehaviour
         if (pivotPoint == null || player == null || _energystorage == null)
             return;
 
+        // Mettre à jour la vitesse de rotation
+        UpdateOrbitSpeed();
+
         // Mettre à jour l'état des objets en fonction de currentLevelIndex
         UpdateActiveRocks();
 
@@ -58,7 +67,7 @@ public class S_TurnAroud_Rock : MonoBehaviour
         {
             if (obj != null)
             {
-                obj.transform.RotateAround(pivotPoint.position, pivotPoint.forward, orbitSpeed * Time.deltaTime);
+                obj.transform.RotateAround(pivotPoint.position, pivotPoint.forward, currentOrbitSpeed * Time.deltaTime);
             }
         }
 
@@ -128,6 +137,29 @@ public class S_TurnAroud_Rock : MonoBehaviour
                 orbitObjects[i].transform.DOScale(reducedScale, scaleTransitionDuration / scaleTransitionSpeed)
                     .SetEase(scaleTransitionEase);
             }
+        }
+    }
+
+    private void UpdateOrbitSpeed()
+    {
+        // Définir la vitesse de rotation en fonction de currentLevelIndex
+        switch (_energystorage.currentLevelIndex)
+        {
+            case 0:
+                currentOrbitSpeed = speedLevel0;
+                break;
+            case 1:
+                currentOrbitSpeed = speedLevel1;
+                break;
+            case 2:
+                currentOrbitSpeed = speedLevel2;
+                break;
+            case 3:
+                currentOrbitSpeed = speedLevel3;
+                break;
+            default:
+                currentOrbitSpeed = speedLevel0; // Valeur par défaut
+                break;
         }
     }
 }
