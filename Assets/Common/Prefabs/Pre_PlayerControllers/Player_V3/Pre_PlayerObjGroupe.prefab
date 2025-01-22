@@ -878,6 +878,7 @@ GameObject:
   - component: {fileID: 4157654177729856021}
   - component: {fileID: 3655990483297614957}
   - component: {fileID: 5023615932806785112}
+  - component: {fileID: 3725120364705310222}
   m_Layer: 0
   m_Name: Player_V3
   m_TagString: Player
@@ -1343,6 +1344,24 @@ MonoBehaviour:
     m_Bits: 833
   angleThreshold: 75
   minimumGroundDistance: 5
+--- !u!114 &3725120364705310222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5351546733178220047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82dfdc30ca01b6b4e97034469fb96198, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundPoundLevels: []
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  angleThreshold: 75
+  minimumGroundDistance: 0
 --- !u!1 &5608158166862176388
 GameObject:
   m_ObjectHideFlags: 0
@@ -2111,17 +2130,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   orbitObjects:
-  - {fileID: 5131793453350059394}
-  - {fileID: 5231269958680751317}
-  - {fileID: 5199671734024714925}
-  - {fileID: 7742065278884104390}
+  - {fileID: 7558690268131558271}
+  - {fileID: 476670308585240886}
+  - {fileID: 6585748144603672572}
+  - {fileID: 2059422663685957584}
   orbitRadius: 0.5
-  orbitSpeed: 70
   selfRotationSpeed: 20
   pivotPoint: {fileID: 446522504099778316}
   player: {fileID: 5308247836013824562}
   selfRotationDuration: 3
   selfRotationEase: 4
+  reducedScale: {x: 0, y: 0, z: 0}
+  normalScale: {x: 1, y: 1, z: 1}
+  scaleTransitionDuration: 0.5
+  scaleTransitionEase: 7
+  scaleTransitionSpeed: 1
+  speedLevel0: 50
+  speedLevel1: 80
+  speedLevel2: 130
+  speedLevel3: 200
 --- !u!1001 &680301185173418634
 PrefabInstance:
   m_ObjectHideFlags: 0
