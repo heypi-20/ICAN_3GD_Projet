@@ -54,7 +54,6 @@ public class S_Reaper : S_Enemy
 
         if (dist < attackRange && canAttack) {
             Attack();
-            Debug.Log("Can attack");
         } else {
             Idle();
         }
@@ -83,7 +82,7 @@ public class S_Reaper : S_Enemy
             rotateTimer += Time.deltaTime;
 
             Vector3 lookDir = new Vector3(player.position.x - transform.position.x, transform.localScale.y/2, player.position.z - transform.position.z);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookDir), rotationSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(lookDir), targetingSpeed * Time.deltaTime);
 
             if (rotateTimer >= 2f) {
                 attackPos = player.position - (transform.position - player.position);
