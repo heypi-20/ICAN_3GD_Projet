@@ -126,6 +126,7 @@ public class S_GroundPound_Module : MonoBehaviour
         foreach (Collider hit in hits)
         {
             hit.GetComponent<S_DestructionModule>()?.DestroyObject();
+            hit.GetComponent<S_DroppingModule>()?.DropItems(5f);
         }
 
         _isGrounded = false; // Réinitialise l'état au sol pour le prochain Ground Pound
