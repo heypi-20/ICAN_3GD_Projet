@@ -9,5 +9,6 @@ public class EnemyBase : MonoBehaviour
     public GameObject enemyGetHitVFX;
     public GameObject enemyDeathVFX;
     public string enemyGetHitSound;
+    public string enemyDeathSound;
     
 }
