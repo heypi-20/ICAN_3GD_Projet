@@ -70,6 +70,7 @@ public class S_FireRateGun_Module : MonoBehaviour
             if (currentLevel == null) return;
 
             Shoot(currentLevel);
+            SoundManager.Instance.Meth_Shoot_No_Hit(_energyStorage.currentLevelIndex+1);
             UpdateFireCooldown(currentLevel);
             ConsumeEnergy(currentLevel);
             ShootVFX();

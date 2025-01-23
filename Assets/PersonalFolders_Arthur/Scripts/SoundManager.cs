@@ -6,27 +6,69 @@ using FMOD.Studio;
 
 public class SoundManager : MonoBehaviour
 {
+
+    #region Check singleton
+    private static SoundManager _instance;
+    public static SoundManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<SoundManager>();
+                
+                if (_instance == null)
+                {
+                    GameObject singleton = new GameObject(typeof(SoundManager).ToString());
+                    _instance = singleton.AddComponent<SoundManager>();
+                    DontDestroyOnLoad(singleton);
+                }
+            }
+            return _instance;
+        }
+    }
+    private void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (_instance != this)
+        {
+            Destroy(gameObject);
+        }
+    }
+    #endregion
+    
     [Header("Shoot_No_Hit")]
     public string Shoot_No_Hit1;
     public string Shoot_No_Hit2;
     public string Shoot_No_Hit3;
     public string Shoot_No_Hit4;
 
-    public void Meth_Shoot_No_Hit_Lvl1()
+
+    public void Meth_Shoot_No_Hit(int currentLevel)
     {
-        FMODUnity.RuntimeManager.PlayOneShot(Shoot_No_Hit1);
-    }
-    public void Meth_Shoot_No_Hit_Lvl2()
-    {
-        FMODUnity.RuntimeManager.PlayOneShot(Shoot_No_Hit2);
-    }
-    public void Meth_Shoot_No_Hit_Lvl3()
-    {
-        FMODUnity.RuntimeManager.PlayOneShot(Shoot_No_Hit3);
-    }
-    public void Meth_Shoot_No_Hit_Lvl4()
-    {
-        FMODUnity.RuntimeManager.PlayOneShot(Shoot_No_Hit4);
+        if (currentLevel == 1)
+        {
+            FMODUnity.RuntimeManager.PlayOneShot(Shoot_No_Hit1);
+        }
+
+        if (currentLevel == 2)
+        {
+            FMODUnity.RuntimeManager.PlayOneShot(Shoot_No_Hit2);
+        }
+        if (currentLevel == 3)
+        {
+            FMODUnity.RuntimeManager.PlayOneShot(Shoot_No_Hit3);
+        }
+
+        if (currentLevel == 4)
+        {
+            FMODUnity.RuntimeManager.PlayOneShot(Shoot_No_Hit4);
+        }
+        
     }
     
 }
