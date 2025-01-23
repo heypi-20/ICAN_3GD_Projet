@@ -84,6 +84,8 @@ public class S_SuperJump_Module : MonoBehaviour
         // Consommer l'énergie pour le saut
         _energyStorage.RemoveEnergy(currentLevel.energyConsumption);
 
+        SoundManager.Instance.Meth_Used_Jump();
+        
         // Appliquer la force de saut
         _characterController.velocity.y = Mathf.Sqrt(currentLevel.jumpHeight * -2f * _characterController.gravity);
 
