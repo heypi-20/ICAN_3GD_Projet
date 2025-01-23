@@ -8,35 +8,36 @@ public class S_GroundPound_Module : MonoBehaviour
     [System.Serializable]
     public class GroundPoundLevel
     {
-        public int level; // Niveau requis
-        public float sphereRange; // Portée de la détection sphérique
-        public float sphereDamage; // Dégâts sphériques (non utilisé pour l'instant)
-        public float descentSpeed; // Vitesse de descente
-        public float energyConsumption; // Consommation d'énergie
+        public int level; // Niveau requis pour ce niveau
+        public float sphereRange; // Portée initiale de la détection sphérique (ajustée dynamiquement)
+        public float sphereDamage; // Dégâts fixes infligés par l'impact
+        public float descentSpeed; // Vitesse maximale de descente
+        public float energyConsumption; // Consommation d'énergie pour l'activation
     }
 
-    [Header("Paramètres du Ground Pound")]
-    public List<GroundPoundLevel> groundPoundLevels; // Paramètres pour différents niveaux
-    public LayerMask targetLayer; // Couches cibles pour la détection sphérique
-    public float angleThreshold = 75f; // Seuil d'angle pour vérifier si la caméra regarde vers le bas (0 = totalement vers le bas)
-    public float minimumGroundDistance; // Distance minimale au sol
+    [Header("Ground Pound Settings")]
+    public List<GroundPoundLevel> groundPoundLevels; // Settings for each level of Ground Pound
+    public LayerMask targetLayer; // Target layers for sphere detection
+    public float angleThreshold = 75f; // Threshold angle to check if the camera is looking downward (0 = fully downward)
+    public float minimumGroundDistance; // Minimum distance from the ground to activate the Ground Pound
 
     private S_InputManager _inputManager; // Gestionnaire des entrées utilisateur
     private S_EnergyStorage _energyStorage; // Stockage d'énergie
     private Transform _cameraTransform; // Transform de la caméra (extrait de CinemachineBrain)
     private CharacterController _characterController; // Contrôleur de personnage
     private S_CustomCharacterController _customCharacterController;
-    private bool _isGrounded = false; // Vérifie si le joueur a touché le sol
-    private bool _isGroundPounding = false; // Indique si la compétence est en cours
+    private bool _isGrounded = false; // Indique si le joueur a touché le sol
+    private bool _isGroundPounding = false; // Indique si la compétence est en cours d'utilisation
+    private float _dynamicSphereRange; // Portée dynamique basée sur la distance de chute
 
     private void Start()
     {
-        // Initialiser les références
+        // Initialiser les références nécessaires
         _inputManager = FindObjectOfType<S_InputManager>();
         _energyStorage = GetComponent<S_EnergyStorage>();
         _characterController = GetComponent<CharacterController>();
         _customCharacterController = GetComponent<S_CustomCharacterController>();
-        _cameraTransform = Camera.main.transform;
+        _cameraTransform = Camera.main?.transform;
     }
 
     private void Update()
@@ -46,72 +47,78 @@ public class S_GroundPound_Module : MonoBehaviour
 
     private void HandleGroundPound()
     {
-        if (_isGroundPounding) return; // Ignorer si la compétence est déjà en cours
+        if (_isGroundPounding) return; // Ignorer si la compétence est déjà active
 
         GroundPoundLevel currentLevel = GetCurrentGroundPoundLevel();
         if (currentLevel == null) return;
 
-        // Vérifier si le joueur appuie sur la touche d'attaque et si l'énergie est suffisante
+        // Vérifier l'entrée utilisateur et la quantité d'énergie disponible
         if (_inputManager.MeleeAttackInput && _energyStorage.currentEnergy >= currentLevel.energyConsumption)
         {
-            if (IsLookingDownward() && IsGroundFarEnough())
+            if (IsLookingAtValidTarget(out float distanceToGround))
             {
-                PerformGroundPound(currentLevel);
-                _energyStorage.RemoveEnergy(currentLevel.energyConsumption); // Consommer de l'énergie une seule fois
+                PerformGroundPound(currentLevel, distanceToGround);
+                _energyStorage.RemoveEnergy(currentLevel.energyConsumption); // Consommer l'énergie une fois
             }
         }
     }
 
-    private bool IsLookingDownward()
+    private bool IsLookingAtValidTarget(out float distanceToGround)
     {
-        if (_cameraTransform == null) return false;
+        distanceToGround = 0f;
 
-        float angle = Vector3.Angle(_cameraTransform.forward, Vector3.down);
-        return angle <= angleThreshold;
-    }
-
-    private bool IsGroundFarEnough()
-    {
-        
-
-        if (Physics.Raycast(transform.position, _cameraTransform.forward, out RaycastHit hit, Mathf.Infinity))
+        if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit hit, Mathf.Infinity, targetLayer))
         {
-            float distance = hit.distance;
-            if (distance > minimumGroundDistance) // Vérifie si la distance au sol dépasse le minimum
+            float verticalDistance = Mathf.Abs(hit.point.y - transform.position.y);
+            if (verticalDistance > minimumGroundDistance)
             {
+                distanceToGround = verticalDistance;
                 return true;
             }
         }
         return false;
     }
 
-    private void PerformGroundPound(GroundPoundLevel currentLevel)
+    private void PerformGroundPound(GroundPoundLevel currentLevel, float distanceToGround)
     {
         _isGroundPounding = true; // Marquer la compétence comme active
-        StopAllCoroutines(); // Arrête les coroutines précédentes (si nécessaire)
-        Vector3 direction = (_cameraTransform.forward).normalized;
-        StartCoroutine(MoveToGround(direction, currentLevel.descentSpeed));
-        Debug.Log("trigger");
+        StopAllCoroutines(); // Arrêter les coroutines précédentes si nécessaire
+
+        // Ajuster la portée dynamique pour respecter la limite maximale
+        _dynamicSphereRange = Mathf.Min(distanceToGround, currentLevel.sphereRange);
+
+        StartCoroutine(MoveToGround(currentLevel.descentSpeed));
     }
 
-    private IEnumerator MoveToGround(Vector3 poundDirection, float speed)
+    private IEnumerator MoveToGround(float maxSpeed)
     {
-        
+        float currentSpeed = 0f; // Initialiser la vitesse actuelle
+        float acceleration = maxSpeed / 1f; // Une accélération basée sur le temps total de descente estimé
+
         while (!_isGrounded)
         {
             if (_customCharacterController.GroundCheck())
             {
                 _isGrounded = true;
-                yield return null;// Confirme que le joueur a touché le sol
+                break; // Quitter la boucle une fois au sol
             }
-            
-            _characterController.Move(poundDirection * (speed * Time.deltaTime));
+
+            // Augmenter dynamiquement la vitesse jusqu'à la vitesse maximale
+            currentSpeed = Mathf.Min(currentSpeed + acceleration*Time.deltaTime, maxSpeed);
+
+            // Déplacement dans la direction de la caméra
+            Vector3 direction = _cameraTransform.forward;
+            direction.y = -1; // Ajouter un composant vers le bas pour forcer la descente
+            direction.Normalize();
+
+            _characterController.Move(direction * (currentSpeed * Time.deltaTime));
+
             yield return null;
         }
+
         if (_isGrounded)
         {
-            _characterController.Move(Vector3.zero);
-            TriggerGroundPoundEffect(); // Exécute l'effet une fois au sol
+            TriggerGroundPoundEffect(); // Exécuter l'effet au sol
         }
         _isGroundPounding = false; // Réinitialiser l'état de la compétence
     }
@@ -121,7 +128,8 @@ public class S_GroundPound_Module : MonoBehaviour
         GroundPoundLevel currentLevel = GetCurrentGroundPoundLevel();
         if (currentLevel == null) return;
 
-        Collider[] hits = Physics.OverlapSphere(transform.position, currentLevel.sphereRange, targetLayer);
+        // Effectuer une détection sphérique avec la portée dynamique
+        Collider[] hits = Physics.OverlapSphere(transform.position, _dynamicSphereRange, targetLayer);
 
         foreach (Collider hit in hits)
         {
@@ -129,7 +137,7 @@ public class S_GroundPound_Module : MonoBehaviour
             hit.GetComponent<S_DroppingModule>()?.DropItems(5f);
         }
 
-        _isGrounded = false; // Réinitialise l'état au sol pour le prochain Ground Pound
+        _isGrounded = false; // Réinitialiser l'état de contact avec le sol
     }
 
     private GroundPoundLevel GetCurrentGroundPoundLevel()
@@ -142,24 +150,47 @@ public class S_GroundPound_Module : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        if (_cameraTransform == null)
+        {
+            Camera mainCamera = Camera.main;
+            if (mainCamera != null)
+            {
+                _cameraTransform = mainCamera.transform;
+            }
+            else
+            {
+                return;
+            }
+        }
+
         if (groundPoundLevels != null && groundPoundLevels.Count > 0)
         {
             GroundPoundLevel currentLevel = GetCurrentGroundPoundLevel();
             if (currentLevel != null)
             {
                 Gizmos.color = Color.blue;
-                Gizmos.DrawWireSphere(transform.position, currentLevel.sphereRange);
+                Gizmos.DrawWireSphere(transform.position, _dynamicSphereRange);
             }
         }
 
-        // Afficher la distance minimale au sol en tant que ligne
+        // Visualiser la distance minimale au sol avec une ligne verte
         Gizmos.color = Color.green;
         Vector3 startPoint = transform.position;
         Vector3 endPoint = transform.position + Vector3.down * minimumGroundDistance;
         Gizmos.DrawLine(startPoint, endPoint);
+        Gizmos.DrawWireSphere(endPoint, 0.1f);
 
-        // Marquer le point final avec une petite sphère
-        Gizmos.color = Color.red;   
-        Gizmos.DrawSphere(endPoint, 0.1f);
+        // Visualiser le rayon de la caméra
+        Gizmos.color = Color.yellow;
+        Vector3 rayEndPoint = _cameraTransform.position + _cameraTransform.forward * 10f;
+        Gizmos.DrawLine(_cameraTransform.position, rayEndPoint);
+
+        // Ajouter une sphère pour marquer l'endroit où le rayon frappe un objet valide
+        if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit hit, Mathf.Infinity, targetLayer))
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(hit.point, 0.2f);
+        }
     }
+
 }
