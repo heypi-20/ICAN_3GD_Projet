@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.Serialization;
 
 public class S_GroundPound_Module : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class S_GroundPound_Module : MonoBehaviour
     public class GroundPoundLevel
     {
         public int level; // Niveau requis pour ce niveau
-        public float sphereRange; // Portée initiale de la détection sphérique (ajustée dynamiquement)
+        public float maxSphereRange; // Portée initiale de la détection sphérique (ajustée dynamiquement)
         public float sphereDamage; // Dégâts fixes infligés par l'impact
         public float descentSpeed; // Vitesse maximale de descente
         public float energyConsumption; // Consommation d'énergie pour l'activation
@@ -66,11 +67,15 @@ public class S_GroundPound_Module : MonoBehaviour
     private bool IsLookingAtValidTarget(out float distanceToGround)
     {
         distanceToGround = 0f;
+        
 
         if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit hit, Mathf.Infinity, targetLayer))
         {
             float verticalDistance = Mathf.Abs(hit.point.y - transform.position.y);
-            if (verticalDistance > minimumGroundDistance)
+            
+            float angle = Vector3.Angle(_cameraTransform.forward, Vector3.down);
+            
+            if (verticalDistance > minimumGroundDistance&&angle < angleThreshold)
             {
                 distanceToGround = verticalDistance;
                 return true;
@@ -85,7 +90,7 @@ public class S_GroundPound_Module : MonoBehaviour
         StopAllCoroutines(); // Arrêter les coroutines précédentes si nécessaire
 
         // Ajuster la portée dynamique pour respecter la limite maximale
-        _dynamicSphereRange = Mathf.Min(distanceToGround, currentLevel.sphereRange);
+        _dynamicSphereRange = Mathf.Min(distanceToGround, currentLevel.maxSphereRange);
 
         StartCoroutine(MoveToGround(currentLevel.descentSpeed));
     }
