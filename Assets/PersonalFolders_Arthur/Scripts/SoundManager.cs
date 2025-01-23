@@ -20,5 +20,13 @@ public class SoundManager : MonoBehaviour
     {
         FMODUnity.RuntimeManager.PlayOneShot(Shoot_No_Hit2);
     }
+    public void Meth_Shoot_No_Hit_Lvl3()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot(Shoot_No_Hit3);
+    }
+    public void Meth_Shoot_No_Hit_Lvl4()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot(Shoot_No_Hit4);
+    }
     
 }
