@@ -5,7 +5,7 @@ using UnityEngine;
 public class Jauge : MonoBehaviour
 {
     public S_EnergyStorage EnergyStore;
-    public List<MeshRenderer> GrowMesh;
+    public List<MeshRenderer> GrowTreeMesh;
     public List<Material> GrowTreeMaterial = new List<Material>();
 
     public float refreshRate = 0.05f;
@@ -45,6 +45,15 @@ public class Jauge : MonoBehaviour
     private void Update()
     {
         _points = EnergyStore.currentEnergy;
+        // Ajouter ou retirer des points pour tester (exemple)
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            AddPoints(50f); // Ajouter des points (float)
+        }
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            RemovePoints(50f); // Retirer des points (float)
+        }
 
         // Mise à jour continue de la croissance vers la cible
         for (int i = 0; i < GrowTreeMaterial.Count; i++)
