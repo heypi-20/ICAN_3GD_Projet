@@ -5,10 +5,49 @@ public class EnemyBase : MonoBehaviour
     [Header("Enemy Infos")]
     public string enemyName;
     public float health;
+    public GameObject energyPoint;
     public float energyDropQuantity;
     public GameObject enemyGetHitVFX;
     public GameObject enemyDeathVFX;
     public string enemyGetHitSound;
     public string enemyDeathSound;
+
+
+    public void ReduceHealth(float amount,string DamageType)
+    {
+        health -= amount;
+        
+        //placeholder pour le VFX =========
+        GameObject GetHitVFX = Instantiate(enemyGetHitVFX, transform.position, transform.rotation);
+        Destroy(GetHitVFX,3f);
+        //placeholder pour le VFX ========
+        
+        if (health <= 0)
+        {
+            EnemyDied(DamageType);
+        }
+    }
+
+    public void EnemyDied(string DamageType)
+    {           
+        //placeholder pour le VFX =======
+        GameObject DeathVFX = Instantiate(enemyDeathVFX, transform.position, transform.rotation);
+        gameObject.GetComponent<MeshRenderer>().enabled = false;
+        Destroy(DeathVFX,3f);
+        //placeholder pour le VFX =======
+        SoundManager.Instance.Meth_Shoot_Kill(1);
+        
+        DropItems();
+        Destroy(gameObject,5f);
+    }
+    
+    private void DropItems()
+    {
+        for (int i = 0; i < energyDropQuantity; i++)
+        {
+           
+            Instantiate(energyPoint, transform.position, Quaternion.identity);
+        }
+    }
     
 }

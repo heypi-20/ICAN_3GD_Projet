@@ -45,6 +45,7 @@ public class S_MeleeAttack_Module : MonoBehaviour
         // Vérifier si le joueur appuie sur la touche d'attaque et si l'attaque est prête
         if (_inputManager.MeleeAttackInput && _attackCooldownTimer <= 0f && _energyStorage.currentEnergy >= currentLevel.energyConsumption)
         {
+            SoundManager.Instance.Meth_Active_CAC();
             PerformMeleeAttack(currentLevel);
             _attackCooldownTimer = currentLevel.attackCooldown; // Réinitialiser la minuterie
             _energyStorage.RemoveEnergy(currentLevel.energyConsumption); // Consommer de l'énergie

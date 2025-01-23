@@ -139,8 +139,7 @@ public class S_GroundPound_Module : MonoBehaviour
 
         foreach (Collider hit in hits)
         {
-            hit.GetComponent<S_DestructionModule>()?.DestroyObject();
-            hit.GetComponent<S_DroppingModule>()?.DropItems(5f);
+            hit.GetComponent<EnemyBase>().ReduceHealth(1000,"caca");
         }
 
         _isGrounded = false; // Réinitialiser l'état de contact avec le sol

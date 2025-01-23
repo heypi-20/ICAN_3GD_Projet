@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using DG.Tweening;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(S_EnergyStorage))]
 public class S_FireRateGun_Module : MonoBehaviour
@@ -171,9 +173,9 @@ public class S_FireRateGun_Module : MonoBehaviour
                 // Éviter les touches répétées sur la même cible
                 if (hitTargets.Add(target))
                 {
-                    // Appliquer les effets de destruction et de loot
-                    target.GetComponent<S_DestructionModule>()?.DestroyObject();
-                    target.GetComponent<S_DroppingModule>()?.DropItems(5f);
+                    // Appliquer les degats
+                    target.GetComponent<EnemyBase>().ReduceHealth(damage,"Distance");
+                    
                 }
 
                 return true; // Une cible a été touchée
