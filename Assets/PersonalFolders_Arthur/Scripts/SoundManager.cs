@@ -46,6 +46,12 @@ public class SoundManager : MonoBehaviour
     public string Shoot_No_Hit2;
     public string Shoot_No_Hit3;
     public string Shoot_No_Hit4;
+    [Header("Shoot_Kill")]
+    [Space(10)]
+    public string Shoot_Kill1;
+    public string Shoot_Kill2;
+    public string Shoot_Kill3;
+    public string Shoot_Kill4;
 
 
     public void Meth_Shoot_No_Hit(int currentLevel)
@@ -69,6 +75,27 @@ public class SoundManager : MonoBehaviour
             FMODUnity.RuntimeManager.PlayOneShot(Shoot_No_Hit4);
         }
         
+    }
+    public void Meth_Shoot_Kill(int currentLevel)
+    {
+        if (currentLevel == 1)
+        {
+            FMODUnity.RuntimeManager.PlayOneShot(Shoot_Kill1);
+        }
+
+        if (currentLevel == 2)
+        {
+            FMODUnity.RuntimeManager.PlayOneShot(Shoot_Kill2);
+        }
+        if (currentLevel == 3)
+        {
+            FMODUnity.RuntimeManager.PlayOneShot(Shoot_Kill3);
+        }
+
+        if (currentLevel == 4)
+        {
+            FMODUnity.RuntimeManager.PlayOneShot(Shoot_Kill4);
+        }
     }
     
 }
