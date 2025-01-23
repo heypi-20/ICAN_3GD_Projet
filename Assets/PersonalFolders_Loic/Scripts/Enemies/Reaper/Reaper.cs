@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class S_Reaper : S_Enemy
+public class Reaper : EnemyBase
 {
     [Header("Enemy Idle Properties")]
     public float idleSpeed = 5f;
