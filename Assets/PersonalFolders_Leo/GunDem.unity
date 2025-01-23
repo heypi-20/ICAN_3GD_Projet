@@ -8281,7 +8281,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afc451294581e704e95156f76e307bb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Shoot_No_Hit: event:/Player/Shoot/Shoot_No_Hit
+  Shoot_No_Hit1: 
+  Shoot_No_Hit2: 
+  Shoot_No_Hit3: 
+  Shoot_No_Hit4: 
+  Shoot_Kill1: 
+  Shoot_Kill2: 
+  Shoot_Kill3: 
+  Shoot_Kill4: 
 --- !u!4 &1153787933
 Transform:
   m_ObjectHideFlags: 0
@@ -15643,6 +15650,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: -12.340001
       objectReference: {fileID: 0}
+    - target: {fileID: 3424957590305070781, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
+      propertyPath: m_Name
+      value: JaugeHolder
+      objectReference: {fileID: 0}
     - target: {fileID: 3638429091486330024, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.95
@@ -15683,13 +15694,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5440094393554877609, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5797918688890428404, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
       propertyPath: field of view
       value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 6050019623761695537, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
+      propertyPath: groundLayer.m_Bits
+      value: 257
+      objectReference: {fileID: 0}
+    - target: {fileID: 6050019623761695537, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
       propertyPath: targetLayer.m_Bits
       value: 769
+      objectReference: {fileID: 0}
+    - target: {fileID: 6050019623761695537, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
+      propertyPath: minimumGroundDistance
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6050019623761695537, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
+      propertyPath: KillableTargetLayer.m_Bits
+      value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 6050019623761695537, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
       propertyPath: groundPoundLevels.Array.size
@@ -15697,11 +15724,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6050019623761695537, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
       propertyPath: groundPoundLevels.Array.data[0].level
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6050019623761695537, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
       propertyPath: groundPoundLevels.Array.data[1].level
-      value: 3
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6050019623761695537, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
+      propertyPath: groundPoundLevels.Array.data[2].level
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6050019623761695537, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
       propertyPath: groundPoundLevels.Array.data[0].sphereRange
@@ -15717,7 +15748,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6050019623761695537, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
       propertyPath: groundPoundLevels.Array.data[0].sphereDamage
-      value: 0
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6050019623761695537, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
       propertyPath: groundPoundLevels.Array.data[1].descentSpeed
@@ -15728,6 +15759,14 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6050019623761695537, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
+      propertyPath: groundPoundLevels.Array.data[2].descentSpeed
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 6050019623761695537, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
+      propertyPath: groundPoundLevels.Array.data[2].sphereDamage
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6050019623761695537, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
       propertyPath: groundPoundLevels.Array.data[0].maxSphereRange
       value: 500
       objectReference: {fileID: 0}
@@ -15735,9 +15774,33 @@ PrefabInstance:
       propertyPath: groundPoundLevels.Array.data[1].maxSphereRange
       value: 500
       objectReference: {fileID: 0}
+    - target: {fileID: 6050019623761695537, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
+      propertyPath: groundPoundLevels.Array.data[2].maxSphereRange
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 6050019623761695537, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
+      propertyPath: groundPoundLevels.Array.data[0].energyConsumption
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 6050019623761695537, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
+      propertyPath: groundPoundLevels.Array.data[1].energyConsumption
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 6050019623761695537, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
+      propertyPath: groundPoundLevels.Array.data[2].energyConsumption
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 6159913385547692226, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7623342092650706014, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
       propertyPath: currentEnergy
       value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 8071749223994153078, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
