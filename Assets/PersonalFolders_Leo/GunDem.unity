@@ -13537,6 +13537,11 @@ MonoBehaviour:
   timer: 0
   TimerTarget: 5
   NPC: {fileID: 5534188564840520030, guid: e081be6bbad2044448d092f9a6da15b3, type: 3}
+--- !u!23 &1984457124 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6190601145777549672, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
+  m_PrefabInstance: {fileID: 5475119511091098334}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1996369220
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15598,6 +15603,38 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1548727754138694021, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
+      propertyPath: _growth
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1548727754138694021, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
+      propertyPath: refreshRate
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 1548727754138694021, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
+      propertyPath: pointsToGrow
+      value: 800
+      objectReference: {fileID: 0}
+    - target: {fileID: 1548727754138694021, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
+      propertyPath: _growDuration
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1548727754138694021, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
+      propertyPath: GrowMesh.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1548727754138694021, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
+      propertyPath: GrowMesh.Array.data[0]
+      value: 
+      objectReference: {fileID: 1984457124}
+    - target: {fileID: 1548727754138694021, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
+      propertyPath: GrowTreeMesh.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1548727754138694021, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
+      propertyPath: GrowTreeMesh.Array.data[0]
+      value: 
+      objectReference: {fileID: 1984457124}
     - target: {fileID: 1837964438143174030, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
       propertyPath: m_Name
       value: Pre_PlayerObjGroupeArthur
@@ -15700,7 +15737,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7623342092650706014, guid: 9af72fca5674cfd4a9c8bad6d7331a44, type: 3}
       propertyPath: currentEnergy
-      value: 3000
+      value: 500
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
