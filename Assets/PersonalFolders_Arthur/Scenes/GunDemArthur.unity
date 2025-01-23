@@ -8498,11 +8498,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 794288f6334cec849afba3da110d66b9, type: 3}
   m_PrefabInstance: {fileID: 1202398775}
   m_PrefabAsset: {fileID: 0}
---- !u!23 &1202398778 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 794288f6334cec849afba3da110d66b9, type: 3}
-  m_PrefabInstance: {fileID: 1202398775}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &1269952695
 Mesh:
   m_ObjectHideFlags: 0
@@ -13999,10 +13994,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnergyStore: {fileID: 0}
-  GrowTreeMesh:
-  - {fileID: 1202398778}
-  GrowTreeMaterial:
-  - {fileID: 0}
+  GrowMesh: []
+  GrowMaterial: []
+  palier1: 0
+  palier2: 0
+  palier3: 0
+  palier4: 0
   refreshRate: 0.05
   _growth: 0.1
   _growDuration: 0.2
@@ -15947,6 +15944,10 @@ PrefabInstance:
     - target: {fileID: 2645031528669413291, guid: 87ba83fc416216045abb3918f8ee6faa, type: 3}
       propertyPath: m_Name
       value: SoundManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 6768836495084319196, guid: 87ba83fc416216045abb3918f8ee6faa, type: 3}
+      propertyPath: Used_Jump
+      value: event:/Player/Jump/Jump_High
       objectReference: {fileID: 0}
     - target: {fileID: 7503010589162537126, guid: 87ba83fc416216045abb3918f8ee6faa, type: 3}
       propertyPath: m_LocalPosition.x

@@ -52,8 +52,8 @@ public class SoundManager : MonoBehaviour
     public string Shoot_Kill2;
     public string Shoot_Kill3;
     public string Shoot_Kill4;
-    [Header("CAC_Active")] public string CAC_Active;
-
+    [Header("CAC")] public string CAC_Active;
+    [Header("Jump")] public string Used_Jump;
 
     public void Meth_Shoot_No_Hit(int currentLevel)
     {
@@ -100,6 +100,10 @@ public class SoundManager : MonoBehaviour
     }
 
     public void Meth_Active_CAC()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot(CAC_Active);
+    }
+    public void Meth_Used_Jump()
     {
         FMODUnity.RuntimeManager.PlayOneShot(CAC_Active);
     }
