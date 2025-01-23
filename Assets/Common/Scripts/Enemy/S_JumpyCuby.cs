@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class S_JumpyCuby : MonoBehaviour
+public class S_JumpyCuby : EnemyBase
 {
     [Header("Jump Settings")]
     public float jumpForce = 10f; // The upward force applied when jumping
