@@ -958,19 +958,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpLevels:
   - level: 1
-    jumpHeight: 5
+    jumpHeight: 20
     energyConsumption: 15
-    maxJumpCount: 1
+    maxJumpCount: 3
   - level: 2
-    jumpHeight: 5
+    jumpHeight: 20
     energyConsumption: 30
-    maxJumpCount: 1
+    maxJumpCount: 3
   - level: 3
-    jumpHeight: 5
+    jumpHeight: 20
     energyConsumption: 50
-    maxJumpCount: 2
+    maxJumpCount: 3
   - level: 4
-    jumpHeight: 10
+    jumpHeight: 20
     energyConsumption: 70
     maxJumpCount: 3
   jumpCooldown: 0.1
@@ -1093,12 +1093,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82dfdc30ca01b6b4e97034469fb96198, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundPoundLevels: []
+  groundPoundLevels:
+  - level: 1
+    sphereRange: 5
+    sphereDamage: 0
+    descentSpeed: 80
+    energyConsumption: 0
+  - level: 2
+    sphereRange: 10
+    sphereDamage: 0
+    descentSpeed: 80
+    energyConsumption: 0
+  - level: 3
+    sphereRange: 10
+    sphereDamage: 0
+    descentSpeed: 80
+    energyConsumption: 0
+  - level: 4
+    sphereRange: 10
+    sphereDamage: 0
+    descentSpeed: 80
+    energyConsumption: 100
   targetLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 769
   angleThreshold: 75
-  minimumGroundDistance: 0
+  minimumGroundDistance: 5
 --- !u!1 &1444685017628237460
 GameObject:
   m_ObjectHideFlags: 0
