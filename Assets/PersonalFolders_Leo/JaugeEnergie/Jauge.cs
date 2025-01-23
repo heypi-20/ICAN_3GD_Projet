@@ -74,10 +74,12 @@ public class Jauge : MonoBehaviour
             UpdateTargetGrowValue();
             pointsToGrow = EnergyStore.energyLevels[3].requiredEnergy - EnergyStore.energyLevels[2].requiredEnergy;
         }
-        //if (EnergyStore.currentLevelIndex == 3)
-        //{
-        //    pointsToGrow = EnergyStore.energyLevels[3].requiredEnergy - EnergyStore.energyLevels[2].requiredEnergy;
-        //}
+        if (EnergyStore.currentLevelIndex == 3)
+        {
+            _points = Mathf.Clamp(EnergyStore.currentEnergy, 0f, maxPoints) - EnergyStore.energyLevels[3].requiredEnergy; // Met à jour les points avec le système d'énergie
+            UpdateTargetGrowValue();
+            pointsToGrow = 1200f;
+        }
 
         // Mise à jour continue de la croissance vers la cible
         for (int i = 0; i < GrowMaterial.Count; i++)
