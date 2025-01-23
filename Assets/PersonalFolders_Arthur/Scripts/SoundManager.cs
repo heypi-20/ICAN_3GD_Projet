@@ -40,8 +40,8 @@ public class SoundManager : MonoBehaviour
         }
     }
     #endregion
-    
     [Header("Shoot_No_Hit")]
+    [Space(10)]
     public string Shoot_No_Hit1;
     public string Shoot_No_Hit2;
     public string Shoot_No_Hit3;
@@ -52,6 +52,7 @@ public class SoundManager : MonoBehaviour
     public string Shoot_Kill2;
     public string Shoot_Kill3;
     public string Shoot_Kill4;
+    [Header("CAC_Active")] public string CAC_Active;
 
 
     public void Meth_Shoot_No_Hit(int currentLevel)
@@ -96,6 +97,11 @@ public class SoundManager : MonoBehaviour
         {
             FMODUnity.RuntimeManager.PlayOneShot(Shoot_Kill4);
         }
+    }
+
+    public void Meth_Active_CAC()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot(CAC_Active);
     }
     
 }
