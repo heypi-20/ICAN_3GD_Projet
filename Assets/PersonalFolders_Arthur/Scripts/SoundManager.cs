@@ -105,7 +105,7 @@ public class SoundManager : MonoBehaviour
     }
     public void Meth_Used_Jump()
     {
-        FMODUnity.RuntimeManager.PlayOneShot(CAC_Active);
+        FMODUnity.RuntimeManager.PlayOneShot(Used_Jump);
     }
     
 }
