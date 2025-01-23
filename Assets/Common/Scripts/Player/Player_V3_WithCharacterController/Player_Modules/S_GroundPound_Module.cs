@@ -184,7 +184,8 @@ public class S_GroundPound_Module : MonoBehaviour
         Vector3 startPoint = transform.position;
         Vector3 endPoint = transform.position + Vector3.down * minimumGroundDistance;
         Gizmos.DrawLine(startPoint, endPoint);
-        Gizmos.DrawWireSphere(endPoint, 0.1f);
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(endPoint, 0.1f);
 
         // Visualiser le rayon de la caméra
         Gizmos.color = Color.yellow;

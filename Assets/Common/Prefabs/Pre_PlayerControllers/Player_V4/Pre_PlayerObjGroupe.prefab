@@ -620,7 +620,7 @@ GameObject:
   - component: {fileID: 598772894804140595}
   - component: {fileID: 6050019623761695537}
   m_Layer: 0
-  m_Name: Player_V3
+  m_Name: Player_V4
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1095,28 +1095,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundPoundLevels:
   - level: 1
-    maxSphereRange: 0
+    maxSphereRange: 100
     sphereDamage: 0
     descentSpeed: 200
     energyConsumption: 0
   - level: 2
-    maxSphereRange: 0
+    maxSphereRange: 100
     sphereDamage: 0
     descentSpeed: 200
     energyConsumption: 0
   - level: 3
-    maxSphereRange: 0
+    maxSphereRange: 100
     sphereDamage: 0
     descentSpeed: 200
     energyConsumption: 0
   - level: 4
-    maxSphereRange: 0
+    maxSphereRange: 100
     sphereDamage: 0
     descentSpeed: 200
     energyConsumption: 100
-  targetLayer:
+  KillableTargetLayer:
     serializedVersion: 2
-    m_Bits: 769
+    m_Bits: 512
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 257
   angleThreshold: 30
   minimumGroundDistance: 5
 --- !u!1 &1444685017628237460
