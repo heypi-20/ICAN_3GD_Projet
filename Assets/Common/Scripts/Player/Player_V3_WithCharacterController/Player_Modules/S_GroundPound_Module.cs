@@ -18,7 +18,8 @@ public class S_GroundPound_Module : MonoBehaviour
 
     [Header("Ground Pound Settings")]
     public List<GroundPoundLevel> groundPoundLevels; // Settings for each level of Ground Pound
-    public LayerMask targetLayer; // Target layers for sphere detection
+    public LayerMask KillableTargetLayer;
+    public LayerMask groundLayer; // Target layers for sphere detection
     public float angleThreshold = 75f; // Threshold angle to check if the camera is looking downward (0 = fully downward)
     public float minimumGroundDistance; // Minimum distance from the ground to activate the Ground Pound
 
@@ -69,7 +70,7 @@ public class S_GroundPound_Module : MonoBehaviour
         distanceToGround = 0f;
         
 
-        if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit hit, Mathf.Infinity, targetLayer))
+        if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit hit, Mathf.Infinity, groundLayer))
         {
             float verticalDistance = Mathf.Abs(hit.point.y - transform.position.y);
             
@@ -134,7 +135,7 @@ public class S_GroundPound_Module : MonoBehaviour
         if (currentLevel == null) return;
 
         // Effectuer une détection sphérique avec la portée dynamique
-        Collider[] hits = Physics.OverlapSphere(transform.position, _dynamicSphereRange, targetLayer);
+        Collider[] hits = Physics.OverlapSphere(transform.position, _dynamicSphereRange, KillableTargetLayer);
 
         foreach (Collider hit in hits)
         {
@@ -191,7 +192,7 @@ public class S_GroundPound_Module : MonoBehaviour
         Gizmos.DrawLine(_cameraTransform.position, rayEndPoint);
 
         // Ajouter une sphère pour marquer l'endroit où le rayon frappe un objet valide
-        if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit hit, Mathf.Infinity, targetLayer))
+        if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit hit, Mathf.Infinity, groundLayer))
         {
             Gizmos.color = Color.red;
             Gizmos.DrawSphere(hit.point, 0.2f);
