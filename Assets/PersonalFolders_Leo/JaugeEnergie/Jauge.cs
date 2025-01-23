@@ -5,8 +5,14 @@ using UnityEngine;
 public class Jauge : MonoBehaviour
 {
     public S_EnergyStorage EnergyStore;
-    public List<MeshRenderer> GrowTreeMesh;
-    public List<Material> GrowTreeMaterial = new List<Material>();
+    public List<MeshRenderer> GrowMesh;
+    public List<Material> GrowMaterial = new List<Material>();
+
+    public float palier1;
+    public float palier2;
+    public float palier3;
+    public float palier4;
+
 
     public float refreshRate = 0.05f;
 
@@ -20,22 +26,27 @@ public class Jauge : MonoBehaviour
     public float _maxGrow = 1;
 
     public float _points = 0f; // Système de points en float
-    public float maxPoints = 9000f; // Points maximaux
-    public float pointsToGrow = 800f; // Points nécessaires pour atteindre la croissance maximale
+    public float maxPoints = 100f; // Points maximaux
+    public float pointsToGrow = 10f; // Points nécessaires pour atteindre la croissance maximale
 
     private float _targetGrowValue; // Valeur de croissance ciblée
     private float _growValue;
 
     void Start()
     {
-        for (int i = 0; i < GrowTreeMesh.Count; i++)
+        palier1 = 800;
+        palier2 = EnergyStore.energyLevels[2].requiredEnergy - EnergyStore.energyLevels[1].requiredEnergy;
+        palier3 = EnergyStore.energyLevels[3].requiredEnergy - EnergyStore.energyLevels[2].requiredEnergy;
+        palier4 = EnergyStore.energyLevels[3].requiredEnergy;
+
+        for (int i = 0; i < GrowMesh.Count; i++)
         {
-            for (int j = 0; j < GrowTreeMesh[i].materials.Length; j++)
+            for (int j = 0; j < GrowMesh[i].materials.Length; j++)
             {
-                if (GrowTreeMesh[i].materials[j].HasProperty("_Grow"))
+                if (GrowMesh[i].materials[j].HasProperty("_Grow"))
                 {
-                    GrowTreeMesh[i].materials[j].SetFloat("_Grow", _minGrow);
-                    GrowTreeMaterial.Add(GrowTreeMesh[i].materials[j]);
+                    GrowMesh[i].materials[j].SetFloat("_Grow", _minGrow);
+                    GrowMaterial.Add(GrowMesh[i].materials[j]);
                 }
             }
         }
@@ -44,21 +55,34 @@ public class Jauge : MonoBehaviour
 
     private void Update()
     {
-        _points = EnergyStore.currentEnergy;
-        // Ajouter ou retirer des points pour tester (exemple)
-        if (Input.GetKeyDown(KeyCode.P))
+        Debug.Log(EnergyStore.currentLevelIndex);
+        if(EnergyStore.currentLevelIndex == 0)
         {
-            AddPoints(50f); // Ajouter des points (float)
+            _points = Mathf.Clamp(EnergyStore.currentEnergy, 0f, maxPoints); // Met à jour les points avec le système d'énergie
+            UpdateTargetGrowValue();
+            pointsToGrow = EnergyStore.energyLevels[1].requiredEnergy;
         }
-        if (Input.GetKeyDown(KeyCode.M))
+        if (EnergyStore.currentLevelIndex == 1)
         {
-            RemovePoints(50f); // Retirer des points (float)
+            _points = Mathf.Clamp(EnergyStore.currentEnergy, 0f, maxPoints) - EnergyStore.energyLevels[1].requiredEnergy; // Met à jour les points avec le système d'énergie
+            UpdateTargetGrowValue();
+            pointsToGrow = EnergyStore.energyLevels[2].requiredEnergy - EnergyStore.energyLevels[1].requiredEnergy;
         }
+        if (EnergyStore.currentLevelIndex == 2)
+        {
+            _points = Mathf.Clamp(EnergyStore.currentEnergy, 0f, maxPoints) - EnergyStore.energyLevels[2].requiredEnergy; // Met à jour les points avec le système d'énergie
+            UpdateTargetGrowValue();
+            pointsToGrow = EnergyStore.energyLevels[3].requiredEnergy - EnergyStore.energyLevels[2].requiredEnergy;
+        }
+        //if (EnergyStore.currentLevelIndex == 3)
+        //{
+        //    pointsToGrow = EnergyStore.energyLevels[3].requiredEnergy - EnergyStore.energyLevels[2].requiredEnergy;
+        //}
 
         // Mise à jour continue de la croissance vers la cible
-        for (int i = 0; i < GrowTreeMaterial.Count; i++)
+        for (int i = 0; i < GrowMaterial.Count; i++)
         {
-            StartCoroutine(UpdateGrow(GrowTreeMaterial[i]));
+            StartCoroutine(UpdateGrow(GrowMaterial[i]));
         }
     }
 
@@ -74,39 +98,24 @@ public class Jauge : MonoBehaviour
         }
     }
 
-    // Fonction pour ajouter des points (float)
+    // Fonction pour ajouter des points
     public void AddPoints(float points)
     {
         _points = Mathf.Clamp(_points + points, 0f, maxPoints);
         UpdateTargetGrowValue();
-        Debug.Log("Points ajoutés : " + points + ". Total : " + _points);
     }
 
-    // Fonction pour retirer des points (float)
+    // Fonction pour retirer des points
     public void RemovePoints(float points)
     {
         _points = Mathf.Clamp(_points - points, 0f, maxPoints);
         UpdateTargetGrowValue();
-        Debug.Log("Points retirés : " + points + ". Total : " + _points);
     }
 
     // Calculer la valeur de croissance cible en fonction des points
     private void UpdateTargetGrowValue()
     {
-        // Assurez-vous que les points ne dépassent pas maxPoints
-        _points = Mathf.Clamp(_points, 0f, maxPoints);
-
-        // Mapper les points sur la plage de croissance (minGrow à maxGrow)
-        if (_points <= pointsToGrow)
-        {
-            _targetGrowValue = Mathf.Lerp(_minGrow, _maxGrow, _points / pointsToGrow);
-        }
-        else
-        {
-            // Si les points dépassent pointsToGrow, restez à la taille maximale
-            _targetGrowValue = _maxGrow;
-        }
-
-        Debug.Log($"Target Grow Value mise à jour : {_targetGrowValue}, Points : {_points}");
+        // Mapper les points (float) sur la plage de croissance [_minGrow, _maxGrow]
+        _targetGrowValue = Mathf.Lerp(_minGrow, _maxGrow, Mathf.Clamp01(_points / pointsToGrow));
     }
 }
