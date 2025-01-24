@@ -12,6 +12,7 @@ public class S_MeleeAttack_Module : MonoBehaviour
         public int maxTargetsToDestroy; // Nombre maximum de cibles à détruire par attaque
         public float attackCooldown; // Temps de recharge entre les attaques
         public float energyConsumption; // Consommation d'énergie par attaque
+        public int dropBonus;
     }
 
     [Header("Attack Settings")]
@@ -58,6 +59,7 @@ public class S_MeleeAttack_Module : MonoBehaviour
         }
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     private void PerformMeleeAttack(MeleeAttackLevel currentLevel)
     {
         // Détecter toutes les cibles dans la portée de l'attaque
@@ -76,8 +78,7 @@ public class S_MeleeAttack_Module : MonoBehaviour
             if (targetsDestroyed >= currentLevel.maxTargetsToDestroy)
                 break;
 
-            target.gameObject.GetComponent<S_DroppingModule>()?.DropItems(7f);
-            target.gameObject.GetComponent<S_DestructionModule>()?.DestroyObject();
+            target.gameObject.GetComponent<EnemyBase>().ReduceHealth(GetCurrentAttackLevel().attackDamage, GetCurrentAttackLevel().dropBonus);
             targetsDestroyed++;
         }
     }

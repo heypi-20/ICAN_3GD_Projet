@@ -14,6 +14,7 @@ public class S_GroundPound_Module : MonoBehaviour
         public float sphereDamage; // Dégâts fixes infligés par l'impact
         public float descentSpeed; // Vitesse maximale de descente
         public float energyConsumption; // Consommation d'énergie pour l'activation
+        public int dropBonus;
     }
 
     [Header("Ground Pound Settings")]
@@ -139,7 +140,8 @@ public class S_GroundPound_Module : MonoBehaviour
 
         foreach (Collider hit in hits)
         {
-            hit.GetComponent<EnemyBase>().ReduceHealth(1000,"caca");
+            // attack enemy logique
+            hit.GetComponent<EnemyBase>().ReduceHealth(1000,currentLevel.dropBonus);
         }
 
         _isGrounded = false; // Réinitialiser l'état de contact avec le sol

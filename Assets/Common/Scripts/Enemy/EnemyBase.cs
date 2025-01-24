@@ -13,7 +13,7 @@ public class EnemyBase : MonoBehaviour
     public string enemyDeathSound;
 
 
-    public void ReduceHealth(float amount,string DamageType)
+    public void ReduceHealth(float amount,int DropBonus)
     {
         health -= amount;
         
@@ -28,11 +28,11 @@ public class EnemyBase : MonoBehaviour
         
         if (health <= 0)
         {
-            EnemyDied(DamageType);
+            EnemyDied(DropBonus);
         }
     }
 
-    public void EnemyDied(string DamageType)
+    public void EnemyDied(int DropBonus)
     {
         if (enemyDeathVFX is not null)
         {
@@ -45,13 +45,13 @@ public class EnemyBase : MonoBehaviour
         SoundManager.Instance.Meth_Shoot_Kill(1);
         
         gameObject.GetComponent<MeshRenderer>().enabled = false;
-        DropItems();
+        DropItems(DropBonus);
         Destroy(gameObject,5f);
     }
     
-    private void DropItems()
+    private void DropItems(float DropBonus)
     {
-        for (int i = 0; i < energyDropQuantity; i++)
+        for (int i = 0; i < energyDropQuantity+DropBonus; i++)
         {
            
             Instantiate(energyPoint, transform.position, Quaternion.identity);
