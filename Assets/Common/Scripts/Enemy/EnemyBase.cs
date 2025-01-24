@@ -11,10 +11,13 @@ public class EnemyBase : MonoBehaviour
     public GameObject enemyDeathVFX;
     public string enemyGetHitSound;
     public string enemyDeathSound;
+    
+    private bool isDead = false;
 
 
     public void ReduceHealth(float amount,int DropBonus)
     {
+        if(isDead) return;
         health -= amount;
         
         //placeholder pour le VFX =========
@@ -24,8 +27,6 @@ public class EnemyBase : MonoBehaviour
             Destroy(GetHitVFX,3f);
         }
         //placeholder pour le VFX ========
-        
-        
         if (health <= 0)
         {
             EnemyDied(DropBonus);
@@ -34,6 +35,7 @@ public class EnemyBase : MonoBehaviour
 
     public void EnemyDied(int DropBonus)
     {
+        isDead = true;
         if (enemyDeathVFX is not null)
         {
             //placeholder pour le VFX =======

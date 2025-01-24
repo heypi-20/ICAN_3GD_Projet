@@ -80,6 +80,7 @@ public class S_BasicSprint_Module : MonoBehaviour
                 _isSprinting = true;
 
                 // Ajouter le feedback FOV
+                SoundManager.Instance.Meth_Active_Sprint();
                 UpdateCameraFOV(GetLevelFOV());
             }
             HandleEnergyConsumption();
@@ -90,8 +91,9 @@ public class S_BasicSprint_Module : MonoBehaviour
             if (IsSprintCoroutineRunning()) StopCoroutine(_currentCoroutine);
             _currentCoroutine = StartCoroutine(DecelerateToNormalSpeed());
             _isSprinting = false;
-
+    
             // Ajouter le feedback FOV
+            SoundManager.Instance.Meth_Desactive_Sprint();
             UpdateCameraFOV(normalFOV);
         }
     }

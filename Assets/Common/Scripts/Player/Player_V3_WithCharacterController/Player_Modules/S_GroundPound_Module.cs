@@ -141,7 +141,7 @@ public class S_GroundPound_Module : MonoBehaviour
         foreach (Collider hit in hits)
         {
             // attack enemy logique
-            hit.GetComponent<EnemyBase>().ReduceHealth(1000,currentLevel.dropBonus);
+            hit.GetComponent<EnemyBase>()?.ReduceHealth(GetCurrentGroundPoundLevel().sphereDamage,currentLevel.dropBonus);
         }
 
         _isGrounded = false; // Réinitialiser l'état de contact avec le sol

@@ -175,7 +175,7 @@ public class S_FireRateGun_Module : MonoBehaviour
                 if (hitTargets.Add(target))
                 {
                     // Appliquer les degats
-                    target.GetComponent<EnemyBase>().ReduceHealth(damage,GetCurrentFireRateLevel().dropBonus);
+                    target.GetComponent<EnemyBase>()?.ReduceHealth(damage,GetCurrentFireRateLevel().dropBonus);
                     
                 }
 

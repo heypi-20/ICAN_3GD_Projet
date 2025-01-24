@@ -8291,6 +8291,9 @@ MonoBehaviour:
   Shoot_Kill4: 
   CAC_Active: 
   Used_Jump: 
+  Active_Sprint: 
+  Desactive_Sprint: 
+  Pillonage_Explosion: 
 --- !u!4 &1153787933
 Transform:
   m_ObjectHideFlags: 0
@@ -15607,6 +15610,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1808371829560776149, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
+      propertyPath: attackLevels.Array.data[0].dropBonus
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1808371829560776149, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
+      propertyPath: attackLevels.Array.data[1].dropBonus
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1808371829560776149, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
+      propertyPath: attackLevels.Array.data[2].dropBonus
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1808371829560776149, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
+      propertyPath: attackLevels.Array.data[3].dropBonus
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 2332357916831905798, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
       propertyPath: m_Name
       value: Pre_PlayerObjGroupe
@@ -15650,6 +15669,10 @@ PrefabInstance:
     - target: {fileID: 3041495021295536507, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7772030290795581598, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
+      propertyPath: currentEnergy
+      value: 4000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

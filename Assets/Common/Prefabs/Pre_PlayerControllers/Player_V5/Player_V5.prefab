@@ -1628,8 +1628,8 @@ GameObject:
   - component: {fileID: 1002787870393967833}
   - component: {fileID: 4053687398543183167}
   - component: {fileID: 7674239862863335189}
-  - component: {fileID: 8661948642549650535}
   - component: {fileID: 5428656350230930278}
+  - component: {fileID: 8661948642549650535}
   m_Layer: 0
   m_Name: Player_V5
   m_TagString: Player
@@ -1896,12 +1896,15 @@ MonoBehaviour:
   - level: 2
     sprintSpeed: 20
     energyConsumptionRate: 60
+    SprintingSpeedFOV: 0
   - level: 3
     sprintSpeed: 45
     energyConsumptionRate: 100
+    SprintingSpeedFOV: 0
   - level: 4
     sprintSpeed: 60
     energyConsumptionRate: 160
+    SprintingSpeedFOV: 0
   accelerationTime: 0.5
   accelerationCurve:
     serializedVersion: 2
@@ -1953,7 +1956,6 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   cinemachineCamera: {fileID: 0}
-  sprintFOV: 120
   fovTransitionTime: 1
 --- !u!114 &1002787870393967833
 MonoBehaviour:
@@ -2015,18 +2017,22 @@ MonoBehaviour:
     fireRate: 3
     damage: 10
     energyConsumption: 3
+    dropBonus: 0
   - level: 2
     fireRate: 6
     damage: 10
     energyConsumption: 5
+    dropBonus: 0
   - level: 3
     fireRate: 12
     damage: 20
     energyConsumption: 10
+    dropBonus: 0
   - level: 4
     fireRate: 20
     damage: 25
     energyConsumption: 15
+    dropBonus: 0
   gunObject: {fileID: 950928097319526230}
   recoilDistance: -0.1
   recoilDuration: 0.1
@@ -2055,43 +2061,32 @@ MonoBehaviour:
     maxTargetsToDestroy: 2
     attackCooldown: 0.2
     energyConsumption: 0
+    dropBonus: 0
   - level: 2
     attackRange: 1.4
     attackDamage: 10
     maxTargetsToDestroy: 3
     attackCooldown: 0.2
     energyConsumption: 0
+    dropBonus: 0
   - level: 3
     attackRange: 1.4
     attackDamage: 15
     maxTargetsToDestroy: 5
     attackCooldown: 0.2
     energyConsumption: 5
+    dropBonus: 0
   - level: 4
     attackRange: 2
     attackDamage: 30
     maxTargetsToDestroy: 8
     attackCooldown: 0.2
     energyConsumption: 10
+    dropBonus: 0
   targetLayer:
     serializedVersion: 2
     m_Bits: 512
   currentAttackCD: 0
---- !u!114 &8661948642549650535
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4176409521652480002}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab8996588d9b1d547a86c08a111f50a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  countdownDuration: 99
-  countdownText: {fileID: 0}
-  countdownImage: {fileID: 0}
 --- !u!114 &5428656350230930278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2110,11 +2105,13 @@ MonoBehaviour:
     sphereDamage: 10
     descentSpeed: 400
     energyConsumption: 30
+    dropBonus: 0
   - level: 4
     maxSphereRange: 500
     sphereDamage: 10
     descentSpeed: 400
     energyConsumption: 30
+    dropBonus: 0
   KillableTargetLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -2123,6 +2120,21 @@ MonoBehaviour:
     m_Bits: 257
   angleThreshold: 75
   minimumGroundDistance: 5
+--- !u!114 &8661948642549650535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4176409521652480002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab8996588d9b1d547a86c08a111f50a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  countdownDuration: 99
+  countdownText: {fileID: 0}
+  countdownImage: {fileID: 0}
 --- !u!1 &4379607675989936248
 GameObject:
   m_ObjectHideFlags: 0

@@ -4244,7 +4244,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &654842485
 Transform:
   m_ObjectHideFlags: 0
@@ -4493,22 +4493,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1808371829560776149, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
-      propertyPath: attackLevels.Array.data[0].dropBonus
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 1808371829560776149, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
-      propertyPath: attackLevels.Array.data[1].dropBonus
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 1808371829560776149, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
-      propertyPath: attackLevels.Array.data[2].dropBonus
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 1808371829560776149, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
-      propertyPath: attackLevels.Array.data[3].dropBonus
-      value: 30
-      objectReference: {fileID: 0}
     - target: {fileID: 2332357916831905798, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
       propertyPath: m_Name
       value: Pre_PlayerObjGroupe (1)
@@ -4552,6 +4536,10 @@ PrefabInstance:
     - target: {fileID: 3041495021295536507, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7772030290795581598, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
+      propertyPath: currentEnergy
+      value: 4500
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6432,6 +6420,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4005124941193937177, guid: e081be6bbad2044448d092f9a6da15b3, type: 3}
+      propertyPath: jumpForce
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005124941193937177, guid: e081be6bbad2044448d092f9a6da15b3, type: 3}
+      propertyPath: idleThreshold
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005124941193937177, guid: e081be6bbad2044448d092f9a6da15b3, type: 3}
+      propertyPath: trackingForce
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005124941193937177, guid: e081be6bbad2044448d092f9a6da15b3, type: 3}
+      propertyPath: activationForce
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5534188564840520030, guid: e081be6bbad2044448d092f9a6da15b3, type: 3}
       propertyPath: m_Name
       value: JumpyCuby_V2
