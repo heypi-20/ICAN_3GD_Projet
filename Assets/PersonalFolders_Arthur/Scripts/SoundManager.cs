@@ -65,6 +65,10 @@ public class SoundManager : MonoBehaviour
     
     [Header("Pillonage")] 
     public string Pillonage_Explosion;
+    
+    [Header("Energy")] 
+    public string Gain_Palier;
+    public string Loose_Palier; 
 
     public void Meth_Shoot_No_Hit(int currentLevel)
     {
@@ -127,6 +131,14 @@ public class SoundManager : MonoBehaviour
         FMODUnity.RuntimeManager.PlayOneShot(Desactive_Sprint);
     }
     public void Meth_Pillonage_Explosion()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot(Pillonage_Explosion);
+    }
+    public void Meth_Gain_Palier()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot(Pillonage_Explosion);
+    }
+    public void Meth_Lose_Palier()
     {
         FMODUnity.RuntimeManager.PlayOneShot(Pillonage_Explosion);
     }
