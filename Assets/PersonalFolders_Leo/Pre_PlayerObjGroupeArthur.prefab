@@ -1093,12 +1093,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82dfdc30ca01b6b4e97034469fb96198, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundPoundLevels: []
-  targetLayer:
+  groundPoundLevels:
+  - level: 3
+    maxSphereRange: 500
+    sphereDamage: 10
+    descentSpeed: 400
+    energyConsumption: 30
+  - level: 4
+    maxSphereRange: 500
+    sphereDamage: 10
+    descentSpeed: 400
+    energyConsumption: 30
+  KillableTargetLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 257
   angleThreshold: 75
-  minimumGroundDistance: 0
+  minimumGroundDistance: 5
 --- !u!1 &1444685017628237460
 GameObject:
   m_ObjectHideFlags: 0
@@ -1793,7 +1806,7 @@ Transform:
   m_GameObject: {fileID: 2748904087875228039}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12.340001, y: 6.4900002, z: -30.490002}
+  m_LocalPosition: {x: -4.3900003, y: 6.4900002, z: -30.490002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1832,7 +1845,7 @@ Camera:
     height: 1
   near clip plane: 0.01
   far clip plane: 1000
-  field of view: 80
+  field of view: 75
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -2565,7 +2578,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6262730291168823557
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3435,7 +3448,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6928302533932461073
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3958,7 +3971,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2b375a6d181a7d642b9357193a83121a, type: 3}
       propertyPath: m_Name
-      value: Brouillon Projet 1
+      value: JaugeHolder
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2b375a6d181a7d642b9357193a83121a, type: 3}
       propertyPath: m_Layer
@@ -4282,16 +4295,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnergyStore: {fileID: 7623342092650706014}
-  GrowTreeMesh: []
-  GrowTreeMaterial: []
-  refreshRate: 0.01
-  _growth: 0.1
-  _growDuration: 0.2
+  GrowMesh:
+  - {fileID: 6190601145777549672}
+  GrowMaterial: []
+  palier1: 0
+  palier2: 0
+  palier3: 0
+  palier4: 0
+  refreshRate: 0.05
+  _growth: 1
+  _growDuration: 1
   _minGrow: 0
   _maxGrow: 1
   _points: 0
   maxPoints: 5200
-  pointsToGrow: 10
+  pointsToGrow: 800
+--- !u!23 &6190601145777549672 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 7ca2c2205d07d1f4eb46e8df9d350a39, type: 3}
+  m_PrefabInstance: {fileID: 4767336529583468012}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5022022275617599659
 PrefabInstance:
   m_ObjectHideFlags: 0
