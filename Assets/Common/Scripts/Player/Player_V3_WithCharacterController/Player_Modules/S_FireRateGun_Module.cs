@@ -71,7 +71,6 @@ public class S_FireRateGun_Module : MonoBehaviour
         {
             FireRateLevel currentLevel = GetCurrentFireRateLevel();
             if (currentLevel == null) return;
-            FindObjectOfType<Rotate_Ring>().rotationSpeed *= 2;
             Shoot(currentLevel);
             SoundManager.Instance.Meth_Shoot_No_Hit(_energyStorage.currentLevelIndex+1);
             UpdateFireCooldown(currentLevel);
