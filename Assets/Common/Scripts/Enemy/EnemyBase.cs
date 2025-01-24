@@ -13,37 +13,45 @@ public class EnemyBase : MonoBehaviour
     public string enemyDeathSound;
 
 
-    public void ReduceHealth(float amount,string DamageType)
+    public void ReduceHealth(float amount,int DropBonus)
     {
         health -= amount;
         
         //placeholder pour le VFX =========
-        GameObject GetHitVFX = Instantiate(enemyGetHitVFX, transform.position, transform.rotation);
-        Destroy(GetHitVFX,3f);
+        if (enemyGetHitVFX is not null)
+        {
+            GameObject GetHitVFX = Instantiate(enemyGetHitVFX, transform.position, transform.rotation);
+            Destroy(GetHitVFX,3f);
+        }
         //placeholder pour le VFX ========
+        
         
         if (health <= 0)
         {
-            EnemyDied(DamageType);
+            EnemyDied(DropBonus);
         }
     }
 
-    public void EnemyDied(string DamageType)
-    {           
-        //placeholder pour le VFX =======
-        GameObject DeathVFX = Instantiate(enemyDeathVFX, transform.position, transform.rotation);
-        gameObject.GetComponent<MeshRenderer>().enabled = false;
-        Destroy(DeathVFX,3f);
-        //placeholder pour le VFX =======
+    public void EnemyDied(int DropBonus)
+    {
+        if (enemyDeathVFX is not null)
+        {
+            //placeholder pour le VFX =======
+            GameObject DeathVFX = Instantiate(enemyDeathVFX, transform.position, transform.rotation);
+            Destroy(DeathVFX,3f);
+            //placeholder pour le VFX =======
+        }
+        
         SoundManager.Instance.Meth_Shoot_Kill(1);
         
-        DropItems();
+        gameObject.GetComponent<MeshRenderer>().enabled = false;
+        DropItems(DropBonus);
         Destroy(gameObject,5f);
     }
     
-    private void DropItems()
+    private void DropItems(float DropBonus)
     {
-        for (int i = 0; i < energyDropQuantity; i++)
+        for (int i = 0; i < energyDropQuantity+DropBonus; i++)
         {
            
             Instantiate(energyPoint, transform.position, Quaternion.identity);

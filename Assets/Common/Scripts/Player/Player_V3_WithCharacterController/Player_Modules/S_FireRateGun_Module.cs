@@ -16,6 +16,7 @@ public class S_FireRateGun_Module : MonoBehaviour
         public float fireRate; // Cadence de tir par seconde
         public float damage; // Dégâts par tir
         public float energyConsumption; // Consommation d'énergie par tir
+        public int dropBonus;
     }
 
     [Header("Shooting Settings")]
@@ -174,7 +175,7 @@ public class S_FireRateGun_Module : MonoBehaviour
                 if (hitTargets.Add(target))
                 {
                     // Appliquer les degats
-                    target.GetComponent<EnemyBase>().ReduceHealth(damage,"Distance");
+                    target.GetComponent<EnemyBase>().ReduceHealth(damage,GetCurrentFireRateLevel().dropBonus);
                     
                 }
 
