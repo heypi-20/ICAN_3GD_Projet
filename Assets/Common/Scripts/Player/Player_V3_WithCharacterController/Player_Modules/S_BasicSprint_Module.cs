@@ -9,7 +9,6 @@ using DG.Tweening;
 [RequireComponent(typeof(S_EnergyStorage))]
 public class S_BasicSprint_Module : MonoBehaviour
 {
-    
     [Serializable]
     public class SprintLevel
     {
@@ -69,9 +68,11 @@ public class S_BasicSprint_Module : MonoBehaviour
     // Gérer le démarrage et l'arrêt du sprint
     private void HandleSprint()
     {
-        if (_inputManager.SprintInput)
+        if (_inputManager.SprintInput&&GetCurrentSprintLevels()!=null)
         {
             // Commencer le sprint si ce n'est pas déjà le cas
+            Debug.Log("Consomme energy");
+            HandleEnergyConsumption();
             if (!_isSprinting)
             {
                 _originalMoveSpeed = _characterController.moveSpeed;
@@ -83,7 +84,8 @@ public class S_BasicSprint_Module : MonoBehaviour
                 SoundManager.Instance.Meth_Active_Sprint();
                 UpdateCameraFOV(GetLevelFOV());
             }
-            HandleEnergyConsumption();
+            
+            
         }
         else if (_isSprinting)
         {
@@ -107,12 +109,13 @@ public class S_BasicSprint_Module : MonoBehaviour
     private IEnumerator AccelerateToSprintSpeed()
     {
         float timer = 0f;
-        float targetSprintSpeed = GetCurrentSprintSpeed();
+        float targetSprintSpeed = GetCurrentSprintLevels().sprintSpeed;
 
         while (timer < accelerationTime)
         {
             // Interpolation de la vitesse selon la courbe d'accélération
             timer += Time.deltaTime;
+            targetSprintSpeed = GetCurrentSprintLevels().sprintSpeed;
             float curveValue = accelerationCurve.Evaluate(Mathf.Clamp01(timer / accelerationTime));
             _characterController.moveSpeed = Mathf.Lerp(_originalMoveSpeed, targetSprintSpeed, curveValue);
             yield return null;
@@ -147,8 +150,8 @@ public class S_BasicSprint_Module : MonoBehaviour
     // Réduction de l'énergie pendant le sprint
     private void HandleEnergyConsumption()
     {
-        float energyConsumptionRate = GetCurrentEnergyConsumptionRate();
-        _energyStorage.currentEnergy = Mathf.Max(0, _energyStorage.currentEnergy - energyConsumptionRate * Time.deltaTime);
+        float energyConsumptionRate = GetCurrentSprintLevels().energyConsumptionRate;
+        _energyStorage.currentEnergy -=energyConsumptionRate*Time.deltaTime;
     }
 
     private void UpdateCameraFOV(float targetFOV)
@@ -166,20 +169,12 @@ public class S_BasicSprint_Module : MonoBehaviour
     }
 
     // Obtient la vitesse de sprint pour le niveau d'énergie actuel
-    private float GetCurrentSprintSpeed()
+    private SprintLevel GetCurrentSprintLevels()
     {
         int currentLevel = _energyStorage.currentLevelIndex + 1; // Ajuste pour correspondre au niveau dans SprintLevel
-        SprintLevel level = sprintLevels.Find(l => l.level == currentLevel);
-        return level != null ? level.sprintSpeed : 0f;
+        return sprintLevels.Find(level => level.level == currentLevel);;
     }
-
-    // Obtient le taux de consommation d'énergie pour le niveau d'énergie actuel
-    private float GetCurrentEnergyConsumptionRate()
-    {
-        int currentLevel = _energyStorage.currentLevelIndex + 1;
-        SprintLevel level = sprintLevels.Find(l => l.level == currentLevel);
-        return level != null ? level.energyConsumptionRate : 0f;
-    }
+    
 
     private float GetLevelFOV()
     {
