@@ -55,6 +55,10 @@ public class S_EnergyAbsorptionModule : MonoBehaviour
             if (energyType is not null)
             {
                 _pullingObjects.Add(collider.gameObject);
+                
+                // play sound
+                SoundManager.Instance.Meth_Gain_Energy();
+                
                 StartCoroutine(PullAndDestroyObject(collider.gameObject, energyType.energyGiven));
             }
         }
