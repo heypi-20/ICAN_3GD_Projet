@@ -97,7 +97,7 @@ public class S_FireRateGun_Module : MonoBehaviour
             PerformSpreadRaycast(shootPoint.position, shootDirection, raycastLength, currentLevel.damage);
         }
 
-        GameObject Bullet = Instantiate(bulletPrefab, spawnBulletPoint.position, bulletPrefab.transform.rotation, spawnBulletPoint.transform);
+        GameObject Bullet = Instantiate(bulletPrefab, spawnBulletPoint.position, spawnBulletPoint.rotation);
         Bullet.GetComponent<S_Projectile>().InitializeProjectile(3,100);
     }
 

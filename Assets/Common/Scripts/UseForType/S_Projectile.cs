@@ -19,7 +19,7 @@ public class S_Projectile : MonoBehaviour
     {
 
         lifeTimer -= Time.deltaTime;
-        transform.Translate(Vector3.up * (bulletSpeed * Time.deltaTime), Space.Self);
+        transform.Translate(Vector3.forward * (bulletSpeed * Time.deltaTime), Space.Self);
         // Destroy the projectile if the lifetime has elapsed
         if (lifeTimer <= 0)
         {
