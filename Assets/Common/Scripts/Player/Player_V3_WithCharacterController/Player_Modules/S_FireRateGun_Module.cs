@@ -98,7 +98,7 @@ public class S_FireRateGun_Module : MonoBehaviour
         }
 
         GameObject Bullet = Instantiate(bulletPrefab, spawnBulletPoint.position, spawnBulletPoint.rotation);
-        Bullet.GetComponent<S_Projectile>().InitializeProjectile(3,100);
+        Bullet.GetComponent<S_Projectile>().InitializeProjectile(3,bulletSpeed);
     }
 
     private IEnumerator SimulateBullet(Vector3 shootDirection, FireRateLevel currentLevel)
