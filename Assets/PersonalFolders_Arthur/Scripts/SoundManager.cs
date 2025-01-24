@@ -52,8 +52,19 @@ public class SoundManager : MonoBehaviour
     public string Shoot_Kill2;
     public string Shoot_Kill3;
     public string Shoot_Kill4;
-    [Header("CAC")] public string CAC_Active;
-    [Header("Jump")] public string Used_Jump;
+    
+    [Header("CAC")] 
+    public string CAC_Active;
+    
+    [Header("Jump")] 
+    public string Used_Jump;
+    
+    [Header("Sprint")] 
+    public string Active_Sprint;
+    public string Desactive_Sprint;
+    
+    [Header("Pillonage")] 
+    public string Pillonage_Explosion;
 
     public void Meth_Shoot_No_Hit(int currentLevel)
     {
@@ -106,6 +117,18 @@ public class SoundManager : MonoBehaviour
     public void Meth_Used_Jump()
     {
         FMODUnity.RuntimeManager.PlayOneShot(Used_Jump);
+    }
+    public void Meth_Active_Sprint()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot(Active_Sprint);
+    }
+    public void Meth_Desactive_Sprint()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot(Desactive_Sprint);
+    }
+    public void Meth_Pillonage_Explosion()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot(Pillonage_Explosion);
     }
     
 }
