@@ -126,6 +126,10 @@ public class S_GroundPound_Module : MonoBehaviour
         if (_isGrounded)
         {
             TriggerGroundPoundEffect(); // Exécuter l'effet au sol
+            
+            //add feedback
+            SoundManager.Instance.Meth_Pillonage_Explosion();
+
         }
         _isGroundPounding = false; // Réinitialiser l'état de la compétence
     }

@@ -136,11 +136,11 @@ public class SoundManager : MonoBehaviour
     }
     public void Meth_Gain_Palier()
     {
-        FMODUnity.RuntimeManager.PlayOneShot(Pillonage_Explosion);
+        FMODUnity.RuntimeManager.PlayOneShot(Gain_Palier);
     }
     public void Meth_Lose_Palier()
     {
-        FMODUnity.RuntimeManager.PlayOneShot(Pillonage_Explosion);
+        FMODUnity.RuntimeManager.PlayOneShot(Loose_Palier);
     }
     
 }
