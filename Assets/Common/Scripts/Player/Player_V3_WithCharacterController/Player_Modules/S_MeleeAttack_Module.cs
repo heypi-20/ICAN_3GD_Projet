@@ -78,7 +78,7 @@ public class S_MeleeAttack_Module : MonoBehaviour
             if (targetsDestroyed >= currentLevel.maxTargetsToDestroy)
                 break;
 
-            target.gameObject.GetComponent<EnemyBase>().ReduceHealth(GetCurrentAttackLevel().attackDamage, GetCurrentAttackLevel().dropBonus);
+            target.gameObject.GetComponent<EnemyBase>()?.ReduceHealth(GetCurrentAttackLevel().attackDamage, GetCurrentAttackLevel().dropBonus);
             targetsDestroyed++;
         }
     }
