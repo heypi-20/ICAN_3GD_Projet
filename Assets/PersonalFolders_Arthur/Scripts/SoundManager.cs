@@ -68,7 +68,13 @@ public class SoundManager : MonoBehaviour
     
     [Header("Energy")] 
     public string Gain_Palier;
-    public string Loose_Palier; 
+    public string Loose_Palier;
+    public string Gain_Energy;
+    
+    [Header("Ennemy")] 
+    public string Dashoot_Dash;
+    public string Dashoot_Shoot;
+    public string JumpyCuby_Jump;
 
     public void Meth_Shoot_No_Hit(int currentLevel)
     {
@@ -142,5 +148,22 @@ public class SoundManager : MonoBehaviour
     {
         FMODUnity.RuntimeManager.PlayOneShot(Loose_Palier);
     }
+    public void Meth_Gain_Energy()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot(Gain_Energy);
+    }
+    public void Meth_Dashoot_Dash()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot(Dashoot_Dash);
+    }
+    public void Meth_Dashoot_Shoot()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot(Dashoot_Shoot);
+    }
+    public void Meth_JumpyCuby_Jump()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot(JumpyCuby_Jump);
+    }
+    
     
 }
