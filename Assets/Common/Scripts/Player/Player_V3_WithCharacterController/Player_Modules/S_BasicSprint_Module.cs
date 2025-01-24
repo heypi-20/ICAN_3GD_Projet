@@ -16,6 +16,7 @@ public class S_BasicSprint_Module : MonoBehaviour
         public int level; // Correspond au niveau d'énergie dans S_EnergyStorage
         public float sprintSpeed; // Vitesse de sprint pour ce niveau
         public float energyConsumptionRate; // Consommation d'énergie pour ce niveau
+        public float SprintingSpeedFOV;
     }
     [Header("Sprint Levels")]
     public List<SprintLevel> sprintLevels; // Liste des niveaux de sprint
@@ -28,7 +29,7 @@ public class S_BasicSprint_Module : MonoBehaviour
 
     [Header("Camera Settings")]
     public CinemachineVirtualCamera cinemachineCamera; // Caméra du joueur pour ajuster le FOV
-    public float sprintFOV = 90f; // FOV pendant le sprint
+    private float sprintFOV = 90f; // FOV pendant le sprint
     private float normalFOV = 60f; // FOV normal
     public float fovTransitionTime = 0.2f; // Durée de transition du FOV
 
@@ -79,7 +80,7 @@ public class S_BasicSprint_Module : MonoBehaviour
                 _isSprinting = true;
 
                 // Ajouter le feedback FOV
-                UpdateCameraFOV(sprintFOV);
+                UpdateCameraFOV(GetLevelFOV());
             }
             HandleEnergyConsumption();
         }
@@ -176,5 +177,12 @@ public class S_BasicSprint_Module : MonoBehaviour
         int currentLevel = _energyStorage.currentLevelIndex + 1;
         SprintLevel level = sprintLevels.Find(l => l.level == currentLevel);
         return level != null ? level.energyConsumptionRate : 0f;
+    }
+
+    private float GetLevelFOV()
+    {
+        int currentLevel = _energyStorage.currentLevelIndex + 1;
+        SprintLevel level = sprintLevels.Find(l => l.level == currentLevel);
+        return level != null ? level.SprintingSpeedFOV : 0f;
     }
 }

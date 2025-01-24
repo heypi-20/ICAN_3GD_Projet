@@ -55,7 +55,6 @@ public class Jauge : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(EnergyStore.currentLevelIndex);
         if(EnergyStore.currentLevelIndex == 0)
         {
             _points = Mathf.Clamp(EnergyStore.currentEnergy, 0f, maxPoints); // Met à jour les points avec le système d'énergie
