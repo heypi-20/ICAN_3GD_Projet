@@ -18,9 +18,13 @@ public class EnemyBase : MonoBehaviour
         health -= amount;
         
         //placeholder pour le VFX =========
-        GameObject GetHitVFX = Instantiate(enemyGetHitVFX, transform.position, transform.rotation);
-        Destroy(GetHitVFX,3f);
+        if (enemyGetHitVFX is not null)
+        {
+            GameObject GetHitVFX = Instantiate(enemyGetHitVFX, transform.position, transform.rotation);
+            Destroy(GetHitVFX,3f);
+        }
         //placeholder pour le VFX ========
+        
         
         if (health <= 0)
         {
@@ -29,14 +33,18 @@ public class EnemyBase : MonoBehaviour
     }
 
     public void EnemyDied(string DamageType)
-    {           
-        //placeholder pour le VFX =======
-        GameObject DeathVFX = Instantiate(enemyDeathVFX, transform.position, transform.rotation);
-        gameObject.GetComponent<MeshRenderer>().enabled = false;
-        Destroy(DeathVFX,3f);
-        //placeholder pour le VFX =======
+    {
+        if (enemyDeathVFX is not null)
+        {
+            //placeholder pour le VFX =======
+            GameObject DeathVFX = Instantiate(enemyDeathVFX, transform.position, transform.rotation);
+            Destroy(DeathVFX,3f);
+            //placeholder pour le VFX =======
+        }
+        
         SoundManager.Instance.Meth_Shoot_Kill(1);
         
+        gameObject.GetComponent<MeshRenderer>().enabled = false;
         DropItems();
         Destroy(gameObject,5f);
     }
