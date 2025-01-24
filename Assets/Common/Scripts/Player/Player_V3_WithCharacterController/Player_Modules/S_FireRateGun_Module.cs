@@ -71,7 +71,7 @@ public class S_FireRateGun_Module : MonoBehaviour
         {
             FireRateLevel currentLevel = GetCurrentFireRateLevel();
             if (currentLevel == null) return;
-
+            FindObjectOfType<Rotate_Ring>().rotationSpeed *= 2;
             Shoot(currentLevel);
             SoundManager.Instance.Meth_Shoot_No_Hit(_energyStorage.currentLevelIndex+1);
             UpdateFireCooldown(currentLevel);
@@ -97,7 +97,8 @@ public class S_FireRateGun_Module : MonoBehaviour
             PerformSpreadRaycast(shootPoint.position, shootDirection, raycastLength, currentLevel.damage);
         }
 
-        Instantiate(bulletPrefab, spawnBulletPoint.position, spawnBulletPoint.rotation, spawnBulletPoint.transform);
+        GameObject Bullet = Instantiate(bulletPrefab, spawnBulletPoint.position, spawnBulletPoint.rotation);
+        Bullet.GetComponent<S_Projectile>().InitializeProjectile(3,100);
     }
 
     private IEnumerator SimulateBullet(Vector3 shootDirection, FireRateLevel currentLevel)
