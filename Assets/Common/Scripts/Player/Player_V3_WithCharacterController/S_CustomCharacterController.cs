@@ -18,6 +18,14 @@ public class S_CustomCharacterController : MonoBehaviour
     public AnimationCurve decelerationCurve = AnimationCurve.Linear(0, 1, 1, 0);
     public float _directionLerpSpeed = 10f;
     
+    [Header("Movement feedback Settings")]
+    public float maxDutchAngle = 10f; 
+    public float smoothTime = 0.2f;
+    private float currentDutch = 0f; // Valeur actuelle de l'inclinaison
+    private float targetDutch = 0f;  // Valeur cible de l'inclinaison
+    private float dutchVelocity = 0f; // Vitesse de transition pour SmoothDamp
+
+    
     
     [Header("Ground Settings")]
     public float gravity = -19.62f;
@@ -169,6 +177,26 @@ public class S_CustomCharacterController : MonoBehaviour
         // {
         //     _cinemachineVirtualCamera.m_Lens.Dutch = 0;
         // }
+
+        // Vérifier les touches pressées pour déterminer la valeur cible
+        if (Input.GetKey(KeyCode.A))
+        {
+            targetDutch = maxDutchAngle; // Inclinaison vers la gauche
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            targetDutch = -maxDutchAngle; // Inclinaison vers la droite
+        }
+        else
+        {
+            targetDutch = 0f; // Retour à l'état neutre
+        }
+
+        // Transition douce vers la valeur cible
+        currentDutch = Mathf.SmoothDamp(currentDutch, targetDutch, ref dutchVelocity, smoothTime);
+
+        // Appliquer l'inclinaison à la caméra
+        _cinemachineVirtualCamera.m_Lens.Dutch = currentDutch;
         
     }
 
