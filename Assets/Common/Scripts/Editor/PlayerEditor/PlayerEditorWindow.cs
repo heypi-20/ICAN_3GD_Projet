@@ -210,7 +210,6 @@ public class PlayerEditorWindow : EditorWindow
 
             profileName = playerProfiles.name;
             index = -1;
-            
         }
     }
     
