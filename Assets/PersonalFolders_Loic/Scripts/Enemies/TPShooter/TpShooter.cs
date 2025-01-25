@@ -71,6 +71,7 @@ public class TpShooter : EnemyBase
         transform.DOScale(targetScale, 0.5f) // Durée pour atteindre la taille cible (0.25s aller)
             .SetEase(Ease.InOutQuad)    // Easing fluide pour un effet agréable
             .SetLoops(-1, LoopType.Yoyo);
+        SoundManager.Instance.Meth_Dashoot_Dash();
     }
 
     private void Shoot()
@@ -79,6 +80,7 @@ public class TpShooter : EnemyBase
             if (hit.transform == player) {
                 Transform projectile = Instantiate(projectilePrefab, shootPoint.position, transform.rotation);
                 projectile.GetComponent<S_ProjectileSpeed>().speed = projectileSpeed;
+                SoundManager.Instance.Meth_Dashoot_Shoot();
             }
         }
     }

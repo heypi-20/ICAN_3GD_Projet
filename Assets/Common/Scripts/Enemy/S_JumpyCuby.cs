@@ -55,7 +55,8 @@ public class S_JumpyCuby : EnemyBase
 
         // Apply upward force
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-
+        SoundManager.Instance.Meth_JumpyCuby_Jump();
+        
         // Apply tracking or random force
         if (enableTracking && target != null)
         {
