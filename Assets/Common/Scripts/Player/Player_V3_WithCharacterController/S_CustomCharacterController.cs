@@ -1,9 +1,12 @@
 ﻿using System;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public class S_CustomCharacterController : MonoBehaviour
 {
+    public CinemachineVirtualCamera _cinemachineVirtualCamera;  
+    
     [Header("Movement Settings")]
     public float moveSpeed = 12f;
     public float AirControl = 5f;
@@ -28,6 +31,7 @@ public class S_CustomCharacterController : MonoBehaviour
     // Composants
     private CharacterController _controller;
     private S_InputManager _inputManager;
+    
     
     // Valeurs d'entrée
     private float _inputHorizontal_X;
@@ -66,7 +70,6 @@ public class S_CustomCharacterController : MonoBehaviour
         ControllerInput();
         MovePlayer();
         HandleGravity();
-        //Jump();
     }
     
    
@@ -75,6 +78,11 @@ public class S_CustomCharacterController : MonoBehaviour
         // Initialisation : obtention des composants nécessaires
         _controller = GetComponent<CharacterController>();
         _inputManager = FindObjectOfType<S_InputManager>();
+        if (_cinemachineVirtualCamera == null)
+        {
+            _cinemachineVirtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+        }
+        
 
     }
     private void ControllerInput()
@@ -149,6 +157,18 @@ public class S_CustomCharacterController : MonoBehaviour
          * }
          *
          */
+        // if (_inputManager.MoveInput.x>0f)
+        // {
+        //     _cinemachineVirtualCamera.m_Lens.Dutch = 1;
+        // }
+        // if (_inputManager.MoveInput.x<0f)
+        // {
+        //     _cinemachineVirtualCamera.m_Lens.Dutch = -1;
+        // }
+        // else
+        // {
+        //     _cinemachineVirtualCamera.m_Lens.Dutch = 0;
+        // }
         
     }
 
