@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEditor;
 using DG.Tweening;
 using Random = UnityEngine.Random;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(S_EnergyStorage))]
 public class S_FireRateGun_Module : MonoBehaviour
@@ -50,6 +51,8 @@ public class S_FireRateGun_Module : MonoBehaviour
     private S_EnergyStorage _energyStorage;
     private float _fireCooldown;
 
+    public GameObject HitMarkerPNG;
+
     private void Start()
     {
         _inputManager = FindObjectOfType<S_InputManager>();
@@ -63,6 +66,8 @@ public class S_FireRateGun_Module : MonoBehaviour
     private void Update()
     {
         HandleShooting();
+
+        Vector3 shootDirection = shootPoint.forward;
     }
 
     private void HandleShooting()
@@ -174,13 +179,19 @@ public class S_FireRateGun_Module : MonoBehaviour
                 // Éviter les touches répétées sur la même cible
                 if (hitTargets.Add(target))
                 {
+                    // HitMarkerEnabler
+                    StartCoroutine(HitMarker());
+
                     // Appliquer les degats
                     target.GetComponent<EnemyBase>()?.ReduceHealth(damage,GetCurrentFireRateLevel().dropBonus);
-                    
                 }
 
                 return true; // Une cible a été touchée
             }
+            //else
+            //{
+            //    CrossAir.color = Color.white;
+            //}
 
             // Si un obstacle est touché (uniquement pour le raycast principal)
             if (checkObstacle && (1 << hit.collider.gameObject.layer & obstacleLayer) != 0)
@@ -234,5 +245,12 @@ public class S_FireRateGun_Module : MonoBehaviour
         gunObject.transform.DOLocalRotate(_originalRotation.eulerAngles, resetDuration)
             .SetDelay(recoilDuration)
             .SetEase(Ease.InQuad);
+    }
+
+    IEnumerator HitMarker()
+    {
+        HitMarkerPNG.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        HitMarkerPNG.SetActive(false);
     }
 }
