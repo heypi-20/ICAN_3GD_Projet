@@ -4,6 +4,8 @@ public class EnemyBase : MonoBehaviour
 {
     [Header("Enemy Infos")]
     public string enemyName;
+
+    public float enemyDamage;
     public float health;
     public GameObject energyPoint;
     public float energyDropQuantity;
