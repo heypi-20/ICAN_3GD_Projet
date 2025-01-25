@@ -4244,7 +4244,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &654842485
 Transform:
   m_ObjectHideFlags: 0
@@ -11213,6 +11213,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1663836772}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1696996119 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4734050014190922554, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
+  m_PrefabInstance: {fileID: 2006303500226646820}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45e653bab7fb20e499bda25e1b646fea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1697226022
 GameObject:
   m_ObjectHideFlags: 0
@@ -15211,6 +15222,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 36317742811562339, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
+      propertyPath: _cinemachineVirtualCamera
+      value: 
+      objectReference: {fileID: 1696996119}
     - target: {fileID: 2332357916831905798, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
       propertyPath: m_Name
       value: Pre_PlayerObjGroupe

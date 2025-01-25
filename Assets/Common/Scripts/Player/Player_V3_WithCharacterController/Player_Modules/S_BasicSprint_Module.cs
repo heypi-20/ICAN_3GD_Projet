@@ -34,7 +34,7 @@ public class S_BasicSprint_Module : MonoBehaviour
 
     // Composant pour ajuster la vitesse de déplacement
     private S_CustomCharacterController _characterController;
-    // Composant pour vérifier et modifier l'énergie disponible
+    // Composant pour vérifier et modifier l'énergie disponible 
     private S_EnergyStorage _energyStorage;
     // Gestionnaire d'input pour détecter les actions du joueur
     private S_InputManager _inputManager;
