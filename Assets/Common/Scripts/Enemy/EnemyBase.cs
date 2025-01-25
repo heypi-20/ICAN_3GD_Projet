@@ -45,10 +45,9 @@ public class EnemyBase : MonoBehaviour
         }
         
         SoundManager.Instance.Meth_Shoot_Kill(1);
-        
-        gameObject.GetComponent<MeshRenderer>().enabled = false;
         DropItems(DropBonus);
         Destroy(gameObject,5f);
+        gameObject.SetActive(false);
     }
     
     private void DropItems(float DropBonus)
