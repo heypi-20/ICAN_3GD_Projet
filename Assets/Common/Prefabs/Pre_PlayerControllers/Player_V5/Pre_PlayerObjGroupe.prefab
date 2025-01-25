@@ -643,6 +643,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1265687602182800299, guid: cb650d61ccc122140a776320c1f19457, type: 3}
+      propertyPath: m_RenderPostProcessing
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265687602182800299, guid: cb650d61ccc122140a776320c1f19457, type: 3}
       propertyPath: m_Cameras.Array.data[0]
       value: 
       objectReference: {fileID: 2327411758440021128}
@@ -661,19 +665,44 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4513033208006144724, guid: cb650d61ccc122140a776320c1f19457, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 221304925591986196}
   m_SourcePrefab: {fileID: 100100000, guid: cb650d61ccc122140a776320c1f19457, type: 3}
 --- !u!4 &139209805471723722 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 38355039834318816, guid: cb650d61ccc122140a776320c1f19457, type: 3}
   m_PrefabInstance: {fileID: 100997977045145386}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4595733112523089406 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4513033208006144724, guid: cb650d61ccc122140a776320c1f19457, type: 3}
+  m_PrefabInstance: {fileID: 100997977045145386}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &221304925591986196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4595733112523089406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449ef5ebbe24720439ec31d15f7b6f3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FocusTracksTarget: 0
+  m_FocusTracking: 0
+  m_FocusTarget: {fileID: 0}
+  m_FocusOffset: 0
+  m_Profile: {fileID: 11400000, guid: 8d1ef4c6a616d0849a5752fbc19e100b, type: 2}
 --- !u!114 &4734050014190922554 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4671473371467709456, guid: cb650d61ccc122140a776320c1f19457, type: 3}
   m_PrefabInstance: {fileID: 100997977045145386}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 4595733112523089406}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e653bab7fb20e499bda25e1b646fea, type: 3}
@@ -1272,6 +1301,10 @@ PrefabInstance:
       propertyPath: attackLevels.Array.data[3].attackDamage
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 8293878084122467235, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
+      propertyPath: _cinemachineVirtualCamera
+      value: 
+      objectReference: {fileID: 4734050014190922554}
     - target: {fileID: 8661948642549650535, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
       propertyPath: countdownText
       value: 
@@ -1327,6 +1360,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c38433cc78643b54c957d99f6b12aec4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _volumeSettings: {fileID: 221304925591986196}
+  vignetteTargetIntensity: 0.4
+  animationDuration: 0.5
+  animationEase: 35
 --- !u!136 &7246221521167357649
 CapsuleCollider:
   m_ObjectHideFlags: 0
