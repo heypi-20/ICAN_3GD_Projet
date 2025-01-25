@@ -203,13 +203,14 @@ public class PlayerEditorWindow : EditorWindow
             modules[i].enabled = playerProfiles.isEnable[i];
             
             int j = 0;
-            foreach (KeyValuePair<string, object> kvp in playerProfiles.moduleProfiles[i].dataDictionary) {
+            foreach(KeyValuePair<string, object> kvp in playerProfiles.moduleProfiles[i].dataDictionary) {
                 fields[j].SetValue(modules[i], kvp.Value);
                 j++;
             }
 
             profileName = playerProfiles.name;
             index = -1;
+            
         }
     }
     
