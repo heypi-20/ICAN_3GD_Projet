@@ -654,13 +654,17 @@ PrefabInstance:
       propertyPath: m_Follow
       value: 
       objectReference: {fileID: 3929823524183571026}
+    - target: {fileID: 4671473371467709456, guid: cb650d61ccc122140a776320c1f19457, type: 3}
+      propertyPath: m_Lens.Dutch
+      value: -0.000003007631
+      objectReference: {fileID: 0}
     - target: {fileID: 5851610818269584816, guid: cb650d61ccc122140a776320c1f19457, type: 3}
       propertyPath: m_VerticalAxis.m_MaxSpeed
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5851610818269584816, guid: cb650d61ccc122140a776320c1f19457, type: 3}
       propertyPath: m_HorizontalAxis.m_MaxSpeed
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7151079118171842360, guid: cb650d61ccc122140a776320c1f19457, type: 3}
       propertyPath: m_Name
@@ -802,9 +806,23 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3041495021295536507}
     m_Modifications:
+    - target: {fileID: 739000353129022906, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3259471047373525032, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
       propertyPath: m_Color.a
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3628814879948278014, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
+      propertyPath: m_text
+      value: "Instructions\nWASD / ZQSD - Move \nRight Click - Melee Attack \nSpace
+        - Jump\nLeft Click - Shoot \nLeft Shift - Sprint\nRight Click and watch down
+        - GroundPound"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3628814879948278014, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
+      propertyPath: m_margin.w
+      value: -64.27384
       objectReference: {fileID: 0}
     - target: {fileID: 4755813948950301855, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
       propertyPath: m_Name
@@ -1055,7 +1073,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1748255068045822558, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
       propertyPath: activeTime
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1748255068045822558, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
       propertyPath: Gain_Palier
@@ -1073,6 +1091,10 @@ PrefabInstance:
       propertyPath: energyDisplay
       value: 
       objectReference: {fileID: 3804179328032330001}
+    - target: {fileID: 1748255068045822558, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
+      propertyPath: animationDuration
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 1892299672951254854, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -1311,7 +1333,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8293878084122467235, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
       propertyPath: smoothTime
-      value: 0.1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8293878084122467235, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
       propertyPath: maxDutchAngle

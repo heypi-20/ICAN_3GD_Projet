@@ -4158,6 +4158,51 @@ MonoBehaviour:
   timer: 0
   TimerTarget: 10
   NPC: {fileID: 9022804584600836904, guid: 2abf467efd4dd5c40add6140d1cbf0cc, type: 3}
+--- !u!1 &591361319
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 591361321}
+  - component: {fileID: 591361320}
+  m_Layer: 0
+  m_Name: BackToMainMenu
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &591361320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 591361319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37f87f3a6240e904193fb97c3f1086ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneName: MainMenu_Proto
+--- !u!4 &591361321
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 591361319}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 54.956898, y: 237.69574, z: -542.76434}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &607257020
 GameObject:
   m_ObjectHideFlags: 0
@@ -15194,13 +15239,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 36317742811562339, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
-      propertyPath: smoothTime
-      value: 0.2
+    - target: {fileID: 1998442018633105092, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -264.57477
       objectReference: {fileID: 0}
-    - target: {fileID: 36317742811562339, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
-      propertyPath: maxDutchAngle
-      value: 3
+    - target: {fileID: 1998442018633105092, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 160.52847
       objectReference: {fileID: 0}
     - target: {fileID: 2332357916831905798, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
       propertyPath: m_Name
@@ -15246,21 +15291,19 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4734050014190922554, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
-      propertyPath: m_Lens.Dutch
-      value: -0.000003007631
+    - target: {fileID: 6573568856162444982, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
+      propertyPath: m_text
+      value: "Instructions\nWASD / ZQSD - Move \nRight Click - Melee Attack \nSpace
+        - Jump\nLeft Click - Shoot \nLV2 to unlock : Left Shift - Sprint\nLV3 to
+        unlock : Right Click and watch down - GroundPound"
       objectReference: {fileID: 0}
-    - target: {fileID: 7772030290795581598, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
-      propertyPath: activeTime
-      value: 0.5
+    - target: {fileID: 6573568856162444982, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
+      propertyPath: m_fontSize
+      value: 10
       objectReference: {fileID: 0}
-    - target: {fileID: 7772030290795581598, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
-      propertyPath: currentEnergy
-      value: 500
-      objectReference: {fileID: 0}
-    - target: {fileID: 7772030290795581598, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
-      propertyPath: animationDuration
-      value: 0.3
+    - target: {fileID: 6573568856162444982, guid: d2e2109385061424fba11b0bd876d4f1, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15294,3 +15337,4 @@ SceneRoots:
   - {fileID: 6084332980076316192}
   - {fileID: 96953808}
   - {fileID: 323150686802350687}
+  - {fileID: 591361321}
