@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using TMPro;
+using DG.Tweening;
 
 [Serializable]
 public class EnergyLevel
@@ -21,6 +22,13 @@ public class S_EnergyStorage : MonoBehaviour
 
     [Header("UI Settings")]
     public TextMeshProUGUI energyDisplay; // Affichage de l'énergie et du niveau
+
+    [Header("UI Gain Loose Palier")] 
+    public GameObject Gain_Palier; //Ui quand on gagne un palier
+    public GameObject Loose_Palier; //UI quand on perd un palier
+    public float animationDuration = 0.5f; // Durée pour l'apparition/disparition
+    public float activeTime = 2f;          // Temps pendant lequel l'objet reste actif
+    public Vector3 active_scale = new Vector3(0.3f, 0.3f, 0.3f);
 
     public int currentLevelIndex{ get; private set; } // Index du niveau actuel
     private float _graceTimer = 0f; // Temps de grâce restant
@@ -88,6 +96,7 @@ public class S_EnergyStorage : MonoBehaviour
             {
                 SetNewLevel(i); // Définit le nouveau niveau
                 SoundManager.Instance.Meth_Gain_Palier();
+                ShowAndHideGainPalier();
                 return true;
             }
         }
@@ -119,6 +128,7 @@ public class S_EnergyStorage : MonoBehaviour
                 //Fin du compte à rebours : énergie positive, ajustement au niveau correspondant.
                 int newLevelIndex = FindLevelIndexForEnergy();
                 SoundManager.Instance.Meth_Lose_Palier();
+                ShowAndHideLoosePalier();
                 SetNewLevel(newLevelIndex);
                 ResetGracePeriod();
             }
@@ -179,5 +189,35 @@ public class S_EnergyStorage : MonoBehaviour
         hasDeathTriggered = false;
         ResetGracePeriod();
         Debug.Log("Réinitialisation après la mort.");
+    }
+    public void ShowAndHideGainPalier()
+    {
+        Gain_Palier.SetActive(true); // Active l'objet
+
+        // Apparition
+        Gain_Palier.transform.localScale = Vector3.zero; // Commence à scale 0
+        Gain_Palier.transform.DOScale(active_scale, animationDuration).SetEase(Ease.OutBack).OnComplete(() =>
+        {
+            // Attend `activeTime` avant de disparaître
+            Gain_Palier.transform.DOScale(Vector3.zero, animationDuration).SetEase(Ease.InBack).SetDelay(activeTime).OnComplete(() =>
+            {
+                Gain_Palier.SetActive(false); // Désactive l'objet une fois invisible
+            });
+        });
+    }
+    public void ShowAndHideLoosePalier()
+    {
+        Loose_Palier.SetActive(true); // Active l'objet
+
+        // Apparition
+        Loose_Palier.transform.localScale = Vector3.zero; // Commence à scale 0
+        Loose_Palier.transform.DOScale(active_scale, animationDuration).SetEase(Ease.OutBack).OnComplete(() =>
+        {
+            // Attend `activeTime` avant de disparaître
+            Loose_Palier.transform.DOScale(Vector3.zero, animationDuration).SetEase(Ease.InBack).SetDelay(activeTime).OnComplete(() =>
+            {
+                Loose_Palier.SetActive(false); // Désactive l'objet une fois invisible
+            });
+        });
     }
 }
