@@ -656,7 +656,7 @@ PrefabInstance:
       objectReference: {fileID: 3929823524183571026}
     - target: {fileID: 4671473371467709456, guid: cb650d61ccc122140a776320c1f19457, type: 3}
       propertyPath: m_Lens.Dutch
-      value: -0.000003007631
+      value: 0.001119536
       objectReference: {fileID: 0}
     - target: {fileID: 5851610818269584816, guid: cb650d61ccc122140a776320c1f19457, type: 3}
       propertyPath: m_VerticalAxis.m_MaxSpeed
@@ -817,12 +817,20 @@ PrefabInstance:
     - target: {fileID: 3628814879948278014, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
       propertyPath: m_text
       value: "Instructions\nWASD / ZQSD - Move \nRight Click - Melee Attack \nSpace
-        - Jump\nLeft Click - Shoot \nLeft Shift - Sprint\nRight Click and watch down
-        - GroundPound"
+        - Jump\nLeft Click - Shoot \nLV2 to unlock : Left Shift - Sprint\nLV3 to
+        unlock : Right Click and watch down - GroundPound"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3628814879948278014, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
+      propertyPath: m_fontSize
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3628814879948278014, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
       propertyPath: m_margin.w
       value: -64.27384
+      objectReference: {fileID: 0}
+    - target: {fileID: 3628814879948278014, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4755813948950301855, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
       propertyPath: m_Name
@@ -907,6 +915,14 @@ PrefabInstance:
     - target: {fileID: 7707028142934571184, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8276988905195901068, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -264.57477
+      objectReference: {fileID: 0}
+    - target: {fileID: 8276988905195901068, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 160.52847
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1051,6 +1067,30 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 893256518631456756, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
+      propertyPath: speedLevels.Array.data[2].energyConsumptionRate
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 893256518631456756, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
+      propertyPath: speedLevels.Array.data[3].energyConsumptionRate
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 1002787870393967833, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
+      propertyPath: jumpLevels.Array.data[0].energyConsumption
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1002787870393967833, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
+      propertyPath: jumpLevels.Array.data[1].energyConsumption
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 1002787870393967833, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
+      propertyPath: jumpLevels.Array.data[2].energyConsumption
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 1002787870393967833, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
+      propertyPath: jumpLevels.Array.data[3].energyConsumption
+      value: 120
+      objectReference: {fileID: 0}
     - target: {fileID: 1176219669701409492, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -1139,6 +1179,22 @@ PrefabInstance:
       propertyPath: lateralRecoilMin
       value: -0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 4053687398543183167, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
+      propertyPath: fireRateLevels.Array.data[3].damage
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 4053687398543183167, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
+      propertyPath: fireRateLevels.Array.data[0].energyConsumption
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4053687398543183167, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
+      propertyPath: fireRateLevels.Array.data[1].energyConsumption
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4053687398543183167, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
+      propertyPath: fireRateLevels.Array.data[2].energyConsumption
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 4176409521652480002, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
       propertyPath: m_Name
       value: Player_V5
@@ -1206,6 +1262,14 @@ PrefabInstance:
     - target: {fileID: 5428656350230930278, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
       propertyPath: groundPoundLevels.Array.data[1].sphereDamage
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 5428656350230930278, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
+      propertyPath: groundPoundLevels.Array.data[0].energyConsumption
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 5428656350230930278, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
+      propertyPath: groundPoundLevels.Array.data[1].energyConsumption
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 5584320361865384233, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -1277,19 +1341,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6635640248903522072, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
       propertyPath: sprintLevels.Array.data[0].energyConsumptionRate
-      value: 20
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 6635640248903522072, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
       propertyPath: sprintLevels.Array.data[1].energyConsumptionRate
-      value: 60
+      value: 120
       objectReference: {fileID: 0}
     - target: {fileID: 6635640248903522072, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
       propertyPath: sprintLevels.Array.data[2].energyConsumptionRate
-      value: 100
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 6635640248903522072, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
       propertyPath: sprintLevels.Array.data[3].energyConsumptionRate
-      value: 160
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 6738019709915686941, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
       propertyPath: m_LocalScale.x
@@ -1331,13 +1395,29 @@ PrefabInstance:
       propertyPath: attackLevels.Array.data[3].attackDamage
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 7674239862863335189, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
+      propertyPath: attackLevels.Array.data[0].energyConsumption
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7674239862863335189, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
+      propertyPath: attackLevels.Array.data[1].energyConsumption
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7674239862863335189, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
+      propertyPath: attackLevels.Array.data[2].energyConsumption
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7674239862863335189, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
+      propertyPath: attackLevels.Array.data[3].energyConsumption
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 8293878084122467235, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
       propertyPath: smoothTime
       value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8293878084122467235, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
       propertyPath: maxDutchAngle
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8293878084122467235, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
       propertyPath: _cinemachineVirtualCamera
