@@ -21,13 +21,11 @@ public class S_Old_MainMenu : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        // Créer un bouton pour chaque éléments présent dans la liste
+        // Crï¿½er un bouton pour chaque ï¿½lï¿½ments prï¿½sent dans la liste
         foreach (string levelName in level)
         {
             CreateButton(levelName);
         }
-        
-
     }
 
     void Update()
@@ -41,13 +39,13 @@ public class S_Old_MainMenu : MonoBehaviour
 
     void CreateButton(string buttonName)
     {
-        // On instancie le Bouton qui est un GameObject et on le stock dans un variable pour la manipulé
+        // On instancie le Bouton qui est un GameObject et on le stock dans un variable pour la manipulï¿½
         GameObject newButton = Instantiate(myButton, buttonContainer);
 
-        // On récupere le component TextMeshProUGUI pour modifier le texte du bouton
+        // On rï¿½cupere le component TextMeshProUGUI pour modifier le texte du bouton
         TextMeshProUGUI buttonText = newButton.GetComponentInChildren<TextMeshProUGUI>();
         
-        if (buttonText != null) // Si l'élément de la liste n'est pas sans nom
+        if (buttonText != null) // Si l'ï¿½lï¿½ment de la liste n'est pas sans nom
         {
             buttonText.text = buttonName; // Le Texte devient la string de son index dans la liste
         }
