@@ -35,6 +35,8 @@ public class S_MeleeAttack_Module : MonoBehaviour
     private void Update()
     {
         HandleMeleeAttack();
+        //reset input
+        _inputManager.MeleeAttackInput = false;
     }
 
     private void HandleMeleeAttack()

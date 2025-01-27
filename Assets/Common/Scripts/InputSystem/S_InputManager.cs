@@ -39,32 +39,10 @@ public class S_InputManager : MonoBehaviour
         _playerInputActions.Gameplay.Shoot.canceled+=ctx=>ShootInput=false;
         
         //melee attack input
-        _playerInputActions.Gameplay.MeleeAttack.performed += OnMeleeAttackPerformed;
+        _playerInputActions.Gameplay.MeleeAttack.performed += ctx =>MeleeAttackInput=true;
     }
     
-    private void OnMeleeAttackPerformed(InputAction.CallbackContext ctx)
-    {
-        if (AllowHoldForMelee)
-        {
-
-            MeleeAttackInput = true;
-        }
-        else
-        {
-
-            MeleeAttackInput = true;
-
-
-            Invoke(nameof(ResetMeleeAttackInput), 0f);
-        }
-    }
-
-    private void ResetMeleeAttackInput()
-    {
-        MeleeAttackInput = false;
-    }
-
-    
+   
     private void OnEnable()
     {
         _playerInputActions.Enable();
