@@ -13,6 +13,10 @@ public class S_InputManager : MonoBehaviour
     public bool ShootInput;
     public bool MeleeAttackInput;
     
+    private bool _meleeAttackTriggered;
+    
+    [Header("Settings")]
+    public bool AllowHoldForMelee;
 
     private void Awake()
     {
@@ -35,11 +39,10 @@ public class S_InputManager : MonoBehaviour
         _playerInputActions.Gameplay.Shoot.canceled+=ctx=>ShootInput=false;
         
         //melee attack input
-        _playerInputActions.Gameplay.MeleeAttack.performed += ctx => MeleeAttackInput = true;
-        _playerInputActions.Gameplay.MeleeAttack.canceled += ctx => MeleeAttackInput = false;
-
+        _playerInputActions.Gameplay.MeleeAttack.performed += ctx =>MeleeAttackInput=true;
     }
     
+   
     private void OnEnable()
     {
         _playerInputActions.Enable();

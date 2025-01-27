@@ -216,8 +216,6 @@ public class PlayerEditorWindow : EditorWindow
     private void MonitorWindow()
     {
         GUILayout.Label("Monitor Window", EditorStyles.boldLabel);
-        
-        
     }
     
     #region Utility Functions

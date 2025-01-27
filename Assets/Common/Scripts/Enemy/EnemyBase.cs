@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class EnemyBase : MonoBehaviour
 {
@@ -15,7 +17,7 @@ public class EnemyBase : MonoBehaviour
     public string enemyDeathSound;
     
     private bool isDead = false;
-
+    private S_ScoreDisplay _s_ScoreDisplay;
 
     public void ReduceHealth(float amount,int DropBonus)
     {
@@ -49,6 +51,8 @@ public class EnemyBase : MonoBehaviour
         SoundManager.Instance.Meth_Shoot_Kill(1);
         DropItems(DropBonus);
         Destroy(gameObject,5f);
+        _s_ScoreDisplay = FindObjectOfType<S_ScoreDisplay>();
+        _s_ScoreDisplay.AddScore(20f);
         gameObject.SetActive(false);
     }
     
@@ -56,8 +60,13 @@ public class EnemyBase : MonoBehaviour
     {
         for (int i = 0; i < energyDropQuantity+DropBonus; i++)
         {
-           
-            Instantiate(energyPoint, transform.position, Quaternion.identity);
+            Vector3 randomOffset = new Vector3(
+                Random.Range(-0.5f, 0.5f),
+                Random.Range(-0.5f, 0.5f), 
+                Random.Range(-0.5f, 0.5f)  
+            );
+            Vector3 spawnPosition = transform.position + randomOffset;
+            Instantiate(energyPoint, spawnPosition, Quaternion.identity);
         }
     }
     

@@ -51,6 +51,10 @@ public class S_PlayerGetHit_Trigger : MonoBehaviour
         {
             _energyStorage.RemoveEnergy(enemy.enemyDamage);
         }
+        else if(other.gameObject.GetComponent<S_EnemyProjectileDamage>())
+        {
+            _energyStorage.RemoveEnergy(other.gameObject.GetComponent<S_EnemyProjectileDamage>().damage);
+        }
 
         // Animer l'effet de vignette
         AnimateVignetteEffect();
