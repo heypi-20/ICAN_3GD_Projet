@@ -35,9 +35,7 @@ public class S_EnemySpawner : MonoBehaviour
         {
             Debug.LogError("Aucun BoxCollider assigné comme zone de génération !");
             spawnArea = gameObject.AddComponent<BoxCollider>();
-            spawnArea = gameObject.GetComponent<BoxCollider>();
             spawnArea.isTrigger = true;
-
         }
 
         // Commencer la génération en continu
@@ -62,11 +60,8 @@ public class S_EnemySpawner : MonoBehaviour
                         // Parcourir les détails de génération pour ce niveau
                         foreach (var detail in levelSpawner.spawnDetails)
                         {
-                            // Générer les objets
-                            for (int i = 0; i < detail.spawnQuantity; i++)
-                            {
-                                SpawnObject(detail.spawnType);
-                            }
+                            // Générer les objets de manière échelonnée
+                            yield return StartCoroutine(SpawnObjectsGradually(detail));
 
                             // Attendre la fréquence spécifiée avant la prochaine vague
                             yield return new WaitForSeconds(detail.spawnRate);
@@ -76,6 +71,15 @@ public class S_EnemySpawner : MonoBehaviour
             }
 
             yield return null; // Attendre une frame avant de recommencer
+        }
+    }
+
+    private IEnumerator SpawnObjectsGradually(SpawnDetails detail)
+    {
+        for (int i = 0; i < detail.spawnQuantity; i++)
+        {
+            SpawnObject(detail.spawnType);
+            yield return null; // Attendre une frame avant de générer le prochain objet
         }
     }
 
@@ -97,7 +101,7 @@ public class S_EnemySpawner : MonoBehaviour
         // Générer l'objet
         Instantiate(spawnType, randomPosition, Quaternion.identity);
     }
-    
+
     private void OnDrawGizmos()
     {
         // Vérifier si un BoxCollider est assigné

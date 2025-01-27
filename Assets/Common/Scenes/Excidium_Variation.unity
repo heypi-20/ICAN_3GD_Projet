@@ -1575,7 +1575,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3041495021295536507, guid: d82abdf23df5a1e469444b0cf4f4720e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.95
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3041495021295536507, guid: d82abdf23df5a1e469444b0cf4f4720e, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4057,79 +4057,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 607257020}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &636074313
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 636074314}
-  - component: {fileID: 636074316}
-  - component: {fileID: 636074315}
-  m_Layer: 2
-  m_Name: Level_1_Spawner (2)
-  m_TagString: Untagged
-  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &636074314
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 636074313}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -28, y: 12, z: -111.5}
-  m_LocalScale: {x: 29.225578, y: 3.2502, z: 51.181736}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 654842485}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &636074315
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 636074313}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &636074316
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 636074313}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65bc874f7bae12846922558bb7557601, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelSpawners:
-  - levelIndex: 1
-    spawnDetails:
-    - spawnType: {fileID: 5534188564840520030, guid: e081be6bbad2044448d092f9a6da15b3, type: 3}
-      spawnQuantity: 4
-      spawnRate: 3
-  gizmoColor: {r: 1, g: 0.22759804, b: 0, a: 0.2}
 --- !u!1 &654842484
 GameObject:
   m_ObjectHideFlags: 0
@@ -4159,8 +4086,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 636074314}
-  - {fileID: 1490036768}
   - {fileID: 1924057590}
   - {fileID: 1565695615}
   - {fileID: 1326932871}
@@ -9534,79 +9459,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8025714876950901999, guid: 24cb3dd53d004fa489373f367c3c0b46, type: 3}
   m_PrefabInstance: {fileID: 1021166485}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1490036767
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1490036768}
-  - component: {fileID: 1490036770}
-  - component: {fileID: 1490036769}
-  m_Layer: 2
-  m_Name: Level_1_Spawner (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1490036768
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1490036767}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 14, y: 12, z: -111.5}
-  m_LocalScale: {x: 29.225578, y: 3.2502, z: 51.181736}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 654842485}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1490036769
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1490036767}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1490036770
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1490036767}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65bc874f7bae12846922558bb7557601, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelSpawners:
-  - levelIndex: 1
-    spawnDetails:
-    - spawnType: {fileID: 5534188564840520030, guid: e081be6bbad2044448d092f9a6da15b3, type: 3}
-      spawnQuantity: 4
-      spawnRate: 3
-  gizmoColor: {r: 1, g: 0.22759804, b: 0, a: 0.2}
 --- !u!1 &1493060574
 GameObject:
   m_ObjectHideFlags: 0
@@ -12172,8 +12024,8 @@ Transform:
   m_GameObject: {fileID: 1924057589}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9, y: 18, z: -20}
-  m_LocalScale: {x: 61.34449, y: 3.2502, z: 74.321}
+  m_LocalPosition: {x: -9, y: 12, z: -46}
+  m_LocalScale: {x: 61.34449, y: 3.2502, z: 127.68348}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 654842485}
@@ -12217,7 +12069,7 @@ MonoBehaviour:
     - spawnType: {fileID: 5534188564840520030, guid: e081be6bbad2044448d092f9a6da15b3, type: 3}
       spawnQuantity: 8
       spawnRate: 3
-  gizmoColor: {r: 1, g: 0.22759804, b: 0, a: 0.2}
+  gizmoColor: {r: 1, g: 1, b: 1, a: 0.06666667}
 --- !u!1 &1929450611
 GameObject:
   m_ObjectHideFlags: 0
