@@ -24,7 +24,6 @@ public class S_FireRateGun_Module : MonoBehaviour
     public Transform shootPoint; // Point d'origine de la direction de tir
     public Transform spawnBulletPoint;
     public GameObject bulletPrefab;
-    public LayerMask targetLayer; // Layer des cibles destructibles
     public LayerMask obstacleLayer; // Layer des obstacles
     public float raycastLength = 50f; // Longueur maximale de la portée du tir
     public float raycastSpread = 5f; // Angle de déviation des rayons secondaires
@@ -66,8 +65,6 @@ public class S_FireRateGun_Module : MonoBehaviour
     private void Update()
     {
         HandleShooting();
-
-        Vector3 shootDirection = shootPoint.forward;
     }
 
     private void HandleShooting()
@@ -172,7 +169,7 @@ public class S_FireRateGun_Module : MonoBehaviour
         if (Physics.Raycast(origin, direction, out RaycastHit hit, length))
         {
             // Si la cible appartient au layer cible
-            if ((1 << hit.collider.gameObject.layer & targetLayer) != 0)
+            if (hit.collider.gameObject.GetComponent<EnemyBase>())
             {
                 var target = hit.collider.gameObject;
 
