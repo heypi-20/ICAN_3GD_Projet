@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using Eflatun.SceneReference;
 
-public class S_New_Main_Menu : MonoBehaviour
+public class S_Menu_Method : MonoBehaviour
 {
     [Header("Prefab")]
     public GameObject myButton;
