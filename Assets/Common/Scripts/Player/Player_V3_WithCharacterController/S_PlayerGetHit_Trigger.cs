@@ -7,7 +7,8 @@ using DG.Tweening;
 public class S_PlayerGetHit_Trigger : MonoBehaviour
 {
     private S_EnergyStorage _energyStorage;
-
+    [Header("Physic settings")]
+    public float pushForce= 3f;
     [Header("Camera Settings")]
     public CinemachineVolumeSettings _volumeSettings; // Référence au composant Volume de la caméra
 
@@ -50,6 +51,13 @@ public class S_PlayerGetHit_Trigger : MonoBehaviour
         if (enemy != null)
         {
             AnimateVignetteEffect();
+            Rigidbody enemyrb = enemy.gameObject.GetComponent<Rigidbody>();
+            if (enemyrb != null)
+            {
+                Vector3 pushDirection = enemy.gameObject.transform.position - transform.position;
+                pushDirection.Normalize();
+                enemyrb.AddForce(pushDirection*pushForce, ForceMode.Impulse);
+            }
             _energyStorage.RemoveEnergy(enemy.enemyDamage);
         }
         else if(other.gameObject.GetComponent<S_EnemyProjectileDamage>())

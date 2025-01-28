@@ -118,7 +118,6 @@ public class S_GroundPound_Module : MonoBehaviour
             direction.Normalize();
 
             _characterController.Move(direction * (currentSpeed * Time.deltaTime));
-
             yield return null;
         }
 

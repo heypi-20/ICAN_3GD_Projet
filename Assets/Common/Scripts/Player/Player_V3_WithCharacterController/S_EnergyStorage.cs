@@ -163,41 +163,57 @@ public class S_EnergyStorage : MonoBehaviour
         _currentCountdownTime = countdownDuration;
 
         // Animation tremblante pour le texte (DOTween)
-        _textShakeTween = countdownText.rectTransform
-            .DOShakePosition(0.5f, new Vector3(5, 5, 0), 20, 90, false, true)
-            .SetLoops(-1, LoopType.Yoyo);
+        if (_textShakeTween != null)
+        {
+            _textShakeTween = countdownText.rectTransform
+                .DOShakePosition(0.5f, new Vector3(5, 5, 0), 20, 90, false, true)
+                .SetLoops(-1, LoopType.Yoyo);
 
-        // Activation des objets visuels
-        countdownText.gameObject.SetActive(true); 
+            // Activation des objets visuels
+            countdownText.gameObject.SetActive(true);
+        }
+        
     }
     private void UpdateCountdown()
     {
-        // Mise à jour du temps restant
-        _currentCountdownTime -= Time.deltaTime;
+        if (_textShakeTween != null)
+        {
+            // Mise à jour du temps restant
+            _currentCountdownTime -= Time.deltaTime;
 
-        // Met à jour le texte avec le temps restant arrondi
-        countdownText.text = Mathf.CeilToInt(_currentCountdownTime).ToString();
+            // Met à jour le texte avec le temps restant arrondi
+            countdownText.text = Mathf.CeilToInt(_currentCountdownTime).ToString();
+        }
+        
     }
     private void StopCountdown()
     {
-        // Arrêt du compte à rebours
-        _isCountingDown = false;
+        if (_textShakeTween != null)
+        {
+            // Arrêt du compte à rebours
+            _isCountingDown = false;
 
-        // Réinitialisation des valeurs
-        ResetCountdown();
+            // Réinitialisation des valeurs
+            ResetCountdown();
 
-        // Désactivation des objets visuels
-        countdownText.gameObject.SetActive(false);
+            // Désactivation des objets visuels
+            countdownText.gameObject.SetActive(false);
 
-        // Arrêt des animations DOTween
-        _textShakeTween?.Kill();
+            // Arrêt des animations DOTween
+            _textShakeTween?.Kill();
+        }
+        
     }
     private void ResetCountdown()
     {
-        // Réinitialisation des paramètres de compte à rebours
-        _currentCountdownTime = countdownDuration;
-        countdownText.text = countdownDuration.ToString();
+        if (_textShakeTween != null)
+        {
+            // Réinitialisation des paramètres de compte à rebours
+            _currentCountdownTime = countdownDuration;
+            countdownText.text = countdownDuration.ToString();
 
+        }
+        
     }
 
     // Définit un nouveau niveau d'énergie
