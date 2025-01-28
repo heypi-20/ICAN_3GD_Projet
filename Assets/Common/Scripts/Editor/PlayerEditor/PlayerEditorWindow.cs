@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-using VFolders.Libs;
 
 public class PlayerEditorWindow : EditorWindow
 {
@@ -29,6 +29,13 @@ public class PlayerEditorWindow : EditorWindow
     private string[] profileNames;
     
     private Vector2 scrollPosition;
+    
+    private int index;
+
+    private void Awake()
+    {
+        index = -1;
+    }
 
     private void OnGUI()
     {
@@ -168,11 +175,17 @@ public class PlayerEditorWindow : EditorWindow
                 moduleProfile.fieldNames.Add(field.Name);
                 moduleProfile.dataDictionary.Add(field.Name, field.GetValue(module));
             }
-                    
+            
             playerProfile.isEnable.Add(module.enabled);
             playerProfile.moduleProfiles.Add(moduleProfile);
             foreach (KeyValuePair<string, object> kvp in moduleProfile.dataDictionary) {
-                Debug.Log("Key = " + kvp.Key + ", Value = " + kvp.Value);
+                if (kvp.Value.GetType().IsGenericType && kvp.Value.GetType().GetGenericTypeDefinition() == typeof(List<>)) {
+                    Debug.Log("List values :" + kvp.Value.GetType().GetGenericArguments());
+                    foreach(var item in (IEnumerable)kvp.Value) {
+                        Debug.Log("Item value = " + item);
+                    }
+                } else
+                    Debug.Log("Key = " + kvp.Key + ", Value = " + kvp.Value);
             }
             
             if (!Directory.Exists("Assets/Common/Data/ModuleProfiles/" + profileName)) {
@@ -183,8 +196,6 @@ public class PlayerEditorWindow : EditorWindow
         }
     }
 
-    private int index;
-        
     private void LoadProfile()
     {
         index = EditorGUILayout.Popup(index, profileNames, GUILayout.Width(100));
@@ -196,15 +207,34 @@ public class PlayerEditorWindow : EditorWindow
             return;
         
         PlayerProfile playerProfiles = profiles[index];
+        Debug.Log("index = " + index);
         
         for (int i = 0; i < playerProfiles.moduleProfiles.Count; i++) {
+            if (playerProfiles.moduleProfiles[i].dataDictionary == null)
+                continue;
             FieldInfo[] fields = modules[i].GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
 
             modules[i].enabled = playerProfiles.isEnable[i];
             
             int j = 0;
             foreach(KeyValuePair<string, object> kvp in playerProfiles.moduleProfiles[i].dataDictionary) {
+                // if (kvp.Value != null &&
+                //     kvp.Value.GetType().IsGenericType &&
+                //     kvp.Value.GetType().GetGenericTypeDefinition() == typeof(List<>)) {
+                //     Type elementType = kvp.Value.GetType().GetGenericArguments()[0];
+                //     Type listType = typeof(List<>).MakeGenericType(elementType);
+                //     IList newList = (IList)Activator.CreateInstance(listType);
+                //
+                //     foreach(var item in (IEnumerable)kvp.Value) {
+                //         newList.Add(item);
+                //         Debug.Log("item = " + item);
+                //     }
+                //     fields[j].SetValue(modules[i], newList);
+                // } else {
+                //     fields[j].SetValue(modules[i], kvp.Value);
+                // }
                 fields[j].SetValue(modules[i], kvp.Value);
+                Debug.Log("Key = " + kvp.Key + ", Value = " + kvp.Value);
                 j++;
             }
 
