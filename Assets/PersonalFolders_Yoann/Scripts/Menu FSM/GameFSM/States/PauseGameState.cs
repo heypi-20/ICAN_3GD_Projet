@@ -14,20 +14,21 @@ public class PauseGameState : GameState
         Cursor.visible   = true;
     }
     
-    //todo Return to game
-    //todo Return to menu
 
     public void Resume()
     {
         fsm.ChangeState(GetComponent<PlayingGameState>());
     }
 
-    // public void ToMenu()
-    // {
-    //     // SceneManager.UnloadSceneAsync(chunkLoader.chunkPrefab.GetComponent<ChunkLoader>().chunkLoaded.BuildIndex);
-    //     SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
-    //     fsm.ChangeState(GetComponent<ReturnToMenuGameState>());
-    // }
+    public void ToMenu()
+    {
+        // SceneManager.UnloadSceneAsync(chunkLoader.chunkPrefab.GetComponent<ChunkLoader>().chunkLoaded.BuildIndex);
+        SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+        fsm.ChangeState(GetComponent<ReturnToMenuGameState>());
+        
+        //ToDo : Go To Main Menu
+        Debug.Log("Main Menu");
+    }
     
     public override void Exit()
     {

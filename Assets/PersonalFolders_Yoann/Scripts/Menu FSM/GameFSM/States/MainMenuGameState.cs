@@ -3,13 +3,15 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using Eflatun.SceneReference;
+using UnityEngine.Serialization;
 
 public class MainMenuGameState : GameState
 {
     public GameObject menuGO;
+    public GameObject levelPanel;
     
     [Header("Prefab")]
-    public GameObject myButton;
+    public GameObject buttonPrefab;
     public Transform buttonContainer;
 
     [Header("Scene List")]
@@ -19,29 +21,29 @@ public class MainMenuGameState : GameState
     // Variable pour stocker les panel principaux
     private GameObject currentMainPanel;
     
-    void OnButtonClicked(string buttonName)
+    void OnButtonClicked(SceneReference scene)
     {
-        Debug.Log("Lancement de la scène : " + buttonName);
-        SceneManager.LoadScene(buttonName);
-        
-        //fsm.selectedLevel = buttonName;
+        fsm.selectedLevel = scene;
         fsm.ChangeState(GetComponent<LoadingLevelGameState>());
     }
     
-    void CreateButton(string buttonName)
+    void CreateButton(SceneReference scene)
     {
-        // Instancie le bouton et configure son texte
-        GameObject newButton = Instantiate(myButton, buttonContainer);
+        GameObject newButton = Instantiate(buttonPrefab, buttonContainer);
         TextMeshProUGUI buttonText = newButton.GetComponentInChildren<TextMeshProUGUI>();
         if (buttonText != null)
         {
-            buttonText.text = buttonName;
+            buttonText.text = scene.Name; // Utilise le nom de la scène
         }
 
         Button buttonComponent = newButton.GetComponent<Button>();
         if (buttonComponent != null)
         {
-            buttonComponent.onClick.AddListener(() => OnButtonClicked(buttonName));
+            buttonComponent.onClick.AddListener(() =>
+            {
+                levelPanel.SetActive(false); // Désactive le panneau de niveaux
+                OnButtonClicked(scene);      // Appelle la méthode pour changer l'état
+            });
         }
     }
     
@@ -53,9 +55,9 @@ public class MainMenuGameState : GameState
         Cursor.visible = true;
 
         // Crée un bouton pour chaque élément présent dans la liste
-        foreach (var scenes in level)
+        foreach (var scene in level)
         {
-            CreateButton(scenes.Name);
+            CreateButton(scene);
         }
     }
 

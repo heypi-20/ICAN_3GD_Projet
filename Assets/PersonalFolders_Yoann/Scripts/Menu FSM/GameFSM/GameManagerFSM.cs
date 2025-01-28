@@ -6,7 +6,6 @@ public class GameManagerFSM : MonoBehaviour
 {
     
     private static GameManagerFSM instance;
-
     public static GameManagerFSM Instance
     {
         get
@@ -19,13 +18,9 @@ public class GameManagerFSM : MonoBehaviour
             return instance;
         }
     }
-
-    public void DoStuff(){}
     
     //Dans un vrai système, cette variable serait chargée depuis une sauvegarde, ou choisie depuis un menu de
     //sélection de niveau : 
-    public SceneReference level1;
-    public SceneReference level2;
     public SceneReference selectedLevel;
     
     private GameState currentState;

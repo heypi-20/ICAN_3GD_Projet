@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 public class LoadingLevelGameState : GameState
 {
@@ -9,6 +10,8 @@ public class LoadingLevelGameState : GameState
     
     private AsyncOperation asyncLoad;
     private float minTransitionTime;
+
+    public bool avoidInitState = false;
     
     
     public override void Enter()
@@ -23,7 +26,14 @@ public class LoadingLevelGameState : GameState
         if (asyncLoad.isDone && Time.time >= minTransitionTime)
         {
             SceneManager.SetActiveScene(fsm.selectedLevel.LoadedScene);
-            fsm.ChangeState(GetComponent<LevelInitializationGameState>());
+            if (avoidInitState)
+            {
+                fsm.ChangeState(GetComponent<PlayingGameState>());
+            }
+            else
+            {
+                fsm.ChangeState(GetComponent<LevelInitializationGameState>());
+            }
         }
         
         //todo : show loading bar/ image...
