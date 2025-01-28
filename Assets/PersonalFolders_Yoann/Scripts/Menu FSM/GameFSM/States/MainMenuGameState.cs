@@ -24,7 +24,7 @@ public class MainMenuGameState : GameState
         Debug.Log("Lancement de la scène : " + buttonName);
         SceneManager.LoadScene(buttonName);
         
-        fsm.selectedLevel = buttonName;
+        //fsm.selectedLevel = buttonName;
         fsm.ChangeState(GetComponent<LoadingLevelGameState>());
     }
     
