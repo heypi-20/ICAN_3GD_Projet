@@ -115,7 +115,6 @@ public class S_GroundPound_Module : MonoBehaviour
 
             // Déplacement dans la direction de la caméra
             Vector3 direction = _cameraTransform.forward;
-            direction.y = -1; // Ajouter un composant vers le bas pour forcer la descente
             direction.Normalize();
 
             _characterController.Move(direction * (currentSpeed * Time.deltaTime));

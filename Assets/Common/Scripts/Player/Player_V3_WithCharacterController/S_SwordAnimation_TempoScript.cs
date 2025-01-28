@@ -28,8 +28,7 @@ public class S_SwordAnimation_TempoScript : MonoBehaviour
 
     private void Update()
     {
-        attackCD = _melee.currentAttackCD;
-        attackDuration = _melee.currentAttackCD;
+        attackCD = _melee.currentAttackCD; 
         AttackCooldown();
 
         if (_inputManager.MeleeAttackInput && canAttack)

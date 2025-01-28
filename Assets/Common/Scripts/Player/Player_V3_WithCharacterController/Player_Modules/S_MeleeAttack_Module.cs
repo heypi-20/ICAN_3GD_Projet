@@ -80,6 +80,14 @@ public class S_MeleeAttack_Module : MonoBehaviour
             if (targetsDestroyed >= currentLevel.maxTargetsToDestroy)
                 break;
 
+            Rigidbody targetRB = target.gameObject.GetComponent<Rigidbody>();
+            
+            if (targetRB!=null)
+            {
+                Vector3 forceDirection = targetRB.transform.position - transform.position;
+                forceDirection.Normalize();
+                targetRB.AddForce(forceDirection*10f, ForceMode.Impulse);
+            }
             target.gameObject.GetComponent<EnemyBase>()?.ReduceHealth(GetCurrentAttackLevel().attackDamage, GetCurrentAttackLevel().dropBonus);
             targetsDestroyed++;
         }

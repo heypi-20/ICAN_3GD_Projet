@@ -36,12 +36,12 @@ public class S_CountdownVFX : MonoBehaviour
     private void MonitorEnergyState()
     {
         // Si l'énergie devient négative et que le compte à rebours n'a pas démarré, démarre le compte à rebours
-        if (_energyStorage.currentEnergy < 0f && !_isCountingDown)
+        if (_energyStorage.currentEnergy <= 0f && !_isCountingDown)
         {
             StartCountdown();
         }
         // Si l'énergie redevient positive, arrête le compte à rebours
-        else if (_energyStorage.currentEnergy >= 0f && _isCountingDown)
+        else if (_energyStorage.currentEnergy > 0f && _isCountingDown)
         {
             StopCountdown();
         }

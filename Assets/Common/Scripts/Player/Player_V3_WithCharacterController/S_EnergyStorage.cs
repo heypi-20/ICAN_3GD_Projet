@@ -103,6 +103,8 @@ public class S_EnergyStorage : MonoBehaviour
 
         return false;
     }
+    
+    
 
     // Vérifie si le niveau doit être diminué
     private void CheckDowngradeLevel()
@@ -114,7 +116,12 @@ public class S_EnergyStorage : MonoBehaviour
             if (!isGraceActive)
             {
                 StartGracePeriod();
+                //compteur
+                countdownDuration = energyLevels[currentLevelIndex].graceTimer;
+                StartCountdown();
             }
+            UpdateCountdown();
+
 
             _graceTimer -= Time.deltaTime;
             
@@ -129,14 +136,68 @@ public class S_EnergyStorage : MonoBehaviour
                 int newLevelIndex = FindLevelIndexForEnergy();
                 SoundManager.Instance.Meth_Lose_Palier();
                 ShowAndHideLoosePalier();
+                
+                //compteur
+                StopCountdown();
+               
                 SetNewLevel(newLevelIndex);
                 ResetGracePeriod();
             }
         }
         else
         {
+            StopCountdown();
             ResetGracePeriod();
         }
+    }
+    public float countdownDuration = 10f; // Durée totale du compte à rebours
+    public TextMeshProUGUI countdownText; // Texte affichant le compte à rebours
+    
+    private float _currentCountdownTime; // Temps restant du compte à rebours
+    private bool _isCountingDown; // Indique si le compte à rebours est en cours
+    private Tween _textShakeTween; // Animation DOTween pour le tremblement du texte
+    private void StartCountdown()
+    {
+        // Démarrage du compte à rebours
+        _isCountingDown = true;
+        _currentCountdownTime = countdownDuration;
+
+        // Animation tremblante pour le texte (DOTween)
+        _textShakeTween = countdownText.rectTransform
+            .DOShakePosition(0.5f, new Vector3(5, 5, 0), 20, 90, false, true)
+            .SetLoops(-1, LoopType.Yoyo);
+
+        // Activation des objets visuels
+        countdownText.gameObject.SetActive(true); 
+    }
+    private void UpdateCountdown()
+    {
+        // Mise à jour du temps restant
+        _currentCountdownTime -= Time.deltaTime;
+
+        // Met à jour le texte avec le temps restant arrondi
+        countdownText.text = Mathf.CeilToInt(_currentCountdownTime).ToString();
+    }
+    private void StopCountdown()
+    {
+        // Arrêt du compte à rebours
+        _isCountingDown = false;
+
+        // Réinitialisation des valeurs
+        ResetCountdown();
+
+        // Désactivation des objets visuels
+        countdownText.gameObject.SetActive(false);
+
+        // Arrêt des animations DOTween
+        _textShakeTween?.Kill();
+    }
+    private void ResetCountdown()
+    {
+        // Réinitialisation des paramètres de compte à rebours
+        _currentCountdownTime = countdownDuration;
+        countdownText.text = countdownDuration.ToString();
+
     }
 
     // Définit un nouveau niveau d'énergie

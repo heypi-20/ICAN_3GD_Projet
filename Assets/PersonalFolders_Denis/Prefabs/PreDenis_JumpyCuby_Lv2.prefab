@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8413619443368152620}
   - component: {fileID: 4005124941193937177}
   m_Layer: 9
-  m_Name: Pre_JumpyCuby_V2
+  m_Name: PreDenis_JumpyCuby_Lv2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,8 +32,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.9155974, y: 0.49999905, z: 5.7894907}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -195,17 +195,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyName: 
-  enemyDamage: 25
-  health: 20
+  enemyDamage: 60
+  health: 50
   energyPoint: {fileID: 284891634115185361, guid: 7ffcda2ccc95748469e58c3af6c7c58f, type: 3}
-  energyDropQuantity: 5
+  energyDropQuantity: 8
   enemyGetHitVFX: {fileID: 2014564717100583912, guid: de8051323aef0554fb4a4ee3dd46ebed, type: 3}
   enemyDeathVFX: {fileID: 2014564717100583912, guid: 332f5cf35c013464e8ebf4ac6d81eedc, type: 3}
   enemyGetHitSound: 
   enemyDeathSound: event:/Kill1
-  jumpForce: 7
-  trackingForce: 5
+  jumpForce: 15
+  trackingForce: 3
   enableTracking: 1
   target: {fileID: 0}
   idleThreshold: 2
-  activationForce: 5
+  activationForce: 15
