@@ -66,7 +66,10 @@ public class EnemyBase : MonoBehaviour
                 Random.Range(-0.5f, 0.5f)  
             );
             Vector3 spawnPosition = transform.position + randomOffset;
-            Instantiate(energyPoint, spawnPosition, Quaternion.identity);
+            GameObject point = Instantiate(energyPoint, spawnPosition, Quaternion.identity);
+            Vector3 pointdirection = point.transform.position - transform.position;
+            pointdirection.Normalize();
+            point.GetComponent<Rigidbody>().AddForce(pointdirection*5f,ForceMode.Impulse);
         }
     }
     

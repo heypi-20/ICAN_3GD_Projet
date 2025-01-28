@@ -71,6 +71,7 @@ public class S_EnergyAbsorptionModule : MonoBehaviour
         while (obj is not null && Vector3.Distance(obj.transform.position, _playerTransform.position) > 2f)
         {
             // Déplacer l'objet vers le joueur à une vitesse définie
+            
             obj.transform.position = Vector3.MoveTowards(obj.transform.position, _playerTransform.position, pullSpeed * Time.deltaTime);
             yield return null;
         }
