@@ -4,7 +4,6 @@
 public class EnhancedLDSave : ScriptableObject
 {
     public float[] increment;
-    public int nbIncrement;
     public bool canBeChanged = false;
 
 }
