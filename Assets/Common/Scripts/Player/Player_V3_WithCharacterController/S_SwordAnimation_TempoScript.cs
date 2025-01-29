@@ -26,7 +26,7 @@ public class S_SwordAnimation_TempoScript : MonoBehaviour
         _melee = FindObjectOfType<S_MeleeAttack_Module>();
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         attackCD = _melee.currentAttackCD; 
         AttackCooldown();
@@ -34,6 +34,8 @@ public class S_SwordAnimation_TempoScript : MonoBehaviour
         if (_inputManager.MeleeAttackInput && canAttack)
         {
             Attack();
+            // reset input
+            _inputManager.MeleeAttackInput = false;
         }
 
         // Ensure the attack object always follows the attack point
@@ -55,6 +57,8 @@ public class S_SwordAnimation_TempoScript : MonoBehaviour
 
         // Activate attack object
         attackObject.SetActive(true);
+        Debug.Log("Active attackanim");
+
         attackObject.transform.position = attackPoint.position;
 
         // Perform swing animation relative to attackPoint's orientation

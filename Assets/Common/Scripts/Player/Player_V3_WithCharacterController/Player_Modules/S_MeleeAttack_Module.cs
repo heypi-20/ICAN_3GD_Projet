@@ -35,16 +35,16 @@ public class S_MeleeAttack_Module : MonoBehaviour
     private void Update()
     {
         HandleMeleeAttack();
-        //reset input
-        _inputManager.MeleeAttackInput = false;
+        
     }
+    
 
     private void HandleMeleeAttack()
     {
         MeleeAttackLevel currentLevel = GetCurrentAttackLevel();
         currentAttackCD = currentLevel.attackCooldown;
         if (currentLevel == null) return;
-
+        
         // Vérifier si le joueur appuie sur la touche d'attaque et si l'attaque est prête
         if (_inputManager.MeleeAttackInput && _attackCooldownTimer <= 0f && _energyStorage.currentEnergy >= currentLevel.energyConsumption)
         {
@@ -59,6 +59,7 @@ public class S_MeleeAttack_Module : MonoBehaviour
         {
             _attackCooldownTimer -= Time.deltaTime;
         }
+        
     }
 
     // ReSharper disable Unity.PerformanceAnalysis
