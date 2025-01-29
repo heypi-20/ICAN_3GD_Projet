@@ -34,10 +34,10 @@ public class Jauge : MonoBehaviour
 
     void Start()
     {
-        palier1 = 800;
-        palier2 = EnergyStore.energyLevels[2].requiredEnergy - EnergyStore.energyLevels[1].requiredEnergy;
-        palier3 = EnergyStore.energyLevels[3].requiredEnergy - EnergyStore.energyLevels[2].requiredEnergy;
-        palier4 = EnergyStore.energyLevels[3].requiredEnergy;
+        //palier1 = 800;
+        //palier2 = EnergyStore.energyLevels[2].requiredEnergy - EnergyStore.energyLevels[1].requiredEnergy;
+        //palier3 = EnergyStore.energyLevels[3].requiredEnergy - EnergyStore.energyLevels[2].requiredEnergy;
+        //palier4 = EnergyStore.energyLevels[3].requiredEnergy;
 
         for (int i = 0; i < GrowMesh.Count; i++)
         {
