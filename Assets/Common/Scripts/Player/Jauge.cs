@@ -13,6 +13,7 @@ public class Jauge : MonoBehaviour
     public float palier3;
     public float palier4;
 
+    public bool NeedToShine;
 
     public float refreshRate = 0.05f;
 
@@ -94,7 +95,7 @@ public class Jauge : MonoBehaviour
             // Interpolation vers la valeur cible (_targetGrowValue)
             _growValue = Mathf.MoveTowards(_growValue, _targetGrowValue, refreshRate / _growDuration);
             mat.SetFloat("_Grow", _growValue);
-            if(_growValue * 10 > 5)
+            if(_growValue * 10 > 5 && NeedToShine == true)
             {
                 mat.SetFloat("_Emmissive", _growValue * 10);
             }

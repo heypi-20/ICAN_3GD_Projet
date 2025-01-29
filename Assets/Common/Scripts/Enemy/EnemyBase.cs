@@ -69,7 +69,7 @@ public class EnemyBase : MonoBehaviour
             GameObject point = Instantiate(energyPoint, spawnPosition, Quaternion.identity);
             Vector3 pointdirection = point.transform.position - transform.position;
             pointdirection.Normalize();
-            point.GetComponent<Rigidbody>().AddForce(pointdirection*5f,ForceMode.Impulse);
+            point.GetComponent<Rigidbody>().AddForce(pointdirection*10f,ForceMode.Impulse);
         }
     }
     

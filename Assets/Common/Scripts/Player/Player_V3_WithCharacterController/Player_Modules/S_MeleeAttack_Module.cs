@@ -86,7 +86,7 @@ public class S_MeleeAttack_Module : MonoBehaviour
             {
                 Vector3 forceDirection = targetRB.transform.position - transform.position;
                 forceDirection.Normalize();
-                targetRB.AddForce(forceDirection*10f, ForceMode.Impulse);
+                targetRB.AddForce(forceDirection*20f, ForceMode.Impulse);
             }
             target.gameObject.GetComponent<EnemyBase>()?.ReduceHealth(GetCurrentAttackLevel().attackDamage, GetCurrentAttackLevel().dropBonus);
             targetsDestroyed++;

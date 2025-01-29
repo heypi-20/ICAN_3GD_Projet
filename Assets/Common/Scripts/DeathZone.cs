@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,13 +6,15 @@ using UnityEngine.SceneManagement;
 
 public class DeathZone : MonoBehaviour
 {
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-       Destroy(collision.gameObject);
-       if (collision.gameObject.tag == "Player")
-       {
-           SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-
-       }
+        
+        if (other.gameObject.tag == "Player")
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+        Destroy(other.gameObject);
+        
+        
     }
 }
