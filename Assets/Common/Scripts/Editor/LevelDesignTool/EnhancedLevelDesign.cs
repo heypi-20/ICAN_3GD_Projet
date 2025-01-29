@@ -18,6 +18,8 @@ public class EnhancedLevelDesign : EditorWindow
     
     private bool linkMoveSnapValues = false; // Contrôle si les valeurs de Move Snap sont identiques
     
+    private EnhancedLDSave ELDSaves; // Supprime LoadAssetAtPath et utilise une variable
+    
     #endregion
 
     #region Propreté de l'editor
@@ -160,52 +162,67 @@ public class EnhancedLevelDesign : EditorWindow
         GUILayout.EndHorizontal();
        
         #region Snap Préféfinie
-        
-        EnhancedLDSave ELDSaves = (EnhancedLDSave)AssetDatabase.LoadAssetAtPath("Assets/Common/Data/EnhancedLDSaves/Saves.asset", typeof(EnhancedLDSave));
-        
+
         GUILayout.BeginHorizontal();
 
-        if (ELDSaves.nbIncrement != ELDSaves.increment.Length)
+        // Stocke la valeur sélectionnée par l'utilisateur
+        ELDSaves = (EnhancedLDSave)EditorGUILayout.ObjectField(GUIContent.none, ELDSaves, typeof(EnhancedLDSave), false, GUILayout.Width(200));
+
+        if (GUILayout.Button("Create New Saves", GUILayout.Width(200)))
         {
-            ELDSaves.nbIncrement = ELDSaves.increment.Length;
-            // ResizeArray(ref ELDSaves.increment, ELDSaves.nbIncrement);
+            //ToDo : Create New Save Assets & Load it
         }
-        
-        int id = 1; // ← DEGUEU CA, A CHANGER !!!!! !!!!!! (la valeur est remis a UN tout le temps !!!!!)
-        
-        GUILayout.BeginVertical("box");
-        
-        showDropdown = EditorGUILayout.Foldout(showDropdown, "Incrément Prédéfinie", true, EditorStyles.foldoutHeader);
-        
-        if (showDropdown)
-        {
-            for (int i = 0; i < ELDSaves.increment.Length; i++)
-            {
-                if (ELDSaves.nbIncrement > 0)
-                {
-                    GUILayout.BeginHorizontal();
-                    EditorGUILayout.PrefixLabel("Increment " + id, EditorStyles.boldLabel);
-                    ELDSaves.increment[i] = EditorGUILayout.FloatField(ELDSaves.increment[i], GUILayout.Width(100));
-                    if (GUILayout.Button("Apply", GUILayout.Width(60)))
-                    {
-                        moveSnap.x = ELDSaves.increment[i];
-                        moveSnap.y = ELDSaves.increment[i];
-                        moveSnap.z = ELDSaves.increment[i];
-                        Debug.Log("Scale is now : " + ELDSaves.increment[i]);
-                    }
-
-                    GUILayout.EndHorizontal();
-
-                    // Le systeme d'ID pour les Prefix Label est Dégueu, A CHANGER !!!!!
-                    id++;
-                }
-            }
-        }
-
-
-        GUILayout.EndVertical();
 
         GUILayout.EndHorizontal();
+
+        // Ajoutez cette vérification pour éviter une erreur si ELDSaves est null
+        if (ELDSaves == null)
+        {
+            EditorGUILayout.HelpBox("Aucun fichier de sauvegarde sélectionné.", MessageType.Warning);
+        }
+        else
+        {
+            if (ELDSaves.nbIncrement != ELDSaves.increment.Length)
+            {
+                ELDSaves.nbIncrement = ELDSaves.increment.Length;
+            }
+        
+            int id = 1; // ← DEGUEU CA, A CHANGER !!!!! !!!!!! (la valeur est remis a UN tout le temps !!!!!)
+        
+            GUILayout.BeginVertical("box");
+        
+            showDropdown = EditorGUILayout.Foldout(showDropdown, "Incrément Prédéfinie", true, EditorStyles.foldoutHeader);
+        
+            if (showDropdown)
+            {
+                for (int i = 0; i < ELDSaves.increment.Length; i++)
+                {
+                    if (ELDSaves.nbIncrement > 0)
+                    {
+                        GUILayout.BeginHorizontal();
+                        EditorGUILayout.PrefixLabel("Increment " + id, EditorStyles.boldLabel);
+                    
+                        GUI.enabled = ELDSaves.canBeChanged;
+                        ELDSaves.increment[i] = EditorGUILayout.FloatField(ELDSaves.increment[i], GUILayout.Width(100));
+                        GUI.enabled = true;
+                        if (GUILayout.Button("Apply", GUILayout.Width(60)))
+                        {
+                            moveSnap.x = ELDSaves.increment[i];
+                            moveSnap.y = ELDSaves.increment[i];
+                            moveSnap.z = ELDSaves.increment[i];
+                            Debug.Log("Scale is now : " + ELDSaves.increment[i]);
+                        }
+
+                        GUILayout.EndHorizontal();
+
+                        // Le systeme d'ID pour les Prefix Label est Dégueu, A CHANGER !!!!!
+                        id++;
+                    }
+                }
+            }
+            
+            GUILayout.EndVertical();
+        }
         
         GUILayout.BeginHorizontal();
                 
@@ -220,35 +237,6 @@ public class EnhancedLevelDesign : EditorWindow
         }
         
         GUILayout.EndHorizontal();
-        
-        GUILayout.BeginHorizontal();
-
-        GUI.enabled = false;
-        EditorGUILayout.ObjectField(GUIContent.none, ELDSaves, typeof(ScriptableObject), false, GUILayout.Width(200));
-        GUI.enabled = true;
-
-        if (GUILayout.Button("Create New Saves", GUILayout.Width(200)))
-        {
-            //ToDo : Create New Save Assets & Load it
-        }
-        
-        GUILayout.EndHorizontal();
-        
-        // GUI.enabled = false;
-        // EditorGUILayout.IntField(ELDSaves.nbIncrement, GUILayout.Width(40));
-        // GUI.enabled = true;
-
-        // if (GUILayout.Button("Create New Increment", GUILayout.Width(150)) && ELDSaves.nbIncrement < 10)
-        // {
-        //     ELDSaves.nbIncrement++;
-        // }        
-        //
-        // if (GUILayout.Button("Delete Last Increment", GUILayout.Width(150)) && ELDSaves.nbIncrement >= 1)
-        // {
-        //     ELDSaves.nbIncrement--;
-        // }
-
-
         
         #endregion
         
