@@ -1,17 +1,19 @@
 using Cinemachine.PostFX;
 using UnityEngine;
-using UnityEngine.Rendering;
+using UnityEngine.UI;
 using UnityEngine.Rendering.Universal;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 public class S_PlayerGetHit_Trigger : MonoBehaviour
 {
     private S_EnergyStorage _energyStorage;
+    
     [Header("Physic settings")]
     public float pushForce= 3f;
+
     [Header("Camera Settings")]
     public CinemachineVolumeSettings _volumeSettings; // Référence au composant Volume de la caméra
-
     private Vignette _vignette; // Composant Vignette
 
     [Header("Vignette Effect Settings")]
@@ -19,17 +21,20 @@ public class S_PlayerGetHit_Trigger : MonoBehaviour
     public float animationDuration = 0.5f; // Durée de l'animation (aller-retour)
     public Ease animationEase = Ease.InOutSine; // Type d'animation (Ease)
 
+    [Header("UI Settings")]
+    public Image countdownImage; // Image dont la transparence change pendant le compte à rebours
+    private Tween _imageFadeTween; // Animation DOTween pour la transparence de l'image
+    private bool isDead = false; // 是否已死亡
+
     private void Start()
     {
-        // Initialisation de la référence au stockage d'énergie
         _energyStorage = GetComponent<S_EnergyStorage>();
 
-        // Vérifier si le Volume est configuré et contient un effet Vignette
         if (_volumeSettings == null)    
         {
             Debug.LogWarning("No Volume Settings Found");
         }
-        // Vérifier si le Volume Profile contient un effet Vignette
+
         if (_volumeSettings.m_Profile != null && _volumeSettings.m_Profile.TryGet<Vignette>(out _vignette))
         {
             Debug.Log("Vignette effect found in the Volume Profile.");
@@ -39,15 +44,27 @@ public class S_PlayerGetHit_Trigger : MonoBehaviour
         {
             Debug.LogError("No Vignette effect found in the Volume Profile!");
         }
-        
+    }
+
+    void Update()
+    {
+        LastHit();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (_energyStorage == null || _vignette == null) return;
 
-        // Réduire l'énergie du joueur en fonction des dégâts de l'ennemi
         var enemy = other.gameObject.GetComponent<EnemyBase>();
+        var projectile = other.gameObject.GetComponent<S_EnemyProjectileDamage>();
+
+        // 只有当 "enemy" 或 "projectile" 不是 null 时才检查 isDead
+        if (isDead && (enemy != null || projectile != null))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            return;
+        }
+
         if (enemy != null)
         {
             AnimateVignetteEffect();
@@ -56,26 +73,40 @@ public class S_PlayerGetHit_Trigger : MonoBehaviour
             {
                 Vector3 pushDirection = enemy.gameObject.transform.position - transform.position;
                 pushDirection.Normalize();
-                enemyrb.AddForce(pushDirection*pushForce, ForceMode.Impulse);
+                enemyrb.AddForce(pushDirection * pushForce, ForceMode.Impulse);
             }
             _energyStorage.RemoveEnergy(enemy.enemyDamage);
         }
-        else if(other.gameObject.GetComponent<S_EnemyProjectileDamage>())
+        else if (projectile != null)
         {
             AnimateVignetteEffect();
-            _energyStorage.RemoveEnergy(other.gameObject.GetComponent<S_EnemyProjectileDamage>().damage);
+            _energyStorage.RemoveEnergy(projectile.damage);
         }
+    }
 
-        // Animer l'effet de vignette
-        
+
+    private void LastHit()
+    {
+        if (_energyStorage.currentEnergy <= 0f)
+        {
+            if (!isDead)
+            {
+                isDead = true;
+                _imageFadeTween?.Kill();
+                _imageFadeTween = countdownImage.DOFade(0.3f, 0.2f).From(0f).SetEase(Ease.Linear);
+            }
+        }
+        else
+        {
+            isDead = false;
+            countdownImage.color = new Color(countdownImage.color.r, countdownImage.color.g, countdownImage.color.b, 0f);
+        }
     }
 
     private void AnimateVignetteEffect()
     {
-        // Assurez-vous que l'animation actuelle est arrêtée pour éviter des conflits
         DOTween.Kill(_vignette);
 
-        // Faire varier l'intensité de la vignette avec une animation en deux étapes
         DOTween.To(() => _vignette.intensity.value, x => _vignette.intensity.value = x, vignetteTargetIntensity, animationDuration / 2)
             .SetEase(animationEase)
             .OnComplete(() =>

@@ -355,12 +355,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2299689794825656360, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3945172415129071170, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
       propertyPath: mainCamera
       value: 
       objectReference: {fileID: 5613625045177897654}
+    - target: {fileID: 4464056042591027142, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
+      propertyPath: m_Color.b
+      value: 0.08708107
+      objectReference: {fileID: 0}
+    - target: {fileID: 4464056042591027142, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
+      propertyPath: m_Color.g
+      value: 0.08708107
+      objectReference: {fileID: 0}
+    - target: {fileID: 4464056042591027142, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
+      propertyPath: m_Color.r
+      value: 0.7484276
+      objectReference: {fileID: 0}
     - target: {fileID: 4755813948950301855, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
       propertyPath: m_Name
       value: Player Canvas
@@ -448,6 +460,10 @@ PrefabInstance:
     - target: {fileID: 8276988905195901068, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 142.27145
+      objectReference: {fileID: 0}
+    - target: {fileID: 8998531152879137625, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -601,7 +617,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1748255068045822558, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
       propertyPath: currentEnergy
-      value: 500
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1748255068045822558, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
       propertyPath: energyDisplay
@@ -639,6 +655,10 @@ PrefabInstance:
       propertyPath: pushForce
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 2729545909730530742, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
+      propertyPath: countdownImage
+      value: 
+      objectReference: {fileID: 6094956557794595214}
     - target: {fileID: 2729545909730530742, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
       propertyPath: _volumeSettings
       value: 
@@ -1159,7 +1179,8 @@ PrefabInstance:
       propertyPath: countdownDuration
       value: 5
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8661948642549650535, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 7749679473454438746, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}
