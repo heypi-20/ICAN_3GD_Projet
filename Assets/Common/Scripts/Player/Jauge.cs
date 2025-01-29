@@ -34,10 +34,10 @@ public class Jauge : MonoBehaviour
 
     void Start()
     {
-        palier1 = 800;
-        palier2 = EnergyStore.energyLevels[2].requiredEnergy - EnergyStore.energyLevels[1].requiredEnergy;
-        palier3 = EnergyStore.energyLevels[3].requiredEnergy - EnergyStore.energyLevels[2].requiredEnergy;
-        palier4 = EnergyStore.energyLevels[3].requiredEnergy;
+        //palier1 = 800;
+        //palier2 = EnergyStore.energyLevels[2].requiredEnergy - EnergyStore.energyLevels[1].requiredEnergy;
+        //palier3 = EnergyStore.energyLevels[3].requiredEnergy - EnergyStore.energyLevels[2].requiredEnergy;
+        //palier4 = EnergyStore.energyLevels[3].requiredEnergy;
 
         for (int i = 0; i < GrowMesh.Count; i++)
         {
@@ -94,7 +94,10 @@ public class Jauge : MonoBehaviour
             // Interpolation vers la valeur cible (_targetGrowValue)
             _growValue = Mathf.MoveTowards(_growValue, _targetGrowValue, refreshRate / _growDuration);
             mat.SetFloat("_Grow", _growValue);
-
+            if(_growValue * 10 > 5)
+            {
+                mat.SetFloat("_Emmissive", _growValue * 10);
+            }
             yield return new WaitForSeconds(refreshRate);
         }
     }
