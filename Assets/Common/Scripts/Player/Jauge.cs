@@ -94,7 +94,10 @@ public class Jauge : MonoBehaviour
             // Interpolation vers la valeur cible (_targetGrowValue)
             _growValue = Mathf.MoveTowards(_growValue, _targetGrowValue, refreshRate / _growDuration);
             mat.SetFloat("_Grow", _growValue);
-
+            if(_growValue * 10 > 5)
+            {
+                mat.SetFloat("_Emmissive", _growValue * 10);
+            }
             yield return new WaitForSeconds(refreshRate);
         }
     }
