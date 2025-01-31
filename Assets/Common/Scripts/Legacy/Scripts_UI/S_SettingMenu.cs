@@ -2,11 +2,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
-using System.Linq; // Pour des requetes SQL en general
+using System.Linq;
+using FMODUnity; // Pour des requetes SQL en general
 
-public class S_Old_SettingMenu : MonoBehaviour
+public class S_SettingMenu : MonoBehaviour
 {
     Resolution[] resolutions;
+    
+    public string volumeParameterName = "Volume";
 
     [Header("Dropdown")]
     public TMP_Dropdown resolutionDropdown;
@@ -18,7 +21,18 @@ public class S_Old_SettingMenu : MonoBehaviour
 
     public void SetVolume(float volume)
     {
-        Debug.Log(volume);
+        // Convertir la valeur du slider (0 à 1) en dB, par exemple de -80 dB à 20 dB
+        // volume est supposé être entre 0 et 1, vous pouvez adapter cette plage si nécessaire.
+        float volumeInDb = volume * 100 - 80;  // Plage dB : -80 à 20
+
+        // Convertir dB en linéaire pour FMOD
+        float linearVolume = Mathf.Pow(10f, volumeInDb / 20f);
+
+        // Appliquer la valeur linéaire au paramètre de volume dans FMOD
+        RuntimeManager.StudioSystem.setParameterByName(volumeParameterName, linearVolume);
+
+        // Optionnel : Affichage pour débogage
+        Debug.Log($"Volume réglé à : {volumeInDb} dB, Linéaire : {linearVolume}");
     }
 
     public void SetFullScreen(bool isFullScreen)
@@ -50,7 +64,7 @@ public class S_Old_SettingMenu : MonoBehaviour
 
         resolutionDropdown.AddOptions(options);
         resolutionDropdown.value = currentResolutionIndex;
-        resolutionDropdown.RefreshShownValue(); // Permet d'avoir la bonne valeur affich� dans le Dropdown
+        resolutionDropdown.RefreshShownValue(); // Permet d'avoir la bonne valeur affich� dans le Dropdown
     }
 
     public void SetResolution(int resolutionIndex)

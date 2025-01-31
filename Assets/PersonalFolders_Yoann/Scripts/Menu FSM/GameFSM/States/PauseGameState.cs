@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using Cinemachine;
+
 
 public class PauseGameState : GameState
 {
     public GameObject pauseMenuPanel;
-    // private ChunkLoader chunkLoader;
     
     public override void Enter()
     {
@@ -12,6 +13,9 @@ public class PauseGameState : GameState
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible   = true;
+        
+        GameObject player = GameObject.Find("PreDenis_PlayerObjGroupe_Variation");
+        player.GetComponentInChildren<Canvas>().enabled = false;
     }
     
 
@@ -35,5 +39,7 @@ public class PauseGameState : GameState
         pauseMenuPanel.SetActive(false);
         //Mettre le jeu en pause = responsabilité de PauseState.
         Time.timeScale = 1f; 
+        GameObject playerCanvas = GameObject.Find("Player Canvas");
+        playerCanvas.GetComponent<Canvas>().enabled = true;
     }
 }
