@@ -40,7 +40,8 @@ public class S_GroundPound_Module : MonoBehaviour
         _energyStorage = GetComponent<S_EnergyStorage>();
         _characterController = GetComponent<CharacterController>();
         _customCharacterController = GetComponent<S_CustomCharacterController>();
-        _cameraTransform = Camera.main?.transform;
+        _cameraTransform = FindObjectOfType<CinemachineBrain>().transform;
+
     }
 
     private void Update()
@@ -54,10 +55,10 @@ public class S_GroundPound_Module : MonoBehaviour
 
         GroundPoundLevel currentLevel = GetCurrentGroundPoundLevel();
         if (currentLevel == null) return;
-
         // Vérifier l'entrée utilisateur et la quantité d'énergie disponible
         if (_inputManager.MeleeAttackInput && _energyStorage.currentEnergy >= currentLevel.energyConsumption)
         {
+
             if (IsLookingAtValidTarget(out float distanceToGround))
             {
                 PerformGroundPound(currentLevel, distanceToGround);
@@ -76,7 +77,7 @@ public class S_GroundPound_Module : MonoBehaviour
             float verticalDistance = Mathf.Abs(hit.point.y - transform.position.y);
             
             float angle = Vector3.Angle(_cameraTransform.forward, Vector3.down);
-            
+
             if (verticalDistance > minimumGroundDistance&&angle < angleThreshold)
             {
                 distanceToGround = verticalDistance;

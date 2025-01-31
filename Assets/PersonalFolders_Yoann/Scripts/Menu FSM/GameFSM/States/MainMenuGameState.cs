@@ -21,6 +21,7 @@ public class MainMenuGameState : GameState
     // Variable pour stocker les panel principaux
     private GameObject currentMainPanel;
     
+    
     void OnButtonClicked(SceneReference scene)
     {
         fsm.selectedLevel = scene;

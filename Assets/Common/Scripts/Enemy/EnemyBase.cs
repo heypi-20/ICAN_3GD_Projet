@@ -50,10 +50,10 @@ public class EnemyBase : MonoBehaviour
         
         SoundManager.Instance.Meth_Shoot_Kill(1);
         DropItems(DropBonus);
-        Destroy(gameObject,5f);
-        _s_ScoreDisplay = FindObjectOfType<S_ScoreDisplay>();
-        _s_ScoreDisplay.AddScore(20f);
+        //_s_ScoreDisplay = FindObjectOfType<S_ScoreDisplay>();
+        //_s_ScoreDisplay.AddScore(20f);
         gameObject.SetActive(false);
+        Destroy(gameObject,5f);
     }
     
     private void DropItems(float DropBonus)

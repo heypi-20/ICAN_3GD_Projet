@@ -28,7 +28,6 @@ public class S_BasicSprint_Module : MonoBehaviour
 
     [Header("Camera Settings")]
     public CinemachineVirtualCamera cinemachineCamera; // Caméra du joueur pour ajuster le FOV
-    private float sprintFOV = 90f; // FOV pendant le sprint
     private float normalFOV = 60f; // FOV normal
     public float fovTransitionTime = 0.2f; // Durée de transition du FOV
 

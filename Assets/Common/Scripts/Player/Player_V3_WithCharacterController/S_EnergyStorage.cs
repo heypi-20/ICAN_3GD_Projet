@@ -13,6 +13,11 @@ public class EnergyLevel
 
 public class S_EnergyStorage : MonoBehaviour
 {
+    [Header("CheatCode")] 
+    public KeyCode cheatCodeforAdd;
+    public KeyCode cheatCodeforRemove;
+    
+    
     [Header("Energy Settings")]
     public float maxEnergy = 2000f; // Énergie maximale
     public float currentEnergy = 0f; // Énergie actuelle
@@ -41,7 +46,21 @@ public class S_EnergyStorage : MonoBehaviour
         UpdateEnergyDisplay();
         currentEnergy = Mathf.Clamp(currentEnergy, 0, maxEnergy);
 
-        
+        CheatCode();
+    }
+
+
+    private void CheatCode()
+    {
+        if (Input.GetKeyUp(cheatCodeforAdd))
+        {
+            AddEnergy(1000f);
+        }
+
+        if (Input.GetKeyUp(cheatCodeforRemove))
+        {
+            RemoveEnergy(1000f);
+        }
     }
 
     // Méthode permettant d'ajouter de l'énergie

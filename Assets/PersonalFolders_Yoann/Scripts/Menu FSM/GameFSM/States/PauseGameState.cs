@@ -17,7 +17,14 @@ public class PauseGameState : GameState
         GameObject player = GameObject.Find("PreDenis_PlayerObjGroupe_Variation");
         player.GetComponentInChildren<Canvas>().enabled = false;
     }
-    
+
+    public override void Tick()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Resume();
+        }
+    }
 
     public void Resume()
     {
