@@ -186,19 +186,19 @@ public class SoundManager : MonoBehaviour
 
     public void Meth_Globale_Musique(int currentLevel)
     {
-        if (currentLevel == 1)
+        if (currentLevel == 0)
         {
             SetParameter(0.3f);
         }
-        if (currentLevel == 2)
+        if (currentLevel == 1)
         {
             SetParameter(1.3f);
         }
-        if (currentLevel == 3)
+        if (currentLevel == 2)
         {
             SetParameter(2.3f);
         }
-        if (currentLevel == 4)
+        if (currentLevel == 3)
         {
             SetParameter(3f);
         }
