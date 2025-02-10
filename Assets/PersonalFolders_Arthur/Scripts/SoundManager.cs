@@ -76,6 +76,8 @@ public class SoundManager : MonoBehaviour
     public string Dashoot_Shoot;
     public string JumpyCuby_Jump;
 
+    [Header("Musique")] public string Globale_Musique;
+
     public void Meth_Shoot_No_Hit(int currentLevel)
     {
         if (currentLevel == 1)
@@ -165,5 +167,35 @@ public class SoundManager : MonoBehaviour
         FMODUnity.RuntimeManager.PlayOneShot(JumpyCuby_Jump);
     }
     
+    
+    public void SetParameter(string myparameter, float value)
+    {
+        EventInstance eventInstance;
+        eventInstance = RuntimeManager.CreateInstance("event:/Musique/Basse");
+        eventInstance.start();
+        eventInstance.setParameterByName(myparameter, value);
+    }
+
+    public void Meth_Globale_Musique(int currentLevel)
+    {
+        
+        //FMODUnity.RuntimeManager.PlayOneShot(Globale_Musique);
+        if (currentLevel == 1)
+        {
+            SetParameter("Palier", 0.3f);
+        }
+        if (currentLevel == 2)
+        {
+            SetParameter("Palier", 1.3f);
+        }
+        if (currentLevel == 3)
+        {
+            SetParameter("Palier", 2.3f);
+        }
+        if (currentLevel == 4)
+        {
+            SetParameter("Palier", 3f);
+        }
+    }
     
 }
