@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b64cc2212301d43409d5b2fceaa753a5, type: 2}
+  - {fileID: 2100000, guid: 702120249a86c1347b31d7012b659fb9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -151,9 +151,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: 
   enemyDamage: 20
-  health: 1000
+  health: 800
   energyPoint: {fileID: 284891634115185361, guid: 7ffcda2ccc95748469e58c3af6c7c58f, type: 3}
-  energyDropQuantity: 60
+  energyDropQuantity: 80
   enemyGetHitVFX: {fileID: 2014564717100583912, guid: de8051323aef0554fb4a4ee3dd46ebed, type: 3}
   enemyDeathVFX: {fileID: 2014564717100583912, guid: 332f5cf35c013464e8ebf4ac6d81eedc, type: 3}
   enemyGetHitSound: 
@@ -163,6 +163,8 @@ MonoBehaviour:
   projectilePrefab: {fileID: 6221195541462812341, guid: 76211ec43f3b6be42a5323f0e3f3a4e4, type: 3}
   shootPoint: {fileID: 6282909468048664633}
   projectileSpeed: 60
+  moveSpeed: 3
+  stopDistance: 5
 --- !u!1 &3374097203210150522
 GameObject:
   m_ObjectHideFlags: 0
@@ -226,7 +228,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b64cc2212301d43409d5b2fceaa753a5, type: 2}
+  - {fileID: 2100000, guid: d9472ea9112da75469135093167faf2b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
