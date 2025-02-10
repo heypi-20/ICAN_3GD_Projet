@@ -831,11 +831,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 851134080077336730, guid: cb650d61ccc122140a776320c1f19457, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -12.340001
+      value: -39.75
       objectReference: {fileID: 0}
     - target: {fileID: 851134080077336730, guid: cb650d61ccc122140a776320c1f19457, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.4900002
+      value: 22.899998
+      objectReference: {fileID: 0}
+    - target: {fileID: 851134080077336730, guid: cb650d61ccc122140a776320c1f19457, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 33.649
       objectReference: {fileID: 0}
     - target: {fileID: 1265687602182800299, guid: cb650d61ccc122140a776320c1f19457, type: 3}
       propertyPath: m_RenderPostProcessing
@@ -852,6 +856,18 @@ PrefabInstance:
     - target: {fileID: 4671473371467709456, guid: cb650d61ccc122140a776320c1f19457, type: 3}
       propertyPath: m_Lens.Dutch
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5512770004671497628, guid: cb650d61ccc122140a776320c1f19457, type: 3}
+      propertyPath: field of view
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 5512770004671497628, guid: cb650d61ccc122140a776320c1f19457, type: 3}
+      propertyPath: near clip plane
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5512770004671497628, guid: cb650d61ccc122140a776320c1f19457, type: 3}
+      propertyPath: orthographic size
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5512770004671497628, guid: cb650d61ccc122140a776320c1f19457, type: 3}
       propertyPath: m_CullingMask.m_Bits
@@ -1146,10 +1162,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5841595651210779942, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4762085393468965633}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 871841261257800979, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8436201823642307808}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
 --- !u!224 &257545897088882424 stripped
 RectTransform:
@@ -1172,17 +1185,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5841595651210779942, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
   m_PrefabInstance: {fileID: 7594795083952172616}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4926329164598132320 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3259471047373525032, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
-  m_PrefabInstance: {fileID: 7594795083952172616}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7313642255629587291}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6094956557794595214 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4464056042591027142, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
@@ -1205,30 +1207,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &7313642255629587291 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 871841261257800979, guid: 973c5ec9e91dd4b4088beb570207a40a, type: 3}
-  m_PrefabInstance: {fileID: 7594795083952172616}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8436201823642307808
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7313642255629587291}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d42d4ad77ce06f4b9bb25f83b4a3eaf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CrossAir: {fileID: 4926329164598132320}
-  ColorCrossAir: {r: 0, g: 1, b: 0.09065032, a: 1}
-  mainCamera: {fileID: 5613625045177897654}
-  maxDistance: Infinity
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 512
 --- !u!1001 &8329619612846496448
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1775,6 +1753,7 @@ MonoBehaviour:
   vignetteTargetIntensity: 0.4
   animationDuration: 0.5
   animationEase: 35
+  countdownImage: {fileID: 0}
 --- !u!4 &5984358572737673935 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2347631655897800719, guid: f9ca243114852b44eae0879d57d8ec79, type: 3}

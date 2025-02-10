@@ -83,7 +83,8 @@ public class S_SuperJump_Module : MonoBehaviour
 
         // Consommer l'énergie pour le saut
         _energyStorage.RemoveEnergy(currentLevel.energyConsumption);
-
+        
+        //Evnement OnJump
         SoundManager.Instance.Meth_Used_Jump();
         
         // Appliquer la force de saut
