@@ -45,7 +45,6 @@ public class S_EnergyStorage : MonoBehaviour
         UpdateEnergyLevel();
         UpdateEnergyDisplay();
         currentEnergy = Mathf.Clamp(currentEnergy, 0, maxEnergy);
-        SoundManager.Instance.Meth_Globale_Musique(energyLevels.Length);
 
         CheatCode();
     }
