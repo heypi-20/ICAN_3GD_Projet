@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -179,23 +180,26 @@ public class SoundManager : MonoBehaviour
     public void Meth_Globale_Musique(int currentLevel)
     {
         
-        //FMODUnity.RuntimeManager.PlayOneShot(Globale_Musique);
-        if (currentLevel == 1)
+        if (currentLevel == 0)
         {
             SetParameter("Palier", 0.3f);
         }
-        if (currentLevel == 2)
+        if (currentLevel == 1)
         {
             SetParameter("Palier", 1.3f);
         }
-        if (currentLevel == 3)
+        if (currentLevel == 2)
         {
             SetParameter("Palier", 2.3f);
         }
-        if (currentLevel == 4)
+        if (currentLevel == 3)
         {
             SetParameter("Palier", 3f);
         }
     }
-    
+
+    private void Start()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot(Globale_Musique);
+    }
 }
