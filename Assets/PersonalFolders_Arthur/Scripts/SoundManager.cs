@@ -77,8 +77,9 @@ public class SoundManager : MonoBehaviour
     public string Dashoot_Shoot;
     public string JumpyCuby_Jump;
 
-    [Header("Musique")] public string Globale_Musique;
-
+    [Header("Musique")]
+    public string Globale_Musique;
+    public S_Jauge_Tmp Jauge;
     public void Meth_Shoot_No_Hit(int currentLevel)
     {
         if (currentLevel == 1)
@@ -167,39 +168,48 @@ public class SoundManager : MonoBehaviour
     {
         FMODUnity.RuntimeManager.PlayOneShot(JumpyCuby_Jump);
     }
-    
-    
-    public void SetParameter(string myparameter, float value)
+
+    public void SetParameter(float value)
     {
-        EventInstance eventInstance;
-        eventInstance = RuntimeManager.CreateInstance("event:/Musique/Basse");
-        eventInstance.start();
-        eventInstance.setParameterByName(myparameter, value);
+        // Modifier le paramètre global dans FMOD
+        FMOD.RESULT result = RuntimeManager.StudioSystem.setParameterByName("Palier", value);
+
+        if (result == FMOD.RESULT.OK)
+        {
+            Debug.Log("? Paramètre global 'Palier' mis à jour : " + value);
+        }
+        else
+        {
+            Debug.LogError("? Erreur FMOD lors de la mise à jour du paramètre 'Palier' : " + result);
+        }
     }
 
     public void Meth_Globale_Musique(int currentLevel)
     {
-        
-        if (currentLevel == 0)
-        {
-            SetParameter("Palier", 0.3f);
-        }
         if (currentLevel == 1)
         {
-            SetParameter("Palier", 1.3f);
+            SetParameter(0.3f);
         }
         if (currentLevel == 2)
         {
-            SetParameter("Palier", 2.3f);
+            SetParameter(1.3f);
         }
         if (currentLevel == 3)
         {
-            SetParameter("Palier", 3f);
+            SetParameter(2.3f);
+        }
+        if (currentLevel == 4)
+        {
+            SetParameter(3f);
         }
     }
 
     private void Start()
     {
         FMODUnity.RuntimeManager.PlayOneShot(Globale_Musique);
+    }
+    private void Update()
+    {
+        Meth_Globale_Musique(Jauge.EnergyStore.currentLevelIndex);
     }
 }
