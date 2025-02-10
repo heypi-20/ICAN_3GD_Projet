@@ -9077,8 +9077,61 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 965098031302558064, guid: d82abdf23df5a1e469444b0cf4f4720e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1411165962}
+    - targetCorrespondingSourceObject: {fileID: 5779202144605559832, guid: d82abdf23df5a1e469444b0cf4f4720e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1411165961}
   m_SourcePrefab: {fileID: 100100000, guid: d82abdf23df5a1e469444b0cf4f4720e, type: 3}
+--- !u!20 &1411165958 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 2327411758440021128, guid: d82abdf23df5a1e469444b0cf4f4720e, type: 3}
+  m_PrefabInstance: {fileID: 1411165957}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1411165959 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5779202144605559832, guid: d82abdf23df5a1e469444b0cf4f4720e, type: 3}
+  m_PrefabInstance: {fileID: 1411165957}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1411165960 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 965098031302558064, guid: d82abdf23df5a1e469444b0cf4f4720e, type: 3}
+  m_PrefabInstance: {fileID: 1411165957}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1411165961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411165959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8427ff4bbce4ca5439ca22e287ca6d2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 1411165958}
+  distanceFromCamera: 1
+  positionOffset: {x: 0, y: 0, z: 0}
+  rotationOffset: {x: 0, y: 0, z: 0}
+--- !u!114 &1411165962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411165960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8427ff4bbce4ca5439ca22e287ca6d2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 1411165958}
+  distanceFromCamera: 1
+  positionOffset: {x: 0, y: 0, z: 0}
+  rotationOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &1431768375
 GameObject:
   m_ObjectHideFlags: 0
