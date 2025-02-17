@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using UnityEngine.Serialization;
+using DG.Tweening;
 
 public class S_GroundPound_Module : MonoBehaviour
 {
@@ -32,6 +33,9 @@ public class S_GroundPound_Module : MonoBehaviour
     private bool _isGrounded = false; // Indique si le joueur a touché le sol
     private bool _isGroundPounding = false; // Indique si la compétence est en cours d'utilisation
     private float _dynamicSphereRange; // Portée dynamique basée sur la distance de chute
+
+    public Camera Camera_For_Shake;
+    private float _timer_of_groundpound;
 
     private void Start()
     {
@@ -111,6 +115,7 @@ public class S_GroundPound_Module : MonoBehaviour
                 break; // Quitter la boucle une fois au sol
             }
 
+            _timer_of_groundpound = _timer_of_groundpound + Time.deltaTime;
             // Augmenter dynamiquement la vitesse jusqu'à la vitesse maximale
             currentSpeed = Mathf.Min(currentSpeed + acceleration*Time.deltaTime, maxSpeed);
 
@@ -137,7 +142,9 @@ public class S_GroundPound_Module : MonoBehaviour
     {
         GroundPoundLevel currentLevel = GetCurrentGroundPoundLevel();
         if (currentLevel == null) return;
-
+        
+        Shake_Camera_On_Ground();
+        _timer_of_groundpound = 0f;
         // Effectuer une détection sphérique avec la portée dynamique
         Collider[] hits = Physics.OverlapSphere(transform.position, _dynamicSphereRange, KillableTargetLayer);
 
@@ -202,6 +209,11 @@ public class S_GroundPound_Module : MonoBehaviour
             Gizmos.color = Color.red;
             Gizmos.DrawSphere(hit.point, 0.2f);
         }
+    }
+
+    private void Shake_Camera_On_Ground()
+    {
+        Camera_For_Shake.transform.DOShakePosition(_timer_of_groundpound, 0.5f, 30, 90);
     }
 
 }
