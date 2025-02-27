@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class S_EnergyAbsorptionModule : MonoBehaviour
+public class S_EnergyAbsorption_Module : MonoBehaviour
 {
     [Header("Detection Settings")]
     public float detectionRadius = 5f; // Rayon de détection de la sphère

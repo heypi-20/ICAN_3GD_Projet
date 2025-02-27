@@ -5,7 +5,7 @@ using UnityEngine.Rendering.Universal;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
 
-public class S_PlayerGetHit_Trigger : MonoBehaviour
+public class S_PlayerHitTrigger : MonoBehaviour
 {
     private S_EnergyStorage _energyStorage;
     
