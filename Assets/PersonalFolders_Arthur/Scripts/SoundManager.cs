@@ -171,17 +171,9 @@ public class SoundManager : MonoBehaviour
 
     public void SetParameter(float value)
     {
-        // Modifier le paramètre global dans FMOD
+        // Modifier le paramï¿½tre global dans FMOD
         FMOD.RESULT result = RuntimeManager.StudioSystem.setParameterByName("Palier", value);
-
-        if (result == FMOD.RESULT.OK)
-        {
-            Debug.Log("? Paramètre global 'Palier' mis à jour : " + value);
-        }
-        else
-        {
-            Debug.LogError("? Erreur FMOD lors de la mise à jour du paramètre 'Palier' : " + result);
-        }
+        
     }
 
     public void Meth_Globale_Musique(int currentLevel)
