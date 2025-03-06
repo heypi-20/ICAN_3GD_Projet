@@ -67,10 +67,9 @@ public class S_CustomCharacterController : MonoBehaviour
     private Vector3 _inertiaDirection;
     private float _airborneSpeed;
 
-    public event Action<String> OnMoveStateChange;
+    public event Action<string> OnMoveStateChange;
     private bool isMovingUseForEvent = false; 
-    private string lastMoveState = ""; 
-
+    private bool hasSentMoving = false;
     private void Start()
     {
         InitializeController();
@@ -84,59 +83,33 @@ public class S_CustomCharacterController : MonoBehaviour
         ObserverEvent();
     }
 
-    
     private void ObserverEvent()
     {
-        // Trigger "StartMoving" event only once
+        // Check if the player has started moving
         if (!isMovingUseForEvent && _inputDirection.magnitude > 0.1f)
         {
             isMovingUseForEvent = true;
+            hasSentMoving = false; // Reset "Moving" trigger
             OnMoveStateChange?.Invoke("StartMoving");
         }
 
-        // Trigger "StopMoving" event only once
+        // Check if the player has stopped moving
         if (isMovingUseForEvent && _inputDirection.magnitude <= 0.1f)
         {
             isMovingUseForEvent = false;
+            hasSentMoving = false; // Reset "Moving" state
             OnMoveStateChange?.Invoke("StopMoving");
-            lastMoveState = "";
             return;
         }
 
-        if (isMovingUseForEvent)
+        // Ensure "Moving" is triggered only once
+        if (isMovingUseForEvent && !hasSentMoving)
         {
-            string moveState = "";
-
-            bool forward = _inputVertical_Z > 0.1f;
-            bool backward = _inputVertical_Z < -0.1f;
-            bool right = _inputHorizontal_X > 0.1f;
-            bool left = _inputHorizontal_X < -0.1f;
-
-            int moveCode = (forward ? 1 : 0) | (backward ? 2 : 0) | (right ? 4 : 0) | (left ? 8 : 0);
-
-            switch (moveCode)
-            {
-                case 1: moveState = "MovingForward"; break;
-                case 2: moveState = "MovingBackward"; break;
-                case 4: moveState = "MovingRight"; break;
-                case 8: moveState = "MovingLeft"; break;
-                case 5: moveState = "MovingForwardRight"; break;
-                case 9: moveState = "MovingForwardLeft"; break;
-                case 6: moveState = "MovingBackwardRight"; break;
-                case 10: moveState = "MovingBackwardLeft"; break;
-            }
-
-            // Prevent redundant event triggers for the same direction
-            if (moveState != lastMoveState && moveState != "")
-            {
-                lastMoveState = moveState;
-                OnMoveStateChange?.Invoke(moveState);
-            }
+            hasSentMoving = true;
+            OnMoveStateChange?.Invoke("Moving");
         }
     }
 
-    
-   
     private void InitializeController()
     {
         // Initialisation : obtention des composants nécessaires
