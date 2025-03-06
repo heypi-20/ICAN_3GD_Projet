@@ -67,6 +67,9 @@ public class S_CustomCharacterController : MonoBehaviour
     private Vector3 _inertiaDirection;
     private float _airborneSpeed;
 
+    public event Action<String> OnMoveStateChange;
+    private bool isMovingUseForEvent = false; 
+    private string lastMoveState = ""; 
 
     private void Start()
     {
@@ -78,7 +81,60 @@ public class S_CustomCharacterController : MonoBehaviour
         ControllerInput();
         MovePlayer();
         HandleGravity();
+        ObserverEvent();
     }
+
+    
+    private void ObserverEvent()
+    {
+        // Trigger "StartMoving" event only once
+        if (!isMovingUseForEvent && _inputDirection.magnitude > 0.1f)
+        {
+            isMovingUseForEvent = true;
+            OnMoveStateChange?.Invoke("StartMoving");
+        }
+
+        // Trigger "StopMoving" event only once
+        if (isMovingUseForEvent && _inputDirection.magnitude <= 0.1f)
+        {
+            isMovingUseForEvent = false;
+            OnMoveStateChange?.Invoke("StopMoving");
+            lastMoveState = "";
+            return;
+        }
+
+        if (isMovingUseForEvent)
+        {
+            string moveState = "";
+
+            bool forward = _inputVertical_Z > 0.1f;
+            bool backward = _inputVertical_Z < -0.1f;
+            bool right = _inputHorizontal_X > 0.1f;
+            bool left = _inputHorizontal_X < -0.1f;
+
+            int moveCode = (forward ? 1 : 0) | (backward ? 2 : 0) | (right ? 4 : 0) | (left ? 8 : 0);
+
+            switch (moveCode)
+            {
+                case 1: moveState = "MovingForward"; break;
+                case 2: moveState = "MovingBackward"; break;
+                case 4: moveState = "MovingRight"; break;
+                case 8: moveState = "MovingLeft"; break;
+                case 5: moveState = "MovingForwardRight"; break;
+                case 9: moveState = "MovingForwardLeft"; break;
+                case 6: moveState = "MovingBackwardRight"; break;
+                case 10: moveState = "MovingBackwardLeft"; break;
+            }
+
+            // Prevent redundant event triggers for the same direction
+            if (moveState != lastMoveState && moveState != "")
+            {
+                lastMoveState = moveState;
+                OnMoveStateChange?.Invoke(moveState);
+            }
+        }
+    }
+
     
    
     private void InitializeController()
@@ -93,7 +149,7 @@ public class S_CustomCharacterController : MonoBehaviour
         
 
     }
-    private void ControllerInput()
+    private void ControllerInput()  
     {
         // Obtenir les valeurs d'entrée depuis le gestionnaire d'entrée (Input Manager)
         _inputHorizontal_X = _inputManager.MoveInput.x;
@@ -197,6 +253,7 @@ public class S_CustomCharacterController : MonoBehaviour
 
         // Appliquer l'inclinaison à la caméra
         _cinemachineVirtualCamera.m_Lens.Dutch = currentDutch;
+        
         
     }
 
