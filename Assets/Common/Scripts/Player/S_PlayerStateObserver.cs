@@ -19,8 +19,7 @@ public class S_PlayerStateObserver : MonoBehaviour
     private S_GroundPound_Module m_GroundPound_Module;
     private S_PlayerHitTrigger m_PlayerHitTrigger;
 
-    private Dictionary<string, Action<string>> stateHandlers;
-    private  HashSet<string> activeStates = new HashSet<string>();
+    public Action<string, Vector2> OnMoveStateEvent;
     
     private void Awake()
     {
@@ -49,56 +48,14 @@ public class S_PlayerStateObserver : MonoBehaviour
         m_GroundPound_Module = player.GetComponent<S_GroundPound_Module>();
         m_PlayerHitTrigger = player.GetComponent<S_PlayerHitTrigger>();
 
-        stateHandlers = new Dictionary<string, Action<string>>
-        {
-            { "MoveType", OnMoveStateChanged },
-            { "JumpType", OnJumpStateChanged },
-            { "SprintType", OnSprintStateChanged },
-            { "ShootType", OnShootStateChanged },
-            { "MeleeType", OnMeleeStateChanged },
-            { "SpecialSkillType", OnSpecialSkillStateChanged }
-        };
+        m_CharacterController.OnMoveStateChange += OnMoveStateChanged;
 
-        m_CharacterController.OnMoveStateChange += (state) => HandleStateChange("MoveType", state);
-
-
-    }
-
-    private void HandleStateChange(string category, string newState)
-    {
-
-        RemoveSameCategoryStates(category);// Remove all previous states of the same category
-        activeStates.Add(newState);
-        
-        //Trigger the event for this category, notifying all subscribed scripts
-        if (stateHandlers.ContainsKey(category))
-        {
-            stateHandlers[category].Invoke(newState);
-        }
     }
     
-    private void RemoveSameCategoryStates(string category)
-    {
-        List<string> statesToRemove = new List<string>();
-        // Iterate through activeStates to find all states of the given category
-        foreach (var state in activeStates)
-        {
-            if (state.StartsWith(category + "_")) // Directly check if it belongs to the category
-            {
-                statesToRemove.Add(state);
-            }
-        }
 
-        // Remove all states that belong to the category
-        foreach (var state in statesToRemove)
-        {
-            activeStates.Remove(state);
-        }
-    }
-
-    private void OnMoveStateChanged(string state)
+    private void OnMoveStateChanged(string state, Vector2 direction)
     {
-        Debug.Log("OnMoveStateChanged: " + state);
+        OnMoveStateEvent?.Invoke(state, direction);
     }
 
     private void OnJumpStateChanged(string state)

@@ -5,7 +5,6 @@ using UnityEngine.Serialization;
 
 public class S_CustomCharacterController : MonoBehaviour
 {
-    public CinemachineVirtualCamera _cinemachineVirtualCamera;  
     
     [Header("Movement Settings")]
     public float moveSpeed = 12f;
@@ -17,15 +16,6 @@ public class S_CustomCharacterController : MonoBehaviour
     public float decelerationTime = 0.3f;
     public AnimationCurve decelerationCurve = AnimationCurve.Linear(0, 1, 1, 0);
     public float _directionLerpSpeed = 10f;
-    
-    [Header("Movement feedback Settings")]
-    public float maxDutchAngle = 10f; 
-    public float smoothTime = 0.2f;
-    private float currentDutch = 0f; // Valeur actuelle de l'inclinaison
-    private float targetDutch = 0f;  // Valeur cible de l'inclinaison
-    private float dutchVelocity = 0f; // Vitesse de transition pour SmoothDamp
-
-    
     
     [Header("Ground Settings")]
     public float gravity = -19.62f;
@@ -67,9 +57,11 @@ public class S_CustomCharacterController : MonoBehaviour
     private Vector3 _inertiaDirection;
     private float _airborneSpeed;
 
-    public event Action<string> OnMoveStateChange;
+    public event Action<string,Vector2> OnMoveStateChange;
     private bool isMovingUseForEvent = false; 
     private bool hasSentMoving = false;
+    private Vector2 _previousDirection = Vector2.zero;
+
     private void Start()
     {
         InitializeController();
@@ -85,42 +77,39 @@ public class S_CustomCharacterController : MonoBehaviour
 
     private void ObserverEvent()
     {
-        // Check if the player has started moving
-        if (!isMovingUseForEvent && _inputDirection.magnitude > 0.1f)
+        Vector2 currentDirection = new Vector2(_inputHorizontal_X, _inputVertical_Z);
+
+        // Check if the player starts moving
+        if (!isMovingUseForEvent && currentDirection.magnitude > 0.1f)
         {
             isMovingUseForEvent = true;
-            hasSentMoving = false; // Reset "Moving" trigger
-            OnMoveStateChange?.Invoke("StartMoving");
+            _previousDirection = Vector2.zero; // Save the initial direction
+            OnMoveStateChange?.Invoke("StartMoving", Vector2.zero);
         }
 
-        // Check if the player has stopped moving
-        if (isMovingUseForEvent && _inputDirection.magnitude <= 0.1f)
+        // Check if the player stops moving
+        if (isMovingUseForEvent && currentDirection.magnitude <= 0.1f)
         {
             isMovingUseForEvent = false;
-            hasSentMoving = false; // Reset "Moving" state
-            OnMoveStateChange?.Invoke("StopMoving");
+            _previousDirection = Vector2.zero; // Reset direction
+            OnMoveStateChange?.Invoke("StopMoving", Vector2.zero);
             return;
         }
 
-        // Ensure "Moving" is triggered only once
-        if (isMovingUseForEvent && !hasSentMoving)
+        // Trigger "Moving" only if the direction changes
+        if (isMovingUseForEvent && !_previousDirection.Equals(currentDirection))
         {
-            hasSentMoving = true;
-            OnMoveStateChange?.Invoke("Moving");
+            _previousDirection = currentDirection;
+            OnMoveStateChange?.Invoke("Moving", currentDirection);
         }
     }
+
 
     private void InitializeController()
     {
         // Initialisation : obtention des composants nécessaires
         _controller = GetComponent<CharacterController>();
         _inputManager = FindObjectOfType<S_InputManager>();
-        if (_cinemachineVirtualCamera == null)
-        {
-            _cinemachineVirtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
-        }
-        
-
     }
     private void ControllerInput()  
     {
@@ -185,48 +174,6 @@ public class S_CustomCharacterController : MonoBehaviour
         Vector3 finalMoveDirection = GroundCheck() ? _lastMoveDirection : _inertiaDirection;
         float finalSpeed = GroundCheck() ? currentSpeed : _airborneSpeed;
         _controller.Move(finalMoveDirection * (finalSpeed * Time.deltaTime));
-        
-        /*
-         *TODO : Check Ground and input
-         * if (GroundCheck() && finalMoveDirection.magnitude > 0.1f)
-         * {
-         *  play feedback
-         * }
-         *
-         */
-        // if (_inputManager.MoveInput.x>0f)
-        // {
-        //     _cinemachineVirtualCamera.m_Lens.Dutch = 1;
-        // }
-        // if (_inputManager.MoveInput.x<0f)
-        // {
-        //     _cinemachineVirtualCamera.m_Lens.Dutch = -1;
-        // }
-        // else
-        // {
-        //     _cinemachineVirtualCamera.m_Lens.Dutch = 0;
-        // }
-
-        // Vérifier les touches pressées pour déterminer la valeur cible
-        if (Input.GetKey(KeyCode.A))
-        {
-            targetDutch = maxDutchAngle; // Inclinaison vers la gauche
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            targetDutch = -maxDutchAngle; // Inclinaison vers la droite
-        }
-        else
-        {
-            targetDutch = 0f; // Retour à l'état neutre
-        }
-
-        // Transition douce vers la valeur cible
-        currentDutch = Mathf.SmoothDamp(currentDutch, targetDutch, ref dutchVelocity, smoothTime);
-
-        // Appliquer l'inclinaison à la caméra
-        _cinemachineVirtualCamera.m_Lens.Dutch = currentDutch;
-        
         
     }
 
