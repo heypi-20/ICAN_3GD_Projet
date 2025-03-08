@@ -49,6 +49,7 @@ public class S_PlayerStateObserver : MonoBehaviour
         m_PlayerHitTrigger = player.GetComponent<S_PlayerHitTrigger>();
 
         m_CharacterController.OnMoveStateChange += OnMoveStateChanged;
+        m_BasicSprint_Module.OnSprintStateChange += OnSprintStateChanged;
 
     }
     
@@ -63,9 +64,9 @@ public class S_PlayerStateObserver : MonoBehaviour
         
     }
 
-    private void OnSprintStateChanged(string state)
+    private void OnSprintStateChanged(string state,int level)
     {
-        
+        Debug.Log("OnSprintStateChanged: " + state+" level: " + level);
     }
 
     private void OnShootStateChanged(string state)

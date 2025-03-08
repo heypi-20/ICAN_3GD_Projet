@@ -42,8 +42,20 @@ public class S_BasicSprint_Module : MonoBehaviour
     private float _originalMoveSpeed;
     // Indicateur si le joueur est en sprint
     public bool _isSprinting { get; private set; }
+
+    public event Action<string,int> OnSprintStateChange;
+    
     // Référence à la coroutine en cours pour éviter les doublons
     private Coroutine _currentCoroutine;
+    
+    // Stores last level while sprinting
+    private int _previousSprintLevelWhileSprinting = -1; 
+    
+    //Use for event
+    private string _previousSprintState = ""; // Stores the last sprint state
+    private int _previousSprintLevel = -1; // Stores the last sprint level
+    private bool _hasStartedSprinting = false; // Tracks whether sprinting has started
+    private bool _shouldTriggerIsSprintingNextFrame = false; // Ensures "IsSprinting" triggers in the next frame
 
     private void Start()
     {
@@ -51,7 +63,7 @@ public class S_BasicSprint_Module : MonoBehaviour
         _characterController = GetComponent<S_CustomCharacterController>();
         _energyStorage = GetComponent<S_EnergyStorage>();
         _inputManager = FindObjectOfType<S_InputManager>();
-
+        
         // Initialiser le FOV de la caméra
         if (cinemachineCamera != null)
         {
@@ -62,15 +74,64 @@ public class S_BasicSprint_Module : MonoBehaviour
     private void Update()
     {
         HandleSprint();
+        UpdateLevelDuringSprinting();
+
     }
 
+    private void UpdateLevelDuringSprinting()
+    {
+        // Ensure sprint re-triggers if level changes while sprinting
+        if (_isSprinting)
+        {
+            int currentLevel = _energyStorage.currentLevelIndex + 1;
+            if (currentLevel != _previousSprintLevel)
+            {
+                _isSprinting = false; // Allow HandleSprint() to re-execute sprint logic
+            }
+            _previousSprintLevel = currentLevel;
+        }
+        else
+        {
+            _previousSprintLevel = _energyStorage.currentLevelIndex + 1;        
+        }
+    }
+    
+
+    private void SprintObserverEvent(string sprintState, int level)
+    {
+        // Step 1: If "StartSprinting" is received, immediately trigger it and mark sprint as started
+        if (sprintState == "StartSprinting")
+        {
+            if (!_hasStartedSprinting)
+            {
+                OnSprintStateChange?.Invoke("StartSprinting", level);
+                
+                _hasStartedSprinting = true; // Mark sprinting as started
+            }
+        }
+
+        if (sprintState != "StopSprinting")
+        {
+            OnSprintStateChange?.Invoke("IsSprinting", level);
+        }
+
+        // Step 4: When sprinting stops, reset everything
+        if (sprintState == "StopSprinting")
+        {
+            _hasStartedSprinting = false;
+            OnSprintStateChange?.Invoke("StopSprinting", level);
+        }
+
+
+    }
+
+    
     // Gérer le démarrage et l'arrêt du sprint
     private void HandleSprint()
     {
         if (_inputManager.SprintInput&&GetCurrentSprintLevels()!=null)
         {
             // Commencer le sprint si ce n'est pas déjà le cas
-            Debug.Log("Consomme energy");
             HandleEnergyConsumption();
             if (!_isSprinting)
             {
@@ -78,8 +139,11 @@ public class S_BasicSprint_Module : MonoBehaviour
                 if (IsSprintCoroutineRunning()) StopCoroutine(_currentCoroutine);
                 _currentCoroutine = StartCoroutine(AccelerateToSprintSpeed());
                 _isSprinting = true;
-
-                // Ajouter le feedback FOV
+                
+                
+                //Trigger event
+                Debug.Log("TriggerEvent=================================================");
+                SprintObserverEvent("StartSprinting",_energyStorage.currentLevelIndex+1);
                 SoundManager.Instance.Meth_Active_Sprint();
                 UpdateCameraFOV(GetLevelFOV());
             }
@@ -88,12 +152,15 @@ public class S_BasicSprint_Module : MonoBehaviour
         }
         else if (_isSprinting)
         {
+            if(GetCurrentSprintLevels()==null)return;
             // Arrêter le sprint si l'input n'est plus actif
             if (IsSprintCoroutineRunning()) StopCoroutine(_currentCoroutine);
             _currentCoroutine = StartCoroutine(DecelerateToNormalSpeed());
             _isSprinting = false;
     
-            // Ajouter le feedback FOV
+            //Trigger event
+            SprintObserverEvent("StopSprinting",_energyStorage.currentLevelIndex+1);
+            
             SoundManager.Instance.Meth_Desactive_Sprint();
             UpdateCameraFOV(normalFOV);
         }

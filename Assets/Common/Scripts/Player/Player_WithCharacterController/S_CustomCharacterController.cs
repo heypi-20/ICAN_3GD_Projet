@@ -72,10 +72,10 @@ public class S_CustomCharacterController : MonoBehaviour
         ControllerInput();
         MovePlayer();
         HandleGravity();
-        ObserverEvent();
+        MovementObserverEvent();
     }
 
-    private void ObserverEvent()
+    private void MovementObserverEvent()
     {
         Vector2 currentDirection = new Vector2(_inputHorizontal_X, _inputVertical_Z);
 

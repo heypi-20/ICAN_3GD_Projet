@@ -65,8 +65,6 @@ public class S_CameraFeedBack : MonoBehaviour
     /// </summary>
     private void ReceiveMoveEvent(string movingState, Vector2 inputDirection)
     {
-        Debug.Log(movingState + " " + inputDirection);
-
         // Check if movement direction has changed
         if (HasDirectionChanged(inputDirection))
         {
