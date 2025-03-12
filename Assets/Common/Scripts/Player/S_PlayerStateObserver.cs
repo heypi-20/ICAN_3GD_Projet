@@ -1,10 +1,17 @@
 using System;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class S_PlayerStateObserver : MonoBehaviour
 {
     public static S_PlayerStateObserver Instance;
+    
+    //Debugger UI
+    [Header ("UI")]
+    public TextMeshProUGUI stateText;
+    private Queue<string> stateHistory = new Queue<string>();
+    private const int maxHistory = 15;
     
     // listening event
     private GameObject player; 
@@ -51,7 +58,7 @@ public class S_PlayerStateObserver : MonoBehaviour
         m_CharacterController.OnMoveStateChange += OnMoveStateChanged;
         m_BasicSprint_Module.OnSprintStateChange += OnSprintStateChanged;
         m_SuperJump_Module.OnJumpStateChange += OnJumpStateChanged;
-
+        m_FireRateGun_Module.OnShootStateChange += OnShootStateChanged;
     }
     
 
@@ -59,24 +66,30 @@ public class S_PlayerStateObserver : MonoBehaviour
     {
         //Done
         OnMoveStateEvent?.Invoke(state, direction);
-        Debug.Log("OnMoveStateChanged"+state);
+        UpdateStateUI(state);
     }
 
     private void OnJumpStateChanged(Enum state)
     {
-        
+        //Done
         Debug.Log("OnJumpStateChanged"+state);
+        UpdateStateUI(state);
+
     }
 
     private void OnSprintStateChanged(Enum state,int level)
     {
         //Done
         Debug.Log("OnSprintStateChanged: " + state+" level: " + level);
+        UpdateStateUI(state);
+
     }
 
-    private void OnShootStateChanged(Enum state)
+    private void OnShootStateChanged(Enum state,int level)
     {
-        
+        Debug.Log("OnShootStateChanged"+state+" level: "+level);
+        UpdateStateUI(state);
+
     }
 
     private void OnMeleeStateChanged(Enum state)
@@ -87,6 +100,24 @@ public class S_PlayerStateObserver : MonoBehaviour
     private void OnSpecialSkillStateChanged(Enum state)
     {
         
+    }
+
+
+    private void UpdateStateUI(Enum state)
+    {// Convert enum to string
+        string stateString = state.ToString();
+
+        // Add the new state to the queue
+        stateHistory.Enqueue(stateString);
+
+        // Ensure only the last 5 states are stored
+        if (stateHistory.Count > maxHistory)
+        {
+            stateHistory.Dequeue(); // Remove the oldest entry
+        }
+
+        // Update the UI text
+        stateText.text = string.Join("\n", stateHistory);
     }
     
 }

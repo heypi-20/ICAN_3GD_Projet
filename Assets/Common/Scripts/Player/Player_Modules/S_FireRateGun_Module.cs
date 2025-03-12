@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -49,11 +50,17 @@ public class S_FireRateGun_Module : MonoBehaviour
 
     public GameObject HitMarkerPNG;
 
+    public event Action<Enum, int> OnShootStateChange;
+    private bool shootStartedUseForEvent;
+    private bool ShootStoppedUseForEvent;
+
     private void Start()
     {
         _inputManager = FindObjectOfType<S_InputManager>();
         _energyStorage = GetComponent<S_EnergyStorage>();
 
+        ShootStoppedUseForEvent = true;
+        
         // Initialisation des positions pour le recul
         _originalPosition = gunObject.transform.localPosition;
         _originalRotation = gunObject.transform.localRotation;
@@ -64,6 +71,32 @@ public class S_FireRateGun_Module : MonoBehaviour
         HandleShooting();
     }
 
+    private void ShootingObserverEvent(Enum Shootstates, FireRateLevel currentLevel)
+    {
+
+        if (Shootstates.Equals(PlayerStates.ShootState.StartShoot))
+        {
+            if (!shootStartedUseForEvent)
+            {
+                OnShootStateChange?.Invoke(PlayerStates.ShootState.StartShoot, currentLevel.level);
+                OnShootStateChange?.Invoke(PlayerStates.ShootState.IsShooting,currentLevel.level);
+                shootStartedUseForEvent = true;
+            }
+            else if (shootStartedUseForEvent)
+            {
+                OnShootStateChange?.Invoke(PlayerStates.ShootState.IsShooting,currentLevel.level);
+            }
+        }
+
+        if (Shootstates.Equals(PlayerStates.ShootState.StopShoot))
+        {
+            shootStartedUseForEvent = false;
+            OnShootStateChange?.Invoke(PlayerStates.ShootState.StopShoot, currentLevel.level);
+        }
+        
+        
+    }
+
     private void HandleShooting()
     {
         if (_inputManager.ShootInput && _fireCooldown <= 0f)
@@ -71,10 +104,26 @@ public class S_FireRateGun_Module : MonoBehaviour
             FireRateLevel currentLevel = GetCurrentFireRateLevel();
             if (currentLevel == null) return;
             Shoot(currentLevel);
+            
+            //Trigger ShootEvent
+            ShootingObserverEvent(PlayerStates.ShootState.StartShoot,GetCurrentFireRateLevel());
+            ShootStoppedUseForEvent = false;
+            
             SoundManager.Instance.Meth_Shoot_No_Hit(_energyStorage.currentLevelIndex+1);
             UpdateFireCooldown(currentLevel);
             ConsumeEnergy(currentLevel);
             ShootVFX();
+        }
+
+        //Trigger once stop shooting event
+        if (!_inputManager.ShootInput)
+        {
+            if (!ShootStoppedUseForEvent)
+            {
+                ShootingObserverEvent(PlayerStates.ShootState.StopShoot,GetCurrentFireRateLevel());
+                ShootStoppedUseForEvent=true;
+            }
+
         }
 
         if (_fireCooldown > 0f)

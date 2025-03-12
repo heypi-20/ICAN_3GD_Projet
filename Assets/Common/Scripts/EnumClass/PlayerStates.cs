@@ -21,5 +21,12 @@ public static class PlayerStates
         OnGround,
         OnAir,
     }
+
+    public enum ShootState
+    {
+        StartShoot,
+        IsShooting,
+        StopShoot,
+    }
     
 }
