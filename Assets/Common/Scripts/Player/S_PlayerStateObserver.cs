@@ -19,7 +19,7 @@ public class S_PlayerStateObserver : MonoBehaviour
     private S_GroundPound_Module m_GroundPound_Module;
     private S_PlayerHitTrigger m_PlayerHitTrigger;
 
-    public Action<string, Vector2> OnMoveStateEvent;
+    public Action<Enum, Vector2> OnMoveStateEvent;
     
     private void Awake()
     {
@@ -50,36 +50,41 @@ public class S_PlayerStateObserver : MonoBehaviour
 
         m_CharacterController.OnMoveStateChange += OnMoveStateChanged;
         m_BasicSprint_Module.OnSprintStateChange += OnSprintStateChanged;
+        m_SuperJump_Module.OnJumpStateChange += OnJumpStateChanged;
 
     }
     
 
-    private void OnMoveStateChanged(string state, Vector2 direction)
+    private void OnMoveStateChanged(Enum state, Vector2 direction)
     {
+        //Done
         OnMoveStateEvent?.Invoke(state, direction);
+        Debug.Log("OnMoveStateChanged"+state);
     }
 
-    private void OnJumpStateChanged(string state)
+    private void OnJumpStateChanged(Enum state)
     {
         
+        Debug.Log("OnJumpStateChanged"+state);
     }
 
-    private void OnSprintStateChanged(string state,int level)
+    private void OnSprintStateChanged(Enum state,int level)
     {
+        //Done
         Debug.Log("OnSprintStateChanged: " + state+" level: " + level);
     }
 
-    private void OnShootStateChanged(string state)
+    private void OnShootStateChanged(Enum state)
     {
         
     }
 
-    private void OnMeleeStateChanged(string state)
+    private void OnMeleeStateChanged(Enum state)
     {
         
     }
     
-    private void OnSpecialSkillStateChanged(string state)
+    private void OnSpecialSkillStateChanged(Enum state)
     {
         
     }

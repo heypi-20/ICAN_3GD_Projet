@@ -63,7 +63,7 @@ public class S_CameraFeedBack : MonoBehaviour
     /// <summary>
     /// Handles movement state changes received from the observer.
     /// </summary>
-    private void ReceiveMoveEvent(string movingState, Vector2 inputDirection)
+    private void ReceiveMoveEvent(Enum movingState, Vector2 inputDirection)
     {
         // Check if movement direction has changed
         if (HasDirectionChanged(inputDirection))

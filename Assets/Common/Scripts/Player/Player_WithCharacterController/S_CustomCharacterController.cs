@@ -57,9 +57,8 @@ public class S_CustomCharacterController : MonoBehaviour
     private Vector3 _inertiaDirection;
     private float _airborneSpeed;
 
-    public event Action<string,Vector2> OnMoveStateChange;
+    public event Action<Enum,Vector2> OnMoveStateChange;
     private bool isMovingUseForEvent = false; 
-    private bool hasSentMoving = false;
     private Vector2 _previousDirection = Vector2.zero;
 
     private void Start()
@@ -84,7 +83,7 @@ public class S_CustomCharacterController : MonoBehaviour
         {
             isMovingUseForEvent = true;
             _previousDirection = Vector2.zero; // Save the initial direction
-            OnMoveStateChange?.Invoke("StartMoving", Vector2.zero);
+            OnMoveStateChange?.Invoke(PlayerStates.MoveState.StartMoving, Vector2.zero);
         }
 
         // Check if the player stops moving
@@ -92,7 +91,7 @@ public class S_CustomCharacterController : MonoBehaviour
         {
             isMovingUseForEvent = false;
             _previousDirection = Vector2.zero; // Reset direction
-            OnMoveStateChange?.Invoke("StopMoving", Vector2.zero);
+            OnMoveStateChange?.Invoke(PlayerStates.MoveState.StopMoving, Vector2.zero);
             return;
         }
 
@@ -100,7 +99,7 @@ public class S_CustomCharacterController : MonoBehaviour
         if (isMovingUseForEvent && !_previousDirection.Equals(currentDirection))
         {
             _previousDirection = currentDirection;
-            OnMoveStateChange?.Invoke("Moving", currentDirection);
+            OnMoveStateChange?.Invoke(PlayerStates.MoveState.IsMoving, currentDirection);
         }
     }
 

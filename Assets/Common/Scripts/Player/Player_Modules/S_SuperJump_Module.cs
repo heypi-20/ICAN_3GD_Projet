@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,6 +30,9 @@ public class S_SuperJump_Module : MonoBehaviour
     private S_CustomCharacterController _characterController;
     private S_EnergyStorage _energyStorage;
     private S_InputManager _inputManager;
+    
+    //Event
+    public event Action<Enum> OnJumpStateChange;
 
     private void Start()
     {
@@ -38,7 +42,7 @@ public class S_SuperJump_Module : MonoBehaviour
         _inputManager = FindObjectOfType<S_InputManager>();
     }
 
-    private bool leaveGround;
+    private bool hadLeaveGround;
     private void Update()
     {
         // Vérifier si le joueur appuie sur la touche de saut
@@ -48,20 +52,29 @@ public class S_SuperJump_Module : MonoBehaviour
             _inputManager.JumpInput = false; // Réinitialiser l'input pour éviter plusieurs sauts dans la même frame
         }
 
-        // Réinitialiser le compteur de saut si le joueur est au sol
-        if (!_characterController.GroundCheck())
+        if (!_characterController.GroundCheck()&&!hadLeaveGround)
         {
-            leaveGround = true;
-            
+            hadLeaveGround = true;
+            JumpObserverEvent(PlayerStates.JumpState.OnAir);
         }
-
-        if (_characterController.GroundCheck()&&leaveGround)
+        
+        // Réinitialiser le compteur de saut si le joueur est au sol
+        if (_characterController.GroundCheck()&&hadLeaveGround)
         {
             ResetJumpCount();
-            leaveGround = false;
+            hadLeaveGround = false;
+            JumpObserverEvent(PlayerStates.JumpState.OnGround);
         }
         
     }
+
+    private void JumpObserverEvent(Enum JumpState)
+    {
+        OnJumpStateChange?.Invoke(JumpState);
+        
+    }
+    
+    
 
     /// <summary>
     /// Tente un saut en fonction de l'état actuel (au sol, énergie disponible, etc.)
@@ -84,8 +97,11 @@ public class S_SuperJump_Module : MonoBehaviour
         // Consommer l'énergie pour le saut
         _energyStorage.RemoveEnergy(currentLevel.energyConsumption);
         
-        //Evnement OnJump
+        //Audio OnJump
         SoundManager.Instance.Meth_Used_Jump();
+        
+        //Trigger Evenement
+        JumpObserverEvent(PlayerStates.JumpState.Jump);
         
         // Appliquer la force de saut
         _characterController.velocity.y = Mathf.Sqrt(currentLevel.jumpHeight * -2f * _characterController.gravity);

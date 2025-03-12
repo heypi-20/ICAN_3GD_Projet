@@ -43,20 +43,14 @@ public class S_BasicSprint_Module : MonoBehaviour
     // Indicateur si le joueur est en sprint
     public bool _isSprinting { get; private set; }
 
-    public event Action<string,int> OnSprintStateChange;
+    public event Action<Enum,int> OnSprintStateChange;
     
     // Référence à la coroutine en cours pour éviter les doublons
     private Coroutine _currentCoroutine;
     
-    // Stores last level while sprinting
-    private int _previousSprintLevelWhileSprinting = -1; 
-    
     //Use for event
-    private string _previousSprintState = ""; // Stores the last sprint state
     private int _previousSprintLevel = -1; // Stores the last sprint level
     private bool _hasStartedSprinting = false; // Tracks whether sprinting has started
-    private bool _shouldTriggerIsSprintingNextFrame = false; // Ensures "IsSprinting" triggers in the next frame
-
     private void Start()
     {
         // Initialisation des composants
@@ -97,29 +91,30 @@ public class S_BasicSprint_Module : MonoBehaviour
     }
     
 
-    private void SprintObserverEvent(string sprintState, int level)
+    private void SprintObserverEvent(Enum sprintState, int level)
     {
         // Step 1: If "StartSprinting" is received, immediately trigger it and mark sprint as started
-        if (sprintState == "StartSprinting")
+        if (sprintState is PlayerStates.SprintState.StartSprinting)
         {
             if (!_hasStartedSprinting)
             {
-                OnSprintStateChange?.Invoke("StartSprinting", level);
+                OnSprintStateChange?.Invoke(PlayerStates.SprintState.StartSprinting, level);
                 
                 _hasStartedSprinting = true; // Mark sprinting as started
             }
         }
 
-        if (sprintState != "StopSprinting")
+        if (sprintState is not PlayerStates.SprintState.StopSprinting)
         {
-            OnSprintStateChange?.Invoke("IsSprinting", level);
+            //Invoke isSprinting state
+            OnSprintStateChange?.Invoke(PlayerStates.SprintState.IsSprinting, level);
         }
 
         // Step 4: When sprinting stops, reset everything
-        if (sprintState == "StopSprinting")
+        if (sprintState is PlayerStates.SprintState.StopSprinting)
         {
             _hasStartedSprinting = false;
-            OnSprintStateChange?.Invoke("StopSprinting", level);
+            OnSprintStateChange?.Invoke(PlayerStates.SprintState.StopSprinting, level);
         }
 
 
@@ -142,8 +137,7 @@ public class S_BasicSprint_Module : MonoBehaviour
                 
                 
                 //Trigger event
-                Debug.Log("TriggerEvent=================================================");
-                SprintObserverEvent("StartSprinting",_energyStorage.currentLevelIndex+1);
+                SprintObserverEvent(PlayerStates.SprintState.StartSprinting,_energyStorage.currentLevelIndex+1);
                 SoundManager.Instance.Meth_Active_Sprint();
                 UpdateCameraFOV(GetLevelFOV());
             }
@@ -159,7 +153,7 @@ public class S_BasicSprint_Module : MonoBehaviour
             _isSprinting = false;
     
             //Trigger event
-            SprintObserverEvent("StopSprinting",_energyStorage.currentLevelIndex+1);
+            SprintObserverEvent(PlayerStates.SprintState.StopSprinting,_energyStorage.currentLevelIndex+1);
             
             SoundManager.Instance.Meth_Desactive_Sprint();
             UpdateCameraFOV(normalFOV);
