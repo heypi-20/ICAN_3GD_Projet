@@ -39,6 +39,15 @@ public class S_EnergyStorage : MonoBehaviour
     private float _graceTimer = 0f; // Temps de grâce restant
     private bool isGraceActive = false; // Indique si le temps de grâce est en cours
     private bool hasDeathTriggered = false; // Indique si la logique de mort a été déclenchée
+    
+    public event Action<Enum,int> OnLevelChange; 
+    private bool EndGraceEventSended;
+
+
+    private void Start()
+    {
+        EndGraceEventSended = true;
+    }
 
     private void Update()
     {
@@ -49,7 +58,12 @@ public class S_EnergyStorage : MonoBehaviour
         CheatCode();
     }
 
-
+    private void EnergyLevelObserverEvent(Enum LevelState,int Level)
+    {
+        OnLevelChange?.Invoke(LevelState, Level);
+    }
+    
+    
     private void CheatCode()
     {
         if (Input.GetKeyUp(cheatCodeforAdd))
@@ -115,6 +129,10 @@ public class S_EnergyStorage : MonoBehaviour
             {
                 SetNewLevel(i); // Définit le nouveau niveau
                 SoundManager.Instance.Meth_Gain_Palier();
+                
+                //trigger upgrade level event
+                EnergyLevelObserverEvent(PlayerStates.LevelState.LevelUp, i+1);
+                
                 ShowAndHideGainPalier();
                 return true;
             }
@@ -149,6 +167,10 @@ public class S_EnergyStorage : MonoBehaviour
                 //Fin du compte à rebours : énergie positive, ajustement au niveau correspondant.
                 int newLevelIndex = FindLevelIndexForEnergy();
                 SoundManager.Instance.Meth_Lose_Palier();
+                
+                //Trigger down level event
+                EnergyLevelObserverEvent(PlayerStates.LevelState.LevelDown, newLevelIndex+1);
+                
                 ShowAndHideLoosePalier();
                
                 SetNewLevel(newLevelIndex);
@@ -169,11 +191,14 @@ public class S_EnergyStorage : MonoBehaviour
         _graceTimer = 0f;
     }
 
+    
     // Démarre une période de grâce
     private void StartGracePeriod()
     {
         isGraceActive = true;
         _graceTimer = energyLevels[currentLevelIndex].graceTimer;
+        EnergyLevelObserverEvent(PlayerStates.LevelState.StartGrace, energyLevels[currentLevelIndex].level);
+        EndGraceEventSended = false;
     }
 
     // Réinitialise la période de grâce
@@ -181,6 +206,12 @@ public class S_EnergyStorage : MonoBehaviour
     {
         isGraceActive = false;
         _graceTimer = 0f;
+
+        if (EndGraceEventSended == false)
+        {
+            EnergyLevelObserverEvent(PlayerStates.LevelState.EndGrace, energyLevels[currentLevelIndex].level);
+            EndGraceEventSended = true;
+        }
     }
 
     // Trouve l'index du niveau correspondant à l'énergie actuelle

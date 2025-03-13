@@ -29,4 +29,13 @@ public static class PlayerStates
         StopShoot,
     }
     
+    public enum LevelState
+    {
+        LevelUp,
+        LevelDown,
+        StartGrace,
+        EndGrace,
+        
+    }
+    
 }

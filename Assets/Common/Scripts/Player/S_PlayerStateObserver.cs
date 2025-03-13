@@ -59,6 +59,8 @@ public class S_PlayerStateObserver : MonoBehaviour
         m_BasicSprint_Module.OnSprintStateChange += OnSprintStateChanged;
         m_SuperJump_Module.OnJumpStateChange += OnJumpStateChanged;
         m_FireRateGun_Module.OnShootStateChange += OnShootStateChanged;
+        m_EnergyStorage.OnLevelChange += OnLevelStateChange;
+
     }
     
 
@@ -90,6 +92,11 @@ public class S_PlayerStateObserver : MonoBehaviour
         Debug.Log("OnShootStateChanged"+state+" level: "+level);
         UpdateStateUI(state);
 
+    }
+
+    private void OnLevelStateChange(Enum state, int level)
+    {
+        Debug.Log("OnLevelStateChange"+state+" level: "+level);
     }
 
     private void OnMeleeStateChanged(Enum state)
