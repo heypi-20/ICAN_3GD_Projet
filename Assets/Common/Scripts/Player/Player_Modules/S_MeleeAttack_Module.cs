@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
+
 
 public class S_MeleeAttack_Module : MonoBehaviour
 {
@@ -25,6 +28,8 @@ public class S_MeleeAttack_Module : MonoBehaviour
     private float _attackCooldownTimer; // Minuterie pour gérer le temps de recharge
     public float currentAttackCD;
 
+    public event Action<Enum, int> OnAttackStateChange;
+    
     private void Start()
     {
         // Initialiser les références
@@ -35,23 +40,30 @@ public class S_MeleeAttack_Module : MonoBehaviour
     private void Update()
     {
         HandleMeleeAttack();
-        
     }
-    
+
+    private void MeleeAttackObserverEvent(Enum attackState, int currentLevel)
+    {
+        OnAttackStateChange?.Invoke(attackState, currentLevel);
+    }
 
     private void HandleMeleeAttack()
     {
         MeleeAttackLevel currentLevel = GetCurrentAttackLevel();
         currentAttackCD = currentLevel.attackCooldown;
-        if (currentLevel == null) return;
         
         // Vérifier si le joueur appuie sur la touche d'attaque et si l'attaque est prête
         if (_inputManager.MeleeAttackInput && _attackCooldownTimer <= 0f && _energyStorage.currentEnergy >= currentLevel.energyConsumption)
         {
             SoundManager.Instance.Meth_Active_CAC();
+            
+            //Trigger start event
+            MeleeAttackObserverEvent(PlayerStates.MeleeState.StartMeleeAttack, currentLevel.level);
+            
             PerformMeleeAttack(currentLevel);
             _attackCooldownTimer = currentLevel.attackCooldown; // Réinitialiser la minuterie
             _energyStorage.RemoveEnergy(currentLevel.energyConsumption); // Consommer de l'énergie
+            StartCoroutine(StartTimer(_attackCooldownTimer));
         }
 
         // Réduire la minuterie de recharge
@@ -62,12 +74,27 @@ public class S_MeleeAttack_Module : MonoBehaviour
         
     }
 
+    private IEnumerator StartTimer(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        MeleeAttackObserverEvent(PlayerStates.MeleeState.EndMeleeAttack, GetCurrentAttackLevel().level);
+    }
+
     // ReSharper disable Unity.PerformanceAnalysis
     private void PerformMeleeAttack(MeleeAttackLevel currentLevel)
     {
         // Détecter toutes les cibles dans la portée de l'attaque
         Collider[] hits = Physics.OverlapSphere(attackOrigin.position + attackOrigin.forward * currentLevel.attackRange, currentLevel.attackRange, targetLayer);
 
+        if (hits.Length > 0)
+        {
+            MeleeAttackObserverEvent(PlayerStates.MeleeState.MeleeAttackHit,GetCurrentAttackLevel().level);
+        }
+        else if(hits.Length == 0)
+        {
+            MeleeAttackObserverEvent(PlayerStates.MeleeState.MeleeAttackMissed,GetCurrentAttackLevel().level);
+        }
+        
         // Trier les cibles par distance
         List<Collider> sortedTargets = new List<Collider>(hits);
         sortedTargets.Sort((a, b) =>
@@ -92,6 +119,8 @@ public class S_MeleeAttack_Module : MonoBehaviour
             target.gameObject.GetComponent<EnemyBase>()?.ReduceHealth(GetCurrentAttackLevel().attackDamage, GetCurrentAttackLevel().dropBonus);
             targetsDestroyed++;
         }
+        
+        
     }
 
     private MeleeAttackLevel GetCurrentAttackLevel()

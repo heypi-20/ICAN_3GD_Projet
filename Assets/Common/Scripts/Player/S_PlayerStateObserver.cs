@@ -27,6 +27,9 @@ public class S_PlayerStateObserver : MonoBehaviour
     private S_PlayerHitTrigger m_PlayerHitTrigger;
 
     public Action<Enum, Vector2> OnMoveStateEvent;
+    public Action<Enum, int> OnMeleeAttackStateEvent;
+
+    public Enum LastMeleeState;
     
     private void Awake()
     {
@@ -60,6 +63,7 @@ public class S_PlayerStateObserver : MonoBehaviour
         m_SuperJump_Module.OnJumpStateChange += OnJumpStateChanged;
         m_FireRateGun_Module.OnShootStateChange += OnShootStateChanged;
         m_EnergyStorage.OnLevelChange += OnLevelStateChange;
+        m_MeleeAttack_Module.OnAttackStateChange += OnMeleeStateChanged;
 
     }
     
@@ -99,8 +103,13 @@ public class S_PlayerStateObserver : MonoBehaviour
         Debug.Log("OnLevelStateChange"+state+" level: "+level);
     }
 
-    private void OnMeleeStateChanged(Enum state)
+    private void OnMeleeStateChanged(Enum state, int level)
     {
+        Debug.Log("OnMeleeStateChanged"+state+" level: "+level);
+        OnMeleeAttackStateEvent?.Invoke(state, level);
+        
+        //Use for shoot logic, to not allow shooting and punching on the same time
+        LastMeleeState = state.Equals(PlayerStates.MeleeState.EndMeleeAttack) ? null : state;
         
     }
     

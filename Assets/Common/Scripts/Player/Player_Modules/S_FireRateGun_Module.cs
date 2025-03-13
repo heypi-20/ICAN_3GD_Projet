@@ -99,7 +99,7 @@ public class S_FireRateGun_Module : MonoBehaviour
 
     private void HandleShooting()
     {
-        if (_inputManager.ShootInput && _fireCooldown <= 0f)
+        if (_inputManager.ShootInput && _fireCooldown <= 0f && S_PlayerStateObserver.Instance.LastMeleeState==null)
         {
             FireRateLevel currentLevel = GetCurrentFireRateLevel();
             if (currentLevel == null) return;
@@ -116,7 +116,7 @@ public class S_FireRateGun_Module : MonoBehaviour
         }
 
         //Trigger once stop shooting event
-        if (!_inputManager.ShootInput)
+        if (!_inputManager.ShootInput||S_PlayerStateObserver.Instance.LastMeleeState!=null)
         {
             if (!ShootStoppedUseForEvent)
             {

@@ -24,7 +24,7 @@ public class S_PlayerHitTrigger : MonoBehaviour
     [Header("UI Settings")]
     public Image countdownImage; // Image dont la transparence change pendant le compte à rebours
     private Tween _imageFadeTween; // Animation DOTween pour la transparence de l'image
-    private bool isDead = false; // 是否已死亡
+    private bool isDead = false; 
 
     private void Start()
     {

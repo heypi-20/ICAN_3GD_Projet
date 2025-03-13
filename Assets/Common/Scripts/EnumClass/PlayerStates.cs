@@ -35,7 +35,14 @@ public static class PlayerStates
         LevelDown,
         StartGrace,
         EndGrace,
-        
+    }
+
+    public enum MeleeState
+    {
+        StartMeleeAttack,
+        MeleeAttackMissed,
+        MeleeAttackHit,
+        EndMeleeAttack,
     }
     
 }
