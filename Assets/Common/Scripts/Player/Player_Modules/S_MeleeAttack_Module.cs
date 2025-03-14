@@ -56,14 +56,15 @@ public class S_MeleeAttack_Module : MonoBehaviour
         if (_inputManager.MeleeAttackInput && _attackCooldownTimer <= 0f && _energyStorage.currentEnergy >= currentLevel.energyConsumption)
         {
             SoundManager.Instance.Meth_Active_CAC();
-            
+            Debug.Log("logic melee");
             //Trigger start event
             MeleeAttackObserverEvent(PlayerStates.MeleeState.StartMeleeAttack, currentLevel.level);
-            
+            _inputManager.MeleeAttackInput = false;
+
             PerformMeleeAttack(currentLevel);
             _attackCooldownTimer = currentLevel.attackCooldown; // Réinitialiser la minuterie
             _energyStorage.RemoveEnergy(currentLevel.energyConsumption); // Consommer de l'énergie
-            StartCoroutine(StartTimer(_attackCooldownTimer));
+            StartCoroutine(StartTimer(1.5f));
         }
 
         // Réduire la minuterie de recharge
