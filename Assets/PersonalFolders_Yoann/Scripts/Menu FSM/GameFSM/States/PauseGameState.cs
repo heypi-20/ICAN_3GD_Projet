@@ -35,7 +35,7 @@ public class PauseGameState : GameState
     {
         // SceneManager.UnloadSceneAsync(chunkLoader.chunkPrefab.GetComponent<ChunkLoader>().chunkLoaded.BuildIndex);
         SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
-        fsm.ChangeState(GetComponent<ReturnToMenuGameState>());
+        fsm.ChangeState(GetComponent<ReturnToMenuGameState >());
         
         //ToDo : Go To Main Menu
         Debug.Log("Main Menu");
