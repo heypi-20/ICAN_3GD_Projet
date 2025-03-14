@@ -19,6 +19,7 @@ public class PlayerEditorWindow : EditorWindow
     private bool windowSwitch;
     private GameObject player;
 
+    #region Modules Window Properties
     private MonoBehaviour[] modules;
 
     private Editor moduleEditor;
@@ -29,12 +30,26 @@ public class PlayerEditorWindow : EditorWindow
     private string[] profileNames;
     
     private Vector2 scrollPosition;
-    
     private int index;
+    #endregion
+
+    #region Monitor Window Properties
+
+    private S_EnergyStorage energy;
+
+    #endregion
 
     private void Awake()
     {
         index = -1;
+    }
+
+    private void OnInspectorUpdate()
+    {
+        if (!windowSwitch) {
+            return;
+        }
+        Repaint();
     }
 
     private void OnGUI()
@@ -59,7 +74,7 @@ public class PlayerEditorWindow : EditorWindow
     private void ModulesWindow()
     {
         GUILayout.Label("Modules Window", EditorStyles.boldLabel);
-
+        
         modules = GetModules();
         GUIStyle labelStyle;
         
@@ -246,8 +261,17 @@ public class PlayerEditorWindow : EditorWindow
     private void MonitorWindow()
     {
         GUILayout.Label("Monitor Window", EditorStyles.boldLabel);
+
+        energy = FindObjectOfType<S_EnergyStorage>();
+
+        Rect playerPropertiesRect = new Rect(50, 70, 200, 200);
+        GUILayout.BeginArea(playerPropertiesRect, EditorStyles.textArea);
+        
+        GUILayout.Label("Current Energy : " + energy.currentEnergy, EditorStyles.boldLabel);
+        GUILayout.Label("Current Level : " + energy.currentLevelIndex, EditorStyles.boldLabel);
+        GUILayout.EndArea();
     }
-    
+
     #region Utility Functions
 
     private GUIStyle LabelTextColor(Color color)

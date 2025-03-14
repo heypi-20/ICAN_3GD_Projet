@@ -1,9 +1,11 @@
+﻿using System;
 using UnityEngine;
+using DG.Tweening;
+using UnityEngine.AI;
 using Random = UnityEngine.Random;
-using DG.Tweening; 
 
-[RequireComponent(typeof(Rigidbody))]
-public class S_TpShooter_Behavior : EnemyBase
+[RequireComponent(typeof(NavMeshAgent))]
+public class S_TPShooter : EnemyBase
 {
     [Header("Enemy Properties")]
     public float teleportCd = 2f;
@@ -17,18 +19,23 @@ public class S_TpShooter_Behavior : EnemyBase
     public Transform shootPoint;
     public float projectileSpeed = 10f;
 
+    private NavMeshAgent agent;
     private Transform player;
     private RaycastHit hit;
 
     private float teleportTimer;
     private float shootTimer;
 
+    private void Awake()
+    {
+        agent = GetComponent<NavMeshAgent>();
+    }
+
     private void Start()
     {
         player = FindObjectOfType<S_CustomCharacterController>().transform;
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         if (player == null)
@@ -61,14 +68,23 @@ public class S_TpShooter_Behavior : EnemyBase
         float randZ = Random.Range(-minDist, maxDist);
         
         Vector3 targetPosition = new Vector3(transform.position.x + randX, transform.position.y, transform.position.z + randZ);
-        transform.DOMove(targetPosition, 0.1f).SetEase(Ease.InOutQuad);
+        NavMeshHit navMeshHit;
+        if (NavMesh.SamplePosition(targetPosition, out navMeshHit, range, NavMesh.AllAreas)) {
+            agent.enabled = false;
+            transform.DOMove(navMeshHit.position, 0.1f)
+                     .SetEase(Ease.InOutQuad)
+                     .OnComplete(() =>
+                     {
+                         agent.enabled = true;
+                         agent.SetDestination(navMeshHit.position);
+                     });
         
-        Vector3 targetScale = new Vector3(1.1f, 1.5f, 1.1f); // Augmenter légèrement la taille
-        // Créer l'animation
-        transform.DOScale(targetScale, 0.5f) // Durée pour atteindre la taille cible (0.25s aller)
-            .SetEase(Ease.InOutQuad)    // Easing fluide pour un effet agréable
-            .SetLoops(-1, LoopType.Yoyo);
-        SoundManager.Instance.Meth_Dashoot_Dash();
+            Vector3 targetScale = new Vector3(1.1f, 1.5f, 1.1f); // Augmenter légèrement la taille
+            // Créer l'animation
+            transform.DOScale(targetScale, 0.5f) // Durée pour atteindre la taille cible (0.25s aller)
+                     .SetEase(Ease.InOutQuad)    // Easing fluide pour un effet agréable
+                     .SetLoops(-1, LoopType.Yoyo);
+        }
     }
 
     private void Shoot()
@@ -77,8 +93,8 @@ public class S_TpShooter_Behavior : EnemyBase
             if (hit.transform == player) {
                 Transform projectile = Instantiate(projectilePrefab, shootPoint.position, transform.rotation);
                 projectile.GetComponent<S_ProjectileSpeed>().speed = projectileSpeed;
-                SoundManager.Instance.Meth_Dashoot_Shoot();
             }
         }
     }
 }
+
