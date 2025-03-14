@@ -109,7 +109,7 @@ public class S_PlayerStateObserver : MonoBehaviour
     {
         Debug.Log("OnMeleeStateChanged"+state+" level: "+level);
         OnMeleeAttackStateEvent?.Invoke(state, level);
-        
+        UpdateStateUI(state);
         //Use for shoot logic, to not allow shooting and punching on the same time
         LastMeleeState = state.Equals(PlayerStates.MeleeState.EndMeleeAttack) ? null : state;
         

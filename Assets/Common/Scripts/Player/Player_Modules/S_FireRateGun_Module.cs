@@ -94,9 +94,9 @@ public class S_FireRateGun_Module : MonoBehaviour
             shootStartedUseForEvent = false;
             OnShootStateChange?.Invoke(PlayerStates.ShootState.StopShoot, currentLevel.level);
         }
-        
-        
     }
+
+
 
     private void HandleShooting()
     {
@@ -105,7 +105,10 @@ public class S_FireRateGun_Module : MonoBehaviour
             FireRateLevel currentLevel = GetCurrentFireRateLevel();
             if (currentLevel == null) return;
             //Trigger ShootEvent
+
             ShootingObserverEvent(PlayerStates.ShootState.StartShoot,GetCurrentFireRateLevel());
+
+            
             Shoot(currentLevel);
             
             ShootStoppedUseForEvent = false;

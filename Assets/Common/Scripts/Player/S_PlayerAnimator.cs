@@ -11,31 +11,38 @@ public class S_PlayerAnimator : MonoBehaviour
     private void Start()
     {
         animator = GetComponent<Animator>();
-        S_PlayerStateObserver.Instance.OnShootStateEvent += HandleCombatEvent;
-        S_PlayerStateObserver.Instance.OnMeleeAttackStateEvent += HandleCombatEvent;
+        S_PlayerStateObserver.Instance.OnShootStateEvent += HandleShootEvent;
+        S_PlayerStateObserver.Instance.OnMeleeAttackStateEvent += HandleMeleeState;
 
     }
 
-    private void HandleCombatEvent(Enum CombatState, int Level)
+    private void HandleShootEvent(Enum ShootState, int Level)
     {
-        switch (CombatState)
+        switch (ShootState)
         {
             case PlayerStates.ShootState.StartShoot when S_PlayerStateObserver.Instance.LastMeleeState==null:
-                animator.CrossFade("StartShoot", 1f);
+                animator.CrossFade("StartShoot", 0.2f);
                 break;
             case PlayerStates.ShootState.IsShooting when S_PlayerStateObserver.Instance.LastMeleeState==null:
                 animator.CrossFade("HoldShoot",0.2f);
                 break;
-            case PlayerStates.ShootState.StopShoot:
-                animator.CrossFade("Idle",1f);
+            case PlayerStates.ShootState.StopShoot when S_PlayerStateObserver.Instance.LastMeleeState==null:
+                animator.CrossFade("EndShoot",0.2f);
                 break;
+
+        }
+    }
+
+    private void HandleMeleeState(Enum MeleeState, int Level)
+    {
+        switch (MeleeState)
+        {
             case PlayerStates.MeleeState.StartMeleeAttack:
                 animator.CrossFade("Punch", 0.2f);
                 break;
             case PlayerStates.MeleeState.EndMeleeAttack:
                 animator.CrossFade("Idle",0.2f);
                 break;
-
         }
     }
 
@@ -43,7 +50,7 @@ public class S_PlayerAnimator : MonoBehaviour
 
     private void OnDisable()
     {
-        S_PlayerStateObserver.Instance.OnShootStateEvent -= HandleCombatEvent;
+        S_PlayerStateObserver.Instance.OnShootStateEvent -= HandleShootEvent;
 
     }
 

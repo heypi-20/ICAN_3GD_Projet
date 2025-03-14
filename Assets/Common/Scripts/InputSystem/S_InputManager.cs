@@ -13,10 +13,6 @@ public class S_InputManager : MonoBehaviour
     public bool ShootInput;
     public bool MeleeAttackInput;
     
-    private bool _meleeAttackTriggered;
-    
-    [Header("Settings")]
-    public bool AllowHoldForMelee;
 
     private void Awake()
     {
@@ -40,6 +36,7 @@ public class S_InputManager : MonoBehaviour
         
         //melee attack input
         _playerInputActions.Gameplay.MeleeAttack.performed += ctx =>MeleeAttackInput=true;
+
     }
     
    

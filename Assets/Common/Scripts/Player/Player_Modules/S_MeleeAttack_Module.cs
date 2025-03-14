@@ -53,18 +53,17 @@ public class S_MeleeAttack_Module : MonoBehaviour
         currentAttackCD = currentLevel.attackCooldown;
         
         // Vérifier si le joueur appuie sur la touche d'attaque et si l'attaque est prête
-        if (_inputManager.MeleeAttackInput && _attackCooldownTimer <= 0f && _energyStorage.currentEnergy >= currentLevel.energyConsumption)
+        if (_inputManager.MeleeAttackInput && _attackCooldownTimer <= 0f && _energyStorage.currentEnergy >= currentLevel.energyConsumption&&S_PlayerStateObserver.Instance.LastMeleeState==null)
         {
             SoundManager.Instance.Meth_Active_CAC();
             Debug.Log("logic melee");
             //Trigger start event
             MeleeAttackObserverEvent(PlayerStates.MeleeState.StartMeleeAttack, currentLevel.level);
-            _inputManager.MeleeAttackInput = false;
 
             PerformMeleeAttack(currentLevel);
             _attackCooldownTimer = currentLevel.attackCooldown; // Réinitialiser la minuterie
             _energyStorage.RemoveEnergy(currentLevel.energyConsumption); // Consommer de l'énergie
-            StartCoroutine(StartTimer(1.5f));
+            StartCoroutine(StartTimer(_attackCooldownTimer));
         }
 
         // Réduire la minuterie de recharge
@@ -79,6 +78,8 @@ public class S_MeleeAttack_Module : MonoBehaviour
     {
         yield return new WaitForSeconds(seconds);
         MeleeAttackObserverEvent(PlayerStates.MeleeState.EndMeleeAttack, GetCurrentAttackLevel().level);
+        _inputManager.MeleeAttackInput = false;
+
     }
 
     // ReSharper disable Unity.PerformanceAnalysis
