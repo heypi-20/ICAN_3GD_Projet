@@ -28,6 +28,7 @@ public class S_PlayerStateObserver : MonoBehaviour
 
     public Action<Enum, Vector2> OnMoveStateEvent;
     public Action<Enum, int> OnMeleeAttackStateEvent;
+    public Action<Enum, int> OnShootStateEvent;
 
     public Enum LastMeleeState;
     
@@ -95,6 +96,7 @@ public class S_PlayerStateObserver : MonoBehaviour
     {
         Debug.Log("OnShootStateChanged"+state+" level: "+level);
         UpdateStateUI(state);
+        OnShootStateEvent?.Invoke(state, level);
 
     }
 

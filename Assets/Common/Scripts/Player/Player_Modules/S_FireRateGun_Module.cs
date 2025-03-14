@@ -53,6 +53,7 @@ public class S_FireRateGun_Module : MonoBehaviour
     public event Action<Enum, int> OnShootStateChange;
     private bool shootStartedUseForEvent;
     private bool ShootStoppedUseForEvent;
+    
 
     private void Start()
     {
@@ -103,10 +104,10 @@ public class S_FireRateGun_Module : MonoBehaviour
         {
             FireRateLevel currentLevel = GetCurrentFireRateLevel();
             if (currentLevel == null) return;
-            Shoot(currentLevel);
-            
             //Trigger ShootEvent
             ShootingObserverEvent(PlayerStates.ShootState.StartShoot,GetCurrentFireRateLevel());
+            Shoot(currentLevel);
+            
             ShootStoppedUseForEvent = false;
             
             SoundManager.Instance.Meth_Shoot_No_Hit(_energyStorage.currentLevelIndex+1);

@@ -213,7 +213,7 @@ public class S_CustomCharacterController : MonoBehaviour
     {
         if (GroundCheck()&&velocity.y<0)
         {
-            velocity.y = -10;
+            velocity.y = -20;
         }
         else
         {
