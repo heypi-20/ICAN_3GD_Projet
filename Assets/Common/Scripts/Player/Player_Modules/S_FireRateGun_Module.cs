@@ -53,6 +53,9 @@ public class S_FireRateGun_Module : MonoBehaviour
     public event Action<Enum, int> OnShootStateChange;
     private bool shootStartedUseForEvent;
     private bool ShootStoppedUseForEvent;
+    private bool ShootPrepared;
+    private bool coroutineStarted;
+
     
 
     private void Start()
@@ -72,45 +75,60 @@ public class S_FireRateGun_Module : MonoBehaviour
         HandleShooting();
     }
 
+    // private void ShootingObserverEvent(Enum Shootstates, FireRateLevel currentLevel)
+    // {
+    //
+    //     if (Shootstates.Equals(PlayerStates.ShootState.StartShoot))
+    //     {
+    //         if (!shootStartedUseForEvent)
+    //         {
+    //             OnShootStateChange?.Invoke(PlayerStates.ShootState.StartShoot, currentLevel.level);
+    //             OnShootStateChange?.Invoke(PlayerStates.ShootState.IsShooting,currentLevel.level);
+    //             shootStartedUseForEvent = true;
+    //         }
+    //         else if (shootStartedUseForEvent)
+    //         {
+    //             OnShootStateChange?.Invoke(PlayerStates.ShootState.IsShooting,currentLevel.level);
+    //         }
+    //     }
+    //
+    //     if (Shootstates.Equals(PlayerStates.ShootState.StopShoot))
+    //     {
+    //         shootStartedUseForEvent = false;
+    //         OnShootStateChange?.Invoke(PlayerStates.ShootState.StopShoot, currentLevel.level);
+    //     }
+    // }
+
+
     private void ShootingObserverEvent(Enum Shootstates, FireRateLevel currentLevel)
     {
-
-        if (Shootstates.Equals(PlayerStates.ShootState.StartShoot))
-        {
-            if (!shootStartedUseForEvent)
-            {
-                OnShootStateChange?.Invoke(PlayerStates.ShootState.StartShoot, currentLevel.level);
-                OnShootStateChange?.Invoke(PlayerStates.ShootState.IsShooting,currentLevel.level);
-                shootStartedUseForEvent = true;
-            }
-            else if (shootStartedUseForEvent)
-            {
-                OnShootStateChange?.Invoke(PlayerStates.ShootState.IsShooting,currentLevel.level);
-            }
-        }
-
-        if (Shootstates.Equals(PlayerStates.ShootState.StopShoot))
-        {
-            shootStartedUseForEvent = false;
-            OnShootStateChange?.Invoke(PlayerStates.ShootState.StopShoot, currentLevel.level);
-        }
+        OnShootStateChange?.Invoke(Shootstates, currentLevel.level);
     }
-
-
-
+    
     private void HandleShooting()
     {
         if (_inputManager.ShootInput && _fireCooldown <= 0f && S_PlayerStateObserver.Instance.LastMeleeState==null)
         {
             FireRateLevel currentLevel = GetCurrentFireRateLevel();
             if (currentLevel == null) return;
-            //Trigger ShootEvent
-
-            ShootingObserverEvent(PlayerStates.ShootState.StartShoot,GetCurrentFireRateLevel());
-
             
+            
+            //Trigger pre-fire delay
+            if (!coroutineStarted)
+            {
+                StartCoroutine(PrepareShoot());
+
+            }
+            // return if the delay is not done
+            if (!shootStartedUseForEvent)
+            {
+                return;
+            }
+            
+            ShootingObserverEvent(PlayerStates.ShootState.IsShooting,GetCurrentFireRateLevel());
             Shoot(currentLevel);
             
+            //reset stop shot to prepare trigger stop shoot event
             ShootStoppedUseForEvent = false;
             
             SoundManager.Instance.Meth_Shoot_No_Hit(_energyStorage.currentLevelIndex+1);
@@ -126,6 +144,8 @@ public class S_FireRateGun_Module : MonoBehaviour
             {
                 ShootingObserverEvent(PlayerStates.ShootState.StopShoot,GetCurrentFireRateLevel());
                 ShootStoppedUseForEvent=true;
+                coroutineStarted = false;
+                shootStartedUseForEvent=false;
             }
 
         }
@@ -135,7 +155,18 @@ public class S_FireRateGun_Module : MonoBehaviour
             _fireCooldown -= Time.deltaTime;
         }
     }
+    
+    
+    // start pre fire delay and trigger start shoot
+    private IEnumerator PrepareShoot()
+    {
+        coroutineStarted = true;
+        ShootingObserverEvent(PlayerStates.ShootState.StartShoot,GetCurrentFireRateLevel());
+        yield return new WaitForSecondsRealtime(0.05f);
+        shootStartedUseForEvent = true;
 
+    }
+    
     private void Shoot(FireRateLevel currentLevel)
     {
         Vector3 shootDirection = shootPoint.forward;
