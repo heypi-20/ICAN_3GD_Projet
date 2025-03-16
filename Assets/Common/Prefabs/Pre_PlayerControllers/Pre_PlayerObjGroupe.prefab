@@ -870,7 +870,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -264.57, y: -150.34688}
+  m_AnchoredPosition: {x: -264.58, y: 34.9}
   m_SizeDelta: {x: 252.37, y: 149.3062}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4543063927027588920
@@ -2169,7 +2169,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2857201636894232589
 Transform:
   m_ObjectHideFlags: 0
@@ -2251,7 +2251,6 @@ MonoBehaviour:
   SprintInput: 0
   ShootInput: 0
   MeleeAttackInput: 0
-  AllowHoldForMelee: 0
 --- !u!1 &4468725605091731526
 GameObject:
   m_ObjectHideFlags: 0
@@ -2759,8 +2758,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5268579106117334288}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.3599558, y: -0.03561446, z: -0.013752197, w: 0.9321879}
-  m_LocalPosition: {x: 7.940081, y: 2.4493227, z: 0.12962104}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 3.8400002, z: 0.13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3665,28 +3664,28 @@ MonoBehaviour:
     attackRange: 1.5
     attackDamage: 10
     maxTargetsToDestroy: 2
-    attackCooldown: 0.3
+    attackCooldown: 0.5
     energyConsumption: 0
     dropBonus: 20
   - level: 2
     attackRange: 1.5
     attackDamage: 20
     maxTargetsToDestroy: 5
-    attackCooldown: 0.3
+    attackCooldown: 0.5
     energyConsumption: 0
     dropBonus: 25
   - level: 3
     attackRange: 1.8
     attackDamage: 20
     maxTargetsToDestroy: 5
-    attackCooldown: 0.3
+    attackCooldown: 0.5
     energyConsumption: 50
     dropBonus: 25
   - level: 4
     attackRange: 2
     attackDamage: 120
     maxTargetsToDestroy: 8
-    attackCooldown: 0.3
+    attackCooldown: 1
     energyConsumption: 50
     dropBonus: 25
   targetLayer:
