@@ -89,6 +89,8 @@ public class S_CameraFeedBack : MonoBehaviour
         return xDirectionChanged || yDirectionChanged;
     }
 
+    
+    #region CameraDutch
     private void CameraDutch(Vector2 direction)
     {
         float targetDutch = 0f;
@@ -135,6 +137,8 @@ public class S_CameraFeedBack : MonoBehaviour
             _cinemachineVirtualCamera.m_Lens.Dutch = _currentDutchAngle;
         }
     }
+    
+    #endregion
 
     private void OnDisable()
     {

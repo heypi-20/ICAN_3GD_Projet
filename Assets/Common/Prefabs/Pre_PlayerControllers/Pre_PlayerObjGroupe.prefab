@@ -1899,7 +1899,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2216946737226565299}
   m_Layer: 0
-  m_Name: GunCamGroup
+  m_Name: FPS Camera Group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1972,7 +1972,7 @@ GameObject:
   - component: {fileID: 184246369406443568}
   - component: {fileID: 3626154498744923805}
   m_Layer: 0
-  m_Name: GunCamera
+  m_Name: FPSCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3507,11 +3507,11 @@ MonoBehaviour:
   - level: 3
     sprintSpeed: 40
     energyConsumptionRate: 60
-    SprintingSpeedFOV: 150
+    SprintingSpeedFOV: 110
   - level: 4
     sprintSpeed: 55
     energyConsumptionRate: 80
-    SprintingSpeedFOV: 200
+    SprintingSpeedFOV: 120
   accelerationTime: 0.5
   accelerationCurve:
     serializedVersion: 2
@@ -3664,28 +3664,28 @@ MonoBehaviour:
     attackRange: 1.5
     attackDamage: 10
     maxTargetsToDestroy: 2
-    attackCooldown: 0.5
+    attackCooldown: 1.2
     energyConsumption: 0
     dropBonus: 20
   - level: 2
     attackRange: 1.5
     attackDamage: 20
     maxTargetsToDestroy: 5
-    attackCooldown: 0.5
+    attackCooldown: 1.2
     energyConsumption: 0
     dropBonus: 25
   - level: 3
     attackRange: 1.8
     attackDamage: 20
     maxTargetsToDestroy: 5
-    attackCooldown: 0.5
+    attackCooldown: 1.2
     energyConsumption: 50
     dropBonus: 25
   - level: 4
     attackRange: 2
     attackDamage: 120
     maxTargetsToDestroy: 8
-    attackCooldown: 1
+    attackCooldown: 1.2
     energyConsumption: 50
     dropBonus: 25
   targetLayer:
@@ -3800,6 +3800,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14e5d7851fbb7514fb097db36748bb34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  handTransform: {fileID: 2380012296949977090}
+  jumpOffsetY: -3
+  jumpOffsetZ: 1
+  jumpDropTime: 0.1
+  jumpReturnTime: 0.6
+  landOffsetY: 1
+  landBounceTime: 0.1
+  landReturnTime: 0.15
 --- !u!1 &6434065933684794513
 GameObject:
   m_ObjectHideFlags: 0
@@ -4871,7 +4879,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1489741607105423985, guid: 5ac2d5d997602244eaafd18ea09fe4a3, type: 3}
       propertyPath: m_Name
-      value: Model_3DArm (2)
+      value: Model_3DArm
       objectReference: {fileID: 0}
     - target: {fileID: 1489741607105423985, guid: 5ac2d5d997602244eaafd18ea09fe4a3, type: 3}
       propertyPath: m_Layer
