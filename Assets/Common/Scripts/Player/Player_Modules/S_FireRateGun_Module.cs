@@ -250,26 +250,31 @@ public class S_FireRateGun_Module : MonoBehaviour
         if (Physics.Raycast(origin, direction, out RaycastHit hit, length))
         {
             // Si la cible appartient au layer cible
-            if (hit.collider.gameObject.GetComponent<EnemyBase>())
+             EnemyBase enemy = hit.collider.gameObject.GetComponentInParent<EnemyBase>();
+            if (enemy != null)
             {
-                var target = hit.collider.gameObject;
+                GameObject enemyObject = enemy.gameObject;
 
                 // Éviter les touches répétées sur la même cible
-                if (hitTargets.Add(target))
+                if (hitTargets.Add(enemyObject))
                 {
                     // HitMarkerEnabler
                     StartCoroutine(HitMarker());
 
                     // Appliquer les degats
-                    target.GetComponent<EnemyBase>()?.ReduceHealth(damage,GetCurrentFireRateLevel().dropBonus);
+                    if(hit.collider.gameObject.CompareTag("WeakPoint"))
+                    {
+                        enemy.ReduceHealth(damage*100,GetCurrentFireRateLevel().dropBonus);
+                        Debug.Log("Hit Weak Point"+damage*100f);
+                    }
+                    else
+                    {
+                        enemy.ReduceHealth(damage,GetCurrentFireRateLevel().dropBonus);
+                    }
                 }
 
                 return true; // Une cible a été touchée
             }
-            //else
-            //{
-            //    CrossAir.color = Color.white;
-            //}
 
             // Si un obstacle est touché (uniquement pour le raycast principal)
             if (checkObstacle && (1 << hit.collider.gameObject.layer & obstacleLayer) != 0)

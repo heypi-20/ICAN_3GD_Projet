@@ -80,7 +80,6 @@ public class S_PlayerStateObserver : MonoBehaviour
     private void OnJumpStateChanged(Enum state)
     {
         //Done
-        Debug.Log("OnJumpStateChanged"+state);
         UpdateStateUI(state);
         OnJumpStateEvent?.Invoke(state);
 
@@ -89,14 +88,12 @@ public class S_PlayerStateObserver : MonoBehaviour
     private void OnSprintStateChanged(Enum state,int level)
     {
         //Done
-        Debug.Log("OnSprintStateChanged: " + state+" level: " + level);
         UpdateStateUI(state);
 
     }
 
     private void OnShootStateChanged(Enum state,int level)
     {
-        Debug.Log("OnShootStateChanged"+state+" level: "+level);
         UpdateStateUI(state);
         OnShootStateEvent?.Invoke(state, level);
 
@@ -104,12 +101,10 @@ public class S_PlayerStateObserver : MonoBehaviour
 
     private void OnLevelStateChange(Enum state, int level)
     {
-        Debug.Log("OnLevelStateChange"+state+" level: "+level);
     }
 
     private void OnMeleeStateChanged(Enum state, int level)
     {
-        Debug.Log("OnMeleeStateChanged"+state+" level: "+level);
         OnMeleeAttackStateEvent?.Invoke(state, level);
         UpdateStateUI(state);
         //Use for shoot logic, to not allow shooting and punching on the same time
