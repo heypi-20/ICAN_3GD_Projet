@@ -30,6 +30,7 @@ public class S_PlayerStateObserver : MonoBehaviour
     public Action<Enum, int> OnMeleeAttackStateEvent;
     public Action<Enum, int> OnShootStateEvent;
     public Action<Enum> OnJumpStateEvent;
+    public Action<Enum> OnGroundPoundStateEvent;
 
     public Enum LastMeleeState;
     public Enum LastGroundPoundState;
@@ -115,6 +116,7 @@ public class S_PlayerStateObserver : MonoBehaviour
     
     private void OnSpecialSkillStateChanged(Enum state)
     {
+        OnGroundPoundStateEvent?.Invoke(state);
         UpdateStateUI(state);
         LastGroundPoundState = state.Equals(PlayerStates.GroundPoundState.EndGroundPound) ? null : state;
     }

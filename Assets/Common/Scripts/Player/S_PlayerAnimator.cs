@@ -21,10 +21,7 @@ public class S_PlayerAnimator : MonoBehaviour
     
     private Animator animator;
     private int skillLayerIndex;
-    
-    
 
-    
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -37,7 +34,7 @@ public class S_PlayerAnimator : MonoBehaviour
         S_PlayerStateObserver.Instance.OnShootStateEvent += HandleShootEvent;
         S_PlayerStateObserver.Instance.OnMeleeAttackStateEvent += HandleMeleeState;
         S_PlayerStateObserver.Instance.OnJumpStateEvent+= HandleJumpState;
-
+        S_PlayerStateObserver.Instance.OnGroundPoundStateEvent += HandleGroundPoundState;
     }
 
     private void HandleShootEvent(Enum ShootState, int Level)
@@ -86,6 +83,23 @@ public class S_PlayerAnimator : MonoBehaviour
                 break;
         }
     }
+
+    private void HandleGroundPoundState(Enum GroundPoundState)
+    {
+        switch (GroundPoundState)
+        {
+            case PlayerStates.GroundPoundState.StartGroundPound:
+                animator.CrossFade("StartGroundPound",0.2f);
+                break;
+            case PlayerStates.GroundPoundState.isGroundPounding:
+                animator.CrossFade("HoldGroundPound",0.2f);
+                break;
+            case PlayerStates.GroundPoundState.EndGroundPound:
+                animator.CrossFade("EndGroundPound",0.2f);
+                break;
+        }
+    }
+    
     private void JumpHandAnimation()
     {
         // Kill any existing DOTween animations on handTransform to prevent conflicts
