@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,7 +34,11 @@ public class S_GroundPound_Module : MonoBehaviour
     private bool _isGrounded = false; // Indique si le joueur a touché le sol
     private bool _isGroundPounding = false; // Indique si la compétence est en cours d'utilisation
     private float _dynamicSphereRange; // Portée dynamique basée sur la distance de chute
+    
 
+    //Trigger event
+    public event Action<Enum> OnGroundPoundStateChange;
+    
     public Camera Camera_For_Shake;
     private float _timer_of_groundpound;
 
@@ -53,10 +58,14 @@ public class S_GroundPound_Module : MonoBehaviour
         HandleGroundPound();
     }
 
+    private void GroundPoundObserverEvent(Enum groundPoundState)
+    {
+        OnGroundPoundStateChange?.Invoke(groundPoundState);
+    }
+
     private void HandleGroundPound()
     {
         if (_isGroundPounding) return; // Ignorer si la compétence est déjà active
-
         GroundPoundLevel currentLevel = GetCurrentGroundPoundLevel();
         if (currentLevel == null) return;
         // Vérifier l'entrée utilisateur et la quantité d'énergie disponible
@@ -65,13 +74,14 @@ public class S_GroundPound_Module : MonoBehaviour
 
             if (IsLookingAtValidTarget(out float distanceToGround))
             {
-                PerformGroundPound(currentLevel, distanceToGround);
+                GroundPoundObserverEvent(PlayerStates.GroundPoundState.StartGroundPound);
+                PerformGroundPound(currentLevel, distanceToGround);//Trigger Event
                 _energyStorage.RemoveEnergy(currentLevel.energyConsumption); // Consommer l'énergie une fois
             }
         }
     }
 
-    private bool IsLookingAtValidTarget(out float distanceToGround)
+    public bool IsLookingAtValidTarget(out float distanceToGround)
     {
         distanceToGround = 0f;
         
@@ -98,7 +108,8 @@ public class S_GroundPound_Module : MonoBehaviour
 
         // Ajuster la portée dynamique pour respecter la limite maximale
         _dynamicSphereRange = Mathf.Min(distanceToGround, currentLevel.maxSphereRange);
-
+        
+        GroundPoundObserverEvent(PlayerStates.GroundPoundState.isGroundPounding);//Trigger event
         StartCoroutine(MoveToGround(currentLevel.descentSpeed));
     }
 
@@ -130,7 +141,7 @@ public class S_GroundPound_Module : MonoBehaviour
         if (_isGrounded)
         {
             TriggerGroundPoundEffect(); // Exécuter l'effet au sol
-            
+            GroundPoundObserverEvent(PlayerStates.GroundPoundState.EndGroundPound);
             //add feedback
             SoundManager.Instance.Meth_Pillonage_Explosion();
 

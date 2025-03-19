@@ -44,5 +44,12 @@ public static class PlayerStates
         MeleeAttackHit,
         EndMeleeAttack,
     }
+
+    public enum GroundPoundState
+    {
+        StartGroundPound,
+        isGroundPounding,
+        EndGroundPound,
+    }
     
 }

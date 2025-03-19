@@ -14,6 +14,7 @@ public class S_CameraPlayerRotation : MonoBehaviour
 
     private void Update()
     {
+
         // Synchronise instantanément l'orientation du joueur avec la direction de la caméra
         AlignerJoueurAvecCamera();
     }

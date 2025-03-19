@@ -6,6 +6,7 @@ using UnityEngine;
 public class S_CameraFeedBack : MonoBehaviour
 {
     public CinemachineVirtualCamera _cinemachineVirtualCamera; 
+    public CinemachineInputProvider _cinemachineInputProvider;
     
     [Header("Dutch Effect Settings")]
     public float maxDutchAngle = 5f; // Maximum Dutch angle
@@ -31,6 +32,8 @@ public class S_CameraFeedBack : MonoBehaviour
             StartCoroutine(WaitForObserver());
         }
     }
+
+
 
     private IEnumerator WaitForObserver()
     {
@@ -58,6 +61,27 @@ public class S_CameraFeedBack : MonoBehaviour
         {
             _cinemachineVirtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
         }
+        _cinemachineInputProvider = _cinemachineVirtualCamera.GetComponent<CinemachineInputProvider>();
+
+    }
+
+    private void Update()
+    {
+        if (S_PlayerStateObserver.Instance.LastGroundPoundState != null)
+        {
+            EnableCamera(false);
+        }
+        else
+        {
+            EnableCamera(true);
+        }
+    }
+
+
+    private void EnableCamera(bool state)
+    {
+        if (_cinemachineInputProvider != null)
+            _cinemachineInputProvider.enabled = state;
     }
 
     /// <summary>

@@ -61,10 +61,10 @@ public class S_PlayerAnimator : MonoBehaviour
     {
         switch (MeleeState)
         {
-            case PlayerStates.MeleeState.StartMeleeAttack:
+            case PlayerStates.MeleeState.StartMeleeAttack when S_PlayerStateObserver.Instance.LastGroundPoundState==null:
                 animator.CrossFade("Punch", 0.2f);
                 break;
-            case PlayerStates.MeleeState.EndMeleeAttack:
+            case PlayerStates.MeleeState.EndMeleeAttack when S_PlayerStateObserver.Instance.LastGroundPoundState==null:
                 animator.CrossFade("Idle",0.2f);
                 break;
         }
