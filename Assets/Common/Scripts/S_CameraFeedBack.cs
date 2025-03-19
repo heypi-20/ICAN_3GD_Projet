@@ -6,7 +6,7 @@ using UnityEngine;
 public class S_CameraFeedBack : MonoBehaviour
 {
     public CinemachineVirtualCamera _cinemachineVirtualCamera; 
-    public CinemachineInputProvider _cinemachineInputProvider;
+    private CinemachineInputProvider _cinemachineInputProvider;
     
     [Header("Dutch Effect Settings")]
     public float maxDutchAngle = 5f; // Maximum Dutch angle
