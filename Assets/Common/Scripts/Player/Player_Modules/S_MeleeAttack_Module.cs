@@ -12,10 +12,11 @@ public class S_MeleeAttack_Module : MonoBehaviour
         public float attackRange; // Radius of the attack range
         public float attackDistance; // Distance of the attack
         public float attackDamage; // Damage per attack
-        public int maxTargetsToDestroy; // Maximum number of targets to destroy per attack
         public float attackCooldown; // Cooldown time between attacks
         public float energyConsumption; // Energy consumption per attack
         public int dropBonus;
+        public int WeakPointDropBonus; 
+
     }
 
     [Header("Attack Settings")]
@@ -136,7 +137,7 @@ public class S_MeleeAttack_Module : MonoBehaviour
 
                 if (bestHit.CompareTag("WeakPoint"))
                 {
-                    bestHit.GetComponentInParent<EnemyBase>()?.ReduceHealth(currentLevel.attackDamage * 100, currentLevel.dropBonus * 10);
+                    bestHit.GetComponentInParent<EnemyBase>()?.ReduceHealth(currentLevel.attackDamage * 100, currentLevel.dropBonus + currentLevel.WeakPointDropBonus);
                     Debug.Log("Touch Weak Point " + currentLevel.attackDamage * 100);
                 }
                 else

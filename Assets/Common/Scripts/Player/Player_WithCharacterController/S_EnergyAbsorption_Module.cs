@@ -59,7 +59,7 @@ public class S_EnergyAbsorption_Module : MonoBehaviour
                 // play sound
                 SoundManager.Instance.Meth_Gain_Energy();
                 
-                StartCoroutine(PullAndDestroyObject(collider.gameObject, energyType.energyGiven));
+                StartCoroutine(PullAndDestroyObject(collider.gameObject, energyType.energyGivenUseForType));
             }
         }
     }
