@@ -11,8 +11,8 @@ public class S_EnergyAbsorption_Module : MonoBehaviour
     // Transform du joueur et ensemble pour suivre les objets en cours d'absorption
     private Transform _playerTransform;
     private HashSet<GameObject> _pullingObjects = new HashSet<GameObject>();
-    
     private S_EnergyStorage _energyStorage;
+    private S_ComboSystem _comboSystem;
 
     
     private void Start()
@@ -20,6 +20,7 @@ public class S_EnergyAbsorption_Module : MonoBehaviour
         // Initialisation des composants nécessaires
         _playerTransform = GetComponent<Transform>();
         _energyStorage = GetComponent<S_EnergyStorage>();
+        _comboSystem = GetComponent<S_ComboSystem>();
     }
     
     private void Update()
@@ -80,7 +81,7 @@ public class S_EnergyAbsorption_Module : MonoBehaviour
         if (obj is not null)
         {
             _pullingObjects.Remove(obj);
-            _energyStorage.AddEnergy(givenPoint);
+            _energyStorage.AddEnergy(givenPoint*_comboSystem.currentComboMultiplier);
             Destroy(obj);
         }
     }

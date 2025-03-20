@@ -16,6 +16,8 @@ public class EnemyBase : MonoBehaviour
     public GameObject enemyDeathVFX;
     public string enemyGetHitSound;
     public string enemyDeathSound;
+
+    public static event Action OnEnemyKill;
     private bool isDead = false;
     private S_ScoreDisplay _s_ScoreDisplay;
 
@@ -81,6 +83,7 @@ public class EnemyBase : MonoBehaviour
             //placeholder pour le VFX =======
         }
         
+        OnEnemyKill?.Invoke();
         SoundManager.Instance.Meth_Shoot_Kill(1);
         DropItems(DropBonus);
         //_s_ScoreDisplay = FindObjectOfType<S_ScoreDisplay>();
