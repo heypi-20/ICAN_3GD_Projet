@@ -22,7 +22,6 @@ public class EnemyBase : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("Start");
         findWeakPoint();
     }
 
