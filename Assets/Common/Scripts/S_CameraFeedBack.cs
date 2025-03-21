@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Cinemachine;
 using UnityEngine;
+using DG.Tweening;
 
 public class S_CameraFeedBack : MonoBehaviour
 {
@@ -21,11 +22,15 @@ public class S_CameraFeedBack : MonoBehaviour
     
     private Vector2 _previousInputDirection = Vector2.zero;
     
+    [Header("CAC Shake")]
     private CinemachineImpulseSource _impulseSource;
     public float CameraShakeCAC_Lvl1;
     public float CameraShakeCAC_Lvl2;
     public float CameraShakeCAC_Lvl3;
     public float CameraShakeCAC_Lvl4;
+    
+    [Header("Pillonage Shake")]
+    private float _timer_of_groundpound;
     public float CameraShakePillonage;
 
     private void OnEnable()
@@ -77,7 +82,7 @@ public class S_CameraFeedBack : MonoBehaviour
         _impulseSource = _cinemachineVirtualCamera.GetComponent<CinemachineImpulseSource>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (S_PlayerStateObserver.Instance.LastGroundPoundState != null)
         {
@@ -87,7 +92,9 @@ public class S_CameraFeedBack : MonoBehaviour
         {
             EnableCamera(true);
         }
-        
+
+        _timer_of_groundpound = _timer_of_groundpound + Time.deltaTime;
+
     }
     
     
@@ -126,14 +133,18 @@ public class S_CameraFeedBack : MonoBehaviour
                     break;
             }
         }
-        
     }
 
     private void ReceiGroudPoundEvevent(Enum state)
     {
         if (state.Equals(PlayerStates.GroundPoundState.EndGroundPound))
         {
-            CameraShake((CameraShakePillonage));
+            CameraShake((CameraShakePillonage*_timer_of_groundpound));
+        }
+
+        if (state.Equals(PlayerStates.GroundPoundState.StartGroundPound))
+        {
+            _timer_of_groundpound = 0f;
         }
     }
     
@@ -210,4 +221,11 @@ public class S_CameraFeedBack : MonoBehaviour
             Debug.LogWarning("CinemachineImpulseSource is missing on this GameObject.");
         }
     }
+    
+    private void Shake_Camera_On_Ground()
+    {
+            _cinemachineVirtualCamera.transform.DOShakePosition(_timer_of_groundpound, 0.5f, 30, 90);
+    }
+
+    
 }

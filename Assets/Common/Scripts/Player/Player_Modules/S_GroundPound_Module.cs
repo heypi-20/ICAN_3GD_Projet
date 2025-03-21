@@ -38,9 +38,6 @@ public class S_GroundPound_Module : MonoBehaviour
 
     //Trigger event
     public event Action<Enum> OnGroundPoundStateChange;
-    
-    public Camera Camera_For_Shake;
-    private float _timer_of_groundpound;
 
     private void Start()
     {
@@ -125,8 +122,6 @@ public class S_GroundPound_Module : MonoBehaviour
                 _isGrounded = true;
                 break; // Quitter la boucle une fois au sol
             }
-
-            _timer_of_groundpound = _timer_of_groundpound + Time.deltaTime;
             // Augmenter dynamiquement la vitesse jusqu'à la vitesse maximale
             currentSpeed = Mathf.Min(currentSpeed + acceleration*Time.deltaTime, maxSpeed);
 
@@ -154,8 +149,6 @@ public class S_GroundPound_Module : MonoBehaviour
         GroundPoundLevel currentLevel = GetCurrentGroundPoundLevel();
         if (currentLevel == null) return;
         
-        Shake_Camera_On_Ground();
-        _timer_of_groundpound = 0f;
         // Effectuer une détection sphérique avec la portée dynamique
         Collider[] hits = Physics.OverlapSphere(transform.position, _dynamicSphereRange, KillableTargetLayer);
 
@@ -221,10 +214,4 @@ public class S_GroundPound_Module : MonoBehaviour
             Gizmos.DrawSphere(hit.point, 0.2f);
         }
     }
-
-    private void Shake_Camera_On_Ground()
-    {
-        Camera_For_Shake.transform.DOShakePosition(_timer_of_groundpound, 0.5f, 30, 90);
-    }
-
 }
