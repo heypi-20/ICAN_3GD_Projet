@@ -22,7 +22,10 @@ public class S_CameraFeedBack : MonoBehaviour
     private Vector2 _previousInputDirection = Vector2.zero;
     
     private CinemachineImpulseSource _impulseSource;
-    public float CameraShakeCAC;
+    public float CameraShakeCAC_Lvl1;
+    public float CameraShakeCAC_Lvl2;
+    public float CameraShakeCAC_Lvl3;
+    public float CameraShakeCAC_Lvl4;
     public float CameraShakePillonage;
 
     private void OnEnable()
@@ -107,9 +110,23 @@ public class S_CameraFeedBack : MonoBehaviour
     {
         if (state.Equals(PlayerStates.MeleeState.MeleeAttackHit))
         {
-            
-            CameraShake(CameraShakeCAC);
+            switch (level)
+            {
+                case 1:
+                    CameraShake(CameraShakeCAC_Lvl1);
+                    break;
+                case 2:
+                    CameraShake(CameraShakeCAC_Lvl2);
+                    break;
+                case 3:
+                    CameraShake(CameraShakeCAC_Lvl3);
+                    break;
+                case 4:
+                    CameraShake(CameraShakeCAC_Lvl4);
+                    break;
+            }
         }
+        
     }
 
     private void ReceiGroudPoundEvevent(Enum state)
