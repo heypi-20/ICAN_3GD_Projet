@@ -24,6 +24,13 @@ public class S_CustomCharacterController : MonoBehaviour
     public LayerMask groundLayer;
     public float groundCheckBufferTime = 0.1f; // Durée du buffer avant de considérer que le joueur n'est plus au sol
     
+    [Header("Debugger")]
+    public Vector3 debugFinalMoveDirection; // Debug: Final movement direction
+    public float debugFinalSpeed; 
+    
+    
+    public Vector3 _inputDirection{ get; private set; }    // Accéder aux valeurs d'entrée dans d'autres scripts pour gérer la vitesse
+
     private float lastGroundedTime = 0f; // Dernière fois où le joueur était au sol
 
     // Composants
@@ -35,14 +42,14 @@ public class S_CustomCharacterController : MonoBehaviour
     private float _inputHorizontal_X;
     private float _inputVertical_Z;
     
-    
-    // Accéder aux valeurs d'entrée dans d'autres scripts pour gérer la vitesse
-    public Vector3 _inputDirection{ get; private set; }
-    [Header("Debugger")]
-    // Actuellement utilisé pour appliquer la gravité et le saut ==== En cours de travail (WIP) ====
-    public Vector3 velocity;
-    // Variables pour la logique de mouvement au sol du joueur
+    [HideInInspector]
     public float currentSpeed;
+    [HideInInspector]
+    public Vector3 velocity;
+
+    
+    
+    
     private Vector3 _lastMoveDirection = Vector3.zero; 
     
     // Variables privées pour la logique d'accélération et de décélération du joueur
@@ -169,9 +176,32 @@ public class S_CustomCharacterController : MonoBehaviour
             _airborneSpeed = Mathf.Lerp(_airborneSpeed, moveSpeed, AirControl * Time.deltaTime);
         }
 
-        // Appliquer la direction et la vitesse finale
-        Vector3 finalMoveDirection = GroundCheck() ? _lastMoveDirection : _inertiaDirection;
-        float finalSpeed = GroundCheck() ? currentSpeed : _airborneSpeed;
+        
+        // Calculate final movement direction and speed
+        Vector3 finalMoveDirection;
+        float finalSpeed;
+        if (GroundCheck())
+        {
+            RaycastHit hit;
+            // Use a sphere cast to get the ground normal
+            if (Physics.SphereCast(transform.position, groundCheckRadius, Vector3.down, out hit, groundCheckDistance, groundLayer))
+            {
+                // Project _lastMoveDirection onto the plane defined by the ground normal and normalize it
+                finalMoveDirection = Vector3.ProjectOnPlane(_lastMoveDirection, hit.normal).normalized;
+            }
+            else
+            {
+                finalMoveDirection = _lastMoveDirection;
+            }
+            finalSpeed = currentSpeed;
+        }
+        else
+        {
+            finalMoveDirection = _inertiaDirection;
+            finalSpeed = _airborneSpeed;
+        }
+        debugFinalMoveDirection = finalMoveDirection;
+        debugFinalSpeed = finalSpeed;
         _controller.Move(finalMoveDirection * (finalSpeed * Time.deltaTime));
         
     }
