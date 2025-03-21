@@ -96,11 +96,6 @@ public class S_CameraFeedBack : MonoBehaviour
         }
 
         _timer_of_groundpound = _timer_of_groundpound + Time.deltaTime;
-
-        if (Input.GetKey(KeyCode.A))
-        {
-            Time.timeScale = 0;
-        }
     }
     
     
@@ -229,12 +224,10 @@ public class S_CameraFeedBack : MonoBehaviour
             Debug.LogWarning("CinemachineImpulseSource is missing on this GameObject.");
         }
     }
-    
-    
     private IEnumerator TimeStopCoroutine()
     {
         // Arrêter le temps
-        Time.timeScale = 0f;
+        Time.timeScale = 0.1f;
         
         // Attendre en temps réel (pas en temps de jeu)
         yield return new WaitForSecondsRealtime(stopDuration);
