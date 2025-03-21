@@ -34,6 +34,13 @@ public class S_CameraFeedBack : MonoBehaviour
     public float CameraShakePillonage;
     
     public float stopDuration = 0.2f;
+    public int normalFPS = 60;     // FPS normal du jeu
+    public int effectFPS = 24;     // FPS pendant l'effet (plus bas = plus "cinématique")
+    public float duration = 0.5f;  // Durée de l'effet en secondes
+        
+        private bool isActive = false;
+        
+        
 
     private void OnEnable()
     {
@@ -142,12 +149,15 @@ public class S_CameraFeedBack : MonoBehaviour
         {
             CameraShake((CameraShakePillonage*_timer_of_groundpound));
             StartCoroutine(TimeStopCoroutine());
+            if (!isActive)
+            {
+                StartCoroutine(ChangeFPS());
+            }
         }
 
         if (state.Equals(PlayerStates.GroundPoundState.StartGroundPound))
         {
             _timer_of_groundpound = 0f;
-            StartCoroutine(TimeStopCoroutine());
         }
     }
     
@@ -227,7 +237,7 @@ public class S_CameraFeedBack : MonoBehaviour
     private IEnumerator TimeStopCoroutine()
     {
         // Arrêter le temps
-        Time.timeScale = 0.1f;
+        Time.timeScale = 0.2f;
         
         // Attendre en temps réel (pas en temps de jeu)
         yield return new WaitForSecondsRealtime(stopDuration);
@@ -235,4 +245,22 @@ public class S_CameraFeedBack : MonoBehaviour
         // Reprendre le temps normal
         Time.timeScale = 1f;
     }
+     private IEnumerator ChangeFPS()
+        {
+            isActive = true;
+            
+            // Sauvegarde le FPS d'origine
+            int originalFPS = Application.targetFrameRate;
+            
+            // Applique le FPS réduit
+            Application.targetFrameRate = effectFPS;
+            
+            // Attend la durée spécifiée
+            yield return new WaitForSecondsRealtime(duration);
+            
+            // Rétablit le FPS normal
+            Application.targetFrameRate = originalFPS;
+            
+            isActive = false;
+        }
 }
