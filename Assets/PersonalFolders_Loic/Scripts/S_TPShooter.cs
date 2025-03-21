@@ -5,6 +5,7 @@ using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(LineRenderer))]
 public class S_TPShooter : EnemyBase
 {
     [Header("Enemy Properties")]
@@ -18,9 +19,11 @@ public class S_TPShooter : EnemyBase
     public Transform projectilePrefab;
     public Transform shootPoint;
     public float projectileSpeed = 10f;
-
+    
+    [Header("Enemy Components")]
     private NavMeshAgent agent;
     private Transform player;
+    private LineRenderer lr;
     private RaycastHit hit;
 
     private float teleportTimer;
@@ -34,12 +37,18 @@ public class S_TPShooter : EnemyBase
     private void Start()
     {
         player = FindObjectOfType<S_CustomCharacterController>().transform;
+        lr = GetComponent<LineRenderer>();
+        lr.startColor = Color.red;
+        lr.endColor = Color.red;
+        lr.SetPosition(1, shootPoint.position);
     }
     
     void Update()
     {
         if (player == null)
             return;
+        
+        lr.SetPosition(0, shootPoint.position);
         
         teleportTimer += Time.deltaTime;
 
@@ -53,11 +62,13 @@ public class S_TPShooter : EnemyBase
         float dist = Vector3.Distance(transform.position, player.position);
 
         if (dist < range) {
-            transform.LookAt(player.position);
             
             if (shootTimer >= fireRate) {
                 Shoot();
                 shootTimer = 0;
+            } else {
+                transform.LookAt(player.position);
+                LaserAim();
             }
         }
     }
@@ -65,6 +76,7 @@ public class S_TPShooter : EnemyBase
     private void Teleport()
     {
         float randX = Random.Range(-minDist, maxDist);
+        float randY = Random.Range(-minDist, maxDist);
         float randZ = Random.Range(-minDist, maxDist);
         
         Vector3 targetPosition = new Vector3(transform.position.x + randX, transform.position.y, transform.position.z + randZ);
@@ -84,6 +96,15 @@ public class S_TPShooter : EnemyBase
             transform.DOScale(targetScale, 0.5f) // Durée pour atteindre la taille cible (0.25s aller)
                      .SetEase(Ease.InOutQuad)    // Easing fluide pour un effet agréable
                      .SetLoops(-1, LoopType.Yoyo);
+        }
+    }
+    
+    private void LaserAim()
+    {
+        if (Physics.Raycast(transform.position, transform.forward, out hit, range)) {
+            if (hit.collider) {
+                lr.SetPosition(1, hit.point);
+            }
         }
     }
 
