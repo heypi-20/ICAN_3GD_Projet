@@ -2733,6 +2733,7 @@ Transform:
   m_Children:
   - {fileID: 5316474552587212434}
   - {fileID: 7121883038825396396}
+  - {fileID: 6446541353025446380}
   - {fileID: 1683905797308371728}
   - {fileID: 6730111253553791090}
   - {fileID: 4667515023304194446}
@@ -4172,6 +4173,108 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.046491228, y: 0.17001319, z: 0.00028336607}
     m_Extent: {x: 0.01447125, y: 0.041335583, z: 0.057584748}
   m_DirtyAABB: 0
+--- !u!1 &5655932433684130944
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6446541353025446380}
+  - component: {fileID: 3596900757883356927}
+  m_Layer: 0
+  m_Name: CameraFeedBack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6446541353025446380
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5655932433684130944}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -33.509132, y: -19.169085, z: -97.690125}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8728408009053761971}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3596900757883356927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5655932433684130944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5ae239371ad31746ae41934fd51bcc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cinemachineVirtualCamera: {fileID: 8716976314815281874}
+  maxDutchAngle: 5
+  dutchDuration: 1
+  resetDuration: 0.2
+  dutchCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  resetCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  CameraShakeCAC_Lvl1: 0.2
+  CameraShakeCAC_Lvl2: 0.4
+  CameraShakeCAC_Lvl3: 0.6
+  CameraShakeCAC_Lvl4: 0.8
+  CameraShakePillonage: 1
+  stopDuration: 0.2
 --- !u!1 &5693079004217836943
 GameObject:
   m_ObjectHideFlags: 0

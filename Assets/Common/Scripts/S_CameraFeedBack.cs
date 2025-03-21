@@ -146,6 +146,7 @@ public class S_CameraFeedBack : MonoBehaviour
         if (state.Equals(PlayerStates.GroundPoundState.EndGroundPound))
         {
             CameraShake((CameraShakePillonage*_timer_of_groundpound));
+            StartCoroutine(TimeStopCoroutine());
         }
 
         if (state.Equals(PlayerStates.GroundPoundState.StartGroundPound))
