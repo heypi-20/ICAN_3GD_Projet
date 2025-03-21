@@ -6753,6 +6753,9 @@ MonoBehaviour:
   CameraShakeCAC_Lvl4: 0
   CameraShakePillonage: 0
   stopDuration: 0.2
+  normalFPS: 60
+  effectFPS: 24
+  duration: 0.5
 --- !u!1 &2142713096 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4065493067683771654, guid: 5329cb32e82971348b081a90f9768a44, type: 3}
@@ -6915,6 +6918,18 @@ PrefabInstance:
     - target: {fileID: 3516553184262417860, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3596900757883356927, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: duration
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3596900757883356927, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: effectFPS
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3596900757883356927, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: stopDuration
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 3632920917575131945, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
       propertyPath: m_Layer

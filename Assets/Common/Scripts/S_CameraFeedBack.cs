@@ -249,17 +249,17 @@ public class S_CameraFeedBack : MonoBehaviour
         {
             isActive = true;
             
-            // Sauvegarde le FPS d'origine
-            int originalFPS = Application.targetFrameRate;
             
             // Applique le FPS réduit
             Application.targetFrameRate = effectFPS;
+            Debug.Log("Baisse Fps");
             
             // Attend la durée spécifiée
             yield return new WaitForSecondsRealtime(duration);
             
             // Rétablit le FPS normal
-            Application.targetFrameRate = originalFPS;
+            Application.targetFrameRate = -1;
+            Debug.Log("Débloooouér sa mèèèèèèère");
             
             isActive = false;
         }
