@@ -7,7 +7,7 @@ public class S_CameraFeedBack : MonoBehaviour
 {
     public CinemachineVirtualCamera _cinemachineVirtualCamera; 
     private CinemachineInputProvider _cinemachineInputProvider;
-    private CinemachineComposer _composer;
+    //private CinemachineComposer _composer;
     
     [Header("Dutch Effect Settings")]
     public float maxDutchAngle = 5f; 
@@ -22,7 +22,8 @@ public class S_CameraFeedBack : MonoBehaviour
     private Vector2 _previousInputDirection = Vector2.zero;
     
     private CinemachineImpulseSource _impulseSource;
-    public float CameraShakeForce;
+    public float CameraShakeCAC;
+    public float CameraShakePillonage;
 
     private void OnEnable()
     {
@@ -33,6 +34,10 @@ public class S_CameraFeedBack : MonoBehaviour
         if (S_PlayerStateObserver.Instance != null)
         {
             S_PlayerStateObserver.Instance.OnMeleeAttackStateEvent += ReceiveMeleeAttackEvent;
+        }
+        if (S_PlayerStateObserver.Instance != null)
+        {
+            S_PlayerStateObserver.Instance.OnGroundPoundStateEvent += ReceiGroudPoundEvevent;
         }
         else
         {
@@ -102,7 +107,16 @@ public class S_CameraFeedBack : MonoBehaviour
     {
         if (state.Equals(PlayerStates.MeleeState.MeleeAttackHit))
         {
-            CameraShake(CameraShakeForce);
+            
+            CameraShake(CameraShakeCAC);
+        }
+    }
+
+    private void ReceiGroudPoundEvevent(Enum state)
+    {
+        if (state.Equals(PlayerStates.GroundPoundState.EndGroundPound))
+        {
+            CameraShake((CameraShakePillonage));
         }
     }
     
