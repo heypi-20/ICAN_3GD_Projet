@@ -553,7 +553,7 @@ PrefabInstance:
       objectReference: {fileID: 1271538600}
     - target: {fileID: 7747871743615992329, guid: b53fe1659d29e6d4381565404a383605, type: 3}
       propertyPath: m_VersionIndex
-      value: 2067
+      value: 2070
       objectReference: {fileID: 0}
     - target: {fileID: 7747871743615992329, guid: b53fe1659d29e6d4381565404a383605, type: 3}
       propertyPath: m_SelectedEdges.Array.size
@@ -1259,98 +1259,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87ba83fc416216045abb3918f8ee6faa, type: 3}
---- !u!1 &714407628 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3801643264983334931, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
-  m_PrefabInstance: {fileID: 2426632132540699556}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &793173646 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8716976314815281874, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
   m_PrefabInstance: {fileID: 2426632132540699556}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 714407628}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45e653bab7fb20e499bda25e1b646fea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &793173650
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 714407628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ImpulseDefinition:
-    m_ImpulseChannel: 1
-    m_ImpulseShape: 4
-    m_CustomImpulseShape:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_ImpulseDuration: 0.2
-    m_ImpulseType: 1
-    m_DissipationRate: 0.25
-    m_RawSignal: {fileID: 0}
-    m_AmplitudeGain: 1
-    m_FrequencyGain: 1
-    m_RepeatMode: 0
-    m_Randomize: 1
-    m_TimeEnvelope:
-      m_AttackShape:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      m_DecayShape:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-      m_AttackTime: 0
-      m_SustainTime: 0.2
-      m_DecayTime: 0.7
-      m_ScaleWithImpact: 1
-      m_HoldForever: 0
-    m_ImpactRadius: 100
-    m_DirectionMode: 0
-    m_DissipationMode: 2
-    m_DissipationDistance: 100
-    m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 0, y: -1, z: 0}
---- !u!114 &793173654
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 714407628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00b2d199b96b516448144ab30fb26aed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ApplyAfter: 2
-  m_ChannelMask: 1
-  m_Gain: 1
-  m_Use2DDistance: 0
-  m_UseCameraSpace: 1
-  m_ReactionSettings:
-    m_SecondaryNoise: {fileID: 0}
-    m_AmplitudeGain: 1
-    m_FrequencyGain: 1
-    m_Duration: 1
-    m_NoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!114 &896148731 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1623366694311380051, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
@@ -2014,7 +1933,7 @@ PrefabInstance:
       objectReference: {fileID: 1815921915}
     - target: {fileID: 871334309628322155, guid: ac78f85709a2f954dace4fb94023e0c5, type: 3}
       propertyPath: m_VersionIndex
-      value: 2333
+      value: 2336
       objectReference: {fileID: 0}
     - target: {fileID: 871334309628322155, guid: ac78f85709a2f954dace4fb94023e0c5, type: 3}
       propertyPath: m_SelectedEdges.Array.size
@@ -3703,7 +3622,8 @@ MonoBehaviour:
   CameraShakeCAC_Lvl2: 0.4
   CameraShakeCAC_Lvl3: 0.6
   CameraShakeCAC_Lvl4: 0.8
-  CameraShakePillonage: 2
+  CameraShakePillonage: 1
+  stopDuration: 0.2
 --- !u!1 &1300675133698295910
 GameObject:
   m_ObjectHideFlags: 0
@@ -4099,24 +4019,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9046166951153555370, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
-      propertyPath: cheatCodeforAdd
-      value: 273
-      objectReference: {fileID: 0}
-    - target: {fileID: 9046166951153555370, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
-      propertyPath: cheatCodeforRemove
-      value: 274
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3801643264983334931, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 793173650}
-    - targetCorrespondingSourceObject: {fileID: 3801643264983334931, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 793173654}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
 --- !u!23 &2961263096902369604
 MeshRenderer:

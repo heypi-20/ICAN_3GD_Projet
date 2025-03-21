@@ -32,6 +32,8 @@ public class S_CameraFeedBack : MonoBehaviour
     [Header("Pillonage Shake")]
     private float _timer_of_groundpound;
     public float CameraShakePillonage;
+    
+    public float stopDuration = 0.2f;
 
     private void OnEnable()
     {
@@ -95,6 +97,10 @@ public class S_CameraFeedBack : MonoBehaviour
 
         _timer_of_groundpound = _timer_of_groundpound + Time.deltaTime;
 
+        if (Input.GetKey(KeyCode.A))
+        {
+            Time.timeScale = 0;
+        }
     }
     
     
@@ -145,6 +151,7 @@ public class S_CameraFeedBack : MonoBehaviour
         if (state.Equals(PlayerStates.GroundPoundState.StartGroundPound))
         {
             _timer_of_groundpound = 0f;
+            StartCoroutine(TimeStopCoroutine());
         }
     }
     
@@ -222,10 +229,16 @@ public class S_CameraFeedBack : MonoBehaviour
         }
     }
     
-    private void Shake_Camera_On_Ground()
-    {
-            _cinemachineVirtualCamera.transform.DOShakePosition(_timer_of_groundpound, 0.5f, 30, 90);
-    }
-
     
+    private IEnumerator TimeStopCoroutine()
+    {
+        // Arrêter le temps
+        Time.timeScale = 0f;
+        
+        // Attendre en temps réel (pas en temps de jeu)
+        yield return new WaitForSecondsRealtime(stopDuration);
+        
+        // Reprendre le temps normal
+        Time.timeScale = 1f;
+    }
 }
