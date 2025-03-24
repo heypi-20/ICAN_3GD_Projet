@@ -68,20 +68,21 @@ public class S_EnergyAbsorption_Module : MonoBehaviour
     // Coroutine pour attirer un objet vers le joueur puis le détruire une fois absorbé
     private IEnumerator PullAndDestroyObject(GameObject obj, float givenPoint)
     {
-        // Tant que l'objet existe et est à une certaine distance du joueur, continuer à l'attirer
-        while (obj is not null && Vector3.Distance(obj.transform.position, _playerTransform.position) > 2f)
+        while (obj != null)
         {
-            // Déplacer l'objet vers le joueur à une vitesse définie
-            
+            if (Vector3.Distance(obj.transform.position, _playerTransform.position) <= 2f)
+            {
+                break;
+            }
+
             obj.transform.position = Vector3.MoveTowards(obj.transform.position, _playerTransform.position, pullSpeed * Time.deltaTime);
             yield return null;
         }
 
-        // Une fois que l'objet est proche, ajouter l'énergie au stockage, le retirer de la liste des objets suivis et le détruire
-        if (obj is not null)
+        if (obj != null)
         {
             _pullingObjects.Remove(obj);
-            _energyStorage.AddEnergy(givenPoint*_comboSystem.currentComboMultiplier);
+            _energyStorage.AddEnergy(givenPoint * _comboSystem.currentComboMultiplier);
             Destroy(obj);
         }
     }
