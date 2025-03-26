@@ -42,6 +42,7 @@ public static class PlayerStates
         StartMeleeAttack,
         MeleeAttackMissed,
         MeleeAttackHit,
+        MeleeAttackHitWeakness,
         EndMeleeAttack,
     }
 
