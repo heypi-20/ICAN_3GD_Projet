@@ -2734,6 +2734,7 @@ Transform:
   - {fileID: 5316474552587212434}
   - {fileID: 7121883038825396396}
   - {fileID: 6446541353025446380}
+  - {fileID: 1638474744326144611}
   - {fileID: 1683905797308371728}
   - {fileID: 6730111253553791090}
   - {fileID: 4667515023304194446}
@@ -3857,6 +3858,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &5226490406568965556
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1638474744326144611}
+  m_Layer: 0
+  m_Name: ExplosionFeedback
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1638474744326144611
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5226490406568965556}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -197.84566, y: 28.756472, z: -244.72884}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8728408009053761971}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5268579106117334288
 GameObject:
   m_ObjectHideFlags: 0
@@ -4275,6 +4307,9 @@ MonoBehaviour:
   CameraShakeCAC_Lvl4: 0.8
   CameraShakePillonage: 1
   stopDuration: 0.1
+  normalFPS: 60
+  effectFPS: 24
+  duration: 0.5
 --- !u!1 &5693079004217836943
 GameObject:
   m_ObjectHideFlags: 0

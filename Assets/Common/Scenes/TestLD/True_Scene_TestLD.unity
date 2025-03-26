@@ -2286,17 +2286,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4258588562213074430, guid: 8b4048e7358469a4bab28071883f6cf2, type: 3}
   m_PrefabInstance: {fileID: 785370992}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &793173646 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8716976314815281874, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
-  m_PrefabInstance: {fileID: 2426632132540699556}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45e653bab7fb20e499bda25e1b646fea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &827138284
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6651,111 +6640,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 784904096100722365, guid: 66eb2c935e2e1014eabba004e8962d12, type: 3}
   m_PrefabInstance: {fileID: 2113856695}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2120563548
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2120563549}
-  - component: {fileID: 2120563550}
-  m_Layer: 0
-  m_Name: CameraFeedBack
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2120563549
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2120563548}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -33.509132, y: -19.169085, z: -97.690125}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2120563550
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2120563548}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5ae239371ad31746ae41934fd51bcc1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _cinemachineVirtualCamera: {fileID: 793173646}
-  maxDutchAngle: 5
-  dutchDuration: 1
-  resetDuration: 0.2
-  dutchCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 1
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  resetCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  CameraShakeCAC_Lvl1: 0
-  CameraShakeCAC_Lvl2: 0
-  CameraShakeCAC_Lvl3: 0
-  CameraShakeCAC_Lvl4: 0
-  CameraShakePillonage: 0
-  stopDuration: 0.2
-  normalFPS: 60
-  effectFPS: 24
-  duration: 0.5
 --- !u!1 &2142713096 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4065493067683771654, guid: 5329cb32e82971348b081a90f9768a44, type: 3}
@@ -6929,7 +6813,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3596900757883356927, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
       propertyPath: stopDuration
-      value: 0.05
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3596900757883356927, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: CameraShakePillonage
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3632920917575131945, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
       propertyPath: m_Layer
@@ -7207,7 +7095,6 @@ SceneRoots:
   - {fileID: 1173875606}
   - {fileID: 2426632132540699556}
   - {fileID: 1455337304}
-  - {fileID: 2120563549}
   - {fileID: 936593257}
   - {fileID: 636669830}
   - {fileID: 384259689}
