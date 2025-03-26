@@ -34,6 +34,7 @@ public class S_GroundPound_Module : MonoBehaviour
     private bool _isGrounded = false; // Indique si le joueur a touché le sol
     private bool _isGroundPounding = false; // Indique si la compétence est en cours d'utilisation
     private float _dynamicSphereRange; // Portée dynamique basée sur la distance de chute
+    public float DynamicSphereRange => _dynamicSphereRange;
     
 
     //Trigger event

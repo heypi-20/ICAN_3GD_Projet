@@ -14,7 +14,6 @@ public class ExplosionEffect : MonoBehaviour
     public MeshRenderer sphereRenderer;  // Renseigner depuis l'inspecteur
 
     private Material sphereMaterial;
-    public float maxScale = 3f;
     public GameObject Explosion_GroundPound_SpawnPoint;
 
     
@@ -83,9 +82,13 @@ public class ExplosionEffect : MonoBehaviour
         while (elapsedTime < duration)
         {
             float normalizedTime = elapsedTime / duration;
-
+            
+            
+            S_GroundPound_Module groundPoundModule = FindObjectOfType<S_GroundPound_Module>();
+            float range = groundPoundModule.DynamicSphereRange;
+            Debug.Log("Portée dynamique du Ground Pound : " + range);
             // Applique la courbe de taille avec un multiplicateur
-            float scale = sizeCurve.Evaluate(normalizedTime) * maxScale;
+            float scale = sizeCurve.Evaluate(normalizedTime) * range;
             sphereRenderer.transform.localScale = Vector3.one * scale;
 
             // Applique la transparence
