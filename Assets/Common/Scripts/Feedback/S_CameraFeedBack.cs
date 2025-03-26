@@ -38,7 +38,7 @@ public class S_CameraFeedBack : MonoBehaviour
     public int effectFPS = 24;     // FPS pendant l'effet (plus bas = plus "cinématique")
     public float duration = 0.5f;  // Durée de l'effet en secondes
         
-        private bool isActive = false;
+    private bool isActive = false;
         
         
 
@@ -47,14 +47,8 @@ public class S_CameraFeedBack : MonoBehaviour
         if (S_PlayerStateObserver.Instance != null)
         {
             S_PlayerStateObserver.Instance.OnMoveStateEvent += ReceiveMoveEvent;
-        }
-        if (S_PlayerStateObserver.Instance != null)
-        {
             S_PlayerStateObserver.Instance.OnMeleeAttackStateEvent += ReceiveMeleeAttackEvent;
-        }
-        if (S_PlayerStateObserver.Instance != null)
-        {
-            S_PlayerStateObserver.Instance.OnGroundPoundStateEvent += ReceiGroudPoundEvevent;
+            S_PlayerStateObserver.Instance.OnGroundPoundStateEvent += ReceiveGroudPoundEvevent;
         }
         else
         {
@@ -143,10 +137,11 @@ public class S_CameraFeedBack : MonoBehaviour
         }
     }
 
-    private void ReceiGroudPoundEvevent(Enum state)
+    private void ReceiveGroudPoundEvevent(Enum state)
     {
         if (state.Equals(PlayerStates.GroundPoundState.EndGroundPound))
         {
+            Debug.Log("Shake my boooooooddyyyyyy");
             CameraShake((CameraShakePillonage*_timer_of_groundpound));
             StartCoroutine(TimeStopCoroutine());
             if (!isActive)

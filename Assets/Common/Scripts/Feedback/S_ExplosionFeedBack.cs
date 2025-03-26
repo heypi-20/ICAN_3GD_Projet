@@ -4,6 +4,7 @@ using System.Collections;
 
 public class ExplosionEffect : MonoBehaviour
 {
+    [Header("GroundPoundExplosion")]
     public GameObject explosionPrefab;  // Le prefab de l'explosion
     private GameObject currentExplosion; // Stocke l'objet instancié
 
@@ -13,18 +14,53 @@ public class ExplosionEffect : MonoBehaviour
     public MeshRenderer sphereRenderer;  // Renseigner depuis l'inspecteur
 
     private Material sphereMaterial;
-    public float maxScale = 3f; 
+    public float maxScale = 3f;
+    public GameObject Explosion_GroundPound_SpawnPoint;
 
-
-    private void Update()
+    
+    private void OnEnable()
     {
-        if (Input.GetKeyDown(KeyCode.J))
+        if (S_PlayerStateObserver.Instance != null)
         {
-            TriggerExplosion(gameObject.transform.position);
+            S_PlayerStateObserver.Instance.OnGroundPoundStateEvent += ReceiGroudPoundEvevent;
+        }
+        else
+        {
+            StartCoroutine(WaitForObserver());
         }
     }
+    
+    private IEnumerator WaitForObserver()
+    {
+        float timeout = 3f;
+        float elapsedTime = 0f;
 
-    public void TriggerExplosion(Vector3 impactPosition)
+        while (S_PlayerStateObserver.Instance == null)
+        {
+            if (elapsedTime >= timeout)
+            {
+                Debug.LogError("S_PlayerStateObserver.Instance not found after waiting " + timeout + " seconds.");
+                yield break;
+            }
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        S_PlayerStateObserver.Instance.OnGroundPoundStateEvent += ReceiGroudPoundEvevent;
+    }
+
+    private void ReceiGroudPoundEvevent(Enum state)
+    {
+        if (state.Equals(PlayerStates.GroundPoundState.EndGroundPound))
+        {
+            Debug.Log("Ca devrait exploser ici");
+            TriggerExplosion(Explosion_GroundPound_SpawnPoint.transform.position);
+        }
+    }
+    
+
+    private void TriggerExplosion(Vector3 impactPosition)
     {
         // Instancie l'explosion à la position d'impact
         currentExplosion = Instantiate(explosionPrefab, impactPosition, Quaternion.identity);
@@ -38,6 +74,7 @@ public class ExplosionEffect : MonoBehaviour
             StartCoroutine(ExplosionRoutine());
         }
     }
+    
 
     IEnumerator ExplosionRoutine()
     {
@@ -49,7 +86,7 @@ public class ExplosionEffect : MonoBehaviour
 
             // Applique la courbe de taille avec un multiplicateur
             float scale = sizeCurve.Evaluate(normalizedTime) * maxScale;
-            currentExplosion.transform.localScale = Vector3.one * scale;
+            sphereRenderer.transform.localScale = Vector3.one * scale;
 
             // Applique la transparence
             if (sphereMaterial != null)
