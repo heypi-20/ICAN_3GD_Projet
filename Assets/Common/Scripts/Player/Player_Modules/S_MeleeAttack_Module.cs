@@ -155,7 +155,6 @@ public class S_MeleeAttack_Module : MonoBehaviour
             bool didHit = Physics.CapsuleCast(capsuleStart, capsuleEnd, radius, attackOrigin.forward, out hit, 0, targetLayer);
             if (didHit)
             {
-                MeleeAttackObserverEvent(PlayerStates.MeleeState.MeleeAttackHit, currentLevel.level);
                 
                 Rigidbody targetRB = hit.collider.gameObject.GetComponent<Rigidbody>();
                 if (targetRB != null)
@@ -167,12 +166,13 @@ public class S_MeleeAttack_Module : MonoBehaviour
                 if (hit.collider.CompareTag("WeakPoint"))
                 {
                     hit.collider.gameObject.GetComponentInParent<EnemyBase>()?.ReduceHealth(currentLevel.attackDamage * 100, currentLevel.dropBonus * 3);
-                    Debug.Log("Touch Weak Point " + currentLevel.attackDamage * 100);
+                    MeleeAttackObserverEvent(PlayerStates.MeleeState.MeleeAttackHitWeakness, currentLevel.level);
+
                 }
                 else
                 {
                     hit.collider.gameObject.GetComponent<EnemyBase>()?.ReduceHealth(currentLevel.attackDamage, currentLevel.dropBonus);
-                    Debug.Log("Didn't Touch Weak Point");
+                    MeleeAttackObserverEvent(PlayerStates.MeleeState.MeleeAttackHit, currentLevel.level);
                 }
                 return;
             }
