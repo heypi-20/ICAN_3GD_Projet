@@ -16,6 +16,10 @@ public class ExplosionEffect : MonoBehaviour
     private Material sphereMaterial;
     public GameObject Explosion_GroundPound_SpawnPoint;
 
+    public ParticleSystem ExplosionParticule;
+    private float shape_responsive;
+    
+
     
     private void OnEnable()
     {
@@ -54,10 +58,12 @@ public class ExplosionEffect : MonoBehaviour
         if (state.Equals(PlayerStates.GroundPoundState.EndGroundPound))
         {
             Debug.Log("Ca devrait exploser ici");
-            TriggerExplosion(Explosion_GroundPound_SpawnPoint.transform.position);
+            //TriggerExplosion(Explosion_GroundPound_SpawnPoint.transform.position);
+            SpawnParticule(Explosion_GroundPound_SpawnPoint.transform.position);
         }
     }
     
+
 
     private void TriggerExplosion(Vector3 impactPosition)
     {
@@ -72,6 +78,19 @@ public class ExplosionEffect : MonoBehaviour
             sphereMaterial = sphereRenderer.material;
             StartCoroutine(ExplosionRoutine());
         }
+    }
+
+    private void SpawnParticule(Vector3 impactPosition)
+    {
+        S_GroundPound_Module groundPoundModule = FindObjectOfType<S_GroundPound_Module>();
+        float range = groundPoundModule.DynamicSphereRange;
+        
+        var main = ExplosionParticule.main;
+        main.startSpeed = range * 0.5f; // Exemple : vitesse proportionnelle au range
+        
+        ParticleSystem newParticles = Instantiate(ExplosionParticule, impactPosition, Quaternion.identity);
+        newParticles.Play();
+        Destroy(newParticles.gameObject, newParticles.main.duration); // Nettoie après la durée de l'effet
     }
     
 
