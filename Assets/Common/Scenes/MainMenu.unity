@@ -651,7 +651,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -423.33334, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 800, y: 450}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &126849347
@@ -2032,6 +2032,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenuPanel: {fileID: 1419142796}
+  optionalDisable: {fileID: 0}
 --- !u!114 &566835926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2076,8 +2077,10 @@ MonoBehaviour:
   buttonPrefab: {fileID: 3665649259260605708, guid: e52ede685011f3c41a570bb6e60e5af1, type: 3}
   buttonContainer: {fileID: 914018155}
   level:
-  - asset: {fileID: 102900000, guid: 3f9e4c43ad5900547a4299793547873d, type: 3}
-    guid: 3f9e4c43ad5900547a4299793547873d
+  - asset: {fileID: 102900000, guid: 4d4568374437390419db81cedcdac6db, type: 3}
+    guid: 4d4568374437390419db81cedcdac6db
+  - asset: {fileID: 102900000, guid: ff856b51e0f3a404086a92a2fbaa145a, type: 3}
+    guid: ff856b51e0f3a404086a92a2fbaa145a
 --- !u!114 &566835929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6861,6 +6864,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 0c51f625a3aa6ff4e9b2b6badc4162af, type: 3}
       propertyPath: m_Name
       value: CharacterBaseModel
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0c51f625a3aa6ff4e9b2b6badc4162af, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 0c51f625a3aa6ff4e9b2b6badc4162af, type: 3}
       propertyPath: m_Controller
