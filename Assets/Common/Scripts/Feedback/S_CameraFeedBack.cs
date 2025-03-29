@@ -72,7 +72,6 @@ public class S_CameraFeedBack : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
         S_PlayerStateObserver.Instance.OnMoveStateEvent += ReceiveMoveEvent;
     }
 
@@ -83,9 +82,11 @@ public class S_CameraFeedBack : MonoBehaviour
             _cinemachineVirtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
         }
         _impulseSource = _cinemachineVirtualCamera.GetComponent<CinemachineImpulseSource>();
+        _cinemachineInputProvider = _cinemachineVirtualCamera.GetComponent<CinemachineInputProvider>();
+
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (S_PlayerStateObserver.Instance.LastGroundPoundState != null)
         {
@@ -95,7 +96,10 @@ public class S_CameraFeedBack : MonoBehaviour
         {
             EnableCamera(true);
         }
-
+    }
+    
+    private void FixedUpdate()
+    {
         _timer_of_groundpound = _timer_of_groundpound + Time.deltaTime;
     }
     
