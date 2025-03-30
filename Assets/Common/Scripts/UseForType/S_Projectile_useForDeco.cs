@@ -26,7 +26,6 @@ public class S_Projectile_useForDeco : MonoBehaviour
             Destroy(gameObject);
         }
         
-        
     }
 
 }

@@ -134,7 +134,6 @@ public class S_FireRateGun_Module : MonoBehaviour
             SoundManager.Instance.Meth_Shoot_No_Hit(_energyStorage.currentLevelIndex+1);
             UpdateFireCooldown(currentLevel);
             ConsumeEnergy(currentLevel);
-            ShootVFX();
         }
 
         //Trigger once stop shooting event
@@ -170,6 +169,7 @@ public class S_FireRateGun_Module : MonoBehaviour
     private void Shoot(FireRateLevel currentLevel)
     {
         Vector3 shootDirection = shootPoint.forward;
+
         if (simulateBulletSpeed)
         {
             StartCoroutine(SimulateBullet(shootDirection, currentLevel));
@@ -179,8 +179,8 @@ public class S_FireRateGun_Module : MonoBehaviour
             PerformSpreadRaycast(shootPoint.position, shootDirection, raycastLength, currentLevel.damage);
         }
 
-        GameObject Bullet = Instantiate(bulletPrefab, spawnBulletPoint.position, spawnBulletPoint.rotation);
-        Bullet.GetComponent<S_Projectile_useForDeco>().InitializeProjectile(3,bulletSpeed);
+        Instantiate(bulletPrefab, spawnBulletPoint.position, spawnBulletPoint.rotation);
+
     }
 
     private IEnumerator SimulateBullet(Vector3 shootDirection, FireRateLevel currentLevel)
@@ -302,34 +302,7 @@ public class S_FireRateGun_Module : MonoBehaviour
         return fireRateLevels.Find(level => level.level == currentLevelIndex);
     }
 
-    private void ShootVFX()
-    {
-        DOTween.Kill(gunObject.transform);
-
-        // Appliquer un recul visuel à l'arme
-        gunObject.transform.DOLocalMove(_originalPosition - gunObject.transform.forward * recoilDistance, recoilDuration)
-            .SetEase(Ease.OutQuad);
-
-        // Appliquer une rotation pour simuler le recul
-        Vector3 recoilRotation = new Vector3(
-            _originalRotation.eulerAngles.x + Random.Range(upwardRecoilMin, upwardRecoilMax),
-            _originalRotation.eulerAngles.y + Random.Range(lateralRecoilMin, lateralRecoilMax),
-            _originalRotation.eulerAngles.z);
-
-        gunObject.transform.DOLocalRotate(recoilRotation, recoilDuration)
-            .SetEase(Ease.OutQuad);
-
-        // Retour à la position initiale après le recul
-        gunObject.transform.DOLocalMove(_originalPosition, resetDuration)
-            .SetDelay(recoilDuration)
-            .SetEase(Ease.InQuad);
-
-        // Retour à l'orientation initiale après le recul
-        gunObject.transform.DOLocalRotate(_originalRotation.eulerAngles, resetDuration)
-            .SetDelay(recoilDuration)
-            .SetEase(Ease.InQuad);
-    }
-
+  
     IEnumerator HitMarker()
     {
         HitMarkerPNG.SetActive(true);
