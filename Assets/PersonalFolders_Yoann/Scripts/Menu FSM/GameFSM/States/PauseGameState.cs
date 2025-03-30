@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using Cinemachine;
 
@@ -6,16 +7,33 @@ using Cinemachine;
 public class PauseGameState : GameState
 {
     public GameObject pauseMenuPanel;
-    
+    private GameObject optionalDisable;
+
     public override void Enter()
     {
+
+        optionalDisable = GameObject.FindGameObjectWithTag("OptionalDisable");
+        if (optionalDisable != null)
+        {
+            optionalDisable.SetActive(false);
+        }
+        else
+        {
+            Debug.LogWarning("Objet avec le tag 'MonTag' non trouvé !");
+        }
+        
         pauseMenuPanel.SetActive(true);
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible   = true;
         
         GameObject player = GameObject.Find("PreDenis_PlayerObjGroupe_Variation");
-        player.GetComponentInChildren<Canvas>().enabled = false;
+        
+        if (player != null)
+        {
+            player.GetComponentInChildren<Canvas>().enabled = false;
+        }
+        
     }
 
     public override void Tick()
@@ -47,6 +65,19 @@ public class PauseGameState : GameState
         //Mettre le jeu en pause = responsabilité de PauseState.
         Time.timeScale = 1f; 
         GameObject playerCanvas = GameObject.Find("Player Canvas");
-        playerCanvas.GetComponent<Canvas>().enabled = true;
+        
+        if (playerCanvas != null)
+        {
+            playerCanvas.GetComponent<Canvas>().enabled = true;
+        }
+        
+        if (optionalDisable != null)
+        {
+            optionalDisable.SetActive(true);
+        }
+        else
+        {
+            Debug.LogWarning("Objet avec le tag 'MonTag' non trouvé !");
+        }
     }
 }
