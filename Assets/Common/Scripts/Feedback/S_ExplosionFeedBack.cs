@@ -58,8 +58,8 @@ public class ExplosionEffect : MonoBehaviour
         if (state.Equals(PlayerStates.GroundPoundState.EndGroundPound))
         {
             Debug.Log("Ca devrait exploser ici");
-            //TriggerExplosion(Explosion_GroundPound_SpawnPoint.transform.position);
-            SpawnParticule(Explosion_GroundPound_SpawnPoint.transform.position);
+            TriggerExplosion(Explosion_GroundPound_SpawnPoint.transform.position);
+            //SpawnParticule(Explosion_GroundPound_SpawnPoint.transform.position);
         }
     }
     
