@@ -2,11 +2,14 @@ using System;
 using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class S_PlayerAnimator : MonoBehaviour
 {
     [Header("References")]
     public Transform handTransform; // The transform of the FPS character's hand/weapon
+    public Animator handAnimator;
+
 
     [Header("Jump Animation Settings")]
     public float jumpOffsetY = -0.2f; // Downward offset when jumping
@@ -28,7 +31,6 @@ public class S_PlayerAnimator : MonoBehaviour
     private Tween moveSwingTween; // Tween for movement hand swing animation
     private Tween jumpTween;      // Tween for jump hand animation
 
-    private Animator animator;
     private int skillLayerIndex;
 
     // Reference to the custom character controller for ground checking
@@ -39,8 +41,7 @@ public class S_PlayerAnimator : MonoBehaviour
 
     private void Start()
     {
-        animator = GetComponent<Animator>();
-        skillLayerIndex = animator.GetLayerIndex("SkillLayer");
+        skillLayerIndex = handAnimator.GetLayerIndex("SkillLayer");
         characterController = GetComponent<S_CustomCharacterController>(); // Get the custom character controller
 
         // Store the default hand position
@@ -134,13 +135,13 @@ public class S_PlayerAnimator : MonoBehaviour
         switch (ShootState)
         {
             case PlayerStates.ShootState.StartShoot when S_PlayerStateObserver.Instance.LastMeleeState == null:
-                animator.CrossFade("StartShoot", 0.2f);
+                handAnimator.CrossFade("StartShoot", 0.2f);
                 break;
             case PlayerStates.ShootState.IsShooting when S_PlayerStateObserver.Instance.LastMeleeState == null:
-                animator.CrossFade("HoldShoot", 0.2f);
+                handAnimator.CrossFade("HoldShoot", 0.2f);
                 break;
             case PlayerStates.ShootState.StopShoot when S_PlayerStateObserver.Instance.LastMeleeState == null:
-                animator.CrossFade("EndShoot", 0.2f);
+                handAnimator.CrossFade("EndShoot", 0.2f);
                 break;
         }
     }
@@ -150,10 +151,10 @@ public class S_PlayerAnimator : MonoBehaviour
         switch (MeleeState)
         {
             case PlayerStates.MeleeState.StartMeleeAttack when S_PlayerStateObserver.Instance.LastGroundPoundState == null:
-                animator.CrossFade("Punch", 0.2f);
+                handAnimator.CrossFade("Punch", 0.2f);
                 break;
             case PlayerStates.MeleeState.EndMeleeAttack when S_PlayerStateObserver.Instance.LastGroundPoundState == null:
-                animator.CrossFade("Idle", 0.2f);
+                handAnimator.CrossFade("Idle", 0.2f);
                 break;
         }
     }
@@ -163,12 +164,12 @@ public class S_PlayerAnimator : MonoBehaviour
         switch (JumpState)
         {
             case PlayerStates.JumpState.Jump:
-                animator.SetLayerWeight(skillLayerIndex, 1f);
-                animator.Play("UseRune", skillLayerIndex, 0f);
+                handAnimator.SetLayerWeight(skillLayerIndex, 1f);
+                handAnimator.Play("UseRune", skillLayerIndex, 0f);
                 JumpHandAnimation();
                 break;
             case PlayerStates.JumpState.OnGround:
-                animator.SetLayerWeight(skillLayerIndex, 0f);
+                handAnimator.SetLayerWeight(skillLayerIndex, 0f);
                 ResetHandPositionWhenLanding();
                 break;
         }
@@ -179,13 +180,13 @@ public class S_PlayerAnimator : MonoBehaviour
         switch (GroundPoundState)
         {
             case PlayerStates.GroundPoundState.StartGroundPound:
-                animator.CrossFade("StartGroundPound", 0.2f);
+                handAnimator.CrossFade("StartGroundPound", 0.2f);
                 break;
             case PlayerStates.GroundPoundState.isGroundPounding:
-                animator.CrossFade("HoldGroundPound", 0.2f);
+                handAnimator.CrossFade("HoldGroundPound", 0.2f);
                 break;
             case PlayerStates.GroundPoundState.EndGroundPound:
-                animator.CrossFade("EndGroundPound", 0.2f);
+                handAnimator.CrossFade("EndGroundPound", 0.2f);
                 break;
         }
     }
