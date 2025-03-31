@@ -145,7 +145,7 @@ public class S_CameraFeedBack : MonoBehaviour
     {
         if (state.Equals(PlayerStates.GroundPoundState.EndGroundPound))
         {
-            Debug.Log("Shake my boooooooddyyyyyy");
+            //Debug.Log("Shake my boooooooddyyyyyy");
             CameraShake((CameraShakePillonage*_timer_of_groundpound));
             StartCoroutine(TimeStopCoroutine());
             if (!isActive)
@@ -226,11 +226,11 @@ public class S_CameraFeedBack : MonoBehaviour
         if (_impulseSource != null)
         {
             _impulseSource.GenerateImpulse(Vector3.one * intensity);
-            Debug.Log("Ca tape fooooooooooort");
+            //Debug.Log("Ca tape fooooooooooort");
         }
         else
         {
-            Debug.LogWarning("CinemachineImpulseSource is missing on this GameObject.");
+            //Debug.LogWarning("CinemachineImpulseSource is missing on this GameObject.");
         }
     }
     private IEnumerator TimeStopCoroutine()
@@ -251,14 +251,14 @@ public class S_CameraFeedBack : MonoBehaviour
             
             // Applique le FPS réduit
             Application.targetFrameRate = effectFPS;
-            Debug.Log("Baisse Fps");
+            //Debug.Log("Baisse Fps");
             
             // Attend la durée spécifiée
             yield return new WaitForSecondsRealtime(duration);
             
             // Rétablit le FPS normal
             Application.targetFrameRate = -1;
-            Debug.Log("Débloooouér sa mèèèèèèère");
+            //Debug.Log("Débloooouér sa mèèèèèèère");
             
             isActive = false;
         }
