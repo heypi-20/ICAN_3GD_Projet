@@ -42,7 +42,7 @@ public class ExplosionEffect : MonoBehaviour
         {
             if (elapsedTime >= timeout)
             {
-                Debug.LogError("S_PlayerStateObserver.Instance not found after waiting " + timeout + " seconds.");
+                //Debug.LogError("S_PlayerStateObserver.Instance not found after waiting " + timeout + " seconds.");
                 yield break;
             }
 
@@ -57,7 +57,7 @@ public class ExplosionEffect : MonoBehaviour
     {
         if (state.Equals(PlayerStates.GroundPoundState.EndGroundPound))
         {
-            Debug.Log("Ca devrait exploser ici");
+            //Debug.Log("Ca devrait exploser ici");
             //TriggerExplosion(Explosion_GroundPound_SpawnPoint.transform.position);
             SpawnParticule(Explosion_GroundPound_SpawnPoint.transform.position);
         }
@@ -105,7 +105,7 @@ public class ExplosionEffect : MonoBehaviour
             
             S_GroundPound_Module groundPoundModule = FindObjectOfType<S_GroundPound_Module>();
             float range = groundPoundModule.DynamicSphereRange;
-            Debug.Log("Portée dynamique du Ground Pound : " + range);
+            //Debug.Log("Portée dynamique du Ground Pound : " + range);
             // Applique la courbe de taille avec un multiplicateur
             float scale = sizeCurve.Evaluate(normalizedTime) * range;
             sphereRenderer.transform.localScale = Vector3.one * scale;
