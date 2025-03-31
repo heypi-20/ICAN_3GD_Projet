@@ -30,17 +30,7 @@ public class S_FireRateGun_Module : MonoBehaviour
 
     [Header("Fire Rate Levels")]
     public List<FireRateLevel> fireRateLevels; // Liste des niveaux de tir
-
-    [Header("Recoil Settings")]
-    public GameObject gunObject; // Référence à l'arme pour appliquer le recul
-    public float recoilDistance = 0.1f; // Distance que l'arme recule pendant le tir
-    public float recoilDuration = 0.1f; // Durée de l'animation de recul
-    public float resetDuration = 0.2f; // Durée pour revenir à la position initiale
-    public float upwardRecoilMin = 2f; // Amplitude minimale pour l'élévation du canon
-    public float upwardRecoilMax = 5f; // Amplitude maximale pour l'élévation du canon
-    public float lateralRecoilMin = -1f; // Amplitude minimale pour le décalage latéral
-    public float lateralRecoilMax = 1f; // Amplitude maximale pour le décalage latéral
-
+    
     private Vector3 _originalPosition; // Position initiale de l'arme
     private Quaternion _originalRotation; // Rotation initiale de l'arme
 
@@ -64,41 +54,13 @@ public class S_FireRateGun_Module : MonoBehaviour
         _energyStorage = GetComponent<S_EnergyStorage>();
 
         ShootStoppedUseForEvent = true;
-        
-        // Initialisation des positions pour le recul
-        _originalPosition = gunObject.transform.localPosition;
-        _originalRotation = gunObject.transform.localRotation;
+
     }
 
     private void Update()
     {
         HandleShooting();
     }
-
-    // private void ShootingObserverEvent(Enum Shootstates, FireRateLevel currentLevel)
-    // {
-    //
-    //     if (Shootstates.Equals(PlayerStates.ShootState.StartShoot))
-    //     {
-    //         if (!shootStartedUseForEvent)
-    //         {
-    //             OnShootStateChange?.Invoke(PlayerStates.ShootState.StartShoot, currentLevel.level);
-    //             OnShootStateChange?.Invoke(PlayerStates.ShootState.IsShooting,currentLevel.level);
-    //             shootStartedUseForEvent = true;
-    //         }
-    //         else if (shootStartedUseForEvent)
-    //         {
-    //             OnShootStateChange?.Invoke(PlayerStates.ShootState.IsShooting,currentLevel.level);
-    //         }
-    //     }
-    //
-    //     if (Shootstates.Equals(PlayerStates.ShootState.StopShoot))
-    //     {
-    //         shootStartedUseForEvent = false;
-    //         OnShootStateChange?.Invoke(PlayerStates.ShootState.StopShoot, currentLevel.level);
-    //     }
-    // }
-
 
     private void ShootingObserverEvent(Enum Shootstates, FireRateLevel currentLevel)
     {
@@ -179,8 +141,8 @@ public class S_FireRateGun_Module : MonoBehaviour
             PerformSpreadRaycast(shootPoint.position, shootDirection, raycastLength, currentLevel.damage);
         }
 
-        Instantiate(bulletPrefab, spawnBulletPoint.position, spawnBulletPoint.rotation);
-
+        GameObject Bullet = Instantiate(bulletPrefab, spawnBulletPoint.position, spawnBulletPoint.rotation);
+        Bullet.GetComponent<S_Projectile_useForDeco>().InitializeProjectile(3,bulletSpeed);
     }
 
     private IEnumerator SimulateBullet(Vector3 shootDirection, FireRateLevel currentLevel)
