@@ -19,7 +19,15 @@ public class ExplosionEffect : MonoBehaviour
     public ParticleSystem ExplosionParticule;
     private float shape_responsive;
     
+    [Header("ShockWave")]
+    public Material shockwaveMaterial;
+    public float shockwaveSpeed = 10f;
+    public float maxDistance = 20f;
+    public float intensity = 10f;
 
+    private float currentDistance = 0f;
+    private bool isPlaying = false;
+    public GameObject ShockWavePoint;
     
     private void OnEnable()
     {
@@ -32,7 +40,30 @@ public class ExplosionEffect : MonoBehaviour
             StartCoroutine(WaitForObserver());
         }
     }
-    
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            Play(ShockWavePoint.transform.position);
+        }
+        if (isPlaying)
+        {
+            currentDistance += Time.deltaTime * shockwaveSpeed;
+
+            // Envoie les valeurs au shader
+            shockwaveMaterial.SetVector("_Shockwave_Position", ShockWavePoint.transform.position);
+            shockwaveMaterial.SetFloat("_Shockwave_Distance", currentDistance);
+            shockwaveMaterial.SetFloat("_Shockwave_Intensity", Mathf.Lerp(intensity, 0f, currentDistance / maxDistance));
+
+            // Stopper une fois terminé
+            if (currentDistance >= maxDistance)
+            {
+                isPlaying = false;
+            }
+        }
+    }
+
     private IEnumerator WaitForObserver()
     {
         float timeout = 3f;
@@ -123,5 +154,17 @@ public class ExplosionEffect : MonoBehaviour
         }
 
         Destroy(currentExplosion);
+    }
+    
+    
+    public void Play(Vector3 origin)
+    {
+        currentDistance = 0f;
+        isPlaying = true;
+        ShockWavePoint.transform.position = origin;
+
+        // Optionnel : si le shader a un paramètre "Enabled"
+        shockwaveMaterial.SetFloat("_Shockwave_Enabled", 1f);
+        shockwaveMaterial.SetFloat("_Shockwave_Max_Distance", maxDistance);
     }
 }
