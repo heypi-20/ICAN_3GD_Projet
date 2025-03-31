@@ -79,7 +79,7 @@ public class SoundManager : MonoBehaviour
 
     [Header("Musique")]
     public string Globale_Musique;
-    public S_Jauge_Tmp Jauge;
+    //public S_Jauge_Tmp Jauge;
     public void Meth_Shoot_No_Hit(int currentLevel)
     {
         if (currentLevel == 1)
@@ -200,8 +200,5 @@ public class SoundManager : MonoBehaviour
     {
         FMODUnity.RuntimeManager.PlayOneShot(Globale_Musique);
     }
-    private void Update()
-    {
-        Meth_Globale_Musique(Jauge.EnergyStore.currentLevelIndex);
-    }
+
 }

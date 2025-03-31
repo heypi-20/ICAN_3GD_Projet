@@ -2042,7 +2042,7 @@ Camera:
   m_ShutterSpeed: 0.005
   m_Aperture: 16
   m_FocusDistance: 10
-  m_FocalLength: 50
+  m_FocalLength: 23.051785
   m_BladeCount: 5
   m_Curvature: {x: 2, y: 11}
   m_BarrelClipping: 0.25
@@ -2095,7 +2095,7 @@ MonoBehaviour:
   m_RendererIndex: -1
   m_VolumeLayerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 4294967295
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 1
@@ -3916,7 +3916,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shootPoint: {fileID: 6187556473507325879}
   spawnBulletPoint: {fileID: 7881909655561821250}
-  bulletPrefab: {fileID: 7506147881936542410, guid: ff1c27561dbbb5b41bb84f33b281fcb8, type: 3}
+  bulletPrefab: {fileID: 8035359663063458905, guid: 7acf3d0d4a031df4ca25c0befa349358, type: 3}
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 65
@@ -4120,7 +4120,7 @@ MonoBehaviour:
   landOffsetY: 1
   landBounceTime: 0.1
   landReturnTime: 0.15
-  swingAmplitude: {x: 0, y: 0.25, z: 0.2}
+  swingAmplitude: {x: 0, y: 0.15, z: 0.1}
   swingDuration: 0.2
   swingEase: 4
 --- !u!114 &6915564590874781277
@@ -4757,7 +4757,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7881909655561821250}
   - component: {fileID: 4001390082554915747}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: SpawnBulletPoint
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
@@ -4793,7 +4793,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 4750812657611663464}
   distanceFromCamera: 1
-  positionOffset: {x: 1, y: -0.64, z: 8}
+  positionOffset: {x: 0.38, y: -0.25, z: 0}
   rotationOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &7880079876113927353
 GameObject:
