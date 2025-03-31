@@ -4,7 +4,11 @@ using UnityEngine;
 public class Bug_Report : EditorWindow
 {
     private int spaceValue = 5;
-    private Vector2 scrollPos;
+    
+    // Définition des options pour chaque dropdown
+    public string[] categoryOptions = { "Assets - Art", "Level Design", "Script", "SFX", "VFX", "Performance", "Game Design" };
+    public string[] severityOptions = { "A - Critique", "B - Majeur", "C - Mineur", "D - Trivial" };
+    public string[] reproductibilityOptions = { "100% - Always", " 75% - Very Often", "50% - Often", "25% Sometimes", "<25% Randomly, Once" };
 
     [MenuItem("Tools/QA/Bug Report")]
     private static void ShowWindow()
@@ -18,18 +22,25 @@ public class Bug_Report : EditorWindow
 
     private void OnGUI()
     {
-        scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
+        
+        // Sélection actuelle pour chaque dropdown
+        int categoryIndex = Mathf.Max(0, System.Array.IndexOf(categoryOptions, QATool.category));
+        int severityIndex = Mathf.Max(0, System.Array.IndexOf(severityOptions, QATool.severity));
+        int reproductibilityIndex = Mathf.Max(0, System.Array.IndexOf(reproductibilityOptions, QATool.reproductibility));
         
         GUILayout.Label("Category", EditorStyles.boldLabel);
-        QATool.category = EditorGUILayout.TextField(QATool.category);
+        categoryIndex = EditorGUILayout.Popup(categoryIndex, categoryOptions);
+        QATool.category = categoryOptions[categoryIndex];
         EditorGUILayout.Space(spaceValue);
         
         GUILayout.Label("Severity", EditorStyles.boldLabel);
-        QATool.severity = EditorGUILayout.TextField(QATool.severity);
+        severityIndex = EditorGUILayout.Popup(severityIndex, severityOptions);
+        QATool.severity = severityOptions[severityIndex];
         EditorGUILayout.Space(spaceValue);
         
         GUILayout.Label("Reproductibility", EditorStyles.boldLabel);
-        QATool.reproductibility = EditorGUILayout.TextField(QATool.reproductibility);
+        reproductibilityIndex = EditorGUILayout.Popup(reproductibilityIndex, reproductibilityOptions);
+        QATool.reproductibility = reproductibilityOptions[reproductibilityIndex];
         EditorGUILayout.Space(spaceValue);
         
         GUILayout.Label("Summary", EditorStyles.boldLabel);
@@ -43,8 +54,6 @@ public class Bug_Report : EditorWindow
         GUILayout.Label("Repro. Steps", EditorStyles.boldLabel);
         QATool.reproSteps = EditorGUILayout.TextArea(QATool.reproSteps, GUILayout.Height(120));
         EditorGUILayout.Space(spaceValue);
-        
-        EditorGUILayout.EndScrollView();
 
         if (GUILayout.Button("Submit Report"))
         {
@@ -52,6 +61,8 @@ public class Bug_Report : EditorWindow
             QATool.SubmitBugReport();
         }
         
-        this.Repaint();
+        EditorGUILayout.HelpBox(QATool.submitStatus, MessageType.Info);
+        
+        Repaint();
     }
 }

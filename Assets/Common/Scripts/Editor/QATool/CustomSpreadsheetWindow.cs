@@ -55,9 +55,9 @@ public class CustomSpreadsheetWindow : EditorWindow
             GUI.enabled = true;
             keyButtonText = "Modifier la clé API"; // Modification du texte temportaire
         }
-        
+
         // Bouton pour activer/désactiver l'édition de l'API Key
-        if (GUILayout.Button(keyButtonText, GUILayout.Width(200))) canModifyKey = !canModifyKey; 
+        if (GUILayout.Button(keyButtonText, GUILayout.Width(200))) canModifyKey = !canModifyKey;
         EditorGUILayout.EndHorizontal();
 
         // Bouton pour charger les données du Google Sheet - Evite trop de Request
@@ -67,7 +67,7 @@ public class CustomSpreadsheetWindow : EditorWindow
             QATool.FetchSheetData(id, sheetName, apiKey);
             Repaint(); // Force le redessin de la fenêtre
         }
-        
+
         scrollPos = EditorGUILayout.BeginScrollView(scrollPos); // Ajoute une barre de défilement
 
         // Vérifie si des données ont été chargées
@@ -82,14 +82,16 @@ public class CustomSpreadsheetWindow : EditorWindow
 
             // Déterminer le nombre de colonnes
             int columnCount = SpreadsheetUtils.SheetData[0].Count;
+            int rowCount = SpreadsheetUtils.SheetData.Count;
             List<float> columnWidths = new List<float>(new float[columnCount]);
+            List<float> rowHeights = new List<float>(new float[rowCount]);
 
             // Étape 1 : Trouver la largeur maximale de chaque colonne
-            for (int j = 0; j < columnCount; j++) 
+            for (int j = 0; j < columnCount; j++)
             {
                 float maxWidth = cellWidth; // Valeur par défaut
 
-                for (int i = 0; i < SpreadsheetUtils.SheetData.Count; i++) 
+                for (int i = 0; i < rowCount; i++)
                 {
                     string cellText = SpreadsheetUtils.SheetData[i][j];
                     float textWidth = EditorStyles.textField.CalcSize(new GUIContent(cellText)).x + 10;
@@ -99,26 +101,44 @@ public class CustomSpreadsheetWindow : EditorWindow
                 columnWidths[j] = maxWidth; // Stocker la largeur maximale de cette colonne
             }
 
-            // Étape 2 : Dessiner les cellules avec la bonne largeur par colonne
-            float xOffset = 0f;
-            for (int j = 0; j < columnCount; j++) 
+            // Étape 2 : Trouver la hauteur maximale de chaque ligne
+            for (int i = 0; i < rowCount; i++)
             {
-                float columnWidth = columnWidths[j]; // Récupérer la largeur de la colonne
-                float yOffset = 0f;
+                float maxHeight = cellHeight; // Valeur par défaut
 
-                for (int i = 0; i < SpreadsheetUtils.SheetData.Count; i++) 
+                for (int j = 0; j < columnCount; j++)
                 {
-                    Rect cellRect = new Rect(xOffset, yOffset, columnWidth, cellHeight);
+                    string cellText = SpreadsheetUtils.SheetData[i][j];
+                    float textHeight = EditorStyles.textField.CalcSize(new GUIContent(cellText)).y + 10;
+                    maxHeight = Mathf.Max(maxHeight, textHeight);
+                }
+
+                rowHeights[i] = maxHeight; // Stocker la hauteur maximale de cette ligne
+            }
+
+            // Étape 3 : Dessiner les cellules avec la bonne largeur par colonne et hauteur par ligne
+            float yOffset = 0f;
+            for (int i = 0; i < rowCount; i++)
+            {
+                float rowHeight = rowHeights[i]; // Récupérer la hauteur de la ligne
+                float xOffset = 0f;
+
+                for (int j = 0; j < columnCount; j++)
+                {
+                    float columnWidth = columnWidths[j]; // Récupérer la largeur de la colonne
+
+                    Rect cellRect = new Rect(xOffset, yOffset, columnWidth, rowHeight);
                     GUI.Box(cellRect, GUIContent.none, EditorStyles.helpBox);
 
                     GUI.enabled = false;
-                    SpreadsheetUtils.SheetData[i][j] = EditorGUI.TextArea(cellRect, SpreadsheetUtils.SheetData[i][j], EditorStyles.textField);
+                    SpreadsheetUtils.SheetData[i][j] = EditorGUI.TextArea(cellRect, SpreadsheetUtils.SheetData[i][j],
+                        EditorStyles.textField);
                     GUI.enabled = true;
 
-                    yOffset += cellHeight; // Déplacer la position Y pour la ligne suivante
+                    xOffset += columnWidth; // Déplacer la position X pour la colonne suivante
                 }
 
-                xOffset += columnWidth; // Déplacer la position X pour la colonne suivante
+                yOffset += rowHeight; // Déplacer la position Y pour la ligne suivante
             }
 
             EditorGUILayout.EndVertical();

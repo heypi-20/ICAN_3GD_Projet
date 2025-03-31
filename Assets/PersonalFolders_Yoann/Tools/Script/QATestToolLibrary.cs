@@ -93,13 +93,16 @@ public static class QATool
     public static string description;
     public static string reproSteps;
 
+    public static string submitStatus;
+
     [SerializeField] private static string BASE_URL =
         "https://docs.google.com/forms/u/0/d/1cwljRmn3eJH_t3v6x9gdwMvEQy5IJlUMOsjhY2UfRTQ/formResponse";
 
     public static IEnumerator Send(string category, string severity, string reproductibility, string summary, string description,
         string reproSteps)
     {
-        Debug.Log("Getting Input");
+
+        submitStatus = "Getting Input";
         WWWForm form = new WWWForm();
         form.AddField("entry.660508839", category);
         form.AddField("entry.871233109", severity);
@@ -114,19 +117,26 @@ public static class QATool
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                Debug.LogError("Error: " + www.error);
+                submitStatus = "Error: " + www.error;
             }
             else
             {
-                Debug.Log("Bug Report Submitted Successfully!");
+                submitStatus = "Bug Report Submitted Successfully!";
             }
         }
     }
 
     public static void SubmitBugReport()
     {
-        Debug.Log("Submitting Bug Report");
-        EditorCoroutineUtility.StartCoroutineOwnerless(Send(category, severity, reproductibility, summary, description, reproSteps));
+        if (summary == null || reproSteps == null || submitStatus == null)
+        {
+            submitStatus = "At least one field is empty !";
+        }
+        else
+        {
+            submitStatus = "Submitting Bug Report";
+            EditorCoroutineUtility.StartCoroutineOwnerless(Send(category, severity, reproductibility, summary, description, reproSteps));
+        }
     }
 
     #endregion
