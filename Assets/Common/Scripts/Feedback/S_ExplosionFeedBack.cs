@@ -58,8 +58,8 @@ public class ExplosionEffect : MonoBehaviour
         if (state.Equals(PlayerStates.GroundPoundState.EndGroundPound))
         {
             Debug.Log("Ca devrait exploser ici");
-            TriggerExplosion(Explosion_GroundPound_SpawnPoint.transform.position);
-            //SpawnParticule(Explosion_GroundPound_SpawnPoint.transform.position);
+            //TriggerExplosion(Explosion_GroundPound_SpawnPoint.transform.position);
+            SpawnParticule(Explosion_GroundPound_SpawnPoint.transform.position);
         }
     }
     
@@ -86,9 +86,9 @@ public class ExplosionEffect : MonoBehaviour
         float range = groundPoundModule.DynamicSphereRange;
         
         var main = ExplosionParticule.main;
-        main.startSpeed = range * 0.5f; // Exemple : vitesse proportionnelle au range
+        main.startSize = range * 4f; // Exemple : vitesse proportionnelle au range
         
-        ParticleSystem newParticles = Instantiate(ExplosionParticule, impactPosition, Quaternion.identity);
+        ParticleSystem newParticles = Instantiate(ExplosionParticule, impactPosition, ExplosionParticule.transform.rotation);
         newParticles.Play();
         Destroy(newParticles.gameObject, newParticles.main.duration); // Nettoie après la durée de l'effet
     }
