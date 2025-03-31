@@ -4,35 +4,35 @@ using UnityEngine;
 
 public class S_FpsFollowWithDelay : MonoBehaviour
 {
-    [Header("摄像机引用")]
-    public Transform cameraTransform; // 在 Inspector 中分配你的摄像机
+    [Header("Camera Reference")]
+    public Transform cameraTransform; // Assign your camera in the Inspector
     public Transform targetTransform;
 
-    [Header("位置偏移")]
-    public Vector3 positionOffset = new Vector3(0, 0, 0); // 相对于摄像机中心的偏移
+    [Header("Position Offset")]
+    public Vector3 positionOffset = new Vector3(0, 0, 0); // Offset relative to the camera's center
 
-    [Header("旋转偏移（欧拉角）")]
-    public Vector3 rotationOffset = new Vector3(0, 0, 0); // 相对于摄像机旋转的附加偏移
+    [Header("Rotation Offset (Euler angles)")]
+    public Vector3 rotationOffset = new Vector3(0, 0, 0); // Additional rotation offset relative to the camera's rotation
 
-    [Header("旋转平滑时间（延迟效果）")]
-    public float rotationSmoothTime = 0.1f; // 数值越大旋转延迟越明显
+    [Header("Rotation Smooth Time (Delay Effect)")]
+    public float rotationSmoothTime = 0.1f; // Higher values create a more noticeable rotation delay
 
     void LateUpdate()
     {
         if (cameraTransform == null)
         {
-            Debug.LogWarning("摄像机引用未分配！");
+            Debug.LogWarning("Camera reference is not assigned!");
             return;
         }
 
-        // 1. 设置位置：始终以摄像机中心为基准，再加上你设定的局部偏移
+        // 1. Set the position: always based on the camera's center plus the specified local offset
         Vector3 targetPosition = cameraTransform.position + cameraTransform.TransformDirection(positionOffset);
         targetTransform.position = targetPosition;
 
-        // 2. 计算目标旋转：以摄像机的旋转为基础，再加上旋转偏移
+        // 2. Calculate the target rotation: based on the camera's rotation plus the additional rotation offset
         Quaternion targetRotation = cameraTransform.rotation * Quaternion.Euler(rotationOffset);
 
-        // 3. 使用 Slerp 平滑旋转：这样可以加一点延迟，使手部看起来更生动，同时减少抖动
+        // 3. Use Slerp for smooth rotation: adding a delay effect to make the weapon (or hands) look more natural and reduce jitter
         if (rotationSmoothTime > 0)
         {
             targetTransform.rotation = Quaternion.Slerp(targetTransform.rotation, targetRotation, Time.deltaTime / rotationSmoothTime);
