@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using Debug = FMOD.Debug;
 
 public class CustomSpreadsheetWindow : EditorWindow
 {
@@ -10,7 +11,8 @@ public class CustomSpreadsheetWindow : EditorWindow
 
     // Identifiants pour récupérer les données du Google Sheet
     public string id = "1iK0tbb5mA7bE84rOALNWjRPUHevWIe_9UdO3_IYTQSo"; // INTERDICTION DE TOUCHER
-    public string sheetName = "Bug_Report";
+    public string sheetName = "Test_Case";
+    public string[] sheetDropdown = {"Test_Case", "Bug_Report"};
     public string apiKey = "AIzaSyDx_lUzjEyCufDkxhLlN-LfXyNG0k_jIdo"; // INTERDICTION DE TOUCHER
 
     private bool canModifyKey = false; // Contrôle si l'utilisateur peut modifier l'API Key
@@ -37,8 +39,16 @@ public class CustomSpreadsheetWindow : EditorWindow
         EditorGUILayout.HelpBox("INTERDICTION DE TOUCHER A L'ID ET A L'API KEY", MessageType.Warning);
 
         // Champs de texte pour saisir l'ID et le nom de la feuille Google Sheets
+        GUI.enabled = false;
         id = EditorGUILayout.TextField("Spreadsheet ID", id);
-        sheetName = EditorGUILayout.TextField("Sheet Name", sheetName);
+        GUI.enabled = true;
+        
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.PrefixLabel("Sheet Name");
+        int sheetNameIndex = Mathf.Max(0, System.Array.IndexOf(sheetDropdown, sheetName));
+        sheetNameIndex = EditorGUILayout.Popup(sheetNameIndex, sheetDropdown);
+        sheetName = sheetDropdown[sheetNameIndex];
+        EditorGUILayout.EndHorizontal();
 
         string keyButtonText; // Texte temporaire du bouton pour modifier l'API Key
 
@@ -65,7 +75,6 @@ public class CustomSpreadsheetWindow : EditorWindow
         {
             // Passer le callback pour arrêter le chargement après la fin de la requête
             QATool.FetchSheetData(id, sheetName, apiKey);
-            Repaint(); // Force le redessin de la fenêtre
         }
 
         scrollPos = EditorGUILayout.BeginScrollView(scrollPos); // Ajoute une barre de défilement
@@ -150,6 +159,6 @@ public class CustomSpreadsheetWindow : EditorWindow
 
         EditorGUILayout.EndScrollView();
 
-        this.Repaint();
+        Repaint();
     }
 }
