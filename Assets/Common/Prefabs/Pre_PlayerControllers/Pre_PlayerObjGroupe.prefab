@@ -1263,7 +1263,7 @@ Transform:
   m_GameObject: {fileID: 3047064154156275688}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.882, z: 0}
+  m_LocalPosition: {x: 0, y: -0.882, z: 0.209}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1601,7 +1601,7 @@ Transform:
   m_GameObject: {fileID: 3801643264983334931}
   serializedVersion: 2
   m_LocalRotation: {x: 0.18165813, y: -0.030235613, z: 0.010054859, w: 0.9828454}
-  m_LocalPosition: {x: -8.8, y: 7.1, z: 0.93}
+  m_LocalPosition: {x: 4, y: 72.4, z: -26.87}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2637,6 +2637,11 @@ MonoBehaviour:
   sphereRenderer: {fileID: 7395567131331070896, guid: b7dd009ad5937e842bb74d5c37faac91, type: 3}
   Explosion_GroundPound_SpawnPoint: {fileID: 3047064154156275688}
   ExplosionParticule: {fileID: 8366783197148879030, guid: 79c09da7de2388e48a949a4bdd337a44, type: 3}
+  shockwaveMaterial: {fileID: 2100000, guid: 2ee56837e7f775d4fbb16360aa403ea5, type: 2}
+  shockwaveSpeed: 10
+  maxDistance: 20
+  intensity: 10
+  ShockWavePoint: {fileID: 0}
 --- !u!1 &5268579106117334288
 GameObject:
   m_ObjectHideFlags: 0
@@ -2667,7 +2672,7 @@ Transform:
   m_GameObject: {fileID: 5268579106117334288}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.8, y: 7.1, z: 0.93}
+  m_LocalPosition: {x: 4, y: 72.4, z: -26.87}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3460,7 +3465,7 @@ Transform:
   m_GameObject: {fileID: 6376292503174423671}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -8.8, y: 6.7, z: 0.8}
+  m_LocalPosition: {x: 4, y: 72, z: -27}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3806,14 +3811,6 @@ MonoBehaviour:
     damage: 60
     energyConsumption: 35
     dropBonus: 5
-  gunObject: {fileID: 252666729069566024}
-  recoilDistance: -0.1
-  recoilDuration: 0.1
-  resetDuration: 0.2
-  upwardRecoilMin: -0.2
-  upwardRecoilMax: -1
-  lateralRecoilMin: -0.2
-  lateralRecoilMax: 0.2
   HitMarkerPNG: {fileID: 969691688291508243}
 --- !u!114 &930943365604710939
 MonoBehaviour:
