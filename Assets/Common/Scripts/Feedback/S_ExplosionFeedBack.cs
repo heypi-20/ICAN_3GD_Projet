@@ -17,7 +17,7 @@ public class ExplosionEffect : MonoBehaviour
     public GameObject Explosion_GroundPound_SpawnPoint;
     
     [Header("ShockWave")]
-    public Material shockwaveMaterial;
+    //public Material shockwaveMaterial;
     public float shockwaveSpeed = 10f;
     public float maxDistance = 20f;
     public float intensity = 10f;
@@ -45,29 +45,20 @@ public class ExplosionEffect : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            Play(ShockWavePoint.transform.position);
-        }
         if (isPlaying)
         {
             currentDistance += Time.deltaTime * shockwaveSpeed;
 
             // Envoie les valeurs au shader
-            shockwaveMaterial.SetVector("_Shockwave_Position", ShockWavePoint.transform.position);
-            shockwaveMaterial.SetFloat("_Shockwave_Distance", currentDistance);
-            shockwaveMaterial.SetFloat("_Shockwave_Intensity", Mathf.Lerp(intensity, 0f, currentDistance / maxDistance));
+            shockwaveMat.SetVector("_Shockwave_Position", ShockWavePoint.transform.position);
+            shockwaveMat.SetFloat("_Shockwave_Distance", currentDistance);
+            shockwaveMat.SetFloat("_Shockwave_Intensity", Mathf.Lerp(intensity, 0f, currentDistance / maxDistance));
 
             // Stopper une fois terminé
             if (currentDistance >= maxDistance)
             {
                 isPlaying = false;
             }
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            float currentTime = Time.time;
-            shockwaveMat.SetFloat("_StartTime", currentTime);
         }
     }
 
@@ -95,29 +86,9 @@ public class ExplosionEffect : MonoBehaviour
     {
         if (state.Equals(PlayerStates.GroundPoundState.EndGroundPound))
         {
-            //Debug.Log("Ca devrait exploser ici");
-            //TriggerExplosion(Explosion_GroundPound_SpawnPoint.transform.position);
             SpawnParticule(Explosion_GroundPound_SpawnPoint.transform.position);
         }
     }
-    
-
-
-    private void TriggerExplosion(Vector3 impactPosition)
-    {
-        // Instancie l'explosion à la position d'impact
-        currentExplosion = Instantiate(explosionPrefab, impactPosition, Quaternion.identity);
-
-        // Récupère le MeshRenderer sur l'objet instancié
-        sphereRenderer = currentExplosion.GetComponentInChildren<MeshRenderer>();
-
-        if (sphereRenderer != null)
-        {
-            sphereMaterial = sphereRenderer.material;
-            StartCoroutine(ExplosionRoutine());
-        }
-    }
-
     private void SpawnParticule(Vector3 impactPosition)
     {
         S_GroundPound_Module groundPoundModule = FindObjectOfType<S_GroundPound_Module>();
@@ -127,44 +98,17 @@ public class ExplosionEffect : MonoBehaviour
         main.startSize = range * 4f; // Exemple : vitesse proportionnelle au range
         
         ParticleSystem newParticles = Instantiate(ExplosionParticule, impactPosition, ExplosionParticule.transform.rotation);
+        
+        float currentTime = Time.time;
+        shockwaveMat.SetFloat("_StartTime", currentTime);
+        //Vector3 center = ShockWavePoint.transform.position;
+        //Debug.Log(center);
+        //shockwaveMat.SetVector("_Center", center);
         GameObject ShockWave = Instantiate(ImpactShockWave, impactPosition, ImpactShockWave.transform.rotation);
         newParticles.Play();
-        Destroy(ShockWave, 2f);
+        Destroy(ShockWave, 0.5f);
         Destroy(newParticles.gameObject, newParticles.main.duration); // Nettoie après la durée de l'effet
     }
-    
-
-    IEnumerator ExplosionRoutine()
-    {
-        float elapsedTime = 0f;
-
-        while (elapsedTime < duration)
-        {
-            float normalizedTime = elapsedTime / duration;
-            
-            
-            S_GroundPound_Module groundPoundModule = FindObjectOfType<S_GroundPound_Module>();
-            float range = groundPoundModule.DynamicSphereRange;
-            //Debug.Log("Portée dynamique du Ground Pound : " + range);
-            // Applique la courbe de taille avec un multiplicateur
-            float scale = sizeCurve.Evaluate(normalizedTime) * range;
-            sphereRenderer.transform.localScale = Vector3.one * scale;
-
-            // Applique la transparence
-            if (sphereMaterial != null)
-            {
-                Color color = sphereMaterial.color;
-                color.a = alphaCurve.Evaluate(normalizedTime);
-                sphereMaterial.color = color;
-            }
-
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        Destroy(currentExplosion);
-    }
-    
     
     public void Play(Vector3 origin)
     {
@@ -173,7 +117,7 @@ public class ExplosionEffect : MonoBehaviour
         ShockWavePoint.transform.position = origin;
 
         // Optionnel : si le shader a un paramètre "Enabled"
-        shockwaveMaterial.SetFloat("_Shockwave_Enabled", 1f);
-        shockwaveMaterial.SetFloat("_Shockwave_Max_Distance", maxDistance);
+        shockwaveMat.SetFloat("_Shockwave_Enabled", 1f);
+        shockwaveMat.SetFloat("_Shockwave_Max_Distance", maxDistance);
     }
 }
