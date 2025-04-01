@@ -16,31 +16,38 @@ public class S_CameraFeedBack : MonoBehaviour
     public float resetDuration = 0.5f;
     public AnimationCurve dutchCurve = AnimationCurve.Linear(0, 0, 1, 1);
     public AnimationCurve resetCurve = AnimationCurve.Linear(0, 0, 1, 1);
-    
     private Coroutine _currentDutchCoroutine;
     private float _currentDutchAngle = 0f;
-    
     private Vector2 _previousInputDirection = Vector2.zero;
     
+    
+    [Header("Pitch Tilt Settings")]
+    public float maxPitchAngle = 8f;
+    public float pitchDuration = 0.3f;
+    public bool autoResetTilt = true;
+    public AnimationCurve pitchToAngleCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+    public AnimationCurve pitchToZeroCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+    
     [Header("CAC Shake")]
-    private CinemachineImpulseSource _impulseSource;
     public float CameraShakeCAC_Lvl1;
     public float CameraShakeCAC_Lvl2;
     public float CameraShakeCAC_Lvl3;
     public float CameraShakeCAC_Lvl4;
+    private CinemachineImpulseSource _impulseSource;
     
     [Header("Pillonage Shake")]
-    private float _timer_of_groundpound;
     public float CameraShakePillonage;
-    
     public float stopDuration = 0.2f;
     public int normalFPS = 60;     // FPS normal du jeu
     public int effectFPS = 24;     // FPS pendant l'effet (plus bas = plus "cinématique")
     public float duration = 0.5f;  // Durée de l'effet en secondes
-        
+    private float _timer_of_groundpound;
     private bool isActive = false;
         
-        
+   
+    private CinemachineRecomposer _recomposer;
+    private float _currentTiltAngle = 0f;
+    private Coroutine _currentTiltCoroutine;
 
     private void OnEnable()
     {
@@ -80,7 +87,9 @@ public class S_CameraFeedBack : MonoBehaviour
         if (_cinemachineVirtualCamera == null)
         {
             _cinemachineVirtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+
         }
+        _recomposer = _cinemachineVirtualCamera.GetComponent<CinemachineRecomposer>();
         _impulseSource = _cinemachineVirtualCamera.GetComponent<CinemachineImpulseSource>();
         _cinemachineInputProvider = _cinemachineVirtualCamera.GetComponent<CinemachineInputProvider>();
 
@@ -117,8 +126,72 @@ public class S_CameraFeedBack : MonoBehaviour
         {
             CameraDutch(inputDirection);
         }
+        if (inputDirection.y > 0.1f)
+            CameraTilt(-maxPitchAngle);   
+        else if (inputDirection.y < -0.1f)
+            CameraTilt(maxPitchAngle);    
+        else
+            CameraTilt(0f);   
+    }
+    
+    private void CameraTilt(float targetAngle)
+    {
+        if (_currentTiltCoroutine != null)
+            StopCoroutine(_currentTiltCoroutine);
+
+        _currentTiltCoroutine = StartCoroutine(ApplyTiltEffectWithReturn(targetAngle));
     }
 
+    private IEnumerator ApplyTiltEffectWithReturn(float targetAngle)
+    {
+        float startAngle = _currentTiltAngle;
+        float elapsedTime = 0f;
+
+        // 1. 进入倾斜
+        while (elapsedTime < pitchDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsedTime / pitchDuration);
+            float curveT = pitchToAngleCurve.Evaluate(t);
+
+            _currentTiltAngle = Mathf.Lerp(startAngle, targetAngle, curveT);
+            if (_recomposer != null)
+                _recomposer.m_Tilt = _currentTiltAngle;
+
+            yield return null;
+        }
+
+        _currentTiltAngle = targetAngle;
+
+        // 如果关闭自动回正，就结束
+        if (!autoResetTilt)
+            yield break;
+
+        // 2. 停留片刻
+        yield return new WaitForSeconds(0.05f);
+
+        // 3. 回正
+        startAngle = _currentTiltAngle;
+        elapsedTime = 0f;
+
+        while (elapsedTime < pitchDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsedTime / pitchDuration);
+            float curveT = pitchToZeroCurve.Evaluate(t);
+
+            _currentTiltAngle = Mathf.Lerp(startAngle, 0f, curveT);
+            if (_recomposer != null)
+                _recomposer.m_Tilt = _currentTiltAngle;
+
+            yield return null;
+        }
+
+        _currentTiltAngle = 0f;
+        if (_recomposer != null)
+            _recomposer.m_Tilt = 0f;
+    }
+    
     private void ReceiveMeleeAttackEvent(Enum state, int level)
     {
         if (state.Equals(PlayerStates.MeleeState.MeleeAttackHit))
