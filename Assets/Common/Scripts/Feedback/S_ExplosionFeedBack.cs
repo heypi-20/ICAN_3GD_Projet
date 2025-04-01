@@ -15,19 +15,21 @@ public class ExplosionEffect : MonoBehaviour
 
     private Material sphereMaterial;
     public GameObject Explosion_GroundPound_SpawnPoint;
-
-    public ParticleSystem ExplosionParticule;
-    private float shape_responsive;
     
     [Header("ShockWave")]
     public Material shockwaveMaterial;
     public float shockwaveSpeed = 10f;
     public float maxDistance = 20f;
     public float intensity = 10f;
+    public ParticleSystem ExplosionParticule;
+    private float shape_responsive;
 
     private float currentDistance = 0f;
     private bool isPlaying = false;
     public GameObject ShockWavePoint;
+    public Material shockwaveMat;
+    public GameObject ImpactShockWave;
+    
     
     private void OnEnable()
     {
@@ -61,6 +63,11 @@ public class ExplosionEffect : MonoBehaviour
             {
                 isPlaying = false;
             }
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            float currentTime = Time.time;
+            shockwaveMat.SetFloat("_StartTime", currentTime);
         }
     }
 
@@ -120,7 +127,9 @@ public class ExplosionEffect : MonoBehaviour
         main.startSize = range * 4f; // Exemple : vitesse proportionnelle au range
         
         ParticleSystem newParticles = Instantiate(ExplosionParticule, impactPosition, ExplosionParticule.transform.rotation);
+        GameObject ShockWave = Instantiate(ImpactShockWave, impactPosition, ImpactShockWave.transform.rotation);
         newParticles.Play();
+        Destroy(ShockWave, 2f);
         Destroy(newParticles.gameObject, newParticles.main.duration); // Nettoie après la durée de l'effet
     }
     
