@@ -6,7 +6,7 @@ public class Bug_Report : EditorWindow
     private int spaceValue = 5;
     
     // Définition des options pour chaque dropdown
-    public string[] categoryOptions = { "Assets - Art", "Level Design", "Script", "SFX", "VFX", "Performance", "Game Design" };
+    public string[] categoryOptions = { "Assets - Art", "Level Design", "Script", "SFX", "VFX", "Performance", "Game Design", "UI", "Camera" };
     public string[] severityOptions = { "A - Critique", "B - Majeur", "C - Mineur", "D - Trivial" };
     public string[] reproductibilityOptions = { "100% - Always", " 75% - Very Often", "50% - Often", "25% Sometimes", "<25% Randomly, Once" };
 
