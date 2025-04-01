@@ -100,7 +100,7 @@ public class S_CameraFeedBack : MonoBehaviour
     
     private void FixedUpdate()
     {
-        _timer_of_groundpound = _timer_of_groundpound + Time.deltaTime;
+        _timer_of_groundpound += Time.deltaTime;
     }
     
     
