@@ -10,34 +10,42 @@ public class S_PlayerAnimator : MonoBehaviour
     public Transform handTransform; // The transform of the FPS character's hand/weapon
     public Animator handAnimator;
 
-
     [Header("Jump Animation Settings")]
     public float jumpOffsetY = -0.2f; // Downward offset when jumping
     public float jumpOffsetZ = 0.1f;  // Forward offset when jumping
-    public float jumpDropTime = 0.05f; // Time for hand to drop quickly
-    public float jumpReturnTime = 0.3f; // Time for hand to slowly return to normal
+    public float jumpDropTime = 0.05f; // Time for the hand to drop quickly
+    public float jumpReturnTime = 0.3f; // Time for the hand to slowly return
 
     [Header("Landing Animation Settings")]
-    public float landOffsetY = 0.1f; // Upward bounce when landing
-    public float landBounceTime = 0.05f; // Time for quick upward motion
-    public float landReturnTime = 0.15f; // Time to smoothly return to normal
+    // These values are defaults; actual values can be adjusted dynamically based on air time
+    public float landBounceTime = 0.05f; // Quick upward bounce time
+    public float landReturnTime = 0.15f; // Smooth return time to default position
 
     [Header("Movement Swing Settings")]
-    public Vector3 swingAmplitude = new Vector3(0.05f, 0.05f, 0f); // Amplitude of hand swing when moving
-    public float swingDuration = 0.5f; // Duration for half swing cycle
+    public Vector3 swingAmplitude = new Vector3(0.05f, 0.05f, 0f); // Swing amplitude when moving
+    public float swingDuration = 0.5f; // Duration for half a swing cycle
     public Ease swingEase = Ease.InOutSine; // Ease type for natural acceleration and deceleration
 
-    private Vector3 defaultHandPosition; // The default local position of the hand
-    private Tween moveSwingTween; // Tween for movement hand swing animation
-    private Tween jumpTween;      // Tween for jump hand animation
+    [Header("Air Time Landing Settings")]
+    public float minAirTimeForLandingAnimation = 0.3f; // Minimum air time to trigger landing animation
+    public float landMinOffsetY = 0.1f; // Minimum upward offset for landing animation
+    public float landMaxOffsetY = 0.3f; // Maximum upward offset for landing animation
+    public float maxAirTimeForMaxLanding = 1.0f; // Air time above which maximum offset is used
+
+    private Vector3 defaultHandPosition; // Default local position of the hand
+    private Tween moveSwingTween; // Tween for the hand swing animation during movement
+    private Tween jumpTween;      // Tween for the jump hand animation
 
     private int skillLayerIndex;
 
     // Reference to the custom character controller for ground checking
     private S_CustomCharacterController characterController;
 
-    // Boolean to track if the player is currently moving
+    // Flag to track if the player is currently moving
     private bool isMoving = false;
+
+    // Used to record the time when the player goes airborne
+    private float airStartTime = 0f;
 
     private void Start()
     {
@@ -56,8 +64,8 @@ public class S_PlayerAnimator : MonoBehaviour
 
     private void Update()
     {
-        // When the player is moving, check if they're grounded.
-        // If not, pause the hand swing tween; if yes and the tween is paused, resume it.
+        // When the player is moving, check if they are grounded.
+        // If not, pause the hand swing tween; if grounded and paused, resume it.
         if (isMoving && characterController != null)
         {
             bool grounded = characterController.GroundCheck();
@@ -83,7 +91,7 @@ public class S_PlayerAnimator : MonoBehaviour
     {
         switch (moveState)
         {
-            case PlayerStates.MoveState.StartMoving:
+            case PlayerStates.MoveState.StartMoving when moveSwingTween == null:
                 isMoving = true;
                 StartHandSwing();
                 break;
@@ -94,27 +102,27 @@ public class S_PlayerAnimator : MonoBehaviour
         }
     }
 
-    // Start hand swing animation using DOTween's Yoyo loop
+    // Start the hand swing animation (using DOTween's Yoyo loop)
     private void StartHandSwing()
     {
-        // Only start the hand swing if the player is grounded
+        // Only start the swing if the player is grounded
         if (characterController != null && !characterController.GroundCheck())
         {
             return;
         }
-        // Kill existing move swing tween if active to avoid duplicates
+        // Kill any existing tween to avoid duplicates
         if (moveSwingTween != null && moveSwingTween.IsActive())
         {
             moveSwingTween.Kill();
         }
-        // Create a looping tween that moves the hand to an offset position and back to default
+        // Create a looping tween that moves the hand from default to an offset position and back
         moveSwingTween = handTransform.DOLocalMove(defaultHandPosition + swingAmplitude, swingDuration)
             .SetEase(swingEase)
             .SetLoops(-1, LoopType.Yoyo)
             .SetId("MoveSwingTween");
     }
 
-    // Stop hand swing animation and smoothly return the hand to its default position
+    // Stop the hand swing animation and smoothly return the hand to its default position
     private void StopHandSwing()
     {
         if (moveSwingTween != null)
@@ -159,18 +167,36 @@ public class S_PlayerAnimator : MonoBehaviour
         }
     }
 
+    // Modified jump state handling with an additional OnAir state
     private void HandleJumpState(Enum JumpState)
     {
         switch (JumpState)
         {
             case PlayerStates.JumpState.Jump:
+                // Record the time when the player goes airborne
                 handAnimator.SetLayerWeight(skillLayerIndex, 1f);
                 handAnimator.Play("UseRune", skillLayerIndex, 0f);
                 JumpHandAnimation();
                 break;
+            case PlayerStates.JumpState.OnAir:
+                airStartTime = Time.time;
+                break;
             case PlayerStates.JumpState.OnGround:
+                // Calculate the air duration
+                float airDuration = Time.time - airStartTime;
                 handAnimator.SetLayerWeight(skillLayerIndex, 0f);
-                ResetHandPositionWhenLanding();
+                if (airDuration >= minAirTimeForLandingAnimation)
+                {
+                    // Interpolate between the minimum and maximum landing offset based on air time
+                    float t = Mathf.Clamp01((airDuration - minAirTimeForLandingAnimation) / (maxAirTimeForMaxLanding - minAirTimeForLandingAnimation));
+                    float adjustedLandingOffsetY = Mathf.Lerp(landMinOffsetY, landMaxOffsetY, t);
+                    ResetHandPositionWhenLanding(adjustedLandingOffsetY);
+                }
+                else
+                {
+                    // If air time is too short, simply reset the hand position
+                    handTransform.DOLocalMove(defaultHandPosition, 0.2f).SetEase(Ease.OutQuad);
+                }
                 break;
         }
     }
@@ -191,10 +217,10 @@ public class S_PlayerAnimator : MonoBehaviour
         }
     }
 
-    // Hand animation for jump event
+    // Jump animation sequence remains unchanged
     private void JumpHandAnimation()
     {
-        // Pause the move swing tween if active to avoid conflicts
+        // Pause the movement swing tween to avoid conflicts
         if (moveSwingTween != null && moveSwingTween.IsActive())
         {
             moveSwingTween.Pause();
@@ -209,7 +235,7 @@ public class S_PlayerAnimator : MonoBehaviour
                 .SetId("JumpTween"))
             .OnComplete(() =>
             {
-                // Resume the move swing tween after jump if the player is grounded
+                // Resume the movement swing tween if the player is grounded
                 if (characterController != null && characterController.GroundCheck() && moveSwingTween != null)
                 {
                     moveSwingTween.Play();
@@ -217,16 +243,17 @@ public class S_PlayerAnimator : MonoBehaviour
             });
     }
 
-    // Hand animation for landing event
-    private void ResetHandPositionWhenLanding()
+    // Modified landing animation method that takes the landing offset as a parameter
+    private void ResetHandPositionWhenLanding(float landingOffsetY)
     {
-        // Pause the move swing tween if active to avoid conflicts
+        // Pause the movement swing tween to avoid conflicts
         if (moveSwingTween != null && moveSwingTween.IsActive())
         {
             moveSwingTween.Pause();
         }
+    
         Tween landTween = DOTween.Sequence()
-            .Append(handTransform.DOLocalMove(defaultHandPosition + new Vector3(0, landOffsetY, 0), landBounceTime)
+            .Append(handTransform.DOLocalMove(defaultHandPosition + new Vector3(0, landingOffsetY, 0), landBounceTime)
                 .SetEase(Ease.OutQuad)
                 .SetId("LandTween"))
             .Append(handTransform.DOLocalMove(defaultHandPosition, landReturnTime)
@@ -234,10 +261,17 @@ public class S_PlayerAnimator : MonoBehaviour
                 .SetId("LandTween"))
             .OnComplete(() =>
             {
-                // Resume the move swing tween after landing if the player is grounded
-                if (characterController != null && characterController.GroundCheck() && moveSwingTween != null)
+                // Explicitly reset the hand position to default
+                handTransform.localPosition = defaultHandPosition;
+                // Restart the movement swing tween if the player is grounded and still moving
+                if (characterController != null && characterController.GroundCheck() && isMoving)
                 {
-                    moveSwingTween.Play();
+                    if (moveSwingTween != null)
+                    {
+                        moveSwingTween.Kill();
+                        moveSwingTween = null;
+                    }
+                    StartHandSwing();
                 }
             });
     }

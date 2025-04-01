@@ -94,7 +94,7 @@ public class S_CustomCharacterController : MonoBehaviour
         }
 
         // Check if the player stops moving
-        if (isMovingUseForEvent && currentDirection.magnitude <= 0.1f)
+        if (isMovingUseForEvent && currentDirection.magnitude <= 0.1f&&currentSpeed<=0.1f)
         {
             isMovingUseForEvent = false;
             _previousDirection = Vector2.zero; // Reset direction

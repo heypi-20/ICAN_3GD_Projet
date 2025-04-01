@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 252666729069566024}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.04, y: 1.33, z: 2.09}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -75,6 +75,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2277451041917407508}
   - component: {fileID: 8468726159868678534}
+  - component: {fileID: 3086604881041763639}
   m_Layer: 0
   m_Name: ArmUseForOffsetMove
   m_TagString: Untagged
@@ -90,14 +91,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 385763982098542670}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3, y: -2.4, z: -0.605}
+  m_LocalRotation: {x: -0.026176924, y: 0, z: 0, w: 0.99965733}
+  m_LocalPosition: {x: 0, y: -1.18, z: 1.27}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2561033837388079682}
   m_Father: {fileID: 1110773156157768034}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -3, y: 0, z: 0}
 --- !u!95 &8468726159868678534
 Animator:
   serializedVersion: 5
@@ -119,6 +120,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3086604881041763639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 385763982098542670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04fdb314ed23cf64db975de947308ba2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  positionLerpSpeed: 15
+  rotationLerpSpeed: 5
+  rotationFactor: 0.02
+  positionFactor: 0.02
 --- !u!1 &390903583512645107
 GameObject:
   m_ObjectHideFlags: 0
@@ -496,6 +513,9 @@ MonoBehaviour:
   distanceFromCamera: 0
   positionOffset: {x: 0, y: 0, z: 0}
   rotationOffset: {x: 0, y: 0, z: 0}
+  useDelayFollow: 0
+  followDelay: 0.1
+  rotationDelay: 0.1
 --- !u!1 &1499196084995585080
 GameObject:
   m_ObjectHideFlags: 0
@@ -1755,7 +1775,7 @@ MonoBehaviour:
     m_AmplitudeGain: 1
     m_FrequencyGain: 1
     m_Duration: 1
-    m_NoiseOffsets: {x: 0, y: 0, z: 0}
+    m_NoiseOffsets: {x: -227.63025, y: 108.46887, z: -594.42664}
 --- !u!1 &3852501314010957507
 GameObject:
   m_ObjectHideFlags: 0
@@ -2556,7 +2576,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1638474744326144611
 Transform:
   m_ObjectHideFlags: 0
@@ -2637,6 +2657,11 @@ MonoBehaviour:
   sphereRenderer: {fileID: 7395567131331070896, guid: b7dd009ad5937e842bb74d5c37faac91, type: 3}
   Explosion_GroundPound_SpawnPoint: {fileID: 3047064154156275688}
   ExplosionParticule: {fileID: 8366783197148879030, guid: 79c09da7de2388e48a949a4bdd337a44, type: 3}
+  shockwaveMaterial: {fileID: 0}
+  shockwaveSpeed: 10
+  maxDistance: 20
+  intensity: 10
+  ShockWavePoint: {fileID: 0}
 --- !u!1 &5268579106117334288
 GameObject:
   m_ObjectHideFlags: 0
@@ -2851,7 +2876,7 @@ Transform:
   m_GameObject: {fileID: 5328715477122232146}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0, y: -0, z: 20.77}
+  m_LocalPosition: {x: -0, y: -0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2963,7 +2988,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6446541353025446380}
   - component: {fileID: 3596900757883356927}
-  - component: {fileID: 4243530292932863724}
   m_Layer: 0
   m_Name: CameraFeedBack
   m_TagString: Untagged
@@ -3059,23 +3083,6 @@ MonoBehaviour:
   normalFPS: 60
   effectFPS: 10
   duration: 0.1
---- !u!114 &4243530292932863724
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5655932433684130944}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04fdb314ed23cf64db975de947308ba2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraTransform: {fileID: 1110773156157768034}
-  targetTransform: {fileID: 2277451041917407508}
-  positionOffset: {x: -3.04, y: -2.27, z: -0.92}
-  rotationOffset: {x: 0, y: 0, z: 0}
-  rotationSmoothTime: 0.01
 --- !u!1 &5770904950431112481
 GameObject:
   m_ObjectHideFlags: 0
@@ -3156,6 +3163,9 @@ MonoBehaviour:
   distanceFromCamera: 1
   positionOffset: {x: 0, y: 0, z: 0}
   rotationOffset: {x: 0, y: 0, z: 0}
+  useDelayFollow: 0
+  followDelay: 0.1
+  rotationDelay: 0.1
 --- !u!1 &5961853690422697129
 GameObject:
   m_ObjectHideFlags: 0
@@ -3777,14 +3787,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shootPoint: {fileID: 6187556473507325879}
   spawnBulletPoint: {fileID: 7881909655561821250}
-  bulletPrefab: {fileID: 8035359663063458905, guid: 7acf3d0d4a031df4ca25c0befa349358, type: 3}
+  bulletPrefab: {fileID: 7506147881936542410, guid: ff1c27561dbbb5b41bb84f33b281fcb8, type: 3}
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 65
   raycastLength: 500
   raycastSpread: 0.5
   simulateBulletSpeed: 0
-  bulletSpeed: 200
+  bulletSpeed: 120
   fireRateLevels:
   - level: 1
     fireRate: 4
@@ -3806,14 +3816,6 @@ MonoBehaviour:
     damage: 60
     energyConsumption: 35
     dropBonus: 5
-  gunObject: {fileID: 252666729069566024}
-  recoilDistance: -0.1
-  recoilDuration: 0.1
-  resetDuration: 0.2
-  upwardRecoilMin: -0.2
-  upwardRecoilMax: -1
-  lateralRecoilMin: -0.2
-  lateralRecoilMax: 0.2
   HitMarkerPNG: {fileID: 969691688291508243}
 --- !u!114 &930943365604710939
 MonoBehaviour:
@@ -4633,9 +4635,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 4750812657611663464}
-  distanceFromCamera: 1
-  positionOffset: {x: 0.38, y: -0.25, z: 0}
+  distanceFromCamera: 2.5
+  positionOffset: {x: 0.5, y: -0.25, z: 0}
   rotationOffset: {x: 0, y: 0, z: 0}
+  useDelayFollow: 0
+  followDelay: 0.1
+  rotationDelay: 0.1
 --- !u!1 &7880079876113927353
 GameObject:
   m_ObjectHideFlags: 0

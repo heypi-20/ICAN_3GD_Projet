@@ -12,6 +12,11 @@ public class S_GunFollowCamera : MonoBehaviour
     public Vector3 positionOffset = Vector3.zero; // Positional offset relative to the calculated position
     public Vector3 rotationOffset = Vector3.zero; // Rotational offset relative to the camera
 
+    [Header("Delay Follow Options")]
+    public bool useDelayFollow = false; // Toggle to enable/disable delayed following
+    public float followDelay = 0.1f; // Delay time for position smoothing (set a small value for subtle effect)
+    public float rotationDelay = 0.1f; // Delay time for rotation smoothing
+
     private void LateUpdate()
     {
         AlignWithCameraCenter();
@@ -29,14 +34,24 @@ public class S_GunFollowCamera : MonoBehaviour
         Vector3 centerPoint = mainCamera.transform.position + mainCamera.transform.forward * distanceFromCamera;
 
         // Apply the positional offset
-        Vector3 finalPosition = centerPoint + mainCamera.transform.right * positionOffset.x
-                                            + mainCamera.transform.up * positionOffset.y
-                                            + mainCamera.transform.forward * positionOffset.z;
+        Vector3 targetPosition = centerPoint + mainCamera.transform.right * positionOffset.x
+                                               + mainCamera.transform.up * positionOffset.y
+                                               + mainCamera.transform.forward * positionOffset.z;
 
-        // Align the position of the object to the calculated center point with the offset
-        transform.position = finalPosition;
+        // Calculate the target rotation based on the camera rotation and additional offset
+        Quaternion targetRotation = mainCamera.transform.rotation * Quaternion.Euler(rotationOffset);
 
-        // Align the rotation of the object to match the camera's rotation, with an optional offset
-        transform.rotation = mainCamera.transform.rotation * Quaternion.Euler(rotationOffset);
+        if (useDelayFollow)
+        {
+            // Smoothly transition to the target position and rotation
+            transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime / followDelay);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime / rotationDelay);
+        }
+        else
+        {
+            // Directly assign the calculated position and rotation
+            transform.position = targetPosition;
+            transform.rotation = targetRotation;
+        }
     }
 }
