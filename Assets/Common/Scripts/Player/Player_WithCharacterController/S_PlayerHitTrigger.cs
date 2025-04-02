@@ -67,7 +67,6 @@ public class S_PlayerHitTrigger : MonoBehaviour
 
         if (enemy != null)
         {
-            AnimateVignetteEffect();
             Rigidbody enemyrb = enemy.gameObject.GetComponent<Rigidbody>();
             if (enemyrb != null)
             {
@@ -75,13 +74,20 @@ public class S_PlayerHitTrigger : MonoBehaviour
                 pushDirection.Normalize();
                 enemyrb.AddForce(pushDirection * pushForce, ForceMode.Impulse);
             }
-            _energyStorage.RemoveEnergy(enemy.enemyDamage);
+            ReceiveDamage(enemy.enemyDamage);
         }
         else if (projectile != null)
         {
             AnimateVignetteEffect();
             _energyStorage.RemoveEnergy(projectile.damage);
         }
+    }
+
+    public void ReceiveDamage(float damage)
+    {
+        AnimateVignetteEffect();
+        _energyStorage.RemoveEnergy(damage);
+
     }
 
 
