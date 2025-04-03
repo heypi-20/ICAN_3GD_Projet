@@ -258,7 +258,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &209335293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,7 +322,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &337386881
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349,6 +349,7 @@ MonoBehaviour:
   idleTime: 1
   minDist: 5
   maxDist: 5
+  elevationRange: 3
   chaseRange: 10
   stoppingRange: 0.5
 --- !u!195 &337386882
@@ -382,7 +383,7 @@ Transform:
   m_GameObject: {fileID: 337386880}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.9, z: 0}
+  m_LocalPosition: {x: 0, y: 0.9, z: 9.96}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -561,7 +562,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 909150334}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b8e56040794c0914e84ca85088ee48ce, type: 3}
   m_Name: 
@@ -863,7 +864,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1664733295
 Transform:
   m_ObjectHideFlags: 0
@@ -967,32 +968,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87ba83fc416216045abb3918f8ee6faa, type: 3}
---- !u!1 &2146052021 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7863619899726797280, guid: 372e2d5281005fc49848f81c06e705a9, type: 3}
-  m_PrefabInstance: {fileID: 3497238292877478882}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &2146052025
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2146052021}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1706345149127688303
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1106,21 +1081,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TPShooter V2
       objectReference: {fileID: 0}
-    - target: {fileID: 4897929555399485672, guid: 372e2d5281005fc49848f81c06e705a9, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5678420582889814344, guid: 372e2d5281005fc49848f81c06e705a9, type: 3}
-      propertyPath: WeakPoint
-      value: 
-      objectReference: {fileID: 2146052021}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7863619899726797280, guid: 372e2d5281005fc49848f81c06e705a9, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2146052025}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 372e2d5281005fc49848f81c06e705a9, type: 3}
 --- !u!1001 &6039361324913547207
 PrefabInstance:

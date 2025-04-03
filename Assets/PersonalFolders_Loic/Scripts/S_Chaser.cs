@@ -17,7 +17,7 @@ public class S_Chaser : EnemyBase
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-
+        
         findPlayer = FindObjectOfType<S_CustomCharacterController>();
         if (findPlayer == null) {
             Debug.LogWarning("No Character Controller");

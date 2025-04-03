@@ -18,6 +18,7 @@ public class S_TPShooter : EnemyBase
     [Header("Shoot Properties")]
     public float range;
     public Transform shootPoint;
+    public float chargeTime;
     public float shootDelay;
     
     [Header("Enemy Components")]
@@ -31,7 +32,6 @@ public class S_TPShooter : EnemyBase
     private float shootTimer;
     private float lerpTimer;
     
-    private bool canShoot = true;
     private bool isCharging;
     private bool laserCharged = false;
 
@@ -66,14 +66,16 @@ public class S_TPShooter : EnemyBase
 
         if (teleportTimer >= teleportCd) {
             Teleport();
-            canShoot = true;
             teleportTimer = 0;
         }
         
         float dist = Vector3.Distance(transform.position, player.position);
 
         if (dist < range) {
-            transform.LookAt(player.position);
+            if (!Physics.Raycast(transform.position, player.position - transform.position, out hit, range))
+                return;
+            if (!isCharging)
+                transform.LookAt(hit.point);
             LaserAim();
         } else {
             lr.SetPosition(1, shootPoint.position);
@@ -95,7 +97,7 @@ public class S_TPShooter : EnemyBase
                      .OnComplete(() =>
                      {
                          agent.enabled = true;
-                         agent.SetDestination(navMeshHit.position);
+                         // agent.SetDestination(navMeshHit.position);
                      });
         
             Vector3 targetScale = new Vector3(1.1f, 1.5f, 1.1f); // Augmenter légèrement la taille
@@ -108,42 +110,43 @@ public class S_TPShooter : EnemyBase
     
     private void LaserAim()
     {
-        if (Physics.Raycast(transform.position, transform.forward, out hit, range)) {
-            if (hit.collider) {
-                if (!laserCharged) {
+        if (!laserCharged) {
+            if (hit.collider.CompareTag("Player")) {
+                if (!isCharging) {
+                    isCharging = true;
+                    StartCoroutine(Shoot());
+                } else if (!laserCharged && isCharging) {
                     lr.SetPosition(1, hit.point);
                     lr.endWidth = Mathf.Min(lr.endWidth + 0.001f, 0.2f);
-                    
+                    transform.LookAt(lr.GetPosition(1));    
+
                     lerpTimer += Time.deltaTime;
                     Color chargedColor = Color.red;
-                    Color lerpColor = Color.Lerp(new Color(1f, 0.36f, 0f), chargedColor, Mathf.PingPong(lerpTimer, 1));
+                    Color lerpColor = Color.Lerp(new Color(1f, 0.36f, 0f), chargedColor, Mathf.Clamp(lerpTimer, 0f , 1f));
                     lr.startColor = lerpColor;
                     lr.endColor = lerpColor;
                 }
-                if (!canShoot)
-                    return;
-                if (!isCharging) {
-                    isCharging = true;
-                    StartCoroutine(Shoot(shootDelay));
+            } else {
+                lr.SetPosition(1, hit.point);
+                if (lerpTimer > 0f) {
+                    lerpTimer = 0f;
                 }
-            }
-        } else {
-            lr.SetPosition(1, transform.position + transform.forward * range);
+            } 
         }
     }
 
-    IEnumerator Shoot(float delay)
+    IEnumerator Shoot()
     {
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(chargeTime);
         laserCharged = true;
-        yield return new WaitForSeconds(delay/2f);
         
-        if (Physics.Raycast(transform.position, transform.forward, out hit, range)) {
-            if (hit.collider && hit.collider.CompareTag("Player")) {
-                hit.collider.GetComponent<S_EnergyStorage>().RemoveEnergy(enemyDamage);
+        yield return new WaitForSeconds(shootDelay);
+        if (Physics.Raycast(transform.position, lr.transform.forward, out hit, range) && laserCharged) {
+            if (hit.collider.CompareTag("Player")) {
+                Debug.Log("Damaging player");
+                hit.collider.GetComponent<S_PlayerHitTrigger>().ReceiveDamage(enemyDamage);
             }
         }
-        
         lr.startColor = new Color(1f, 0.36f, 0f);
         lr.endColor = new Color(1f, 0.36f, 0f);
         lr.endWidth = 0.05f;
