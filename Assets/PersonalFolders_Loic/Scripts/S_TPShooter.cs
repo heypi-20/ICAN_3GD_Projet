@@ -31,7 +31,8 @@ public class S_TPShooter : EnemyBase
     private float teleportTimer;
     private float shootTimer;
     private float lerpTimer;
-    
+
+    private bool canShoot;
     private bool isCharging;
     private bool laserCharged = false;
 
@@ -74,9 +75,10 @@ public class S_TPShooter : EnemyBase
         if (dist < range) {
             if (!Physics.Raycast(transform.position, player.position - transform.position, out hit, range))
                 return;
-            if (!isCharging)
+            if (!isCharging && canShoot)
                 transform.LookAt(hit.point);
-            LaserAim();
+            if (canShoot)
+                LaserAim();
         } else {
             lr.SetPosition(1, shootPoint.position);
         }
@@ -96,6 +98,7 @@ public class S_TPShooter : EnemyBase
                      .SetEase(Ease.InOutQuad)
                      .OnComplete(() =>
                      {
+                         canShoot = true;
                          agent.enabled = true;
                          // agent.SetDestination(navMeshHit.position);
                      });
@@ -115,6 +118,9 @@ public class S_TPShooter : EnemyBase
                 if (!isCharging) {
                     isCharging = true;
                     StartCoroutine(Shoot());
+                    if (lerpTimer > 0f) {
+                        lerpTimer = 0f;
+                    }
                 } else if (!laserCharged && isCharging) {
                     lr.SetPosition(1, hit.point);
                     lr.endWidth = Mathf.Min(lr.endWidth + 0.001f, 0.2f);
@@ -127,7 +133,7 @@ public class S_TPShooter : EnemyBase
                     lr.endColor = lerpColor;
                 }
             } else {
-                lr.SetPosition(1, hit.point);
+                lr.SetPosition(1, shootPoint.position + transform.forward * range);
                 if (lerpTimer > 0f) {
                     lerpTimer = 0f;
                 }
@@ -153,6 +159,7 @@ public class S_TPShooter : EnemyBase
         laserCharged = false;
         isCharging = false;
         lerpTimer = 0;
+        canShoot = false;
     }
 }
 
