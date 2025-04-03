@@ -10,6 +10,7 @@ public class S_Banshee : EnemyBase
     public float idleTime = 2f;
     public float minDist = 5f;
     public float maxDist = 5f;
+    public float elevationRange = 3f;
     public float chaseRange = 10f;
     public float stoppingRange = 0.5f;
     
@@ -20,10 +21,11 @@ public class S_Banshee : EnemyBase
     private Transform player;
         
     private float idleTimer;
-    private bool getNewPos;
+    private bool getNewPos = true;
     private float randX;
     private float randY;
     private float randZ;
+    private float desiredY;
     
     private void Start()
     {
@@ -38,53 +40,47 @@ public class S_Banshee : EnemyBase
         if (findPlayer == null) {
             Debug.LogWarning("No Character Controller");
         }
+
+        findBody.position = new Vector3(transform.position.x, 10f, transform.position.z);
     }
 
     private void Update()
     {
         player = findPlayer.transform;
-        
-        Vector3 effectiveEnemyPos = transform.position + findBody.localPosition;
 
-        Vector3 effectiveXZ = new Vector3(effectiveEnemyPos.x, 0, effectiveEnemyPos.z);
-        Vector3 playerXZ = new Vector3(player.position.x, 0, player.position.z);
-
-        float dist = Vector3.Distance(effectiveXZ, playerXZ);
+        float dist = Vector3.Distance(findBody.position, player.position);
 
         if (dist < chaseRange) {
-            getNewPos = true;
             idleTimer = 0f;
             Chase();
         } else {
-            getNewPos = true;
             Idle();
         }
     }
 
     private void Idle()
     {
-        idleTimer += Time.deltaTime;
-    
-        if (getNewPos)
-        {
+        if (!getNewPos)
+            idleTimer += Time.deltaTime;
+        else if (getNewPos) {
             randX = Random.Range(-minDist, maxDist);
-            randY = Random.Range(-minDist, maxDist);
+            randY = Random.Range(-elevationRange, elevationRange);
             randZ = Random.Range(-minDist, maxDist);
-        
+            
             Vector3 targetPosition = new Vector3(transform.position.x + randX, transform.position.y, transform.position.z + randZ);
             agent.SetDestination(targetPosition);
+            
+            desiredY = findBody.localPosition.y + randY;
             getNewPos = false;
         }
-
-        float desiredLocalY = randY;
+        
         findBody.localPosition = new Vector3(
-            findBody.localPosition.x,
-            Mathf.Lerp(findBody.localPosition.y, desiredLocalY, Time.deltaTime * agent.speed),
-            findBody.localPosition.z
+            0f,
+            Mathf.Lerp(findBody.localPosition.y, desiredY, Time.deltaTime * (agent.speed/2f)),
+            0f
         );
     
-        if (idleTimer >= idleTime)
-        {
+        if (idleTimer >= idleTime) {
             getNewPos = true;
             idleTimer = 0f;
         }
@@ -92,17 +88,20 @@ public class S_Banshee : EnemyBase
 
     private void Chase()
     {
+        if (Vector3.Distance(player.position, findBody.position) < stoppingRange) {
+            Attack();
+        }
+        
         Vector3 playerXZ = new Vector3(player.position.x, transform.position.y, player.position.z);
         agent.SetDestination(playerXZ);
 
-        float desiredLocalY = player.position.y - transform.position.y;
+        float desiredLocalY = player.position.y - findBody.localPosition.y;
         findBody.localPosition = new Vector3(
-            findBody.localPosition.x,
+            0f,
             Mathf.Lerp(findBody.localPosition.y, desiredLocalY, Time.deltaTime * agent.speed),
-            findBody.localPosition.z
+            0f
         );
     }
-
 
     private void Attack()
     {

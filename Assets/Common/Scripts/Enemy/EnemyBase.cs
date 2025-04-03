@@ -47,8 +47,6 @@ public class EnemyBase : MonoBehaviour
             }
         }
     }
-    
-
 
     public void ReduceHealth(float amount,int DropBonus)
     {
