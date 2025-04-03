@@ -26,11 +26,11 @@ public class EnemyBase : MonoBehaviour
 
     private void OnEnable()
     {
-        findWeakPoint();
+        FindWeakPoint();
         currentHealth = health;
     }
 
-    private void findWeakPoint()
+    private void FindWeakPoint()
     {
         if (WeakPoint == null)
         {

@@ -33,6 +33,7 @@ public class S_Banshee : EnemyBase
         findBody = transform.GetChild(0);
 
         if (findBody.name != "Body") {
+            Debug.LogWarning("The body object should be named 'Body' and the 1st child in the hierarchy.");
             return;
         }
         
