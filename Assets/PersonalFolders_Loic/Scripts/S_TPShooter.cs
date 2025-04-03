@@ -50,8 +50,8 @@ public class S_TPShooter : EnemyBase
         
         lr = GetComponent<LineRenderer>();
         
-        lr.startColor = new Color(1f, 0.36f, 0f);
-        lr.endColor = new Color(1f, 0.36f, 0f);
+        lr.startColor = new Color(0.04f, 0.45f, 1f);
+        lr.endColor = new Color(0.04f, 0.45f, 1f);
         lr.startWidth = 0.05f;
         lr.endWidth = 0.05f;
         lr.SetPosition(1, shootPoint.position);
@@ -128,7 +128,7 @@ public class S_TPShooter : EnemyBase
 
                     lerpTimer += Time.deltaTime;
                     Color chargedColor = Color.red;
-                    Color lerpColor = Color.Lerp(new Color(1f, 0.36f, 0f), chargedColor, Mathf.Clamp(lerpTimer, 0f , 1f));
+                    Color lerpColor = Color.Lerp(new Color(0.04f, 0.45f, 1f), chargedColor, Mathf.Clamp(lerpTimer, 0f , 1f));
                     lr.startColor = lerpColor;
                     lr.endColor = lerpColor;
                 }
@@ -153,9 +153,11 @@ public class S_TPShooter : EnemyBase
                 hit.collider.GetComponent<S_PlayerHitTrigger>().ReceiveDamage(enemyDamage);
             }
         }
-        lr.startColor = new Color(1f, 0.36f, 0f);
-        lr.endColor = new Color(1f, 0.36f, 0f);
+        lr.startColor = new Color(0.04f, 0.45f, 1f);
+        lr.endColor = new Color(0.04f, 0.45f, 1f);
         lr.endWidth = 0.05f;
+        lr.SetPosition(1, shootPoint.position);
+        
         laserCharged = false;
         isCharging = false;
         lerpTimer = 0;
