@@ -149,7 +149,6 @@ public class S_TPShooter : EnemyBase
         yield return new WaitForSeconds(shootDelay);
         if (Physics.Raycast(transform.position, lr.transform.forward, out hit, range) && laserCharged) {
             if (hit.collider.CompareTag("Player")) {
-                Debug.Log("Damaging player");
                 hit.collider.GetComponent<S_PlayerHitTrigger>().ReceiveDamage(enemyDamage);
             }
         }
