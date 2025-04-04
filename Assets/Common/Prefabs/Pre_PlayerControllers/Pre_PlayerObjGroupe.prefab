@@ -2684,7 +2684,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 3.454, z: 1.803}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8728408009053761971}
@@ -2701,64 +2701,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d65c22ee799eaf747a6ce554a12695ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosionPrefab: {fileID: 367880103839936670, guid: b7dd009ad5937e842bb74d5c37faac91, type: 3}
-  sizeCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  alphaCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0.0041656494
-      value: 1.0023499
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1.022583
-      value: 0.022197723
-      inSlope: 0.0006230351
-      outSlope: 0.0006230351
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 1
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  duration: 1.5
-  sphereRenderer: {fileID: 7395567131331070896, guid: b7dd009ad5937e842bb74d5c37faac91, type: 3}
-  Explosion_GroundPound_SpawnPoint: {fileID: 3047064154156275688}
-  shockwaveSpeed: 10
-  maxDistance: 20
-  intensity: 10
-  ExplosionParticule: {fileID: 8366783197148879030, guid: 79c09da7de2388e48a949a4bdd337a44, type: 3}
+  OndeParticule: {fileID: 8366783197148879030, guid: 79c09da7de2388e48a949a4bdd337a44, type: 3}
   ShockWavePoint: {fileID: 3047064154156275688}
-  shockwaveMat: {fileID: 2100000, guid: 951ceb54e9db4f04e8375a0ab11cd375, type: 2}
   ImpactShockWave: {fileID: 1126947036174708035, guid: 2770428620af1a84b9c0565aa7940fef, type: 3}
 --- !u!1 &5268579106117334288
 GameObject:
@@ -3227,17 +3171,17 @@ MonoBehaviour:
   CameraShakeCAC_Lvl2: 0.4
   CameraShakeCAC_Lvl3: 0.6
   CameraShakeCAC_Lvl4: 0.8
-  CameraShakePillonage: 10
+  _WobbleCountPillonage: 4
+  _WobbleAngle: 10
+  _DuraionWobble: 0.05
+  _RecoverDurationWobble: 0.1
+  startimpulseshakeforce: 3
+  _imulseMultiplicator: 1.5
   stopDuration: 0.2
-  normalFPS: 60
   effectFPS: 10
   duration: 0.1
-  tiltAnglePillonage: 50
-  shakeIntensityPillonage: 100
-  fallDurationPillonage: 2
-  recoverDurationPillonage: 1
   fov_multiplicator: 105
-  fov_transition_time: 0.5
+  fov_transition_time: 1
 --- !u!1 &5688435463808219286
 GameObject:
   m_ObjectHideFlags: 0
@@ -4454,7 +4398,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7161786904926102830}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -4760,7 +4704,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7675864561282676840}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
