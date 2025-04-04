@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class S_EnemySpawner : MonoBehaviour
+public class S_OldEnemySpawner : MonoBehaviour
 {
     [System.Serializable]
     public class SpawnDetails
