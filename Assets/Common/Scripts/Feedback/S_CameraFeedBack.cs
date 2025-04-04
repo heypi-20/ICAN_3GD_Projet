@@ -43,6 +43,10 @@ public class S_CameraFeedBack : MonoBehaviour
     public float duration = 0.5f;  // Durée de l'effet en secondes
     private float _timer_of_groundpound;
     private bool isActive = false;
+    public float tiltAnglePillonage;
+    public float shakeIntensityPillonage;
+    public float fallDurationPillonage;
+    public float recoverDurationPillonage;
 
     [Header("Pillonage FOV")] 
     public float fov_multiplicator;
@@ -60,41 +64,15 @@ public class S_CameraFeedBack : MonoBehaviour
     private Coroutine _currentTiltCoroutine;
     private Tween currentTween;
 
-    private void OnEnable()
+    private void Start()
     {
+        
         if (S_PlayerStateObserver.Instance != null)
         {
             S_PlayerStateObserver.Instance.OnMoveStateEvent += ReceiveMoveEvent;
             S_PlayerStateObserver.Instance.OnMeleeAttackStateEvent += ReceiveMeleeAttackEvent;
             S_PlayerStateObserver.Instance.OnGroundPoundStateEvent += ReceiveGroudPoundEvevent;
         }
-        else
-        {
-            StartCoroutine(WaitForObserver());
-        }
-    }
-
-    private IEnumerator WaitForObserver()
-    {
-        float timeout = 3f;
-        float elapsedTime = 0f;
-
-        while (S_PlayerStateObserver.Instance == null)
-        {
-            if (elapsedTime >= timeout)
-            {
-                Debug.LogError("S_PlayerStateObserver.Instance not found after waiting " + timeout + " seconds.");
-                yield break;
-            }
-
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        S_PlayerStateObserver.Instance.OnMoveStateEvent += ReceiveMoveEvent;
-    }
-
-    private void Start()
-    {
         if (_cinemachineVirtualCamera == null)
         {
             _cinemachineVirtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
@@ -128,8 +106,6 @@ public class S_CameraFeedBack : MonoBehaviour
             _cinemachineVirtualCamera.m_Lens.FieldOfView = Start_FOV + timePassed * fov_multiplicator;
         }
     }
-    
-    
 
     private void EnableCamera(bool state)
     {
@@ -179,15 +155,12 @@ public class S_CameraFeedBack : MonoBehaviour
         }
 
         _currentTiltAngle = targetAngle;
-
-        // 如果关闭自动回正，就结束儿童而烦恼欧文二分我的
+        
         if (!autoResetTilt)
             yield break;
-
-        // 2. 停留片刻
+        
         yield return new WaitForSeconds(0.05f);
-
-        // 3. 回正
+        
         startAngle = _currentTiltAngle;
         elapsedTime = 0f;
 
@@ -235,7 +208,9 @@ public class S_CameraFeedBack : MonoBehaviour
     {
         if (state.Equals(PlayerStates.GroundPoundState.EndGroundPound))
         {
-            CameraShake((CameraShakePillonage*_timer_of_groundpound));
+            //CameraFallImpactEffect(tiltAnglePillonage,shakeIntensityPillonage,fallDurationPillonage,recoverDurationPillonage);
+            CameraWobbleEffect();
+            CameraDutchWobble();
             StartCoroutine(TimeStopCoroutine());
             if (!isActive)
             {
@@ -360,8 +335,106 @@ public class S_CameraFeedBack : MonoBehaviour
             
             isActive = false;
         }
-    private void ResetFOV_Bounce()
+
+    public void CameraWobbleEffect(int wobbleCount = 4, float wobbleAngle = 6f, float wobbleSpeed = 0.05f, float recoverDuration = 0.1f)
     {
-        
+        if (_currentTiltCoroutine != null)
+            StopCoroutine(_currentTiltCoroutine);
+
+        _currentTiltCoroutine = StartCoroutine(WobbleCoroutine(wobbleCount, wobbleAngle, wobbleSpeed, recoverDuration));
+    }
+
+    private IEnumerator WobbleCoroutine(int count, float angle, float speed, float recoverDuration)
+    {
+        float elapsed = 0f;
+
+        for (int i = 0; i < count; i++)
+        {
+            float target = (i % 2 == 0) ? angle : -angle;
+            float start = _recomposer != null ? _recomposer.m_Tilt : 0f;
+            elapsed = 0f;
+
+            while (elapsed < speed)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / speed;
+                float tilt = Mathf.Lerp(start, target, pitchToAngleCurve.Evaluate(t));
+
+                if (_recomposer != null)
+                    _recomposer.m_Tilt = tilt;
+
+                yield return null;
+            }
+        }
+
+        // Retour progressif à 0
+        float endAngle = _recomposer.m_Tilt;
+        elapsed = 0f;
+
+        while (elapsed < recoverDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / recoverDuration;
+            float tilt = Mathf.Lerp(endAngle, 0f, pitchToZeroCurve.Evaluate(t));
+
+            if (_recomposer != null)
+                _recomposer.m_Tilt = tilt;
+
+            yield return null;
+        }
+
+        _currentTiltAngle = 0f;
+    }
+    public void CameraDutchWobble(int wobbleCount = 4, float wobbleAngle = 6f, float wobbleSpeed = 0.05f, float recoverDuration = 0.1f)
+    {
+        if (_currentDutchCoroutine != null)
+            StopCoroutine(_currentDutchCoroutine);
+
+        _currentDutchCoroutine = StartCoroutine(DutchWobbleCoroutine(wobbleCount, wobbleAngle, wobbleSpeed, recoverDuration));
+    }
+
+    private IEnumerator DutchWobbleCoroutine(int count, float angle, float speed, float recoverDuration)
+    {
+        float elapsed = 0f;
+
+        for (int i = 0; i < count; i++)
+        {
+            float target = (i % 2 == 0) ? angle : -angle;
+            float start = _cinemachineVirtualCamera.m_Lens.Dutch;
+
+            // Démarre directement l’effet visuel pour la première frame
+            _cinemachineVirtualCamera.m_Lens.Dutch = target;
+            yield return null;
+
+            elapsed = 0f;
+
+            while (elapsed < speed)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / speed;
+                float dutch = Mathf.Lerp(target, -target, dutchCurve.Evaluate(t)); // oscille à partir de target
+
+                _cinemachineVirtualCamera.m_Lens.Dutch = dutch;
+
+                yield return null;
+            }
+        }
+
+        // Retour à 0 smooth
+        float endDutch = _cinemachineVirtualCamera.m_Lens.Dutch;
+        elapsed = 0f;
+
+        while (elapsed < recoverDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / recoverDuration;
+            float dutch = Mathf.Lerp(endDutch, 0f, resetCurve.Evaluate(t));
+
+            _cinemachineVirtualCamera.m_Lens.Dutch = dutch;
+
+            yield return null;
+        }
+
+        _currentDutchAngle = 0f;
     }
 }

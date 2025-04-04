@@ -29,17 +29,12 @@ public class ExplosionEffect : MonoBehaviour
     public GameObject ShockWavePoint;
     public Material shockwaveMat;
     public GameObject ImpactShockWave;
-    
-    
-    private void OnEnable()
+
+    private void Start()
     {
         if (S_PlayerStateObserver.Instance != null)
         {
-            S_PlayerStateObserver.Instance.OnGroundPoundStateEvent += ReceiGroudPoundEvevent;
-        }
-        else
-        {
-            StartCoroutine(WaitForObserver());
+            S_PlayerStateObserver.Instance.OnGroundPoundStateEvent += ReceiceGroudPoundEvevent;
         }
     }
 
@@ -79,10 +74,10 @@ public class ExplosionEffect : MonoBehaviour
             yield return null;
         }
 
-        S_PlayerStateObserver.Instance.OnGroundPoundStateEvent += ReceiGroudPoundEvevent;
+        S_PlayerStateObserver.Instance.OnGroundPoundStateEvent += ReceiceGroudPoundEvevent;
     }
 
-    private void ReceiGroudPoundEvevent(Enum state)
+    private void ReceiceGroudPoundEvevent(Enum state)
     {
         if (state.Equals(PlayerStates.GroundPoundState.EndGroundPound))
         {
@@ -101,9 +96,6 @@ public class ExplosionEffect : MonoBehaviour
         
         float currentTime = Time.time;
         shockwaveMat.SetFloat("_StartTime", currentTime);
-        //Vector3 center = ShockWavePoint.transform.position;
-        //Debug.Log(center);
-        //shockwaveMat.SetVector("_Center", center);
         GameObject ShockWave = Instantiate(ImpactShockWave, impactPosition, ImpactShockWave.transform.rotation);
         newParticles.Play();
         Destroy(ShockWave, 0.5f);
