@@ -43,11 +43,22 @@ public class S_CameraFeedBack : MonoBehaviour
     public float duration = 0.5f;  // Durée de l'effet en secondes
     private float _timer_of_groundpound;
     private bool isActive = false;
+
+    [Header("Pillonage FOV")] 
+    public float fov_multiplicator;
+
+    public float fov_transition_time;
+
+    private float Curent_FOV;
+    private float Start_FOV;
+    private bool isIncreasing;
+    private float timePassed;
         
    
     private CinemachineRecomposer _recomposer;
     private float _currentTiltAngle = 0f;
     private Coroutine _currentTiltCoroutine;
+    private Tween currentTween;
 
     private void OnEnable()
     {
@@ -110,6 +121,12 @@ public class S_CameraFeedBack : MonoBehaviour
     private void FixedUpdate()
     {
         _timer_of_groundpound += Time.deltaTime;
+        
+        if (isIncreasing)
+        {
+            timePassed += Time.deltaTime;
+            _cinemachineVirtualCamera.m_Lens.FieldOfView = Start_FOV + timePassed * fov_multiplicator;
+        }
     }
     
     
@@ -163,7 +180,7 @@ public class S_CameraFeedBack : MonoBehaviour
 
         _currentTiltAngle = targetAngle;
 
-        // 如果关闭自动回正，就结束
+        // 如果关闭自动回正，就结束儿童而烦恼欧文二分我的
         if (!autoResetTilt)
             yield break;
 
@@ -218,17 +235,28 @@ public class S_CameraFeedBack : MonoBehaviour
     {
         if (state.Equals(PlayerStates.GroundPoundState.EndGroundPound))
         {
-            //Debug.Log("Shake my boooooooddyyyyyy");
             CameraShake((CameraShakePillonage*_timer_of_groundpound));
             StartCoroutine(TimeStopCoroutine());
             if (!isActive)
             {
                 StartCoroutine(ChangeFPS());
             }
+
+            isIncreasing = false;
+            float currentFOV = _cinemachineVirtualCamera.m_Lens.FieldOfView;
+            currentTween = DOTween.To(
+                () => currentFOV,
+                x => _cinemachineVirtualCamera.m_Lens.FieldOfView = x,
+                Start_FOV,
+                fov_transition_time
+            ).SetEase(Ease.OutSine);
         }
 
         if (state.Equals(PlayerStates.GroundPoundState.StartGroundPound))
         {
+            Start_FOV = _cinemachineVirtualCamera.m_Lens.FieldOfView;
+            isIncreasing = true;
+            timePassed = 0f;
             _timer_of_groundpound = 0f;
         }
     }
@@ -284,8 +312,6 @@ public class S_CameraFeedBack : MonoBehaviour
         _cinemachineVirtualCamera.m_Lens.Dutch = _currentDutchAngle;
     }
     #endregion
-    
-
     private void OnDisable()
     {
         if (S_PlayerStateObserver.Instance != null)
@@ -293,7 +319,6 @@ public class S_CameraFeedBack : MonoBehaviour
             S_PlayerStateObserver.Instance.OnMoveStateEvent -= ReceiveMoveEvent;
         }
     }
-    
     public void CameraShake(float intensity = 1f)
     {
         if (_impulseSource != null)
@@ -317,7 +342,7 @@ public class S_CameraFeedBack : MonoBehaviour
         // Reprendre le temps normal
         Time.timeScale = 1f;
     }
-     private IEnumerator ChangeFPS()
+    private IEnumerator ChangeFPS()
         {
             isActive = true;
             
@@ -335,4 +360,8 @@ public class S_CameraFeedBack : MonoBehaviour
             
             isActive = false;
         }
+    private void ResetFOV_Bounce()
+    {
+        
+    }
 }
