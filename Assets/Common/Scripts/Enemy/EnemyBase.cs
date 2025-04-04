@@ -8,6 +8,7 @@ public class EnemyBase : MonoBehaviour
     public string enemyName;
     public float enemyDamage;
     public float health;
+    
     public float WeaknessExposureHealth;
     public GameObject WeakPoint;
     public GameObject energyPoint;
@@ -17,17 +18,19 @@ public class EnemyBase : MonoBehaviour
     public string enemyGetHitSound;
     public string enemyDeathSound;
 
+    private float currentHealth;
     public static event Action OnEnemyKill;
     private bool isDead = false;
     private S_ScoreDisplay _s_ScoreDisplay;
 
 
-    private void Awake()
+    private void OnEnable()
     {
-        findWeakPoint();
+        FindWeakPoint();
+        currentHealth = health;
     }
 
-    private void findWeakPoint()
+    private void FindWeakPoint()
     {
         if (WeakPoint == null)
         {
@@ -44,13 +47,11 @@ public class EnemyBase : MonoBehaviour
             }
         }
     }
-    
-
 
     public void ReduceHealth(float amount,int DropBonus)
     {
         if(isDead) return;
-        health -= amount;
+        currentHealth -= amount;
         
         //placeholder pour le VFX =========
         if (enemyGetHitVFX is not null)
@@ -60,11 +61,11 @@ public class EnemyBase : MonoBehaviour
         }
         //placeholder pour le VFX ========
 
-        if (health <= WeaknessExposureHealth)
+        if (currentHealth <= WeaknessExposureHealth)
         {
             WeakPoint.SetActive(true);
         }
-        if (health <= 0)
+        if (currentHealth <= 0)
         {
             EnemyDied(DropBonus);
         }
