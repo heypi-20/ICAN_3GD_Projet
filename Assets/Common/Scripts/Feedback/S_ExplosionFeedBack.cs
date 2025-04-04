@@ -4,15 +4,12 @@ using System.Collections;
 
 public class ExplosionEffect : MonoBehaviour
 {
-    [Header("Onde_GroundPound")]
-
+    [Header("Onde_GroundPound")] 
+    public ParticleSystem OndeParticule;
     
     [Header("ShockWave")]
 
-    private float currentDistance = 0f;
-    private bool isPlaying = false;
     public GameObject ShockWavePoint;
-    public Material shockwaveMat;
     public GameObject ImpactShockWave;
 
     private void Start()
@@ -34,8 +31,11 @@ public class ExplosionEffect : MonoBehaviour
     private void SpawnExplosion_GroundPound(Vector3 impactPosition)
     {
         float currentTime = Time.time;
+        ParticleSystem Onde = Instantiate(OndeParticule, impactPosition, ImpactShockWave.transform.rotation);
+        Onde.Play();
         GameObject ShockWave = Instantiate(ImpactShockWave, impactPosition, ImpactShockWave.transform.rotation);
         Destroy(ShockWave, 0.5f);
+        Destroy(Onde,2f);
     }
     
     
