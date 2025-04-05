@@ -28,6 +28,13 @@ public class S_SpawnZone : MonoBehaviour
     public bool isWaitingToBeReactivated = false;
 
 
+    private void Start()
+    {
+        
+        enemySpawnPointGroups = new List<S_EnemySpawnPointGroup>(GetComponentsInChildren<S_EnemySpawnPointGroup>());
+        
+    }
+
     public Vector3[] GetSpawnPointsByEnemyType(EnemyType type)
     {
         foreach (S_EnemySpawnPointGroup Group in enemySpawnPointGroups)
