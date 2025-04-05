@@ -786,7 +786,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f21812271ccd7ae4ba27c4723dd9d861, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 0
+  enemyType: 4
   spawnPoints: []
 --- !u!43 &261993252
 Mesh:
@@ -1169,11 +1169,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56c4a7902b6c5284f87e9890b0d3aac3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnZones: []
-  player: {fileID: 0}
   trackInterval: 1
   weightThreshold: 0.1
   timeToBeReactive: 5
+  spawnZones: []
+  player: {fileID: 0}
 --- !u!1 &392533280
 GameObject:
   m_ObjectHideFlags: 0
@@ -1219,8 +1219,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f21812271ccd7ae4ba27c4723dd9d861, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 0
+  enemyType: 4
   spawnPoints: []
+--- !u!1 &394038145
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 394038146}
+  - component: {fileID: 394038147}
+  m_Layer: 0
+  m_Name: MegaSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &394038146
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 394038145}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1977128831}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &394038147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 394038145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e71bb8dcb1c6f1245896f5a7a6f6f521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnemyType: 0
+  enemyprefab: {fileID: 5534188564840520030, guid: 778fc3ef1c775ec449a44e3d5f0b9aab, type: 3}
 --- !u!1 &438033128
 GameObject:
   m_ObjectHideFlags: 0
@@ -1534,7 +1580,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f21812271ccd7ae4ba27c4723dd9d861, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 0
+  enemyType: 4
   spawnPoints: []
 --- !u!1 &630998970
 GameObject:
@@ -1783,7 +1829,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f21812271ccd7ae4ba27c4723dd9d861, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 0
+  enemyType: 4
   spawnPoints: []
 --- !u!1 &966975570
 GameObject:
@@ -1830,7 +1876,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f21812271ccd7ae4ba27c4723dd9d861, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 0
+  enemyType: 4
   spawnPoints: []
 --- !u!1001 &988318693
 PrefabInstance:
@@ -4072,7 +4118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f21812271ccd7ae4ba27c4723dd9d861, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 0
+  enemyType: 4
   spawnPoints: []
 --- !u!1 &1776235286
 GameObject:
@@ -5114,6 +5160,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 331461420}
+  - {fileID: 394038146}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2011157344
@@ -5365,7 +5412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f21812271ccd7ae4ba27c4723dd9d861, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 0
+  enemyType: 4
   spawnPoints: []
 --- !u!1 &2123506646
 GameObject:

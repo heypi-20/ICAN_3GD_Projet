@@ -5,33 +5,51 @@ using UnityEngine;
 
 public class S_ZoneManager : MonoBehaviour
 {
-    public List<S_SpawnZone> spawnZones;
-    public GameObject player;
-    // Tracking interval in seconds (can be changed at runtime)
+    public static S_ZoneManager Instance { get; private set; }
+    
+    [Header("Zone manager settings")]
     public float trackInterval = 0.5f;
-    // Weight threshold for triggering chain switch logic
     public float weightThreshold = 0.5f;
     public float timeToBeReactive = 0.5f;
     
+        
+    [Header("Automatic search for references")]
+    public List<S_SpawnZone> spawnZones;
+    public GameObject player;
     
     private Vector3 playerPosition;
     private List<S_SpawnZone> ActiveZonesByPlayer;
     private HashSet<S_SpawnZone> zonesBeingWatched = new HashSet<S_SpawnZone>();
+    
 
 
     private void Awake()
     {
+        SimpleSingleton();
         // Get all instances of S_SpawnZone in the scene and store them in spawnZones
         spawnZones = new List<S_SpawnZone>(FindObjectsOfType<S_SpawnZone>());
         // Get the GameObject with the S_CustomCharacterController component
         player = FindObjectOfType<S_CustomCharacterController>().gameObject;
         ActiveZonesByPlayer = new List<S_SpawnZone>();
+
     }
 
     private void Start()
     {
         // Start continuous tracking of player position using a coroutine
         StartCoroutine(TrackPlayerRoutine());
+    }
+    
+    private void SimpleSingleton()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Debug.LogWarning("[ZoneManager] Duplicate instance found, destroying the new one.");
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
     }
 
     private IEnumerator TrackPlayerRoutine()
@@ -142,6 +160,28 @@ public class S_ZoneManager : MonoBehaviour
 
         // Done watching
         zonesBeingWatched.Remove(zone);
+    }
+
+    public Vector3[] GetSpawnPointsByEnemyWithZoneWeight(EnemyType type)
+    {
+        foreach (S_SpawnZone zone in spawnZones)
+        {
+            Vector3[] points = zone.GetSpawnPointsByEnemyType(type);
+            if (points == null || points.Length == 0)
+                continue;
+            if (Mathf.Approximately(zone.weight, 1f))
+            {
+                return points;
+            }
+            
+            float chance = Random.Range(0f, 1f);
+            if (chance <= zone.weight)
+            {
+                return points;  
+            }
+        }
+        return null;
+
     }
     
     
