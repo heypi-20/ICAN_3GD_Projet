@@ -86,10 +86,9 @@ public class S_SpawnRequester : MonoBehaviour
                 if (spawnPoints != null && spawnPoints.Length > 0)
                 {
                     // Loop through each spawn point and request an enemy spawn.
-                    foreach (Vector3 pos in spawnPoints)
+                    if (currentCount < config.MaxCount)
                     {
-                        if (currentCount >= config.MaxCount) break;
-                        // Raise an event to request enemy spawn at the given position.
+                        Vector3 pos = spawnPoints[Random.Range(0, spawnPoints.Length)];
                         OnRequestEnemySpawn?.Invoke(config, pos);
                         currentCount++;
                     }

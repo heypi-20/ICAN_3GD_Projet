@@ -83,7 +83,14 @@ public class S_EnergyAbsorption_Module : MonoBehaviour
         {
             _pullingObjects.Remove(obj);
             _energyStorage.AddEnergy(givenPoint * _comboSystem.currentComboMultiplier);
-            Destroy(obj);
+            if (obj.TryGetComponent(out S_AddEnergyTypeWithDelay energySetting))
+            {
+                S_EnergyPointPoolManager.Instance.ReturnToPool(obj, energySetting.selfPrefab);
+            }
+            else
+            {
+                Destroy(obj); // fallback
+            }
         }
     }
 

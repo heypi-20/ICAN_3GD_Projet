@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class S_AddEnergyTypeWithDelay : MonoBehaviour
 {
     public float delay = 1f;
     public float energyGiven;
     public float destructionTime=10f;
+    public GameObject selfPrefab;
 
     void Start()
     {
@@ -20,6 +22,7 @@ public class S_AddEnergyTypeWithDelay : MonoBehaviour
         EnergyType energyType = gameObject.AddComponent<EnergyType>();
         energyType.energyGivenUseForType=energyGiven;
         energyType.destructionTimeUseForType=destructionTime;
+
     }
 
 }

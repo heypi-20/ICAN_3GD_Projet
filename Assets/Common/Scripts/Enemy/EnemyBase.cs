@@ -6,7 +6,7 @@ public class EnemyBase : MonoBehaviour
 {
     [Header("Enemy Infos")]
     public string enemyName;
-    public EnemyType enemyType; // ✅ 新增：用于 Tracker 和 Pool 分类
+    public EnemyType enemyType; // Used for tracking and pooling
     public float enemyDamage;
     public float health;
     
@@ -23,16 +23,18 @@ public class EnemyBase : MonoBehaviour
     private bool isDead = false;
     private S_ScoreDisplay _s_ScoreDisplay;
 
-    public static event Action OnEnemyKillForCombo; // ✅ 保留你已有的全局事件
-    public event Action<EnemyBase> OnKilled; // ✅ 新增：实例事件，用于池化系统
+    public static event Action OnEnemyKillForCombo; // Global event for combo tracking
+    public event Action<EnemyBase> OnKilled; // Instance event for pooling
 
+    // Called when the object is enabled (e.g., when reused from the pool)
     private void OnEnable()
     {
-        FindWeakPoint();
-        currentHealth = health;
-        isDead = false; // ✅ 重置死亡状态（用于对象池复用）
+        FindWeakPoint();             // Find and disable the weak point
+        currentHealth = health;      // Reset health
+        isDead = false;              // Reset death flag for pooling reuse
     }
 
+    // Finds the weak point among child objects and disables it.
     private void FindWeakPoint()
     {
         Transform[] children = transform.GetComponentsInChildren<Transform>();
@@ -47,51 +49,58 @@ public class EnemyBase : MonoBehaviour
         }
     }
 
+    // Reduces health by a given amount, shows hit effects, and triggers death if needed.
     public void ReduceHealth(float amount, int DropBonus)
     {
         if (isDead) return;
-
         currentHealth -= amount;
 
-        // VFX
+        // Show hit effect if available.
         if (enemyGetHitVFX != null)
         {
-            GameObject GetHitVFX = Instantiate(enemyGetHitVFX, transform.position, transform.rotation);
-            Destroy(GetHitVFX, 3f);
+            S_VFXPoolManager.Instance.SpawnVFX(enemyGetHitVFX, transform.position, transform.rotation, 3f);
+
         }
 
+        // Activate weak point if health is low.
         if (currentHealth <= WeaknessExposureHealth && WeakPoint != null)
         {
             WeakPoint.SetActive(true);
         }
 
+        // Trigger death if health is zero or below.
         if (currentHealth <= 0)
         {
             EnemyDied(DropBonus);
         }
     }
 
+    // Handles enemy death: plays effects, triggers events, drops items, and deactivates the object.
     public void EnemyDied(int DropBonus)
     {
         if (isDead) return;
         isDead = true;
 
-        // Death VFX
+        // Play death effect if available.
         if (enemyDeathVFX != null)
         {
-            GameObject DeathVFX = Instantiate(enemyDeathVFX, transform.position, transform.rotation);
-            Destroy(DeathVFX, 3f);
+            S_VFXPoolManager.Instance.SpawnVFX(enemyDeathVFX, transform.position, transform.rotation, 3f);
+
         }
 
-        OnEnemyKillForCombo?.Invoke();                 // ✅ 你的原有事件
-        OnKilled?.Invoke(this);                // ✅ 实例事件，适配对象池
-        SoundManager.Instance.Meth_Shoot_Kill(1);
+        // Trigger global and instance death events.
+        OnEnemyKillForCombo?.Invoke();
+        OnKilled?.Invoke(this);
+
+        // Play kill sound and drop energy items.
+        //SoundManager.Instance.Meth_Shoot_Kill(1);
         DropItems(DropBonus);
 
-        gameObject.SetActive(false);           // ✅ 关闭对象，池系统会处理回收
-        
+        // Deactivate the enemy so it can be returned to the pool.
+        gameObject.SetActive(false);
     }
 
+    // Drops energy items with a random offset.
     private void DropItems(float DropBonus)
     {
         for (int i = 0; i < energyDropQuantity + DropBonus; i++)
@@ -101,16 +110,18 @@ public class EnemyBase : MonoBehaviour
                 Random.Range(-0.5f, 0.5f),
                 Random.Range(-0.5f, 0.5f)
             );
+
             Vector3 spawnPosition = transform.position + randomOffset;
-            GameObject point = Instantiate(energyPoint, spawnPosition, Quaternion.identity);
-            Vector3 pointdirection = point.transform.position - transform.position;
-            pointdirection.Normalize();
-            point.GetComponent<Rigidbody>().AddForce(pointdirection * 10f, ForceMode.Impulse);
+            Vector3 direction = (spawnPosition - transform.position).normalized;
+
+            S_EnergyPointPoolManager.Instance.QueueEnergyPoint(energyPoint, spawnPosition, direction);
+            
         }
     }
 
+    // Clears instance events on disable to avoid multiple subscriptions.
     private void OnDisable()
     {
-        OnKilled = null; // ✅ 避免事件多次订阅
+        OnKilled = null;
     }
 }
