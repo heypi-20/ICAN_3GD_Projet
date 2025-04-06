@@ -5,5 +5,6 @@
     Cuby_lv3,
     Cuby_lv4,
     TpShooter,
+    TpShooter_lv2,
     OunOun
 }

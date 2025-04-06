@@ -2,44 +2,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class S_ZoneManager : MonoBehaviour
 {
+    // Singleton instance of S_ZoneManager.
     public static S_ZoneManager Instance { get; private set; }
     
-    [Header("Zone manager settings")]
-    public float trackInterval = 0.5f;
-    public float weightThreshold = 0.5f;
-    public float timeToBeReactive = 0.5f;
+    // Zone manager settings.
+    public float trackInterval = 0.5f;      // How often to check the player's position.
+    public float weightThreshold = 0.5f;    // Weight value threshold to trigger chain activation.
+    public float timeToBeReactive = 0.5f;   // Time to wait before a zone can be reactivated.
     
-        
-    [Header("Automatic search for references")]
-    public List<S_SpawnZone> spawnZones;
-    public GameObject player;
+    // References found automatically.
+    public List<S_SpawnZone> spawnZones;    // List of all spawn zones in the scene.
+    public GameObject player;               // Reference to the player GameObject.
     
-    private Vector3 playerPosition;
-    private List<S_SpawnZone> ActiveZonesByPlayer;
-    private HashSet<S_SpawnZone> zonesBeingWatched = new HashSet<S_SpawnZone>();
+    private Vector3 playerPosition;         // Current player position.
+    private List<S_SpawnZone> ActiveZonesByPlayer; // List of zones currently active due to player proximity.
+    private HashSet<S_SpawnZone> zonesBeingWatched = new HashSet<S_SpawnZone>(); // Zones being monitored for full charge.
     
-
-
     private void Awake()
     {
+        // Setup singleton pattern.
         SimpleSingleton();
-        // Get all instances of S_SpawnZone in the scene and store them in spawnZones
+        
+        // Get all S_SpawnZone components in the scene.
         spawnZones = new List<S_SpawnZone>(FindObjectsOfType<S_SpawnZone>());
-        // Get the GameObject with the S_CustomCharacterController component
+        
+        // Find the player by looking for the S_CustomCharacterController component.
         player = FindObjectOfType<S_CustomCharacterController>().gameObject;
+        
         ActiveZonesByPlayer = new List<S_SpawnZone>();
-
     }
 
     private void Start()
     {
-        // Start continuous tracking of player position using a coroutine
+        // Start continuously tracking the player's position.
         StartCoroutine(TrackPlayerRoutine());
     }
     
+    // Simple singleton setup to ensure only one instance exists.
     private void SimpleSingleton()
     {
         if (Instance != null && Instance != this)
@@ -48,10 +49,10 @@ public class S_ZoneManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
     }
 
+    // Continuously checks the player's position at set intervals.
     private IEnumerator TrackPlayerRoutine()
     {
         while (true)
@@ -63,24 +64,30 @@ public class S_ZoneManager : MonoBehaviour
 
     private void Update()
     {
+        // Continuously handle player entry and update active zones.
         HandlePlayerEntry();
         HandleActivatedSpawnZoneByPlayer();
     }
+    
+    // Checks if the player has entered or left a zone.
     private void HandlePlayerEntry()
     {
-        // Update player's current position
+        // Update the player's current position.
         playerPosition = player.transform.position;
 
         foreach (S_SpawnZone zone in spawnZones)
         {
             float distance = Vector3.Distance(playerPosition, zone.transform.position);
-            if (distance <= zone.radius&&!ActiveZonesByPlayer.Contains(zone))
+            
+            // If the player is within the zone's radius and the zone is not already active.
+            if (distance <= zone.radius && !ActiveZonesByPlayer.Contains(zone))
             {
                 zone.StartWeightLossTimer();
                 ActiveZonesByPlayer.Add(zone);
                 Debug.Log(zone.name + " is active by the player");
             }
             
+            // If the zone's weight is 0 and the player is outside the zone, mark it for reactivation.
             if (zone.weight == 0 && distance > zone.radius && ActiveZonesByPlayer.Contains(zone) && !zone.isWaitingToBeReactivated)
             {
                 zone.isWaitingToBeReactivated = true;
@@ -90,6 +97,7 @@ public class S_ZoneManager : MonoBehaviour
         }
     }
 
+    // Waits for a set time before allowing a zone to be reactivated.
     private IEnumerator WaitForXSecToBeReactive(S_SpawnZone zone)
     {
         yield return new WaitForSeconds(timeToBeReactive);
@@ -99,18 +107,20 @@ public class S_ZoneManager : MonoBehaviour
         Debug.Log(zone.name + " is now removed and ready to be reactivated.");
     }
 
-
+    // Checks active zones and triggers nearby zones based on weight.
     private void HandleActivatedSpawnZoneByPlayer()
     {
         if (ActiveZonesByPlayer == null) return;
 
         foreach (S_SpawnZone playerZone in ActiveZonesByPlayer)
         {
-            if (playerZone != null && playerZone.weight <= weightThreshold&&!playerZone.alreadyTriggerAnotherZone)
+            // If the active zone's weight is below the threshold and hasn't triggered another zone.
+            if (playerZone != null && playerZone.weight <= weightThreshold && !playerZone.alreadyTriggerAnotherZone)
             {
                 S_SpawnZone nearestZone = null;
                 float minDistance = Mathf.Infinity;
 
+                // Find the nearest inactive zone (weight is 0) that is not already active.
                 foreach (S_SpawnZone zone in spawnZones)
                 {
                     if (zone.weight == 0 && !ActiveZonesByPlayer.Contains(zone))
@@ -127,6 +137,7 @@ public class S_ZoneManager : MonoBehaviour
                 {
                     nearestZone.StartWeightGainTimer();
                     playerZone.alreadyTriggerAnotherZone = true;
+                    // Start watching the zone until it is fully charged.
                     if (!zonesBeingWatched.Contains(nearestZone))
                     {
                         StartCoroutine(WatchZoneUntilFullyCharged(nearestZone));
@@ -139,29 +150,28 @@ public class S_ZoneManager : MonoBehaviour
         }
     }
     
+    // Monitors a zone until its weight reaches full charge (1).
     private IEnumerator WatchZoneUntilFullyCharged(S_SpawnZone zone)
     {
-        // Wait until the zone is fully charged (weight >= 1)
+        // Wait until the zone's weight reaches or exceeds 1.
         while (zone.weight < 1f)
         {
             yield return null;
         }
-
-        // Wait an extra frame to ensure stability
+        // Wait one extra frame to ensure stability.
         yield return null;
-
-        // Trigger as if player entered it (but only if player didn't already do so)
+        // If the zone is not already active, start its weight loss timer.
         if (!ActiveZonesByPlayer.Contains(zone))
         {
             zone.StartWeightLossTimer();
             ActiveZonesByPlayer.Add(zone);
             Debug.Log(zone.name + " reached full weight and is now activated by system");
         }
-
-        // Done watching
+        // Stop watching this zone.
         zonesBeingWatched.Remove(zone);
     }
 
+    // Returns spawn points for an enemy based on the zone's weight and a random chance.
     public Vector3[] GetSpawnPointsByEnemyWithZoneWeight(EnemyType type)
     {
         foreach (S_SpawnZone zone in spawnZones)
@@ -169,11 +179,12 @@ public class S_ZoneManager : MonoBehaviour
             Vector3[] points = zone.GetSpawnPointsByEnemyType(type);
             if (points == null || points.Length == 0)
                 continue;
+            // If the zone weight is exactly 1, return its points.
             if (Mathf.Approximately(zone.weight, 1f))
             {
                 return points;
             }
-            
+            // Otherwise, return the points based on a random chance compared to the zone's weight.
             float chance = Random.Range(0f, 1f);
             if (chance <= zone.weight)
             {
@@ -181,9 +192,5 @@ public class S_ZoneManager : MonoBehaviour
             }
         }
         return null;
-
     }
-    
-    
-
 }
