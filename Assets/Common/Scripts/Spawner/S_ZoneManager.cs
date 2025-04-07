@@ -65,7 +65,6 @@ public class S_ZoneManager : MonoBehaviour
     private void Update()
     {
         // Continuously handle player entry and update active zones.
-        HandlePlayerEntry();
         HandleActivatedSpawnZoneByPlayer();
     }
     
