@@ -3,7 +3,7 @@ using Random = UnityEngine.Random;
 using DG.Tweening; 
 
 [RequireComponent(typeof(Rigidbody))]
-public class S_TpShooter_Behavior : EnemyBase
+public class S_OldTpShooter_Behavior : EnemyBase
 {
     [Header("Enemy Properties")]
     public float teleportCd = 2f;
