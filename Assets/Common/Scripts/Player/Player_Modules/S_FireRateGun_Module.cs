@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(S_EnergyStorage))]
@@ -14,6 +15,7 @@ public class S_FireRateGun_Module : MonoBehaviour
         public int level; // Niveau requis pour ce niveau de tir
         public float fireRate; // Cadence de tir par seconde
         public float damage; // Dégâts par tir
+        public float weekPointMultiplier = 100f;
         public float energyConsumption; // Consommation d'énergie par tir
         public int dropBonus;
     }
@@ -226,7 +228,7 @@ public class S_FireRateGun_Module : MonoBehaviour
                     // Appliquer les degats
                     if(hit.collider.gameObject.CompareTag("WeakPoint"))
                     {
-                        enemy.ReduceHealth(damage*100,GetCurrentFireRateLevel().dropBonus);
+                        enemy.ReduceHealth(damage*GetCurrentFireRateLevel().weekPointMultiplier,GetCurrentFireRateLevel().dropBonus);
                         Debug.Log("Hit Weak Point"+damage*100f);
                     }
                     else
