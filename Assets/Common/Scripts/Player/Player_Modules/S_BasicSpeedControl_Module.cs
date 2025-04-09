@@ -47,6 +47,7 @@ public class S_BasicSpeedControl_Module : MonoBehaviour
         return _basicSprintModule != null && (_basicSprintModule._isSprinting || _basicSprintModule.IsSprintCoroutineRunning());
     }
 
+    private float totalenergy;
     // Met à jour la vitesse et la consommation en fonction du niveau d'énergie actuel
     private void UpdateSpeedAndConsumption()
     {
@@ -67,6 +68,8 @@ public class S_BasicSpeedControl_Module : MonoBehaviour
                 {
                     float energyToConsume = level.energyConsumptionRate * Time.deltaTime;
                     _energyStorage.currentEnergy -= energyToConsume;
+                    totalenergy += energyToConsume;
+                    Debug.Log("Energy"+totalenergy);
                 }
             }
             else
