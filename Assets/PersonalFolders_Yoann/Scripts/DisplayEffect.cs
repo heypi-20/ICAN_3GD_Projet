@@ -20,13 +20,18 @@ public class DisplayEffect : MonoBehaviour
         // Définit l'axe de rotation
         switch (rotationAxis)
         {
-            case RotationAxis.X: rotationVector = Vector3.right; break;
-            case RotationAxis.Y: rotationVector = Vector3.up; break;
-            case RotationAxis.Z: rotationVector = Vector3.forward; break;
+            case RotationAxis.X: rotationVector = transform.right; break;
+            case RotationAxis.Y: rotationVector = transform.up; break;
+            case RotationAxis.Z: rotationVector = transform.forward; break;
         }
 
-        // Définir le centre de l'objet pour que la rotation soit centrée
-        objectCenter = GetComponent<Renderer>().bounds.center;
+        if (GetComponent<Renderer>() != null)
+        {
+            // Définir le centre de l'objet pour que la rotation soit centrée
+            objectCenter = GetComponent<Renderer>().bounds.center;
+        }
+
+
     }
 
     void Update()
