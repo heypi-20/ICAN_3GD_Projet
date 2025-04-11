@@ -1,13 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 public class S_JumpyCuby_Behavior : EnemyBase
 {
     [Header("Jump Settings")]
     public float jumpForce = 10f; // The upward force applied when jumping
     public float trackingForce = 5f; // The additional force applied to track a target
-
+    public float rotationSpeed = 1f;  
     [Header("Tracking Settings")]
     public bool enableTracking = false; // Whether the cube should track a target
     public Transform target; // The target to track (if tracking is enabled)
@@ -46,7 +49,14 @@ public class S_JumpyCuby_Behavior : EnemyBase
     private void Update()
     {
         CheckIdleState();
+        Quaternion startRot = transform.rotation;
+        Vector3 direction = (target.position - transform.position).normalized;
+        Quaternion endRot = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Lerp(startRot, endRot, rotationSpeed*Time.deltaTime);
     }
+
+
+
 
     // Method to make the cube jump
     public void Jump()
