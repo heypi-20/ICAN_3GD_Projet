@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: VisualEffect_Dithering
-  m_Shader: {fileID: -6465566751694194690, guid: d4f8a1ab7a9663b48b3ad591ecd717e4, type: 3}
+  m_Name: MAT_Rune_Symbole
+  m_Shader: {fileID: -6465566751694194690, guid: b33f341bdf12b8247a2616e72ad082c9, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -23,6 +23,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _RuneTexture:
+        m_Texture: {fileID: 2800000, guid: c3dce533189ed3f45891089336756334, type: 3}
+        m_Scale: {x: 5, y: 5}
+        m_Offset: {x: -0.15, y: -1.9}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -37,11 +41,25 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Activate: 1
-    - _ColorResolution: 0
-    - _Dithering_Size: 0.5
-    - _Dithering_Size_1: 0.08
-    - _Saturation: 0
+    - _EmissionIntensity: 3
+    - _QueueControl: 0
+    - _QueueOffset: 0
     m_Colors:
-    - _Color: {r: 0.15, g: 0.15, b: 0.15, a: 0}
+    - _EmessionColor: {r: 1, g: 0, b: 0, a: 0}
+    - _EmessiveColor: {r: 1, g: 0, b: 0.5006079, a: 0}
+    - _Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Tiling: {r: 5, g: 5, b: 0, a: 0}
   m_BuildTextureStacks: []
+--- !u!114 &5800555711467912711
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7
