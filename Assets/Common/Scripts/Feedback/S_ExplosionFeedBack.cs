@@ -15,6 +15,8 @@ public class ExplosionEffect : MonoBehaviour
     private bool In_Ground;
     private Material ShockwaveMaterial;
     public float Shock_Wave_Speed_Multiplayer = 1f;
+    private bool timer_work;
+    private float timer_groundpound;
 
     private void Start()
     {
@@ -33,6 +35,12 @@ public class ExplosionEffect : MonoBehaviour
             float amplitude = Mathf.Lerp(10f, 0f, distanceShockwave / 200f);
             ShockwaveMaterial.SetFloat("_Amplitude", amplitude);
         }
+
+        if (timer_work)
+        {
+            timer_groundpound += Time.deltaTime;
+            Shock_Wave_Speed_Multiplayer += Time.deltaTime * 2;
+        }
     }
     private void ReceiceGroudPoundEvevent(Enum state)
     {
@@ -44,11 +52,14 @@ public class ExplosionEffect : MonoBehaviour
     private void SpawnExplosion_GroundPound(Vector3 impactPosition)
     {
         distanceShockwave = 8f;
+        timer_groundpound = 0f;
+        Shock_Wave_Speed_Multiplayer = 40f;
         ParticleSystem Onde = Instantiate(OndeParticule, impactPosition, ImpactShockWave.transform.rotation);
         Onde.Play();
         GameObject ShockWave = Instantiate(ImpactShockWave, impactPosition, ImpactShockWave.transform.rotation);
         ShockwaveMaterial = ShockWave.GetComponent<Renderer>().material;
         In_Ground = true;
+        timer_work = true;
         Destroy(ShockWave, 3f);
         Destroy(Onde,2f);
     }
