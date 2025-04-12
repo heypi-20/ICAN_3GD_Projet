@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -9,7 +10,6 @@ public class EnemyBase : MonoBehaviour
     public EnemyType enemyType; // Used for tracking and pooling
     public float enemyDamage;
     public float health;
-    
     public float WeaknessExposureHealth;
     public GameObject WeakPoint;
     public GameObject energyPoint;
@@ -18,15 +18,26 @@ public class EnemyBase : MonoBehaviour
     public GameObject enemyDeathVFX;
     public string enemyGetHitSound;
     public string enemyDeathSound;
+    [Header("WeakPoint Visuals")]
+    public Material extraWeakPointMaterial;
+    public Renderer weakPointRenderer;
+    
 
     private float currentHealth;
     private bool isDead = false;
     private S_ScoreDisplay _s_ScoreDisplay;
+    
+    //Use for WeakPoint VFX todo: Will be replace by shader
+    private Coroutine pulseCoroutine;
+    private Color extraMatBaseColor;
+    private Material runtimeExtraMat; // Instantiated material used only by this enemy
+
 
     public static event Action OnEnemyKillForCombo; // Global event for combo tracking
     public event Action<EnemyBase> OnKilled; // Instance event for pooling
 
     // Called when the object is enabled (e.g., when reused from the pool)
+
     private void OnEnable()
     {
         FindWeakPoint();             // Find and disable the weak point
@@ -65,7 +76,7 @@ public class EnemyBase : MonoBehaviour
         // Activate weak point if health is low.
         if (currentHealth <= WeaknessExposureHealth && WeakPoint != null)
         {
-            WeakPoint.SetActive(true);
+            activeWeakPoint();
         }
 
         // Trigger death if health is zero or below.
@@ -74,6 +85,80 @@ public class EnemyBase : MonoBehaviour
             EnemyDied(DropBonus);
         }
     }
+
+    private void activeWeakPoint()
+    {
+        WeakPoint.SetActive(true);
+
+        if (weakPointRenderer != null && extraWeakPointMaterial != null)
+        {
+            Material[] originalMats = weakPointRenderer.materials;
+
+            // Check if already added (avoid duplicates)
+            foreach (var mat in originalMats)
+            {
+                if (mat.name.StartsWith(extraWeakPointMaterial.name + "_Instance_"))
+                    return;
+            }
+
+            // Create and assign a unique instance material
+            runtimeExtraMat = new Material(extraWeakPointMaterial);
+            runtimeExtraMat.name = extraWeakPointMaterial.name + "_Instance_" + GetInstanceID();
+
+            Material[] newMats = new Material[originalMats.Length + 1];
+            for (int i = 0; i < originalMats.Length; i++)
+            {
+                newMats[i] = originalMats[i];
+            }
+            newMats[newMats.Length - 1] = runtimeExtraMat;
+
+            weakPointRenderer.materials = newMats;
+
+            // Store base color for alpha pulsing
+            if (runtimeExtraMat.HasProperty("_BaseColor"))
+            {
+                extraMatBaseColor = runtimeExtraMat.GetColor("_BaseColor");
+                pulseCoroutine = StartCoroutine(PulseMaterialAlpha(runtimeExtraMat));
+            }
+        }
+    }
+    
+    private IEnumerator PulseMaterialAlpha(Material targetMat)
+    {
+        float minAlpha = 0.25f;
+        float maxAlpha = 1f;
+        float speed = 5f;
+        float t = 0f;
+        bool increasing = true;
+
+        while (!isDead)
+        {
+            t += Time.deltaTime * speed * (increasing ? 1f : -1f);
+            float alpha = Mathf.Lerp(minAlpha, maxAlpha, t);
+
+            Color c = extraMatBaseColor;
+            c.a = alpha;
+
+            if (targetMat.HasProperty("_BaseColor"))
+            {
+                targetMat.SetColor("_BaseColor", c);
+            }
+
+            if (t >= 1f)
+            {
+                t = 1f;
+                increasing = false;
+            }
+            else if (t <= 0f)
+            {
+                t = 0f;
+                increasing = true;
+            }
+
+            yield return null;
+        }
+    }
+    
 
     // Handles enemy death: plays effects, triggers events, drops items, and deactivates the object.
     public void EnemyDied(int DropBonus)
@@ -98,6 +183,21 @@ public class EnemyBase : MonoBehaviour
 
         // Deactivate the enemy so it can be returned to the pool.
         gameObject.SetActive(false);
+        
+        //Reset weak point material
+        if (pulseCoroutine != null)
+        {
+            StopCoroutine(pulseCoroutine);
+            pulseCoroutine = null;
+        }
+
+        // Reset material alpha if needed
+        if (runtimeExtraMat != null && runtimeExtraMat.HasProperty("_BaseColor"))
+        {
+            Color resetColor = extraMatBaseColor;
+            resetColor.a = 0f; 
+            runtimeExtraMat.SetColor("_BaseColor", resetColor);
+        }
     }
 
     // Drops energy items with a random offset.

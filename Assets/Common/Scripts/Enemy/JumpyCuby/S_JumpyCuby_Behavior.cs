@@ -1,10 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
-
 public class S_JumpyCuby_Behavior : EnemyBase
 {
     [Header("Jump Settings")]

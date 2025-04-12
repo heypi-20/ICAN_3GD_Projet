@@ -62,6 +62,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: d6d50abd242cb364fa7de215ac577125, type: 2}
+  - {fileID: 2100000, guid: 152d9b433b056a84eac8846e6d4aff69, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -291,9 +292,11 @@ MonoBehaviour:
   enemyDeathVFX: {fileID: 2014564717100583912, guid: 332f5cf35c013464e8ebf4ac6d81eedc, type: 3}
   enemyGetHitSound: 
   enemyDeathSound: event:/Kill1
-  jumpForce: 10
-  trackingForce: 10
-  rotationSpeed: 5
+  extraWeakPointMaterial: {fileID: 2100000, guid: 152d9b433b056a84eac8846e6d4aff69, type: 2}
+  weakPointRenderer: {fileID: 9163132484602687829}
+  jumpForce: 8
+  trackingForce: 6
+  rotationSpeed: 3.5
   enableTracking: 1
   target: {fileID: 0}
   idleThreshold: 2

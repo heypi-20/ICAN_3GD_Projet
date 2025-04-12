@@ -22,6 +22,7 @@ public class S_SpawnZone : MonoBehaviour
     // Current weight value used to control spawn behavior.
     public float weight = 0f;
     // Flag to indicate if this zone has already triggered another zone.
+    [HideInInspector]
     public bool alreadyTriggerAnotherZone = false;
     
     // Gizmos settings for visual debugging in the editor.
