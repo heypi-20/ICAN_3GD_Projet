@@ -66,6 +66,8 @@ public class SoundManager : MonoBehaviour
     
     [Header("Pillonage")] 
     public string Pillonage_Explosion;
+    public string Pillonage_Activate;
+    public string Pillonage_Fall;
     
     [Header("Energy")] 
     public string Gain_Palier;
