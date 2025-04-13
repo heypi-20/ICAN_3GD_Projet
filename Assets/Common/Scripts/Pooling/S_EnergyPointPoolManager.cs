@@ -84,7 +84,7 @@ public class S_EnergyPointPoolManager : MonoBehaviour
     public void ReturnToPool(GameObject obj, GameObject prefab)
     {
         obj.SetActive(false);
-
+        Destroy(obj.GetComponent<EnergyType>());
         if (!pool.ContainsKey(prefab))
             pool[prefab] = new Queue<GameObject>();
 

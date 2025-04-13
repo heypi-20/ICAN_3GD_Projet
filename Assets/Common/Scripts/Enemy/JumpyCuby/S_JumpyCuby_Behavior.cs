@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using Random = UnityEngine.Random;
 public class S_JumpyCuby_Behavior : EnemyBase
@@ -16,6 +17,8 @@ public class S_JumpyCuby_Behavior : EnemyBase
 
     private Rigidbody rb;
     private float lastMovementTime;
+    private bool isJumping = false; // Prevent multiple jumps
+
 
     private void Start()
     {
@@ -56,30 +59,42 @@ public class S_JumpyCuby_Behavior : EnemyBase
     // Method to make the cube jump
     public void Jump()
     {
-        if (rb == null) return;
+        if (rb == null || isJumping) return;
 
-        // Apply upward force
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        SoundManager.Instance.Meth_JumpyCuby_Jump();
-        
-        // Apply tracking or random force
-        if (enableTracking && target != null)
-        {
-            Vector3 directionToTarget = (target.position - transform.position).normalized;
-            rb.AddForce(directionToTarget * trackingForce, ForceMode.Impulse);
-        }
-        else
-        {
-            Vector3 randomDirection = new Vector3(
-                Random.Range(-1f, 1f),
-                0f,
-                Random.Range(-1f, 1f)).normalized;
-            rb.AddForce(randomDirection * trackingForce, ForceMode.Impulse);
-        }
+        isJumping = true; // Lock
 
-        lastMovementTime = Time.time; // Reset idle timer on jump
+        Vector3 originalScale = transform.localScale;
+        Vector3 punchScale = originalScale * 1.5f;
+
+        transform.DOScale(punchScale, 0.15f)
+            .SetEase(Ease.OutQuad)
+            .OnComplete(() =>
+            {
+                transform.DOScale(originalScale, 0.15f)
+                    .SetEase(Ease.InQuad)
+                    .OnComplete(() => isJumping = false); // Unlock after scale back
+
+                SoundManager.Instance.Meth_JumpyCuby_Jump();
+
+                rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+
+                if (enableTracking && target != null)
+                {
+                    Vector3 directionToTarget = (target.position - transform.position).normalized;
+                    rb.AddForce(directionToTarget * trackingForce, ForceMode.Impulse);
+                }
+                else
+                {
+                    Vector3 randomDirection = new Vector3(
+                        Random.Range(-1f, 1f),
+                        0f,
+                        Random.Range(-1f, 1f)).normalized;
+                    rb.AddForce(randomDirection * trackingForce, ForceMode.Impulse);
+                }
+
+                lastMovementTime = Time.time;
+            });
     }
-
     private void CheckIdleState()
     {
         // Check if the object has been idle for too long

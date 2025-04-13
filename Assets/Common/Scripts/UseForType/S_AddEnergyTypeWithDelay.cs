@@ -10,7 +10,7 @@ public class S_AddEnergyTypeWithDelay : MonoBehaviour
     public float destructionTime=10f;
     public GameObject selfPrefab;
 
-    void Start()
+    void OnEnable()
     {
         // Schedule the AddScript method to be called after a delay.
         Invoke(nameof(AddScript), delay);
