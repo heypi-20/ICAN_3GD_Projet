@@ -1665,7 +1665,7 @@ MonoBehaviour:
   _minGrow: 0
   _maxGrow: 1
   _points: 0
-  maxPoints: 14000
+  maxPoints: 100000
   pointsToGrow: 800
 --- !u!114 &2674771433257209025
 MonoBehaviour:
@@ -5829,20 +5829,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cheatCodeforAdd: 273
   cheatCodeforRemove: 274
-  maxEnergy: 14000
-  currentEnergy: 500
+  maxEnergy: 100000
+  currentEnergy: 150
   energyLevels:
   - level: 1
     requiredEnergy: 0
     graceTimer: 0
   - level: 2
-    requiredEnergy: 3000
+    requiredEnergy: 2000
     graceTimer: 3
   - level: 3
-    requiredEnergy: 8000
+    requiredEnergy: 10000
     graceTimer: 3
   - level: 4
-    requiredEnergy: 12000
+    requiredEnergy: 35000
     graceTimer: 3
   energyDisplay: {fileID: 6788294273892150970}
   Gain_Palier: {fileID: 6127146839083381311}
@@ -5879,16 +5879,16 @@ MonoBehaviour:
   speedLevels:
   - level: 1
     speed: 10
-    energyConsumptionRate: 5
+    energyConsumptionRate: 8
   - level: 2
     speed: 15
-    energyConsumptionRate: 10
+    energyConsumptionRate: 25
   - level: 3
     speed: 20
-    energyConsumptionRate: 15
+    energyConsumptionRate: 85
   - level: 4
-    speed: 25
-    energyConsumptionRate: 25
+    speed: 24
+    energyConsumptionRate: 500
 --- !u!114 &8464428744350943366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5904,15 +5904,15 @@ MonoBehaviour:
   sprintLevels:
   - level: 2
     sprintSpeed: 30
-    energyConsumptionRate: 35
+    energyConsumptionRate: 150
     SprintingSpeedFOV: 100
   - level: 3
     sprintSpeed: 40
-    energyConsumptionRate: 60
+    energyConsumptionRate: 450
     SprintingSpeedFOV: 110
   - level: 4
-    sprintSpeed: 55
-    energyConsumptionRate: 80
+    sprintSpeed: 75
+    energyConsumptionRate: 3000
     SprintingSpeedFOV: 120
   accelerationTime: 0.5
   accelerationCurve:
@@ -5985,15 +5985,15 @@ MonoBehaviour:
     maxJumpCount: 1
   - level: 2
     jumpHeight: 8
-    energyConsumption: 20
+    energyConsumption: 50
     maxJumpCount: 1
   - level: 3
     jumpHeight: 13
-    energyConsumption: 30
+    energyConsumption: 1000
     maxJumpCount: 2
   - level: 4
     jumpHeight: 18
-    energyConsumption: 45
+    energyConsumption: 3500
     maxJumpCount: 3
   jumpCooldown: 0.1
 --- !u!114 &5131711004954361696
@@ -6021,28 +6021,28 @@ MonoBehaviour:
   fireRateLevels:
   - level: 1
     fireRate: 4
-    damage: 5
-    weekPointMultiplier: 100
-    energyConsumption: 5
+    damage: 10
+    weekPointMultiplier: 15
+    energyConsumption: 10
     dropBonus: 0
   - level: 2
     fireRate: 6
-    damage: 10
-    weekPointMultiplier: 100
-    energyConsumption: 12
-    dropBonus: 5
+    damage: 20
+    weekPointMultiplier: 5
+    energyConsumption: 22
+    dropBonus: 0
   - level: 3
-    fireRate: 8
-    damage: 35
-    weekPointMultiplier: 100
-    energyConsumption: 15
-    dropBonus: 4
+    fireRate: 10
+    damage: 25
+    weekPointMultiplier: 2
+    energyConsumption: 61
+    dropBonus: 1
   - level: 4
     fireRate: 20
-    damage: 60
-    weekPointMultiplier: 100
-    energyConsumption: 35
-    dropBonus: 5
+    damage: 40
+    weekPointMultiplier: 2
+    energyConsumption: 75
+    dropBonus: 0
   HitMarkerPNG: {fileID: 969691688291508243}
 --- !u!114 &930943365604710939
 MonoBehaviour:
@@ -6059,37 +6059,37 @@ MonoBehaviour:
   attackOrigin: {fileID: 3636347044067628401}
   attackLevels:
   - level: 1
-    attackRange: 0.25
+    attackRange: 0.8
     attackDistance: 5
-    attackDamage: 10
+    attackDamage: 15
     attackCooldown: 0.5
-    energyConsumption: 0
-    dropBonus: 20
-    WeakPointDropBonus: 30
+    energyConsumption: 25
+    dropBonus: 10
+    WeakPointDropBonus: 15
   - level: 2
-    attackRange: 0.25
+    attackRange: 0.8
     attackDistance: 5
-    attackDamage: 20
+    attackDamage: 90
     attackCooldown: 0.5
-    energyConsumption: 0
-    dropBonus: 25
-    WeakPointDropBonus: 30
+    energyConsumption: 85
+    dropBonus: 12
+    WeakPointDropBonus: 20
   - level: 3
-    attackRange: 0.25
+    attackRange: 0.8
     attackDistance: 5
-    attackDamage: 20
+    attackDamage: 250
     attackCooldown: 0.5
-    energyConsumption: 50
-    dropBonus: 25
-    WeakPointDropBonus: 30
+    energyConsumption: 200
+    dropBonus: 15
+    WeakPointDropBonus: 25
   - level: 4
-    attackRange: 0.25
+    attackRange: 0.8
     attackDistance: 5
-    attackDamage: 120
+    attackDamage: 500
     attackCooldown: 0.5
-    energyConsumption: 50
-    dropBonus: 25
-    WeakPointDropBonus: 30
+    energyConsumption: 2000
+    dropBonus: 15
+    WeakPointDropBonus: 25
   targetLayer:
     serializedVersion: 2
     m_Bits: 3584
@@ -6110,16 +6110,16 @@ MonoBehaviour:
   groundPoundLevels:
   - level: 3
     maxSphereRange: 100
-    sphereDamage: 1000
+    sphereDamage: 2000
     descentSpeed: 300
-    energyConsumption: 1000
-    dropBonus: 0
+    energyConsumption: 18500
+    dropBonus: -5
   - level: 4
     maxSphereRange: 100
     sphereDamage: 2000
     descentSpeed: 300
-    energyConsumption: 1500
-    dropBonus: 0
+    energyConsumption: 46000
+    dropBonus: -5
   KillableTargetLayer:
     serializedVersion: 2
     m_Bits: 1536

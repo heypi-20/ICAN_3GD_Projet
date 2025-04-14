@@ -158,7 +158,7 @@ public class S_TPShooter : EnemyBase
         Debug.Log("Shooting laser");
 
         if (Physics.SphereCast(transform.position, laserRadius, finalLaserDirection, out laserHit, range) && laserCharged) {
-            Debug.Log("Laser charged and hitting something");
+            Debug.Log("Laser charged and hitting something"+laserHit.collider.name);
             if (laserHit.collider.CompareTag("Player")) {
                 Debug.Log("Hit player");
                 laserHit.collider.GetComponent<S_PlayerHitTrigger>().ReceiveDamage(enemyDamage);
