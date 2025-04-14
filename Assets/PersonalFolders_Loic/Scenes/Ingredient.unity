@@ -130,9 +130,45 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 452221403134719869, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 452221403134719869, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 452221403134719869, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 14.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 1110773156157768034, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1110773156157768034, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1110773156157768034, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 14.03
+      objectReference: {fileID: 0}
     - target: {fileID: 3991563848175933883, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
       propertyPath: m_Name
       value: Pre_PlayerObjGroupe
+      objectReference: {fileID: 0}
+    - target: {fileID: 7121883038825396396, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7121883038825396396, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7121883038825396396, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 13.9
       objectReference: {fileID: 0}
     - target: {fileID: 8728408009053761971, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
       propertyPath: m_LocalPosition.x
@@ -336,6 +372,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyName: 
+  enemyType: 0
   enemyDamage: 0
   health: 0
   WeaknessExposureHealth: 0
@@ -346,12 +383,17 @@ MonoBehaviour:
   enemyDeathVFX: {fileID: 0}
   enemyGetHitSound: 
   enemyDeathSound: 
+  extraWeakPointMaterial: {fileID: 0}
+  weakPointRenderer: {fileID: 0}
   idleTime: 1
   minDist: 5
   maxDist: 5
   elevationRange: 3
-  chaseRange: 10
-  stoppingRange: 0.5
+  elevationLimit: 10
+  flyHeight: 20
+  chaseRange: 20
+  stoppingRange: 2
+  screamRange: 10
 --- !u!195 &337386882
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -383,7 +425,7 @@ Transform:
   m_GameObject: {fileID: 337386880}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.9, z: 9.96}
+  m_LocalPosition: {x: 0, y: 0.9, z: -69.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -539,7 +581,6 @@ GameObject:
   - component: {fileID: 909150337}
   - component: {fileID: 909150336}
   - component: {fileID: 909150339}
-  - component: {fileID: 909150340}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -556,7 +597,7 @@ Transform:
   m_GameObject: {fileID: 909150334}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 20, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -577,7 +618,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -660,41 +701,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &909150340
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 909150334}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8e56040794c0914e84ca85088ee48ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useCollision: 0
-  collisionCooldown: 1
-  usePhysicCast: 1
-  physicCastCooldown: 1
-  overlapType: 1
-  withScaleSize: 1
-  ignoreChildren: 0
-  customSize: {x: 1, y: 1, z: 1}
-  customOffset: {x: 0, y: 0, z: 0}
-  sphereRadius: 1
-  capsulePoint1: {x: 0, y: 0, z: 0}
-  capsulePoint2: {x: 0, y: 1, z: 0}
-  capsuleRadius: 1
-  collisionTags: []
-  collisionTargetComponentNames: []
-  physicCastTags: []
-  physicCastLayers:
-    serializedVersion: 2
-    m_Bits: 1
-  physicTargetComponentNames: []
-  OnTouchCalled:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &1138317449
 GameObject:
   m_ObjectHideFlags: 0
@@ -1186,6 +1192,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: TPShooter V2
       objectReference: {fileID: 0}
+    - target: {fileID: 4897929555399485672, guid: 372e2d5281005fc49848f81c06e705a9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5678420582889814344, guid: 372e2d5281005fc49848f81c06e705a9, type: 3}
+      propertyPath: playerLayer.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1315,6 +1329,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 1138317451}
   - {fileID: 1480167946}
+  - {fileID: 374584381}
   - {fileID: 6515644511533744737}
   - {fileID: 39693646}
   - {fileID: 1706345149127688303}
@@ -1324,4 +1339,3 @@ SceneRoots:
   - {fileID: 581968698}
   - {fileID: 1998997658}
   - {fileID: 1348258016}
-  - {fileID: 374584381}
