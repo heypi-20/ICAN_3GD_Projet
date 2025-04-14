@@ -21,6 +21,7 @@ public class S_TPShooter : EnemyBase
     public float laserRadius;
     public float chargeTime;
     public float shootDelay;
+    public LayerMask playerLayer;
     
     [Header("Enemy Components")]
     private NavMeshAgent agent;
@@ -155,10 +156,10 @@ public class S_TPShooter : EnemyBase
         Vector3 finalLaserDirection = (hit.point - transform.position).normalized;
 
         yield return new WaitForSeconds(shootDelay);
-        Debug.Log("Shooting laser");
+        Debug.Log("Shooting laser at ");
 
-        if (Physics.SphereCast(transform.position, laserRadius, finalLaserDirection, out laserHit, range) && laserCharged) {
-            Debug.Log("Laser charged and hitting something");
+        if (Physics.SphereCast(shootPoint.position, laserRadius, finalLaserDirection, out laserHit, range, playerLayer) && laserCharged) {
+            Debug.Log("Laser charged and hitting something " + laserHit.collider.name);
             if (laserHit.collider.CompareTag("Player")) {
                 Debug.Log("Hit player");
                 laserHit.collider.GetComponent<S_PlayerHitTrigger>().ReceiveDamage(enemyDamage);

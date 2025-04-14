@@ -264,12 +264,22 @@ public class PlayerEditorWindow : EditorWindow
 
         energy = FindObjectOfType<S_EnergyStorage>();
 
-        Rect playerPropertiesRect = new Rect(50, 70, 200, 200);
-        GUILayout.BeginArea(playerPropertiesRect, EditorStyles.textArea);
+        Rect playerMonitorPropertiesRect = new Rect(50, 70, 200, 200);
+        GUILayout.BeginArea(playerMonitorPropertiesRect, EditorStyles.textArea);
         
         GUILayout.Label("Current Energy : " + energy.currentEnergy, EditorStyles.boldLabel);
         GUILayout.Label("Current Level : " + energy.currentLevelIndex, EditorStyles.boldLabel);
+        GUILayout.Label("");
         GUILayout.EndArea();
+        
+        Rect playerPropertiesRect = new Rect(400, 70, 300, 500);
+        GUILayout.BeginArea(playerPropertiesRect, EditorStyles.textArea);
+
+        energy.maxEnergy = EditorGUILayout.FloatField("Max Energy : ", energy.maxEnergy, "BOX");
+        energy.currentEnergy = EditorGUILayout.FloatField("Starting Energy : ", energy.currentEnergy, "BOX");
+        GUILayout.EndArea();
+        
+        Repaint();
     }
 
     #region Utility Functions

@@ -11,8 +11,13 @@ public class S_Banshee : EnemyBase
     public float minDist = 5f;
     public float maxDist = 5f;
     public float elevationRange = 3f;
+    public float elevationLimit = 10f;
+    public float flyHeight = 20f;
     public float chaseRange = 10f;
     public float stoppingRange = 0.5f;
+    
+    [Header("Attack Properties")]
+    public float screamRange = 10f;
     
     private NavMeshAgent agent;
     private Transform findBody;
@@ -26,6 +31,8 @@ public class S_Banshee : EnemyBase
     private float randY;
     private float randZ;
     private float desiredY;
+
+    private bool canAttack;
     
     private void Start()
     {
@@ -42,7 +49,7 @@ public class S_Banshee : EnemyBase
             Debug.LogWarning("No Character Controller");
         }
 
-        findBody.position = new Vector3(transform.position.x, 10f, transform.position.z);
+        findBody.position = new Vector3(transform.position.x, flyHeight, transform.position.z);
     }
 
     private void Update()
@@ -53,25 +60,33 @@ public class S_Banshee : EnemyBase
 
         if (dist < chaseRange) {
             idleTimer = 0f;
+            agent.enabled = false;
             Chase();
-        } else {
+        } else if (!canAttack) {
+            agent.enabled = true;
             Idle();
         }
     }
 
     private void Idle()
     {
-        if (!getNewPos)
+        if (!getNewPos) {
             idleTimer += Time.deltaTime;
-        else if (getNewPos) {
+        } else if (getNewPos) {
             randX = Random.Range(-minDist, maxDist);
             randY = Random.Range(-elevationRange, elevationRange);
             randZ = Random.Range(-minDist, maxDist);
             
             Vector3 targetPosition = new Vector3(transform.position.x + randX, transform.position.y, transform.position.z + randZ);
             agent.SetDestination(targetPosition);
-            
             desiredY = findBody.localPosition.y + randY;
+
+            if (desiredY >= flyHeight + elevationLimit) {
+                desiredY = flyHeight + elevationLimit;
+            } else if (desiredY <= flyHeight - elevationLimit) {
+                desiredY = flyHeight - elevationLimit;
+            }
+            
             getNewPos = false;
         }
         
@@ -89,23 +104,40 @@ public class S_Banshee : EnemyBase
 
     private void Chase()
     {
-        if (Vector3.Distance(player.position, findBody.position) < stoppingRange) {
-            Attack();
-        }
+        findBody.rotation = Quaternion.Slerp(findBody.rotation,
+            Quaternion.LookRotation(player.position - findBody.position), 3f * Time.deltaTime);
         
-        Vector3 playerXZ = new Vector3(player.position.x, transform.position.y, player.position.z);
-        agent.SetDestination(playerXZ);
-
-        float desiredLocalY = player.position.y - findBody.localPosition.y;
-        findBody.localPosition = new Vector3(
-            0f,
-            Mathf.Lerp(findBody.localPosition.y, desiredLocalY, Time.deltaTime * agent.speed),
-            0f
-        );
+        if (Vector3.Distance(findBody.position, player.position) < stoppingRange) {
+            if (Physics.Raycast(findBody.position, player.position - findBody.position, out RaycastHit hit, stoppingRange)
+                && canAttack) {
+                Attack();
+            }
+            Debug.Log("In Attack Range");
+        } else {
+            findBody.position += findBody.forward * (agent.speed * 2) * Time.deltaTime;
+            // Vector3 playerXZ = new Vector3(player.position.x, transform.position.y, player.position.z);
+            // agent.SetDestination(playerXZ);
+            //
+            // float desiredLocalY = player.position.y - findBody.localPosition.y;
+            // findBody.localPosition = new Vector3(
+            //     0f,
+            //     Mathf.Lerp(findBody.localPosition.y, desiredLocalY, Time.deltaTime * agent.speed),
+            //     0f
+            // );
+        }
     }
 
     private void Attack()
     {
+        Collider[] hits = Physics.OverlapSphere(findBody.position, screamRange, player.gameObject.layer);
         
+        Debug.Log("Attacking");
+        
+        foreach (Collider hit in hits) {
+            Debug.Log("Hit player");
+            hit.GetComponent<S_PlayerHitTrigger>()?.ReceiveDamage(enemyDamage);
+        }
+
+        canAttack = false;
     }
 }
