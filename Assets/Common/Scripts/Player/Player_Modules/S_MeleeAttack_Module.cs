@@ -132,7 +132,7 @@ public class S_MeleeAttack_Module : MonoBehaviour
                 if (targetRB != null)
                 {
                     Vector3 forceDirection = (targetRB.transform.position - transform.position).normalized;
-                    targetRB.AddForce(forceDirection * 20f, ForceMode.Impulse);
+                    targetRB.AddForce(forceDirection * 10f, ForceMode.Impulse);
                 }
 
                 if (bestHit.CompareTag("WeakPoint"))
