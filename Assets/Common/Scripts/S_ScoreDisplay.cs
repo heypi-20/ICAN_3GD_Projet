@@ -20,6 +20,8 @@ public class S_ScoreDisplay : MonoBehaviour
         // Initialize the score text
         UpdateScoreText();
         lastScoreIncreaseTime = Time.time;
+        EnemyBase.OnEnemyKillForCombo += AddScore;
+
     }
 
     void Update()
@@ -32,9 +34,9 @@ public class S_ScoreDisplay : MonoBehaviour
     }
 
     // Method to add points to the score
-    public void AddScore(float points)
+    public void AddScore()
     {
-        score += points; // Add points to the score
+        score += 10; // Add points to the score
         lastScoreIncreaseTime = Time.time; // Reset the last increase time
         UpdateScoreText(); // Update the display
     }

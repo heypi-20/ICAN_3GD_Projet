@@ -31,7 +31,7 @@ public class EnemyBase : MonoBehaviour
 
     public static event Action OnEnemyKillForCombo; // Global event for combo tracking
     public event Action<EnemyBase> OnKilled; // Instance event for pooling
-
+    
     // Called when the object is enabled (e.g., when reused from the pool)
 
     private void OnEnable()
