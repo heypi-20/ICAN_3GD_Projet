@@ -36,6 +36,8 @@ public class S_GroundPound_Module : MonoBehaviour
     private float _dynamicSphereRange; // Portée dynamique basée sur la distance de chute
     public float DynamicSphereRange => _dynamicSphereRange;
     
+    private LayerMask savedLayerMask;
+    
 
     //Trigger event
     public event Action<Enum> OnGroundPoundStateChange;
@@ -48,6 +50,9 @@ public class S_GroundPound_Module : MonoBehaviour
         _characterController = GetComponent<CharacterController>();
         _customCharacterController = GetComponent<S_CustomCharacterController>();
         _cameraTransform = FindObjectOfType<CinemachineBrain>().transform;
+        
+        //save layer mask, use to restore layer after ground pound
+        savedLayerMask = _characterController.excludeLayers;
 
     }
 
@@ -67,7 +72,7 @@ public class S_GroundPound_Module : MonoBehaviour
         GroundPoundLevel currentLevel = GetCurrentGroundPoundLevel();
         if (currentLevel == null) return;
         // Vérifier l'entrée utilisateur et la quantité d'énergie disponible
-        if (_inputManager.MeleeAttackInput && _energyStorage.currentEnergy >= currentLevel.energyConsumption)
+        if (_inputManager.MeleeAttackInput)
         {
 
             if (IsLookingAtValidTarget(out float distanceToGround))
@@ -129,7 +134,7 @@ public class S_GroundPound_Module : MonoBehaviour
             // Déplacement dans la direction de la caméra
             Vector3 direction = _cameraTransform.forward;
             direction.Normalize();
-
+            _characterController.excludeLayers = KillableTargetLayer+savedLayerMask;
             _characterController.Move(direction * (currentSpeed * Time.deltaTime));
             yield return null;
         }
@@ -138,10 +143,12 @@ public class S_GroundPound_Module : MonoBehaviour
         {
             TriggerGroundPoundEffect(); // Exécuter l'effet au sol
             GroundPoundObserverEvent(PlayerStates.GroundPoundState.EndGroundPound);
+            
             //add feedback
             SoundManager.Instance.Meth_Pillonage_Explosion();
 
         }
+        _characterController.excludeLayers = savedLayerMask;
         _isGroundPounding = false; // Réinitialiser l'état de la compétence
     }
 

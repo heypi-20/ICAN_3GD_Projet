@@ -8,9 +8,9 @@ public class EnemyBase : MonoBehaviour
     [Header("Enemy Infos")]
     public string enemyName;
     public EnemyType enemyType; // Used for tracking and pooling
-    public float enemyDamage;
     public float health;
     public float WeaknessExposureHealth;
+    public float enemyDamage;
     public GameObject WeakPoint;
     public GameObject energyPoint;
     public float energyDropQuantity;

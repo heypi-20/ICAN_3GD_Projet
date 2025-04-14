@@ -1572,7 +1572,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8904249591229659874
 Transform:
   m_ObjectHideFlags: 0
@@ -3163,7 +3163,7 @@ Transform:
   m_GameObject: {fileID: 3801643264983334931}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 502.4, y: 8.51581, z: -489.97}
+  m_LocalPosition: {x: 0, y: 2.973, z: 0.13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3191,7 +3191,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 7121883038825396396}
   m_Lens:
-    FieldOfView: 112.2629
+    FieldOfView: 75
     OrthographicSize: 5
     NearClipPlane: 0.01
     FarClipPlane: 1000
@@ -3371,7 +3371,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -0.153}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -625.92255, y: 418.3018}
+  m_AnchoredPosition: {x: -7, y: -84}
   m_SizeDelta: {x: 581.072, y: 149.456}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &594675673650140874
@@ -3431,14 +3431,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 46.6
-  m_fontSizeBase: 46.6
+  m_fontSize: 15.35
+  m_fontSizeBase: 15.35
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -4622,7 +4622,7 @@ Transform:
   m_GameObject: {fileID: 5268579106117334288}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.6584925, z: 0, w: 0.7525873}
-  m_LocalPosition: {x: 502.4, y: 8.51581, z: -489.97}
+  m_LocalPosition: {x: 0, y: 2.973, z: 0.13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4663,7 +4663,7 @@ Camera:
     height: 1
   near clip plane: 0.01
   far clip plane: 1000
-  field of view: 112.2629
+  field of view: 75
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -5693,7 +5693,7 @@ Transform:
   m_GameObject: {fileID: 6376292503174423671}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 502.4, y: 8.11581, z: -490.1}
+  m_LocalPosition: {x: 0, y: 2.573, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5717,7 +5717,7 @@ CharacterController:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 1540
+    m_Bits: 4
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -5829,20 +5829,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cheatCodeforAdd: 273
   cheatCodeforRemove: 274
-  maxEnergy: 40000
-  currentEnergy: 800
+  maxEnergy: 10000
+  currentEnergy: 500
   energyLevels:
   - level: 1
     requiredEnergy: 0
     graceTimer: 0
   - level: 2
-    requiredEnergy: 1800
+    requiredEnergy: 2000
     graceTimer: 5
   - level: 3
-    requiredEnergy: 7000
+    requiredEnergy: 4000
     graceTimer: 5
   - level: 4
-    requiredEnergy: 23000
+    requiredEnergy: 6000
     graceTimer: 5
   energyDisplay: {fileID: 6788294273892150970}
   Gain_Palier: {fileID: 6127146839083381311}
@@ -5879,16 +5879,16 @@ MonoBehaviour:
   speedLevels:
   - level: 1
     speed: 10
-    energyConsumptionRate: 8
+    energyConsumptionRate: 1.5
   - level: 2
     speed: 15
-    energyConsumptionRate: 25
+    energyConsumptionRate: 10
   - level: 3
     speed: 20
-    energyConsumptionRate: 85
+    energyConsumptionRate: 15
   - level: 4
     speed: 24
-    energyConsumptionRate: 250
+    energyConsumptionRate: 25
 --- !u!114 &8464428744350943366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5904,16 +5904,16 @@ MonoBehaviour:
   sprintLevels:
   - level: 2
     sprintSpeed: 30
-    energyConsumptionRate: 150
-    SprintingSpeedFOV: 100
+    energyConsumptionRate: 20
+    SprintingSpeedFOV: 75
   - level: 3
     sprintSpeed: 40
-    energyConsumptionRate: 450
-    SprintingSpeedFOV: 110
+    energyConsumptionRate: 20
+    SprintingSpeedFOV: 80
   - level: 4
     sprintSpeed: 75
-    energyConsumptionRate: 1000
-    SprintingSpeedFOV: 120
+    energyConsumptionRate: 50
+    SprintingSpeedFOV: 100
   accelerationTime: 0.5
   accelerationCurve:
     serializedVersion: 2
@@ -5989,11 +5989,11 @@ MonoBehaviour:
     maxJumpCount: 1
   - level: 3
     jumpHeight: 13
-    energyConsumption: 600
+    energyConsumption: 100
     maxJumpCount: 2
   - level: 4
     jumpHeight: 18
-    energyConsumption: 1500
+    energyConsumption: 350
     maxJumpCount: 3
   jumpCooldown: 0.1
 --- !u!114 &5131711004954361696
@@ -6022,27 +6022,27 @@ MonoBehaviour:
   - level: 1
     fireRate: 4
     damage: 10
-    weekPointMultiplier: 15
-    energyConsumption: 10
+    weekPointMultiplier: 3
+    energyConsumption: 3
     dropBonus: 0
   - level: 2
     fireRate: 6
     damage: 25
-    weekPointMultiplier: 5
-    energyConsumption: 15
+    weekPointMultiplier: 3
+    energyConsumption: 3
     dropBonus: 0
   - level: 3
     fireRate: 10
     damage: 40
-    weekPointMultiplier: 2
-    energyConsumption: 40
-    dropBonus: 1
+    weekPointMultiplier: 3
+    energyConsumption: 3
+    dropBonus: 0
   - level: 4
     fireRate: 20
-    damage: 60
-    weekPointMultiplier: 2
-    energyConsumption: 75
-    dropBonus: -3
+    damage: 100
+    weekPointMultiplier: 3
+    energyConsumption: 5
+    dropBonus: 0
   HitMarkerPNG: {fileID: 969691688291508243}
 --- !u!114 &930943365604710939
 MonoBehaviour:
@@ -6063,36 +6063,36 @@ MonoBehaviour:
     attackDistance: 5
     attackDamage: 15
     attackCooldown: 0.2
-    energyConsumption: 25
-    dropBonus: 10
-    WeakPointDropBonus: 15
+    energyConsumption: 0
+    dropBonus: 30
+    WeakPointDropBonus: 40
   - level: 2
+    attackRange: 0.8
+    attackDistance: 5
+    attackDamage: 70
+    attackCooldown: 0.2
+    energyConsumption: 50
+    dropBonus: 25
+    WeakPointDropBonus: 40
+  - level: 3
     attackRange: 0.8
     attackDistance: 5
     attackDamage: 90
     attackCooldown: 0.2
-    energyConsumption: 85
-    dropBonus: 12
-    WeakPointDropBonus: 20
-  - level: 3
-    attackRange: 0.8
-    attackDistance: 5
-    attackDamage: 250
-    attackCooldown: 0.2
-    energyConsumption: 200
-    dropBonus: 15
-    WeakPointDropBonus: 25
+    energyConsumption: 75
+    dropBonus: 25
+    WeakPointDropBonus: 40
   - level: 4
     attackRange: 0.8
     attackDistance: 5
-    attackDamage: 500
+    attackDamage: 180
     attackCooldown: 0.2
-    energyConsumption: 2000
-    dropBonus: 15
-    WeakPointDropBonus: 25
+    energyConsumption: 200
+    dropBonus: 25
+    WeakPointDropBonus: 40
   targetLayer:
     serializedVersion: 2
-    m_Bits: 3584
+    m_Bits: 2560
   windupTime: 0.35
   currentAttackCD: 0
 --- !u!114 &8670675854258119381
@@ -6112,17 +6112,17 @@ MonoBehaviour:
     maxSphereRange: 100
     sphereDamage: 2000
     descentSpeed: 300
-    energyConsumption: 5000
-    dropBonus: -5
+    energyConsumption: 500
+    dropBonus: 0
   - level: 4
     maxSphereRange: 100
     sphereDamage: 2000
     descentSpeed: 300
-    energyConsumption: 10000
-    dropBonus: -5
+    energyConsumption: 1000
+    dropBonus: 0
   KillableTargetLayer:
     serializedVersion: 2
-    m_Bits: 1536
+    m_Bits: 512
   groundLayer:
     serializedVersion: 2
     m_Bits: 257
@@ -6140,7 +6140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c38433cc78643b54c957d99f6b12aec4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pushForce: 10
+  pushForce: 3
   _volumeSettings: {fileID: 3034586635551676886}
   vignetteTargetIntensity: 0.6
   animationDuration: 0.5
@@ -6211,22 +6211,22 @@ MonoBehaviour:
   comboSettings:
   - LevelToUnlock: 1
     minComboMultiplier: 1
-    maxComboMultiplier: 2
+    maxComboMultiplier: 1
     comboTime: 3
     GainPerKill: 0.5
   - LevelToUnlock: 2
     minComboMultiplier: 1
-    maxComboMultiplier: 3
+    maxComboMultiplier: 1
     comboTime: 3
     GainPerKill: 0.5
   - LevelToUnlock: 3
     minComboMultiplier: 1
-    maxComboMultiplier: 4
+    maxComboMultiplier: 1
     comboTime: 3
     GainPerKill: 0.5
   - LevelToUnlock: 4
     minComboMultiplier: 1
-    maxComboMultiplier: 5
+    maxComboMultiplier: 1
     comboTime: 3
     GainPerKill: 0.5
   currentComboMultiplier: 0
