@@ -69,7 +69,6 @@ public class S_BasicSpeedControl_Module : MonoBehaviour
                     float energyToConsume = level.energyConsumptionRate * Time.deltaTime;
                     _energyStorage.currentEnergy -= energyToConsume;
                     totalenergy += energyToConsume;
-                    Debug.Log("Energy"+totalenergy);
                 }
             }
             else
