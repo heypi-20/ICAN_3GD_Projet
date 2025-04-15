@@ -5,6 +5,7 @@ using UnityEngine;
 public class S_VFXPoolManager : MonoBehaviour
 {
     public static S_VFXPoolManager Instance;
+    public float VFXStayTime;
 
     private Dictionary<GameObject, Queue<GameObject>> pool = new();
     private Queue<Request> vfxRequestQueue = new(); 
@@ -65,7 +66,7 @@ public class S_VFXPoolManager : MonoBehaviour
             vfx = Instantiate(req.prefab, req.position, req.rotation);
         }
 
-        StartCoroutine(ReleaseAfter(vfx, req.prefab, req.releaseTime));
+        StartCoroutine(ReleaseAfter(vfx, req.prefab, VFXStayTime));
     }
 
     private IEnumerator ReleaseAfter(GameObject obj, GameObject prefab, float time)

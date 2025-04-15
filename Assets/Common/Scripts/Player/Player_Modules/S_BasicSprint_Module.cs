@@ -17,8 +17,8 @@ public class S_BasicSprint_Module : MonoBehaviour
         public int level; // Correspond au niveau d'énergie dans S_EnergyStorage
         public float sprintSpeed; // Vitesse de sprint pour ce niveau
         public float energyConsumptionRate; // Consommation d'énergie pour ce niveau
-        public float SprintingSpeedFOV;
         public float sprintDamage;
+        public float SprintingSpeedFOV;
         public int dropBonus;
     }
     [Header("Sprint Levels")]
@@ -178,8 +178,9 @@ public class S_BasicSprint_Module : MonoBehaviour
                     if (rb != null)
                     {
                         // Apply push force to the enemy
-                        Vector3 forceDirection = (rb.transform.position + finalPosition).normalized;
+                        Vector3 forceDirection = (rb.transform.position-finalPosition).normalized;
                         rb.AddForce(forceDirection * pushForce, ForceMode.Impulse);
+                        
                     }
 
                     // Apply damage to the enemy
