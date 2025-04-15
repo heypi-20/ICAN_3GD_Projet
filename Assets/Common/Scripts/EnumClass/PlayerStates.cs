@@ -40,6 +40,7 @@ public static class PlayerStates
     public enum MeleeState
     {
         StartMeleeAttack,
+        DashingBeforeMelee,
         MeleeAttackMissed,
         MeleeAttackHit,
         MeleeAttackHitWeakness,

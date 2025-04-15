@@ -24,13 +24,18 @@ public class S_MeleeAttack_Module : MonoBehaviour
     public List<MeleeAttackLevel> attackLevels; // List of attack levels
     public LayerMask targetLayer; // Layer for objects that can be destroyed
     public float windupTime = 0.2f; // Windup time (delay before executing the attack after pressing the attack button)
+    
+    [Header("Dash Settings")]
+    public float dashMoveDistance = 1.0f; // Total dash distance to move before attacking
+    public float dashDuration = 0.5f;   // Duration over which to perform the dash movement
+
 
     private S_InputManager _inputManager; // Reference to the input manager
     private S_EnergyStorage _energyStorage; // Reference to the energy storage
     private float _attackCooldownTimer; // Timer to manage the cooldown period
     public float currentAttackCD;
     private bool _isWindupInProgress = false; // Flag indicating whether windup is in progress
-
+    private CharacterController _characterController;
     public event Action<Enum, int> OnAttackStateChange;
     
     private void Start()
@@ -38,6 +43,7 @@ public class S_MeleeAttack_Module : MonoBehaviour
         // Initialize references
         _inputManager = FindObjectOfType<S_InputManager>();
         _energyStorage = GetComponent<S_EnergyStorage>();
+        _characterController = GetComponent<CharacterController>();
     }
 
     private void Update()
@@ -60,10 +66,11 @@ public class S_MeleeAttack_Module : MonoBehaviour
             && S_PlayerStateObserver.Instance.LastMeleeState == null && !_isWindupInProgress)
         {
             _isWindupInProgress = true;
-            // Start the windup coroutine and wait for windupTime seconds before executing the attack logic
-            StartCoroutine(WindupAndAttack(currentLevel));
             // Trigger the start attack event
             MeleeAttackObserverEvent(PlayerStates.MeleeState.StartMeleeAttack, currentLevel.level);
+            // Start the windup coroutine and wait for windupTime seconds before executing the attack logic
+            StartCoroutine(WindupAndAttack(currentLevel));
+            
         }
 
         // Decrease the cooldown timer
@@ -72,10 +79,13 @@ public class S_MeleeAttack_Module : MonoBehaviour
             _attackCooldownTimer -= Time.deltaTime;
         }
     }
+    
+    
 
     private IEnumerator WindupAndAttack(MeleeAttackLevel currentLevel)
     {
         // Wait for the windup time
+        yield return StartCoroutine(AttackMovementCoroutine(dashDuration, dashMoveDistance));
         yield return new WaitForSeconds(windupTime);
 
         // Play the attack sound effect (executed after the windup ends)
@@ -90,6 +100,22 @@ public class S_MeleeAttack_Module : MonoBehaviour
         yield return StartCoroutine(StartTimer(_attackCooldownTimer));
 
         _isWindupInProgress = false;
+    }
+    // Coroutine to move the character gradually forward
+    private IEnumerator AttackMovementCoroutine(float duration, float moveDistance)
+    {
+        // Calculate constant speed: total distance divided by duration
+        float dashSpeed = moveDistance / duration;
+        float elapsed = 0f;
+        MeleeAttackObserverEvent(PlayerStates.MeleeState.DashingBeforeMelee, GetCurrentAttackLevel().level);
+
+        while (elapsed < duration)
+        {
+            // Move the character in the attack origin's forward direction
+            _characterController.Move(attackOrigin.forward * (dashSpeed * Time.deltaTime));
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
     }
 
     private IEnumerator StartTimer(float seconds)
