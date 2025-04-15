@@ -8,9 +8,6 @@ using UnityEngine.SceneManagement;
 public class S_PlayerHitTrigger : MonoBehaviour
 {
     private S_EnergyStorage _energyStorage;
-    
-    [Header("Physic settings")]
-    public float pushForce= 3f;
 
     [Header("Camera Settings")]
     public CinemachineVolumeSettings _volumeSettings; // Référence au composant Volume de la caméra
@@ -58,7 +55,6 @@ public class S_PlayerHitTrigger : MonoBehaviour
         var enemy = other.gameObject.GetComponent<EnemyBase>();
         var projectile = other.gameObject.GetComponent<S_EnemyProjectileDamage>();
 
-        // 只有当 "enemy" 或 "projectile" 不是 null 时才检查 isDead
         if (isDead && (enemy != null || projectile != null))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -67,13 +63,6 @@ public class S_PlayerHitTrigger : MonoBehaviour
 
         if (enemy != null)
         {
-            Rigidbody enemyrb = enemy.gameObject.GetComponent<Rigidbody>();
-            if (enemyrb != null)
-            {
-                Vector3 pushDirection = enemy.gameObject.transform.position - transform.position;
-                pushDirection.Normalize();
-                enemyrb.AddForce(pushDirection * pushForce, ForceMode.Impulse);
-            }
             ReceiveDamage(enemy.enemyDamage);
         }
         else if (projectile != null)

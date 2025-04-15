@@ -5903,17 +5903,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sprintLevels:
   - level: 2
-    sprintSpeed: 30
-    energyConsumptionRate: 20
-    SprintingSpeedFOV: 75
+    sprintSpeed: 45
+    energyConsumptionRate: 100
+    SprintingSpeedFOV: 90
+    sprintRange: 10
+    sprintDamage: 35
+    dropBonus: 0
   - level: 3
-    sprintSpeed: 40
-    energyConsumptionRate: 20
-    SprintingSpeedFOV: 80
+    sprintSpeed: 60
+    energyConsumptionRate: 200
+    SprintingSpeedFOV: 90
+    sprintRange: 10
+    sprintDamage: 45
+    dropBonus: 0
   - level: 4
-    sprintSpeed: 75
-    energyConsumptionRate: 50
+    sprintSpeed: 80
+    energyConsumptionRate: 400
     SprintingSpeedFOV: 100
+    sprintRange: 10
+    sprintDamage: 80
+    dropBonus: 0
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  pushForce: 50
   accelerationTime: 0.5
   accelerationCurve:
     serializedVersion: 2
@@ -5966,6 +5979,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   cinemachineCamera: {fileID: 8716976314815281874}
   fovTransitionTime: 0.5
+  drawSprintDamageGizmo: 1
+  drawSprintRangeGizmoSize: 10
 --- !u!114 &4765734768186810465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6062,7 +6077,7 @@ MonoBehaviour:
     attackRange: 0.8
     attackDistance: 5
     attackDamage: 15
-    attackCooldown: 0.2
+    attackCooldown: 0.4
     energyConsumption: 0
     dropBonus: 30
     WeakPointDropBonus: 40
@@ -6070,7 +6085,7 @@ MonoBehaviour:
     attackRange: 0.8
     attackDistance: 5
     attackDamage: 70
-    attackCooldown: 0.2
+    attackCooldown: 0.4
     energyConsumption: 50
     dropBonus: 25
     WeakPointDropBonus: 40
@@ -6078,7 +6093,7 @@ MonoBehaviour:
     attackRange: 0.8
     attackDistance: 5
     attackDamage: 100
-    attackCooldown: 0.2
+    attackCooldown: 0.4
     energyConsumption: 75
     dropBonus: 25
     WeakPointDropBonus: 40
@@ -6086,7 +6101,7 @@ MonoBehaviour:
     attackRange: 0.8
     attackDistance: 5
     attackDamage: 200
-    attackCooldown: 0.2
+    attackCooldown: 0.4
     energyConsumption: 200
     dropBonus: 25
     WeakPointDropBonus: 40
@@ -6094,6 +6109,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2560
   windupTime: 0.35
+  dashMoveDistance: 10
+  dashDuration: 0.05
   currentAttackCD: 0
 --- !u!114 &8670675854258119381
 MonoBehaviour:
@@ -6140,7 +6157,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c38433cc78643b54c957d99f6b12aec4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pushForce: 3
   _volumeSettings: {fileID: 3034586635551676886}
   vignetteTargetIntensity: 0.6
   animationDuration: 0.5
