@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 using DG.Tweening;
-using UnityEditor.ShaderGraph.Internal;
-using UnityEngine.Serialization;
 
 [RequireComponent(typeof(S_CustomCharacterController))]
 [RequireComponent(typeof(S_EnergyStorage))]
