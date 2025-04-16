@@ -29,6 +29,8 @@ public class S_MeleeAttack_Module : MonoBehaviour
     public float dashMoveDistance = 1.0f; // Total dash distance to move before attacking
     public float dashDuration = 0.5f;   // Duration over which to perform the dash movement
 
+    [Header("Gizmos settings")]
+    public bool drawGizmos = true;
 
     private S_InputManager _inputManager; // Reference to the input manager
     private S_EnergyStorage _energyStorage; // Reference to the energy storage
@@ -84,8 +86,13 @@ public class S_MeleeAttack_Module : MonoBehaviour
 
     private IEnumerator WindupAndAttack(MeleeAttackLevel currentLevel)
     {
+        //dash when ennemis is far
+        if (!Physics.Raycast(attackOrigin.position, attackOrigin.forward,currentLevel.attackDistance, targetLayer))
+        {
+            yield return StartCoroutine(AttackMovementCoroutine(dashDuration, dashMoveDistance));
+        }
+        
         // Wait for the windup time
-        yield return StartCoroutine(AttackMovementCoroutine(dashDuration, dashMoveDistance));
         yield return new WaitForSeconds(windupTime);
 
         // Play the attack sound effect (executed after the windup ends)
@@ -101,6 +108,9 @@ public class S_MeleeAttack_Module : MonoBehaviour
 
         _isWindupInProgress = false;
     }
+    
+    
+    
     // Coroutine to move the character gradually forward
     private IEnumerator AttackMovementCoroutine(float duration, float moveDistance)
     {
@@ -158,7 +168,7 @@ public class S_MeleeAttack_Module : MonoBehaviour
                 if (targetRB != null)
                 {
                     Vector3 forceDirection = (targetRB.transform.position - transform.position).normalized;
-                    targetRB.AddForce(forceDirection * 10f, ForceMode.Impulse);
+                    targetRB.AddForce(forceDirection * 0f, ForceMode.Impulse);
                 }
 
                 if (bestHit.CompareTag("WeakPoint"))
@@ -223,6 +233,7 @@ public class S_MeleeAttack_Module : MonoBehaviour
     // Gizmos drawing: Draw a capsule that matches the detection area used by OverlapCapsule.
     private void OnDrawGizmos()
     {
+        if(!drawGizmos)return;
         if (attackOrigin != null && attackLevels != null && attackLevels.Count > 0)
         {
             MeleeAttackLevel currentLevel = GetCurrentAttackLevel();
