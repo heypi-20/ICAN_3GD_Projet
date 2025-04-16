@@ -2780,7 +2780,7 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_HorizontalAxis:
-    Value: 82.37
+    Value: 0
     m_SpeedMode: 1
     m_MaxSpeed: 0.1
     m_AccelTime: 0.1
@@ -3191,7 +3191,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 7121883038825396396}
   m_Lens:
-    FieldOfView: 75
+    FieldOfView: 60
     OrthographicSize: 5
     NearClipPlane: 0.01
     FarClipPlane: 1000
@@ -4621,7 +4621,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5268579106117334288}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.6584925, z: 0, w: 0.7525873}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 2.973, z: 0.13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4663,7 +4663,7 @@ Camera:
     height: 1
   near clip plane: 0.01
   far clip plane: 1000
-  field of view: 75
+  field of view: 60
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -5905,28 +5905,28 @@ MonoBehaviour:
   - level: 2
     sprintSpeed: 45
     energyConsumptionRate: 100
+    sprintDamage: 80
     SprintingSpeedFOV: 90
-    sprintRange: 10
-    sprintDamage: 35
     dropBonus: 0
   - level: 3
     sprintSpeed: 60
     energyConsumptionRate: 200
+    sprintDamage: 90
     SprintingSpeedFOV: 90
-    sprintRange: 10
-    sprintDamage: 45
     dropBonus: 0
   - level: 4
     sprintSpeed: 80
-    energyConsumptionRate: 400
+    energyConsumptionRate: 600
+    sprintDamage: 300
     SprintingSpeedFOV: 100
-    sprintRange: 10
-    sprintDamage: 80
     dropBonus: 0
   enemyLayer:
     serializedVersion: 2
     m_Bits: 512
-  pushForce: 50
+  rangeDistance: 1.76
+  rangeOffset: {x: 0, y: 0, z: 0}
+  pushForce: 0
+  sprintRange: 3.5
   accelerationTime: 0.5
   accelerationCurve:
     serializedVersion: 2
@@ -5980,7 +5980,6 @@ MonoBehaviour:
   cinemachineCamera: {fileID: 8716976314815281874}
   fovTransitionTime: 0.5
   drawSprintDamageGizmo: 1
-  drawSprintRangeGizmoSize: 10
 --- !u!114 &4765734768186810465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6079,11 +6078,11 @@ MonoBehaviour:
     attackDamage: 15
     attackCooldown: 0.4
     energyConsumption: 0
-    dropBonus: 30
-    WeakPointDropBonus: 40
+    dropBonus: 45
+    WeakPointDropBonus: 65
   - level: 2
     attackRange: 0.8
-    attackDistance: 5
+    attackDistance: 3
     attackDamage: 70
     attackCooldown: 0.4
     energyConsumption: 50
@@ -6091,7 +6090,7 @@ MonoBehaviour:
     WeakPointDropBonus: 40
   - level: 3
     attackRange: 0.8
-    attackDistance: 5
+    attackDistance: 3
     attackDamage: 100
     attackCooldown: 0.4
     energyConsumption: 75
@@ -6099,7 +6098,7 @@ MonoBehaviour:
     WeakPointDropBonus: 40
   - level: 4
     attackRange: 0.8
-    attackDistance: 5
+    attackDistance: 3
     attackDamage: 200
     attackCooldown: 0.4
     energyConsumption: 200
@@ -6109,8 +6108,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2560
   windupTime: 0.35
-  dashMoveDistance: 10
-  dashDuration: 0.05
+  dashMoveDistance: 5
+  dashDuration: 0.1
+  drawGizmos: 1
   currentAttackCD: 0
 --- !u!114 &8670675854258119381
 MonoBehaviour:
