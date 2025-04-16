@@ -902,6 +902,50 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 930943365604710939, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: dashDuration
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 930943365604710939, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: attackLevels.Array.data[0].attackRange
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 930943365604710939, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: attackLevels.Array.data[1].attackRange
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 930943365604710939, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: attackLevels.Array.data[2].attackRange
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 930943365604710939, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: attackLevels.Array.data[3].attackRange
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 930943365604710939, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: attackLevels.Array.data[0].attackDamage
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 930943365604710939, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: attackLevels.Array.data[2].attackDamage
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 930943365604710939, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: attackLevels.Array.data[0].attackDistance
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 930943365604710939, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: attackLevels.Array.data[1].attackDistance
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 930943365604710939, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: attackLevels.Array.data[2].attackDistance
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 930943365604710939, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: attackLevels.Array.data[3].attackDistance
+      value: 300
+      objectReference: {fileID: 0}
     - target: {fileID: 3991563848175933883, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
       propertyPath: m_Name
       value: Pre_PlayerObjGroupe
@@ -1180,83 +1224,6 @@ LightingSettings:
   m_PVRTiledBaking: 0
   m_NumRaysToShootPerTexel: -1
   m_RespectSceneVisibilityWhenBakingGI: 0
---- !u!1001 &197609737
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4005124941193937177, guid: fe344e904f9713d4690825b59ca829ca, type: 3}
-      propertyPath: health
-      value: 99999
-      objectReference: {fileID: 0}
-    - target: {fileID: 4005124941193937177, guid: fe344e904f9713d4690825b59ca829ca, type: 3}
-      propertyPath: jumpForce
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4005124941193937177, guid: fe344e904f9713d4690825b59ca829ca, type: 3}
-      propertyPath: idleThreshold
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4005124941193937177, guid: fe344e904f9713d4690825b59ca829ca, type: 3}
-      propertyPath: trackingForce
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4005124941193937177, guid: fe344e904f9713d4690825b59ca829ca, type: 3}
-      propertyPath: activationForce
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5534188564840520030, guid: fe344e904f9713d4690825b59ca829ca, type: 3}
-      propertyPath: m_Name
-      value: Pre_JumpyCuby_Lv1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8844635092672372801, guid: fe344e904f9713d4690825b59ca829ca, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.4156199
-      objectReference: {fileID: 0}
-    - target: {fileID: 8844635092672372801, guid: fe344e904f9713d4690825b59ca829ca, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.2928028
-      objectReference: {fileID: 0}
-    - target: {fileID: 8844635092672372801, guid: fe344e904f9713d4690825b59ca829ca, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 12.824837
-      objectReference: {fileID: 0}
-    - target: {fileID: 8844635092672372801, guid: fe344e904f9713d4690825b59ca829ca, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8844635092672372801, guid: fe344e904f9713d4690825b59ca829ca, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8844635092672372801, guid: fe344e904f9713d4690825b59ca829ca, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8844635092672372801, guid: fe344e904f9713d4690825b59ca829ca, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8844635092672372801, guid: fe344e904f9713d4690825b59ca829ca, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8844635092672372801, guid: fe344e904f9713d4690825b59ca829ca, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8844635092672372801, guid: fe344e904f9713d4690825b59ca829ca, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: fe344e904f9713d4690825b59ca829ca, type: 3}
 --- !u!1 &219138060
 GameObject:
   m_ObjectHideFlags: 0
@@ -12523,6 +12490,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AdapatativeSpawner_LD
       objectReference: {fileID: 0}
+    - target: {fileID: 8223523392238652190, guid: a4638295f87e9cf4c9b159ab5e8451a1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8442768937541065026, guid: a4638295f87e9cf4c9b159ab5e8451a1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -12731,4 +12702,3 @@ SceneRoots:
   - {fileID: 6139688245911669227}
   - {fileID: 83086560}
   - {fileID: 1932249899}
-  - {fileID: 197609737}

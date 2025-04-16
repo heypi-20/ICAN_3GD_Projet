@@ -26,8 +26,9 @@ public class S_MeleeAttack_Module : MonoBehaviour
     public float windupTime = 0.2f; // Windup time (delay before executing the attack after pressing the attack button)
     
     [Header("Dash Settings")]
-    public float dashMoveDistance = 1.0f; // Total dash distance to move before attacking
     public float dashDuration = 0.5f;   // Duration over which to perform the dash movement
+
+    public float StopDashDistance = 3f;
 
     [Header("Gizmos settings")]
     public bool drawGizmos = true;
@@ -87,10 +88,10 @@ public class S_MeleeAttack_Module : MonoBehaviour
     private IEnumerator WindupAndAttack(MeleeAttackLevel currentLevel)
     {
         //dash when ennemis is far
-        if (!Physics.Raycast(attackOrigin.position, attackOrigin.forward,currentLevel.attackDistance, targetLayer))
-        {
-            StartCoroutine(AttackMovementCoroutine(dashDuration, dashMoveDistance));
-        }
+        // if (!Physics.Raycast(attackOrigin.position, attackOrigin.forward,currentLevel.attackDistance, targetLayer))
+        // {
+        //     StartCoroutine(AttackMovementCoroutine(dashDuration, dashMoveDistance));
+        // }
         
         // Wait for the windup time
         yield return new WaitForSeconds(windupTime);
@@ -112,19 +113,40 @@ public class S_MeleeAttack_Module : MonoBehaviour
     
     
     // Coroutine to move the character gradually forward
-    private IEnumerator AttackMovementCoroutine(float duration, float moveDistance)
+    private IEnumerator AttackMovementCoroutine(float duration,Vector3 enemyPos,Collider hit,MeleeAttackLevel currentLevel)
     {
         // Calculate constant speed: total distance divided by duration
+        float moveDistance = Vector3.Distance(transform.position, enemyPos)-StopDashDistance;
         float dashSpeed = moveDistance / duration;
         float elapsed = 0f;
         MeleeAttackObserverEvent(PlayerStates.MeleeState.DashingBeforeMelee, GetCurrentAttackLevel().level);
 
+        Vector3 direction =(enemyPos-attackOrigin.position).normalized;
         while (elapsed < duration)
         {
             // Move the character in the attack origin's forward direction
-            _characterController.Move(attackOrigin.forward * (dashSpeed * Time.deltaTime));
+            //_characterController.Move(attackOrigin.forward * (dashSpeed * Time.deltaTime));
+            _characterController.Move(direction * (dashSpeed * Time.deltaTime));
             elapsed += Time.deltaTime;
             yield return null;
+        }
+        // yield return new WaitUntil(() => elapsed >= duration);
+        Debug.Log("handle Damage");
+        Rigidbody targetRB = hit.GetComponentInParent<Rigidbody>();
+        if (targetRB != null)
+        {
+            Vector3 forceDirection = (hit.transform.position - transform.position).normalized;
+            targetRB.AddForce(forceDirection * 30f, ForceMode.Impulse);
+        }
+        if (hit.CompareTag("WeakPoint"))
+        {
+            hit.GetComponentInParent<EnemyBase>()?.ReduceHealth(currentLevel.attackDamage * 100, currentLevel.dropBonus + currentLevel.WeakPointDropBonus);
+            Debug.Log("Touch Weak Point " + currentLevel.attackDamage * 100);
+        }
+        else
+        {
+            hit.GetComponent<EnemyBase>()?.ReduceHealth(currentLevel.attackDamage, currentLevel.dropBonus);
+            Debug.Log("Didn't Touch Weak Point");
         }
     }
 
@@ -163,24 +185,18 @@ public class S_MeleeAttack_Module : MonoBehaviour
             if (bestHit != null)
             {
                 MeleeAttackObserverEvent(PlayerStates.MeleeState.MeleeAttackHit, currentLevel.level);
-                
-                Rigidbody targetRB = bestHit.GetComponentInParent<Rigidbody>();
-                if (targetRB != null)
-                {
-                    Vector3 forceDirection = (targetRB.transform.position - transform.position).normalized;
-                    targetRB.AddForce(forceDirection * 0f, ForceMode.Impulse);
-                }
+                StartCoroutine(AttackMovementCoroutine(dashDuration, bestHit.transform.position,bestHit,currentLevel));
 
-                if (bestHit.CompareTag("WeakPoint"))
-                {
-                    bestHit.GetComponentInParent<EnemyBase>()?.ReduceHealth(currentLevel.attackDamage * 100, currentLevel.dropBonus + currentLevel.WeakPointDropBonus);
-                    Debug.Log("Touch Weak Point " + currentLevel.attackDamage * 100);
-                }
-                else
-                {
-                    bestHit.GetComponent<EnemyBase>()?.ReduceHealth(currentLevel.attackDamage, currentLevel.dropBonus);
-                    Debug.Log("Didn't Touch Weak Point");
-                }
+                // if (bestHit.CompareTag("WeakPoint"))
+                // {
+                //     bestHit.GetComponentInParent<EnemyBase>()?.ReduceHealth(currentLevel.attackDamage * 100, currentLevel.dropBonus + currentLevel.WeakPointDropBonus);
+                //     Debug.Log("Touch Weak Point " + currentLevel.attackDamage * 100);
+                // }
+                // else
+                // {
+                //     bestHit.GetComponent<EnemyBase>()?.ReduceHealth(currentLevel.attackDamage, currentLevel.dropBonus);
+                //     Debug.Log("Didn't Touch Weak Point");
+                // }
                 return;
             }
         }
