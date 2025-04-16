@@ -8,7 +8,6 @@ using UnityEditor;
 [RequireComponent(typeof(S_EnergyStorage))]
 public class S_SuperJump_Module : MonoBehaviour
 {
-    
     [System.Serializable]
     public class JumpLevel
     {
@@ -16,12 +15,23 @@ public class S_SuperJump_Module : MonoBehaviour
         public float jumpHeight; // Hauteur du saut pour ce niveau
         public float energyConsumption; // Consommation d'énergie pour ce niveau
         public int maxJumpCount; // Nombre maximum de sauts permis pour ce niveau
+        public float VortexRange;
     }
     [Header("Jump Settings")]
     public List<JumpLevel> jumpLevels; // Liste des niveaux de saut
 
     [Header("Jump Cooldown")]
     public float jumpCooldown = 1f; // Temps de cooldown entre deux sauts
+    
+    [Header("Vortex Settings")]
+    public LayerMask enemyLayer;
+    public float vortexPullSpeed;
+    public float vortexDuration;
+    public AnimationCurve pullSpeedOverTime;
+    
+    [Header ("Gizmos Settings")]
+    public bool showGizmos = true;
+    public float vortexRadius;
 
     private int _currentJumpCount = 0; // Compteur de sauts utilisés
     private bool _isJumpOnCooldown = false; // Indique si le saut est en cooldown
@@ -100,6 +110,9 @@ public class S_SuperJump_Module : MonoBehaviour
         //Audio OnJump
         SoundManager.Instance.Meth_Used_Jump();
         
+        //Active Vortex
+        JumpVortex();
+        
         //Trigger Evenement
         JumpObserverEvent(PlayerStates.JumpState.Jump);
         
@@ -111,9 +124,46 @@ public class S_SuperJump_Module : MonoBehaviour
 
         // Lancer le cooldown
         StartCoroutine(JumpCooldownRoutine());
-
-        // TODO : Ajouter un feedback visuel ou sonore ici
     }
+
+    private void JumpVortex()
+    {
+        StartCoroutine(VortexPullCoroutine());
+    }
+    private IEnumerator VortexPullCoroutine()
+    {
+        float elapsed = 0f;
+        Vector3 vortexCenter = transform.position;
+
+        List<Rigidbody> affectedBodies = new List<Rigidbody>();
+        Collider[] colliders = Physics.OverlapSphere(vortexCenter, GetCurrentJumpLevel().VortexRange, enemyLayer);
+        foreach (var col in colliders)
+        {
+            Rigidbody rb = col.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                affectedBodies.Add(rb);
+            }
+        }
+
+        while (elapsed < vortexDuration)
+        {
+            float strength = pullSpeedOverTime.Evaluate(elapsed / vortexDuration);
+
+            foreach (Rigidbody rb in affectedBodies)
+            {
+                if (rb == null) continue;
+
+                Vector3 dir = (vortexCenter - rb.position).normalized;
+                Vector3 move = dir * (vortexPullSpeed * strength * Time.deltaTime);
+                rb.MovePosition(rb.position + move);
+            }
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+    }
+    
 
     /// <summary>
     /// Obtient le niveau de saut correspondant au niveau d'énergie actuel
@@ -142,5 +192,12 @@ public class S_SuperJump_Module : MonoBehaviour
         _isJumpOnCooldown = true;
         yield return new WaitForSeconds(jumpCooldown);
         _isJumpOnCooldown = false;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if(!showGizmos)return;
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position, vortexRadius);
     }
 }
