@@ -5994,22 +5994,57 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpLevels:
   - level: 1
-    jumpHeight: 5
+    jumpHeight: 15
     energyConsumption: 15
     maxJumpCount: 1
+    VortexRange: 15
   - level: 2
-    jumpHeight: 8
+    jumpHeight: 15
     energyConsumption: 50
     maxJumpCount: 1
+    VortexRange: 15
   - level: 3
-    jumpHeight: 13
+    jumpHeight: 15
     energyConsumption: 100
     maxJumpCount: 2
+    VortexRange: 15
   - level: 4
-    jumpHeight: 18
+    jumpHeight: 25
     energyConsumption: 350
     maxJumpCount: 3
+    VortexRange: 15
   jumpCooldown: 0.1
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  vortexPullSpeed: 15
+  vortexDuration: 1
+  pullSpeedOverTime:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  showGizmos: 1
+  vortexRadius: 15
 --- !u!114 &5131711004954361696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6073,32 +6108,32 @@ MonoBehaviour:
   attackOrigin: {fileID: 3636347044067628401}
   attackLevels:
   - level: 1
-    attackRange: 0.8
-    attackDistance: 5
-    attackDamage: 30
+    attackRange: 1.5
+    attackDistance: 300
+    attackDamage: 15
     attackCooldown: 0.4
     energyConsumption: 0
     dropBonus: 45
     WeakPointDropBonus: 65
   - level: 2
-    attackRange: 0.8
-    attackDistance: 5
+    attackRange: 1.5
+    attackDistance: 300
     attackDamage: 80
     attackCooldown: 0.4
     energyConsumption: 50
     dropBonus: 25
     WeakPointDropBonus: 40
   - level: 3
-    attackRange: 0.8
-    attackDistance: 5
-    attackDamage: 100
+    attackRange: 1.5
+    attackDistance: 50
+    attackDamage: 300
     attackCooldown: 0.4
     energyConsumption: 75
     dropBonus: 25
     WeakPointDropBonus: 40
   - level: 4
-    attackRange: 0.8
-    attackDistance: 5
+    attackRange: 1.5
+    attackDistance: 300
     attackDamage: 200
     attackCooldown: 0.4
     energyConsumption: 200
@@ -6108,8 +6143,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2560
   windupTime: 0.35
-  dashMoveDistance: 3
   dashDuration: 0.1
+  StopDashDistance: 3
   drawGizmos: 1
   currentAttackCD: 0
 --- !u!114 &8670675854258119381
