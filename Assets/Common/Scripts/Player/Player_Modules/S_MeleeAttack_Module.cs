@@ -89,7 +89,7 @@ public class S_MeleeAttack_Module : MonoBehaviour
         //dash when ennemis is far
         if (!Physics.Raycast(attackOrigin.position, attackOrigin.forward,currentLevel.attackDistance, targetLayer))
         {
-            yield return StartCoroutine(AttackMovementCoroutine(dashDuration, dashMoveDistance));
+            StartCoroutine(AttackMovementCoroutine(dashDuration, dashMoveDistance));
         }
         
         // Wait for the windup time
