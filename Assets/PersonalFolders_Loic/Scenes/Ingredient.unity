@@ -231,7 +231,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &189086053
 Transform:
   m_ObjectHideFlags: 0
@@ -294,7 +294,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &209335293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -358,7 +358,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &337386881
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -373,9 +373,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: 
   enemyType: 0
-  enemyDamage: 0
   health: 0
   WeaknessExposureHealth: 0
+  enemyDamage: 0
   WeakPoint: {fileID: 0}
   energyPoint: {fileID: 0}
   energyDropQuantity: 0
@@ -392,8 +392,15 @@ MonoBehaviour:
   elevationLimit: 10
   flyHeight: 20
   chaseRange: 20
-  stoppingRange: 2
-  screamRange: 10
+  stoppingRange: 5
+  validPosLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  screamRange: 20
+  runTime: 2
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!195 &337386882
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -404,7 +411,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: -902729914
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 10
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -598,7 +605,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 20, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 337386883}
@@ -1194,11 +1201,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4897929555399485672, guid: 372e2d5281005fc49848f81c06e705a9, type: 3}
       propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5678420582889814344, guid: 372e2d5281005fc49848f81c06e705a9, type: 3}
-      propertyPath: playerLayer.m_Bits
-      value: 8
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
