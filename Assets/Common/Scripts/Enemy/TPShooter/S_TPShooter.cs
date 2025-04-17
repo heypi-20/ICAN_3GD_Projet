@@ -14,6 +14,7 @@ public class S_TPShooter : EnemyBase
     public float teleportCd = 2f;
     public float minDist = 5f;
     public float maxDist = 5f;
+    public LayerMask validPosLayer;
 
     [Header("Shoot Properties")]
     public float range;
@@ -81,7 +82,7 @@ public class S_TPShooter : EnemyBase
             if (!isCharging && canShoot)
                 transform.LookAt(hit.point);
             if (canShoot)
-                LaserAim();
+                LaserHandler();
         } else {
             lr.SetPosition(1, shootPoint.position);
         }
@@ -94,8 +95,12 @@ public class S_TPShooter : EnemyBase
         float randZ = Random.Range(-minDist, maxDist);
         
         Vector3 targetPosition = new Vector3(transform.position.x + randX, transform.position.y + randY, transform.position.z + randZ);
-        NavMeshHit navMeshHit;
-        if (NavMesh.SamplePosition(targetPosition, out navMeshHit, range, NavMesh.AllAreas)) {
+        DoMovement(targetPosition);
+    }
+
+    private void DoMovement(Vector3 targetPosition)
+    {
+        if (NavMesh.SamplePosition(targetPosition, out NavMeshHit navMeshHit, range, validPosLayer)) {
             agent.enabled = false;
             transform.DOMove(navMeshHit.position, 0.1f)
                      .SetEase(Ease.InOutQuad)
@@ -113,12 +118,11 @@ public class S_TPShooter : EnemyBase
         }
     }
     
-    private void LaserAim()
+    private void LaserHandler()
     {
         if (!laserCharged) {
             transform.LookAt(hit.point);    
             if (hit.collider.CompareTag("Player")) {
-
                 if (!isCharging) {
                     isCharging = true;
                     StartCoroutine(Shoot());
@@ -126,14 +130,7 @@ public class S_TPShooter : EnemyBase
                         lerpTimer = 0f;
                     }
                 } else if (isCharging) {
-                    lr.SetPosition(1, hit.point);
-                    lr.endWidth = Mathf.Min(lr.endWidth + 0.001f, 0.2f);
-
-                    lerpTimer += Time.deltaTime;
-                    Color chargedColor = Color.red;
-                    Color lerpColor = Color.Lerp(new Color(0.04f, 0.45f, 1f), chargedColor, Mathf.Clamp(lerpTimer, 0f , 1f));
-                    lr.startColor = lerpColor;
-                    lr.endColor = lerpColor;
+                    LaserCharge();
                 }
             } else if (!hit.collider.CompareTag("Player")) {
                 lr.SetPosition(1, hit.point);
@@ -147,6 +144,18 @@ public class S_TPShooter : EnemyBase
                 }
             }
         }
+    }
+
+    private void LaserCharge()
+    {
+        lr.SetPosition(1, hit.point);
+        lr.endWidth = Mathf.Min(lr.endWidth + 0.001f, 0.2f);
+
+        lerpTimer += Time.deltaTime;
+        Color chargedColor = Color.red;
+        Color lerpColor = Color.Lerp(new Color(0.04f, 0.45f, 1f), chargedColor, Mathf.Clamp(lerpTimer, 0f , 1f));
+        lr.startColor = lerpColor;
+        lr.endColor = lerpColor;
     }
 
     IEnumerator Shoot()
@@ -166,6 +175,11 @@ public class S_TPShooter : EnemyBase
             }
         }
         
+        ResetLaser();
+    }
+
+    private void ResetLaser()
+    {
         lr.startColor = new Color(0.04f, 0.45f, 1f);
         lr.endColor = new Color(0.04f, 0.45f, 1f);
         lr.endWidth = 0.05f;
