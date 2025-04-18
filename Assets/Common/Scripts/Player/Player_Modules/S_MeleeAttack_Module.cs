@@ -27,7 +27,6 @@ public class S_MeleeAttack_Module : MonoBehaviour
     
     [Header("Dash Settings")]
     public float dashDuration = 0.5f;   // Duration over which to perform the dash movement
-
     public float StopDashDistance = 3f;
 
     [Header("Gizmos settings")]
@@ -87,11 +86,6 @@ public class S_MeleeAttack_Module : MonoBehaviour
 
     private IEnumerator WindupAndAttack(MeleeAttackLevel currentLevel)
     {
-        //dash when ennemis is far
-        // if (!Physics.Raycast(attackOrigin.position, attackOrigin.forward,currentLevel.attackDistance, targetLayer))
-        // {
-        //     StartCoroutine(AttackMovementCoroutine(dashDuration, dashMoveDistance));
-        // }
         
         // Wait for the windup time
         yield return new WaitForSeconds(windupTime);
@@ -186,17 +180,6 @@ public class S_MeleeAttack_Module : MonoBehaviour
             {
                 MeleeAttackObserverEvent(PlayerStates.MeleeState.MeleeAttackHit, currentLevel.level);
                 StartCoroutine(AttackMovementCoroutine(dashDuration, bestHit.transform.position,bestHit,currentLevel));
-
-                // if (bestHit.CompareTag("WeakPoint"))
-                // {
-                //     bestHit.GetComponentInParent<EnemyBase>()?.ReduceHealth(currentLevel.attackDamage * 100, currentLevel.dropBonus + currentLevel.WeakPointDropBonus);
-                //     Debug.Log("Touch Weak Point " + currentLevel.attackDamage * 100);
-                // }
-                // else
-                // {
-                //     bestHit.GetComponent<EnemyBase>()?.ReduceHealth(currentLevel.attackDamage, currentLevel.dropBonus);
-                //     Debug.Log("Didn't Touch Weak Point");
-                // }
                 return;
             }
         }
