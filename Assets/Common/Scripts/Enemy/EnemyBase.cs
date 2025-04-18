@@ -125,7 +125,7 @@ public class EnemyBase : MonoBehaviour
         OnKilled?.Invoke(this);
 
         // Play kill sound and drop energy items.
-        SoundManager.Instance.Meth_Shoot_Kill(1);
+        //SoundManager.Instance.Meth_Shoot_Kill(1);
         DropItems(DropBonus);
 
         // Deactivate the enemy so it can be returned to the pool.
