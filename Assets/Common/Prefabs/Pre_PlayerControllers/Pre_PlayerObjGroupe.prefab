@@ -5862,8 +5862,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 167f586d133250a4ab3d847653d3c68b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectionRadius: 10
-  pullSpeed: 45
+  detectionRadius: 30
+  pullSpeed: 120
 --- !u!114 &4618156451083959548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5994,30 +5994,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpLevels:
   - level: 1
-    jumpHeight: 15
+    jumpHeight: 25
     energyConsumption: 15
     maxJumpCount: 1
-    VortexRange: 15
+    VortexRange: 30
   - level: 2
-    jumpHeight: 15
+    jumpHeight: 25
     energyConsumption: 50
     maxJumpCount: 1
-    VortexRange: 15
+    VortexRange: 30
   - level: 3
-    jumpHeight: 15
+    jumpHeight: 30
     energyConsumption: 100
     maxJumpCount: 2
-    VortexRange: 15
+    VortexRange: 30
   - level: 4
-    jumpHeight: 25
+    jumpHeight: 40
     energyConsumption: 350
     maxJumpCount: 3
-    VortexRange: 15
+    VortexRange: 30
   jumpCooldown: 0.1
   enemyLayer:
     serializedVersion: 2
     m_Bits: 512
-  vortexPullSpeed: 15
+  vortexPullSpeed: 25
   vortexDuration: 1
   pullSpeedOverTime:
     serializedVersion: 2
@@ -6044,7 +6044,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   showGizmos: 1
-  vortexRadius: 15
+  vortexRadius: 30
 --- !u!114 &5131711004954361696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6143,7 +6143,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2560
   windupTime: 0.35
-  dashDuration: 0.1
+  dashDuration: 0
   StopDashDistance: 3
   drawGizmos: 1
   currentAttackCD: 0

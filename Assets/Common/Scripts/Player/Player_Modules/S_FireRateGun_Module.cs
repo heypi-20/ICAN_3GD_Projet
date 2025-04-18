@@ -18,6 +18,7 @@ public class S_FireRateGun_Module : MonoBehaviour
         public float weekPointMultiplier = 100f;
         public float energyConsumption; // Consommation d'énergie par tir
         public int dropBonus;
+        public float knockbackForce;
     }
 
     [Header("Shooting Settings")]
@@ -235,6 +236,8 @@ public class S_FireRateGun_Module : MonoBehaviour
                     {
                         enemy.ReduceHealth(damage,GetCurrentFireRateLevel().dropBonus);
                     }
+                    Vector3 hitDirection = (enemy.transform.position - transform.position).normalized;
+                    enemy.GetComponent<Rigidbody>().AddForce(hitDirection*GetCurrentFireRateLevel().knockbackForce, ForceMode.Impulse);
                 }
 
                 return true; // Une cible a été touchée
