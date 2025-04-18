@@ -4558,7 +4558,7 @@ MonoBehaviour:
   OndeParticule: {fileID: 8366783197148879030, guid: 79c09da7de2388e48a949a4bdd337a44, type: 3}
   ShockWavePoint: {fileID: 3047064154156275688}
   ImpactShockWave: {fileID: 1126947036174708035, guid: 2770428620af1a84b9c0565aa7940fef, type: 3}
-  Shock_Wave_Speed_Multiplayer: 40
+  Shock_Wave_Speed_Multiplayer: 50
 --- !u!1 &5240738020761877213
 GameObject:
   m_ObjectHideFlags: 0
@@ -5157,11 +5157,11 @@ MonoBehaviour:
   _DuraionWobble: 0.05
   _RecoverDurationWobble: 0.1
   startimpulseshakeforce: 3
-  _imulseMultiplicator: 1.5
+  _imulseMultiplicator: 2
   stopDuration: 0.2
   effectFPS: 10
   duration: 0.1
-  fov_multiplicator: 105
+  fov_multiplicator: 130
   fov_transition_time: 1
 --- !u!1 &5688435463808219286
 GameObject:
@@ -7371,6 +7371,10 @@ MonoBehaviour:
   score: 0
   scoreDecayRate: 5
   decayDelay: 3
+  killRateWindow: 1
+  killRateAverageWindow: 2
+  lerpSpeed: 5
+  coolDownSpeed: 3
 --- !u!1 &7978082922031872024
 GameObject:
   m_ObjectHideFlags: 0
