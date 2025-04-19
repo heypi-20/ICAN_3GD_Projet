@@ -37,9 +37,11 @@ public class S_SuperJump_Module : MonoBehaviour
     private bool _isJumpOnCooldown = false; // Indique si le saut est en cooldown
 
     // Références aux composants nécessaires
-    private S_CustomCharacterController _characterController;
+    private S_CustomCharacterController _customCC;
     private S_EnergyStorage _energyStorage;
     private S_InputManager _inputManager;
+    private LayerMask _playerBackupLayer;
+    private CharacterController _CC;
     
     //Event
     public event Action<Enum> OnJumpStateChange;
@@ -47,9 +49,11 @@ public class S_SuperJump_Module : MonoBehaviour
     private void Start()
     {
         // Initialisation des composants nécessaires
-        _characterController = GetComponent<S_CustomCharacterController>();
+        _customCC = GetComponent<S_CustomCharacterController>();
+        _CC = GetComponent<CharacterController>();
         _energyStorage = GetComponent<S_EnergyStorage>();
         _inputManager = FindObjectOfType<S_InputManager>();
+        _playerBackupLayer = _CC.excludeLayers;
     }
 
     private bool hadLeaveGround;
@@ -62,14 +66,14 @@ public class S_SuperJump_Module : MonoBehaviour
             _inputManager.JumpInput = false; // Réinitialiser l'input pour éviter plusieurs sauts dans la même frame
         }
 
-        if (!_characterController.GroundCheck()&&!hadLeaveGround)
+        if (!_customCC.GroundCheck()&&!hadLeaveGround)
         {
             hadLeaveGround = true;
             JumpObserverEvent(PlayerStates.JumpState.OnAir);
         }
         
         // Réinitialiser le compteur de saut si le joueur est au sol
-        if (_characterController.GroundCheck()&&hadLeaveGround)
+        if (_customCC.GroundCheck()&&hadLeaveGround)
         {
             ResetJumpCount();
             hadLeaveGround = false;
@@ -107,6 +111,9 @@ public class S_SuperJump_Module : MonoBehaviour
         // Consommer l'énergie pour le saut
         _energyStorage.RemoveEnergy(currentLevel.energyConsumption);
         
+        //Ignore enemy layer
+        _CC.excludeLayers = enemyLayer+_playerBackupLayer;
+        
         //Audio OnJump
         SoundManager.Instance.Meth_Used_Jump();
         
@@ -117,7 +124,7 @@ public class S_SuperJump_Module : MonoBehaviour
         JumpObserverEvent(PlayerStates.JumpState.Jump);
         
         // Appliquer la force de saut
-        _characterController.velocity.y = Mathf.Sqrt(currentLevel.jumpHeight * -2f * _characterController.gravity);
+        _customCC.velocity.y = Mathf.Sqrt(currentLevel.jumpHeight * -2f * _customCC.gravity);
 
         // Incrémenter le compteur de sauts
         _currentJumpCount++;
@@ -162,6 +169,7 @@ public class S_SuperJump_Module : MonoBehaviour
             elapsed += Time.deltaTime;
             yield return null;
         }
+        _CC.excludeLayers = _playerBackupLayer;
     }
     
 

@@ -6070,28 +6070,32 @@ MonoBehaviour:
   fireRateLevels:
   - level: 1
     fireRate: 4
-    damage: 10
-    weekPointMultiplier: 3
+    damage: 5
+    weekPointMultiplier: 100
     energyConsumption: 3
     dropBonus: 0
+    knockbackForce: 0
   - level: 2
     fireRate: 6
-    damage: 25
-    weekPointMultiplier: 3
+    damage: 5
+    weekPointMultiplier: 100
     energyConsumption: 3
     dropBonus: 0
+    knockbackForce: 0
   - level: 3
-    fireRate: 10
-    damage: 40
-    weekPointMultiplier: 3
+    fireRate: 8
+    damage: 10
+    weekPointMultiplier: 100
     energyConsumption: 3
     dropBonus: 0
+    knockbackForce: 0
   - level: 4
     fireRate: 20
-    damage: 100
-    weekPointMultiplier: 3
+    damage: 10
+    weekPointMultiplier: 100
     energyConsumption: 5
     dropBonus: 0
+    knockbackForce: 0
   HitMarkerPNG: {fileID: 969691688291508243}
 --- !u!114 &930943365604710939
 MonoBehaviour:
@@ -6108,33 +6112,33 @@ MonoBehaviour:
   attackOrigin: {fileID: 3636347044067628401}
   attackLevels:
   - level: 1
-    attackRange: 1.5
-    attackDistance: 300
-    attackDamage: 15
+    attackRange: 3
+    attackDistance: 999
+    attackDamage: 999
     attackCooldown: 0.4
     energyConsumption: 0
     dropBonus: 45
     WeakPointDropBonus: 65
   - level: 2
-    attackRange: 1.5
-    attackDistance: 300
-    attackDamage: 80
+    attackRange: 3
+    attackDistance: 999
+    attackDamage: 999
     attackCooldown: 0.4
     energyConsumption: 50
     dropBonus: 25
     WeakPointDropBonus: 40
   - level: 3
-    attackRange: 1.5
-    attackDistance: 50
-    attackDamage: 300
+    attackRange: 3
+    attackDistance: 999
+    attackDamage: 999
     attackCooldown: 0.4
     energyConsumption: 75
     dropBonus: 25
     WeakPointDropBonus: 40
   - level: 4
     attackRange: 1.5
-    attackDistance: 300
-    attackDamage: 200
+    attackDistance: 999
+    attackDamage: 999
     attackCooldown: 0.4
     energyConsumption: 200
     dropBonus: 25
@@ -6143,7 +6147,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2560
   windupTime: 0.35
-  dashDuration: 0
+  dashDuration: 0.2
   StopDashDistance: 3
   drawGizmos: 1
   currentAttackCD: 0
