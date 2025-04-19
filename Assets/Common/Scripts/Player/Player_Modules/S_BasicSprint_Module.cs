@@ -176,7 +176,8 @@ public class S_BasicSprint_Module : MonoBehaviour
                     if (rb != null)
                     {
                         // Apply push force to the enemy
-                        Vector3 forceDirection = (rb.transform.position-finalPosition).normalized;
+                        Vector3 forceDirection = (rb.transform.position - finalPosition).normalized + Vector3.up;
+                        forceDirection.Normalize(); 
                         rb.AddForce(forceDirection * pushForce, ForceMode.Impulse);
                         
                     }

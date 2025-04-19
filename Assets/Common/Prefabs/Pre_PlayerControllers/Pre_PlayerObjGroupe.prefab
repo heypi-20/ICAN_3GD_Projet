@@ -4606,6 +4606,7 @@ GameObject:
   - component: {fileID: 7906409983274454026}
   - component: {fileID: 1930739765659286631}
   - component: {fileID: 8747535281410142855}
+  - component: {fileID: 3752078447587882493}
   m_Layer: 0
   m_Name: FPSCameraBrain
   m_TagString: MainCamera
@@ -4781,6 +4782,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerBody: {fileID: 7121883038825396396}
   cameraTransform: {fileID: 1110773156157768034}
+--- !u!114 &3752078447587882493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5268579106117334288}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: fc723267deb8d5943b22ee27a50c5499, type: 2}
 --- !u!1 &5305130034550350263
 GameObject:
   m_ObjectHideFlags: 0
@@ -5904,20 +5922,20 @@ MonoBehaviour:
   sprintLevels:
   - level: 2
     sprintSpeed: 45
-    energyConsumptionRate: 300
-    sprintDamage: 100
+    energyConsumptionRate: 100
+    sprintDamage: 30
     SprintingSpeedFOV: 90
     dropBonus: 0
   - level: 3
     sprintSpeed: 60
-    energyConsumptionRate: 600
-    sprintDamage: 150
+    energyConsumptionRate: 200
+    sprintDamage: 30
     SprintingSpeedFOV: 90
     dropBonus: 0
   - level: 4
     sprintSpeed: 80
-    energyConsumptionRate: 800
-    sprintDamage: 300
+    energyConsumptionRate: 300
+    sprintDamage: 30
     SprintingSpeedFOV: 100
     dropBonus: 0
   enemyLayer:
@@ -5925,8 +5943,8 @@ MonoBehaviour:
     m_Bits: 512
   rangeDistance: 3.5
   rangeOffset: {x: 0, y: 0, z: 0}
-  pushForce: 0
-  sprintRange: 5.18
+  pushForce: 20
+  sprintRange: 10
   accelerationTime: 0.5
   accelerationCurve:
     serializedVersion: 2
@@ -6070,28 +6088,32 @@ MonoBehaviour:
   fireRateLevels:
   - level: 1
     fireRate: 4
-    damage: 10
-    weekPointMultiplier: 3
+    damage: 5
+    weekPointMultiplier: 100
     energyConsumption: 3
     dropBonus: 0
+    knockbackForce: 0
   - level: 2
     fireRate: 6
-    damage: 25
-    weekPointMultiplier: 3
+    damage: 5
+    weekPointMultiplier: 100
     energyConsumption: 3
     dropBonus: 0
+    knockbackForce: 0
   - level: 3
-    fireRate: 10
-    damage: 40
-    weekPointMultiplier: 3
+    fireRate: 8
+    damage: 10
+    weekPointMultiplier: 100
     energyConsumption: 3
     dropBonus: 0
+    knockbackForce: 0
   - level: 4
     fireRate: 20
-    damage: 100
-    weekPointMultiplier: 3
+    damage: 10
+    weekPointMultiplier: 100
     energyConsumption: 5
     dropBonus: 0
+    knockbackForce: 0
   HitMarkerPNG: {fileID: 969691688291508243}
 --- !u!114 &930943365604710939
 MonoBehaviour:
@@ -6108,33 +6130,33 @@ MonoBehaviour:
   attackOrigin: {fileID: 3636347044067628401}
   attackLevels:
   - level: 1
-    attackRange: 1.5
-    attackDistance: 300
-    attackDamage: 15
+    attackRange: 3
+    attackDistance: 999
+    attackDamage: 10
     attackCooldown: 0.4
     energyConsumption: 0
     dropBonus: 45
     WeakPointDropBonus: 65
   - level: 2
-    attackRange: 1.5
-    attackDistance: 300
-    attackDamage: 80
+    attackRange: 3
+    attackDistance: 999
+    attackDamage: 10
     attackCooldown: 0.4
     energyConsumption: 50
     dropBonus: 25
     WeakPointDropBonus: 40
   - level: 3
-    attackRange: 1.5
-    attackDistance: 50
-    attackDamage: 300
+    attackRange: 3
+    attackDistance: 999
+    attackDamage: 10
     attackCooldown: 0.4
     energyConsumption: 75
     dropBonus: 25
     WeakPointDropBonus: 40
   - level: 4
     attackRange: 1.5
-    attackDistance: 300
-    attackDamage: 200
+    attackDistance: 999
+    attackDamage: 10
     attackCooldown: 0.4
     energyConsumption: 200
     dropBonus: 25
@@ -6143,7 +6165,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2560
   windupTime: 0.35
-  dashDuration: 0
+  dashDuration: 0.2
   StopDashDistance: 3
   drawGizmos: 1
   currentAttackCD: 0

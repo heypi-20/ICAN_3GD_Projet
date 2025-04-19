@@ -69,7 +69,6 @@ public class S_ComboSystem : MonoBehaviour
             comboActive = true;
             // Display initial combo information.
             comboText.text = $"Combo started, multiplier: {currentComboMultiplier:F2}";
-            Debug.Log("Combo started, initial multiplier: " + currentComboMultiplier);
         }
         else
         {
@@ -81,7 +80,6 @@ public class S_ComboSystem : MonoBehaviour
                 // Reset combo timer using new settings.
                 comboTimer = currentComboSetting.comboTime;
                 comboText.text = $"Energy level upgraded, combo updated, multiplier remains: {currentComboMultiplier:F2}";
-                Debug.Log("Energy level upgraded, combo settings updated, current multiplier remains: " + currentComboMultiplier);
             }
             else
             {
@@ -96,7 +94,6 @@ public class S_ComboSystem : MonoBehaviour
                 currentComboMultiplier = currentComboSetting.maxComboMultiplier;
             }
             comboText.text = $"Combo updated, multiplier: {currentComboMultiplier:F2}";
-            Debug.Log("Combo updated, current multiplier: " + currentComboMultiplier);
         }
     }
 
@@ -111,7 +108,6 @@ public class S_ComboSystem : MonoBehaviour
             if (comboTimer <= 0)
             {
                 // Combo timed out, reset combo state.
-                Debug.Log("Combo ended, final multiplier: " + currentComboMultiplier);
                 ResetCombo();
             }
         }
