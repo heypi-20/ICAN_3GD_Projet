@@ -26,7 +26,7 @@ public class EnemyBase : MonoBehaviour
 
     private float currentHealth;
     private bool isDead = false;
-    private S_ScoreDisplay _s_ScoreDisplay;
+    private S_ScoreDebugDisplay _sScoreDebugDisplay;
 
 
     public static event Action OnEnemyKillForCombo; // Global event for combo tracking
