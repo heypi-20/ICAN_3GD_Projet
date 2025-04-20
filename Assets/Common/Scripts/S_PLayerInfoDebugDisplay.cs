@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
 
-public class S_ScoreDebugDisplay : MonoBehaviour
+public class S_PLayerInfoDebugDisplay : MonoBehaviour
 {
     [Header("UI References")]
     public TextMeshProUGUI scoreText; // The UI text element to display score, kill rate, and energy gain
