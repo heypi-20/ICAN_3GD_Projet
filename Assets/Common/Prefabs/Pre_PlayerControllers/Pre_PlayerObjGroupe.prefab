@@ -5064,7 +5064,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cinemachineVirtualCamera: {fileID: 8716976314815281874}
-  maxDutchAngle: 5
+  maxDutchAngle: 3
   dutchDuration: 1
   resetDuration: 0.2
   dutchCurve:
@@ -5847,20 +5847,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cheatCodeforAdd: 273
   cheatCodeforRemove: 274
-  maxEnergy: 10000
+  maxEnergy: 12000
   currentEnergy: 500
   energyLevels:
   - level: 1
     requiredEnergy: 0
     graceTimer: 0
   - level: 2
-    requiredEnergy: 2000
+    requiredEnergy: 3000
     graceTimer: 5
   - level: 3
-    requiredEnergy: 4000
+    requiredEnergy: 6000
     graceTimer: 5
   - level: 4
-    requiredEnergy: 6000
+    requiredEnergy: 9000
     graceTimer: 5
   energyDisplay: {fileID: 6788294273892150970}
   Gain_Palier: {fileID: 6127146839083381311}
@@ -5900,13 +5900,13 @@ MonoBehaviour:
     energyConsumptionRate: 1.5
   - level: 2
     speed: 15
-    energyConsumptionRate: 10
+    energyConsumptionRate: 20
   - level: 3
     speed: 20
-    energyConsumptionRate: 15
+    energyConsumptionRate: 30
   - level: 4
     speed: 24
-    energyConsumptionRate: 25
+    energyConsumptionRate: 40
 --- !u!114 &8464428744350943366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5922,22 +5922,22 @@ MonoBehaviour:
   sprintLevels:
   - level: 2
     sprintSpeed: 45
-    energyConsumptionRate: 100
-    sprintDamage: 30
+    energyConsumptionRate: 65
+    sprintDamage: 20
     SprintingSpeedFOV: 90
-    dropBonus: 0
+    dropBonus: -10
   - level: 3
     sprintSpeed: 60
-    energyConsumptionRate: 200
-    sprintDamage: 30
+    energyConsumptionRate: 100
+    sprintDamage: 20
     SprintingSpeedFOV: 90
-    dropBonus: 0
+    dropBonus: -10
   - level: 4
     sprintSpeed: 80
-    energyConsumptionRate: 300
-    sprintDamage: 30
+    energyConsumptionRate: 500
+    sprintDamage: 200
     SprintingSpeedFOV: 100
-    dropBonus: 0
+    dropBonus: -15
   enemyLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -6012,25 +6012,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpLevels:
   - level: 1
-    jumpHeight: 25
-    energyConsumption: 15
+    jumpHeight: 8
+    energyConsumption: 20
     maxJumpCount: 1
-    VortexRange: 30
+    VortexRange: 0
   - level: 2
-    jumpHeight: 25
+    jumpHeight: 18
     energyConsumption: 50
     maxJumpCount: 1
     VortexRange: 30
   - level: 3
-    jumpHeight: 30
-    energyConsumption: 100
+    jumpHeight: 25
+    energyConsumption: 70
     maxJumpCount: 2
     VortexRange: 30
   - level: 4
-    jumpHeight: 40
-    energyConsumption: 350
+    jumpHeight: 30
+    energyConsumption: 300
     maxJumpCount: 3
-    VortexRange: 30
+    VortexRange: 60
   jumpCooldown: 0.1
   enemyLayer:
     serializedVersion: 2
@@ -6092,28 +6092,28 @@ MonoBehaviour:
     weekPointMultiplier: 100
     energyConsumption: 3
     dropBonus: 0
-    knockbackForce: 0
+    knockbackForce: 3
   - level: 2
     fireRate: 6
-    damage: 5
-    weekPointMultiplier: 100
-    energyConsumption: 3
+    damage: 4.5
+    weekPointMultiplier: 10
+    energyConsumption: 2.2
     dropBonus: 0
-    knockbackForce: 0
+    knockbackForce: 10
   - level: 3
-    fireRate: 8
-    damage: 10
-    weekPointMultiplier: 100
-    energyConsumption: 3
+    fireRate: 10
+    damage: 3.5
+    weekPointMultiplier: 10
+    energyConsumption: 1.5
     dropBonus: 0
-    knockbackForce: 0
+    knockbackForce: 15
   - level: 4
     fireRate: 20
-    damage: 10
-    weekPointMultiplier: 100
-    energyConsumption: 5
+    damage: 50
+    weekPointMultiplier: 10
+    energyConsumption: 13
     dropBonus: 0
-    knockbackForce: 0
+    knockbackForce: 15
   HitMarkerPNG: {fileID: 969691688291508243}
 --- !u!114 &930943365604710939
 MonoBehaviour:
@@ -6130,43 +6130,47 @@ MonoBehaviour:
   attackOrigin: {fileID: 3636347044067628401}
   attackLevels:
   - level: 1
-    attackRange: 3
+    attackRange: 2
     attackDistance: 999
     attackDamage: 10
     attackCooldown: 0.4
-    energyConsumption: 0
+    energyConsumption: 10
     dropBonus: 45
     WeakPointDropBonus: 65
+    knockbackForce: 5
   - level: 2
-    attackRange: 3
+    attackRange: 2
     attackDistance: 999
-    attackDamage: 10
+    attackDamage: 20
     attackCooldown: 0.4
-    energyConsumption: 50
-    dropBonus: 25
-    WeakPointDropBonus: 40
+    energyConsumption: 65
+    dropBonus: 45
+    WeakPointDropBonus: 65
+    knockbackForce: 10
   - level: 3
-    attackRange: 3
+    attackRange: 2
     attackDistance: 999
-    attackDamage: 10
+    attackDamage: 50
     attackCooldown: 0.4
-    energyConsumption: 75
-    dropBonus: 25
-    WeakPointDropBonus: 40
+    energyConsumption: 120
+    dropBonus: 45
+    WeakPointDropBonus: 65
+    knockbackForce: 15
   - level: 4
-    attackRange: 1.5
+    attackRange: 2
     attackDistance: 999
-    attackDamage: 10
+    attackDamage: 500
     attackCooldown: 0.4
     energyConsumption: 200
-    dropBonus: 25
-    WeakPointDropBonus: 40
+    dropBonus: 70
+    WeakPointDropBonus: 90
+    knockbackForce: 0
   targetLayer:
     serializedVersion: 2
     m_Bits: 2560
   windupTime: 0.35
-  dashDuration: 0.2
-  StopDashDistance: 3
+  dashDuration: 0.1
+  StopDashDistance: 2
   drawGizmos: 1
   currentAttackCD: 0
 --- !u!114 &8670675854258119381
@@ -6184,16 +6188,16 @@ MonoBehaviour:
   groundPoundLevels:
   - level: 3
     maxSphereRange: 100
-    sphereDamage: 2000
+    sphereDamage: 180
     descentSpeed: 300
-    energyConsumption: 500
-    dropBonus: 0
+    energyConsumption: 300
+    dropBonus: -20
   - level: 4
     maxSphereRange: 100
-    sphereDamage: 2000
+    sphereDamage: 500
     descentSpeed: 300
     energyConsumption: 1000
-    dropBonus: 0
+    dropBonus: -10
   KillableTargetLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -7397,6 +7401,7 @@ MonoBehaviour:
   killRateAverageWindow: 2
   lerpSpeed: 5
   coolDownSpeed: 3
+  energyUpdateInterval: 0.2
 --- !u!1 &7978082922031872024
 GameObject:
   m_ObjectHideFlags: 0

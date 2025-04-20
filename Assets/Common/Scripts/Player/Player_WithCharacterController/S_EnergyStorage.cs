@@ -129,7 +129,7 @@ public class S_EnergyStorage : MonoBehaviour
             {
                 SetNewLevel(i); // Définit le nouveau niveau
                 SoundManager.Instance.Meth_Gain_Palier();
-                
+                AddEnergy(energyLevels[i].requiredEnergy*0.2f);
                 //trigger upgrade level event
                 EnergyLevelObserverEvent(PlayerStates.LevelState.LevelUp, i+1);
                 
