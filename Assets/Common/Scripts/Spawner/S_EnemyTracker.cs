@@ -24,13 +24,11 @@ public class S_EnemyTracker
     }
 
     // Removes an enemy GameObject from the sets.
-    public void Remove(GameObject enemy)
+    public void Remove(EnemyType type, GameObject enemy)
     {
-        // Loop through each set and try to remove the enemy.
-        foreach (var list in enemyInstances.Values)
+        if (enemyInstances.TryGetValue(type, out var set))
         {
-            if (list.Remove(enemy))
-                break; // Stop once the enemy is removed.
+            set.Remove(enemy);
         }
     }
 

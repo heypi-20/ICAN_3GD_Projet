@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 // Holds configuration for enemy spawning.
 [System.Serializable]
@@ -16,24 +18,17 @@ public class EnemyConfig
     public int MinCount => Mathf.FloorToInt(spawnRateCurve.keys[0].time);
     // The largest enemy count from the curve.
     public int MaxCount => Mathf.CeilToInt(spawnRateCurve.keys[^1].time);
-
-    // Returns the spawn interval (in seconds) based on the current enemy count.
-    public float GetSpawnInterval(int currentCount)
-    {
-        float clampedCount = Mathf.Clamp(currentCount, MinCount, MaxCount);
-        float spawnRate = spawnRateCurve.Evaluate(clampedCount);
-        return 1f / Mathf.Max(spawnRate, 0.01f);
-    }
+    
 }
 
 // Handles the timing and conditions for spawning enemies.
 public class S_SpawnRequester : MonoBehaviour
 {
     public List<EnemyConfig> enemyConfigs = new List<EnemyConfig>();  // List of enemy configurations.
-    public static event System.Action<EnemyConfig, Vector3> OnRequestEnemySpawn;  // Event to request enemy spawn.
+    public static event Action<EnemyConfig, Vector3> OnRequestEnemySpawn;  // Event to request enemy spawn.
 
     private S_EnergyStorage playerEnergyStorage;   // Reference to the player's energy storage (holds player level).
-    private S_EnemyTracker tracker = new S_EnemyTracker();  // Tracks the number of active enemies.
+    private readonly S_EnemyTracker tracker = new S_EnemyTracker();  // Tracks the number of active enemies.
     private S_EnemyPoolManager poolManager;          // Manages enemy object pooling.
 
     private void Awake()
@@ -63,41 +58,44 @@ public class S_SpawnRequester : MonoBehaviour
     // Continuously spawns enemies based on the configuration.
     private IEnumerator SpawnLoop(EnemyConfig config)
     {
+        float timer = 0f;
+
         while (true)
         {
-            // Get the player's level.
             int playerLevel = playerEnergyStorage.currentLevelIndex + 1;
-            // If the player's level is too low, wait 1 second and try again.
             if (playerLevel < config.minRequiredLevel)
             {
-                yield return new WaitForSeconds(1f);
+                yield return null;
                 continue;
             }
 
-            // Get the current number of active enemies of this type.
             int currentCount = tracker.GetCount(config.enemyType);
 
-            // If the current count is less than the maximum allowed,
-            // get spawn points for this enemy type.
-            if (currentCount < config.MaxCount)
+            float clampedCount = Mathf.Clamp(currentCount, config.MinCount, config.MaxCount);
+            float spawnRate = config.spawnRateCurve.Evaluate(clampedCount);
+
+            if (spawnRate <= 0f)
+            {
+                yield return null;
+                continue;
+            }
+
+            float interval = 1f / spawnRate;
+            timer += Time.deltaTime;
+
+            // Once enough time has passed, attempt to spawn
+            if (timer >= interval)
             {
                 Vector3[] spawnPoints = S_ZoneManager.Instance.GetSpawnPointsByEnemyWithZoneWeight(config.enemyType);
-
-                if (spawnPoints != null && spawnPoints.Length > 0)
+                if (spawnPoints != null && spawnPoints.Length > 0 && currentCount < config.MaxCount)
                 {
-                    // Loop through each spawn point and request an enemy spawn.
-                    if (currentCount < config.MaxCount)
-                    {
-                        Vector3 pos = spawnPoints[Random.Range(0, spawnPoints.Length)];
-                        OnRequestEnemySpawn?.Invoke(config, pos);
-                        currentCount++;
-                    }
+                    Vector3 pos = spawnPoints[Random.Range(0, spawnPoints.Length)];
+                    OnRequestEnemySpawn?.Invoke(config, pos);
+                    timer = 0f; // reset timer after spawn
                 }
             }
 
-            // Get the wait time from the spawn rate curve based on current count.
-            float waitTime = config.GetSpawnInterval(currentCount);
-            yield return new WaitForSeconds(waitTime);
+            yield return null; // Check every frame
         }
     }
 }

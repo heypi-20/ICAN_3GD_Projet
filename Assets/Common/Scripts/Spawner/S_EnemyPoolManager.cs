@@ -77,7 +77,7 @@ public class S_EnemyPoolManager : MonoBehaviour
         // Unsubscribe from the enemy's OnKilled event to avoid memory leaks.
         enemy.OnKilled -= HandleEnemyKilled;
         // Remove the enemy from the tracker since it is no longer active.
-        tracker.Remove(enemy.gameObject);
+        tracker.Remove(enemy.enemyType,enemy.gameObject);
         // Deactivate the enemy so that it is not visible or interactive.
         enemy.gameObject.SetActive(false);
 
