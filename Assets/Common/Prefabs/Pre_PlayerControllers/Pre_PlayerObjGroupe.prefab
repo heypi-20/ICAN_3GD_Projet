@@ -8135,7 +8135,8 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -176.7
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9219113129831817685, guid: fcd19f56672fff5489c1a22bf8294375, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -8169,6 +8170,11 @@ MonoBehaviour:
   renderers:
   - {fileID: 1256986129642050906}
   - {fileID: 4432589578744040820}
+  maxGainPerSecond: 100
+  maxWidth: 0.4
+  minIntensity: 0.5
+  maxIntensity: 2
+  smoothTime: 0.5
 --- !u!20 &4189595085616842902 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 5203951713334118074, guid: fcd19f56672fff5489c1a22bf8294375, type: 3}
