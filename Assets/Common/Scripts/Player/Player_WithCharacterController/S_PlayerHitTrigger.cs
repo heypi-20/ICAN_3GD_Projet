@@ -34,7 +34,6 @@ public class S_PlayerHitTrigger : MonoBehaviour
 
         if (_volumeSettings.m_Profile != null && _volumeSettings.m_Profile.TryGet<Vignette>(out _vignette))
         {
-            Debug.Log("Vignette effect found in the Volume Profile.");
             _vignette.intensity.value = 0f;
         }
         else
