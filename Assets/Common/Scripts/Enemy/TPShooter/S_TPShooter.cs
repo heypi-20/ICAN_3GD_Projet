@@ -12,8 +12,8 @@ public class S_TPShooter : EnemyBase
 {
     [Header("Enemy Properties")]
     public float teleportCd = 2f;
-    public float minDist = 5f;
-    public float maxDist = 5f;
+    public float negativeDist = 5f;
+    public float positiveDist = 5f;
     public LayerMask validPosLayer;
 
     [Header("Shoot Properties")]
@@ -90,9 +90,9 @@ public class S_TPShooter : EnemyBase
 
     private void Teleport()
     {
-        float randX = Random.Range(-minDist, maxDist);
-        float randY = Random.Range(-minDist, maxDist);
-        float randZ = Random.Range(-minDist, maxDist);
+        float randX = Random.Range(-negativeDist, positiveDist);
+        float randY = Random.Range(-negativeDist, positiveDist);
+        float randZ = Random.Range(-negativeDist, positiveDist);
         
         Vector3 targetPosition = new Vector3(transform.position.x + randX, transform.position.y + randY, transform.position.z + randZ);
         DoMovement(targetPosition);
