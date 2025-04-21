@@ -25,7 +25,8 @@ public class S_GroundPound_Module : MonoBehaviour
     public LayerMask groundLayer; // Target layers for sphere detection
     public float angleThreshold = 75f; // Threshold angle to check if the camera is looking downward (0 = fully downward)
     public float minimumGroundDistance; // Minimum distance from the ground to activate the Ground Pound
-
+    public float PushForce;
+    
     private S_InputManager _inputManager; // Gestionnaire des entrées utilisateur
     private S_EnergyStorage _energyStorage; // Stockage d'énergie
     private Transform _cameraTransform; // Transform de la caméra (extrait de CinemachineBrain)
@@ -164,6 +165,8 @@ public class S_GroundPound_Module : MonoBehaviour
         {
             // attack enemy logique
             hit.GetComponent<EnemyBase>()?.ReduceHealth(GetCurrentGroundPoundLevel().sphereDamage,currentLevel.dropBonus);
+            Vector3 direction =(hit.transform.position - transform.position).normalized;
+            hit.GetComponent<Rigidbody>()?.AddForce(direction * PushForce, ForceMode.Impulse);
         }
 
         _isGrounded = false; // Réinitialiser l'état de contact avec le sol

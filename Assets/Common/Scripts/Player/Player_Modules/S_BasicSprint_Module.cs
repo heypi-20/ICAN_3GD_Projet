@@ -28,6 +28,10 @@ public class S_BasicSprint_Module : MonoBehaviour
     public Vector3 rangeOffset;
     public float pushForce;
     public float sprintRange = 3f;
+    public float sprintDamageCooldown = 0.6f;
+    private float sprintDamageTimer = 0f; 
+
+    
 
     [Header("Acceleration/Deceleration Settings")]
     public float accelerationTime = 0.5f;
@@ -54,7 +58,6 @@ public class S_BasicSprint_Module : MonoBehaviour
     private float _originalMoveSpeed;
     // Indicateur si le joueur est en sprint
     public bool _isSprinting { get; private set; }
-
     public event Action<Enum,int> OnSprintStateChange;
     
     // Référence à la coroutine en cours pour éviter les doublons
@@ -83,6 +86,12 @@ public class S_BasicSprint_Module : MonoBehaviour
     {
         HandleSprint();
         UpdateLevelDuringSprinting();
+        
+        //damage cooldown
+        if (_isSprinting)
+            sprintDamageTimer += Time.deltaTime;
+        else
+            sprintDamageTimer = 0f;
         HandleSprintDamage();
     }
 
@@ -145,6 +154,7 @@ public class S_BasicSprint_Module : MonoBehaviour
 
             return;
         }
+        if (sprintDamageTimer < sprintDamageCooldown) return;
 
         // Clean up: remove null or inactive enemies from the alreadyDamagedEnemies set
         alreadyDamagedEnemies.RemoveWhere(e => e == null || !e.gameObject.activeInHierarchy);

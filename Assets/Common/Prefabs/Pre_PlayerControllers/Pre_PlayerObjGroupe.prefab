@@ -5822,7 +5822,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _directionLerpSpeed: 10
-  gravity: -19.62
+  gravity: -29.43
   groundCheckDistance: 0.59
   groundCheckRadius: 0.49
   groundLayer:
@@ -5847,7 +5847,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cheatCodeforAdd: 273
   cheatCodeforRemove: 274
-  maxEnergy: 12000
+  maxEnergy: 100000
   currentEnergy: 500
   energyLevels:
   - level: 1
@@ -5857,10 +5857,10 @@ MonoBehaviour:
     requiredEnergy: 3000
     graceTimer: 5
   - level: 3
-    requiredEnergy: 6000
+    requiredEnergy: 15000
     graceTimer: 5
   - level: 4
-    requiredEnergy: 9000
+    requiredEnergy: 50000
     graceTimer: 5
   energyDisplay: {fileID: 6788294273892150970}
   Gain_Palier: {fileID: 6127146839083381311}
@@ -5880,7 +5880,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 167f586d133250a4ab3d847653d3c68b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectionRadius: 30
+  detectionRadius: 25
   pullSpeed: 120
 --- !u!114 &4618156451083959548
 MonoBehaviour:
@@ -5900,13 +5900,13 @@ MonoBehaviour:
     energyConsumptionRate: 1.5
   - level: 2
     speed: 15
-    energyConsumptionRate: 20
+    energyConsumptionRate: 40
   - level: 3
     speed: 20
-    energyConsumptionRate: 30
+    energyConsumptionRate: 100
   - level: 4
     speed: 24
-    energyConsumptionRate: 40
+    energyConsumptionRate: 450
 --- !u!114 &8464428744350943366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5922,20 +5922,20 @@ MonoBehaviour:
   sprintLevels:
   - level: 2
     sprintSpeed: 45
-    energyConsumptionRate: 65
+    energyConsumptionRate: 250
     sprintDamage: 20
     SprintingSpeedFOV: 90
-    dropBonus: -10
+    dropBonus: 0
   - level: 3
     sprintSpeed: 60
-    energyConsumptionRate: 100
-    sprintDamage: 20
+    energyConsumptionRate: 800
+    sprintDamage: 70
     SprintingSpeedFOV: 90
-    dropBonus: -10
+    dropBonus: 0
   - level: 4
     sprintSpeed: 80
-    energyConsumptionRate: 500
-    sprintDamage: 200
+    energyConsumptionRate: 2500
+    sprintDamage: 500
     SprintingSpeedFOV: 100
     dropBonus: -15
   enemyLayer:
@@ -5945,6 +5945,7 @@ MonoBehaviour:
   rangeOffset: {x: 0, y: 0, z: 0}
   pushForce: 20
   sprintRange: 10
+  sprintDamageCooldown: 0.5
   accelerationTime: 0.5
   accelerationCurve:
     serializedVersion: 2
@@ -6018,24 +6019,24 @@ MonoBehaviour:
     VortexRange: 0
   - level: 2
     jumpHeight: 18
-    energyConsumption: 50
+    energyConsumption: 100
     maxJumpCount: 1
     VortexRange: 30
   - level: 3
     jumpHeight: 25
-    energyConsumption: 70
+    energyConsumption: 200
     maxJumpCount: 2
     VortexRange: 30
   - level: 4
-    jumpHeight: 30
-    energyConsumption: 300
+    jumpHeight: 35
+    energyConsumption: 450
     maxJumpCount: 3
     VortexRange: 60
   jumpCooldown: 0.1
   enemyLayer:
     serializedVersion: 2
     m_Bits: 512
-  vortexPullSpeed: 25
+  vortexPullSpeed: 20
   vortexDuration: 1
   pullSpeedOverTime:
     serializedVersion: 2
@@ -6062,7 +6063,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   showGizmos: 1
-  vortexRadius: 30
+  vortexRadius: 60
 --- !u!114 &5131711004954361696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6095,25 +6096,25 @@ MonoBehaviour:
     knockbackForce: 3
   - level: 2
     fireRate: 6
-    damage: 4.5
+    damage: 6
     weekPointMultiplier: 10
-    energyConsumption: 2.2
+    energyConsumption: 15
     dropBonus: 0
-    knockbackForce: 10
+    knockbackForce: 6
   - level: 3
     fireRate: 10
-    damage: 3.5
+    damage: 10
     weekPointMultiplier: 10
-    energyConsumption: 1.5
-    dropBonus: 0
-    knockbackForce: 15
+    energyConsumption: 80
+    dropBonus: -5
+    knockbackForce: 8
   - level: 4
     fireRate: 20
-    damage: 50
+    damage: 25
     weekPointMultiplier: 10
-    energyConsumption: 13
-    dropBonus: 0
-    knockbackForce: 15
+    energyConsumption: 100
+    dropBonus: -15
+    knockbackForce: 0
   HitMarkerPNG: {fileID: 969691688291508243}
 --- !u!114 &930943365604710939
 MonoBehaviour:
@@ -6141,18 +6142,18 @@ MonoBehaviour:
   - level: 2
     attackRange: 2
     attackDistance: 999
-    attackDamage: 20
+    attackDamage: 50
     attackCooldown: 0.4
-    energyConsumption: 65
+    energyConsumption: 200
     dropBonus: 45
     WeakPointDropBonus: 65
     knockbackForce: 10
   - level: 3
     attackRange: 2
     attackDistance: 999
-    attackDamage: 50
+    attackDamage: 160
     attackCooldown: 0.4
-    energyConsumption: 120
+    energyConsumption: 500
     dropBonus: 45
     WeakPointDropBonus: 65
     knockbackForce: 15
@@ -6161,16 +6162,16 @@ MonoBehaviour:
     attackDistance: 999
     attackDamage: 500
     attackCooldown: 0.4
-    energyConsumption: 200
+    energyConsumption: 1000
     dropBonus: 70
-    WeakPointDropBonus: 90
+    WeakPointDropBonus: 100
     knockbackForce: 0
   targetLayer:
     serializedVersion: 2
     m_Bits: 2560
   windupTime: 0.35
   dashDuration: 0.1
-  StopDashDistance: 2
+  StopDashDistance: 2.5
   drawGizmos: 1
   currentAttackCD: 0
 --- !u!114 &8670675854258119381
@@ -6188,15 +6189,15 @@ MonoBehaviour:
   groundPoundLevels:
   - level: 3
     maxSphereRange: 100
-    sphereDamage: 180
+    sphereDamage: 150
     descentSpeed: 300
-    energyConsumption: 300
-    dropBonus: -20
+    energyConsumption: 2000
+    dropBonus: -10
   - level: 4
     maxSphereRange: 100
     sphereDamage: 500
     descentSpeed: 300
-    energyConsumption: 1000
+    energyConsumption: 9000
     dropBonus: -10
   KillableTargetLayer:
     serializedVersion: 2
@@ -6206,6 +6207,7 @@ MonoBehaviour:
     m_Bits: 257
   angleThreshold: 45
   minimumGroundDistance: 10
+  PushForce: 35
 --- !u!114 &6386192446695717372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6288,24 +6290,24 @@ MonoBehaviour:
   comboSettings:
   - LevelToUnlock: 1
     minComboMultiplier: 1
-    maxComboMultiplier: 1
-    comboTime: 3
-    GainPerKill: 0.5
+    maxComboMultiplier: 2
+    comboTime: 5
+    GainPerKill: 0.05
   - LevelToUnlock: 2
     minComboMultiplier: 1
-    maxComboMultiplier: 1
+    maxComboMultiplier: 2.5
     comboTime: 3
-    GainPerKill: 0.5
+    GainPerKill: 0.02
   - LevelToUnlock: 3
     minComboMultiplier: 1
-    maxComboMultiplier: 1
+    maxComboMultiplier: 2.8
     comboTime: 3
-    GainPerKill: 0.5
+    GainPerKill: 0.01
   - LevelToUnlock: 4
     minComboMultiplier: 1
-    maxComboMultiplier: 1
+    maxComboMultiplier: 3
     comboTime: 3
-    GainPerKill: 0.5
+    GainPerKill: 0.01
   currentComboMultiplier: 0
   comboText: {fileID: 7649215530791213466}
 --- !u!1 &6456051407392324954
