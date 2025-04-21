@@ -17,7 +17,7 @@ public class S_Jauge_Energy : MonoBehaviour
     [SerializeField] private float maxGainPerSecond = 100f;
     [SerializeField] private float maxWidth = 0.4f;
     [SerializeField] private float minIntensity = 0.5f;
-    [SerializeField] private float maxIntensity = 1.5f;
+    [SerializeField] private float maxIntensity = 2f;
     [SerializeField] private float smoothTime = 0.5f;
 
     private float lastEnergy = 0f;
@@ -69,7 +69,7 @@ public class S_Jauge_Energy : MonoBehaviour
             : energyStorage.maxEnergy;
 
         float ratio = Mathf.InverseLerp(min, max, current);
-        float fillValue = Mathf.Lerp(0f, 2f, 1f - ratio);
+        float fillValue = Mathf.Lerp(0.5f, 1.5f, 1f - ratio);
 
         // Préparation des valeurs dynamiques
         float gainClamped = Mathf.Clamp01(smoothedGain / maxGainPerSecond);
@@ -99,7 +99,7 @@ public class S_Jauge_Energy : MonoBehaviour
             {
                 // Jauge perte
                 _mpb.SetFloat(EndFillColorAmountID, lossAmount);
-                _mpb.SetFloat(EndIntensityID, lossIntensity);
+                _mpb.SetFloat(EndIntensityID, lossIntensity-0.3f);
             }
 
             rend.SetPropertyBlock(_mpb);
