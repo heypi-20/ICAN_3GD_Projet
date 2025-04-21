@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3366756862444597606}
   - component: {fileID: 692772915333056553}
   m_Layer: 9
-  m_Name: Pre_HeavyUnit
+  m_Name: Pre_OunOun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29,12 +29,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3096616329890149264}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -16.4, y: 3.98, z: -13.58}
-  m_LocalScale: {x: 4, y: 2.5, z: 4}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 12.44, y: 7.7749996, z: 12.44}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8236457062200441199}
+  - {fileID: 3887551701024867961}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7657245800675107991
@@ -133,7 +134,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -150,23 +151,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyName: 
-  enemyDamage: 20
-  health: 800
-  WeaknessExposureHealth: 400
-  WeakPoint: {fileID: 0}
-  energyPoint: {fileID: 284891634115185361, guid: 7ffcda2ccc95748469e58c3af6c7c58f, type: 3}
-  energyDropQuantity: 80
+  enemyType: 6
+  health: 3000
+  WeaknessExposureHealth: 500
+  enemyDamage: 45
+  WeakPoint: {fileID: 8136006638649724909}
+  energyPoint: {fileID: 284891634115185361, guid: 96c3cd77d45b4e442b666f6be32f86d1, type: 3}
+  energyDropQuantity: 100
   enemyGetHitVFX: {fileID: 2014564717100583912, guid: de8051323aef0554fb4a4ee3dd46ebed, type: 3}
   enemyDeathVFX: {fileID: 2014564717100583912, guid: 332f5cf35c013464e8ebf4ac6d81eedc, type: 3}
   enemyGetHitSound: 
   enemyDeathSound: 
+  extraWeakPointMaterial: {fileID: 2100000, guid: 88ed2fc4320abc049b8fbac9be0e16cd, type: 2}
+  weakPointRenderer: {fileID: 6197985156518759559}
   fireRate: 0.1
   range: 100
   projectilePrefab: {fileID: 6221195541462812341, guid: f8059b4edff9d2f488687120e8012cb0, type: 3}
   shootPoint: {fileID: 6282909468048664633}
   projectileSpeed: 60
-  moveSpeed: 3
-  stopDistance: 5
+  moveSpeed: 5
+  stopDistance: 15
 --- !u!1 &3374097203210150522
 GameObject:
   m_ObjectHideFlags: 0
@@ -181,7 +185,7 @@ GameObject:
   - component: {fileID: 2563195656351737896}
   m_Layer: 9
   m_Name: Cube
-  m_TagString: WeakPoint
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -304,3 +308,56 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8236457062200441199}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8136006638649724909
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3887551701024867961}
+  - component: {fileID: 2947345975659119848}
+  m_Layer: 9
+  m_Name: WeakPoint
+  m_TagString: WeakPoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3887551701024867961
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8136006638649724909}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.369, z: 0.55}
+  m_LocalScale: {x: 0.33157972, y: 0.44449463, z: 0.27360207}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4903943375435957626}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2947345975659119848
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8136006638649724909}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}

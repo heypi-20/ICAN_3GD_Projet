@@ -164,9 +164,15 @@ public class S_GroundPound_Module : MonoBehaviour
         foreach (Collider hit in hits)
         {
             // attack enemy logique
-            hit.GetComponent<EnemyBase>()?.ReduceHealth(GetCurrentGroundPoundLevel().sphereDamage,currentLevel.dropBonus);
+            if (hit.TryGetComponent<EnemyBase>(out var enemy))
+            {
+                enemy.ReduceHealth(GetCurrentGroundPoundLevel().sphereDamage, currentLevel.dropBonus);
+            }
             Vector3 direction =(hit.transform.position - transform.position).normalized;
-            hit.GetComponent<Rigidbody>()?.AddForce(direction * PushForce, ForceMode.Impulse);
+            if (hit.TryGetComponent(out Rigidbody rb))
+            {
+                rb.AddForce(direction * PushForce, ForceMode.Impulse);
+            }
         }
 
         _isGrounded = false; // Réinitialiser l'état de contact avec le sol
