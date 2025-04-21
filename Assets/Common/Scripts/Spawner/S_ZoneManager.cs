@@ -83,14 +83,12 @@ public class S_ZoneManager : MonoBehaviour
             {
                 zone.StartWeightLossTimer();
                 ActiveZonesByPlayer.Add(zone);
-                Debug.Log(zone.name + " is active by the player");
             }
             
             // If the zone's weight is 0 and the player is outside the zone, mark it for reactivation.
             if (zone.weight == 0 && distance > zone.radius && ActiveZonesByPlayer.Contains(zone) && !zone.isWaitingToBeReactivated)
             {
                 zone.isWaitingToBeReactivated = true;
-                Debug.Log("Start Zone coroutine");
                 StartCoroutine(WaitForXSecToBeReactive(zone));
             }
         }
@@ -103,7 +101,6 @@ public class S_ZoneManager : MonoBehaviour
         zone.alreadyTriggerAnotherZone = false;
         ActiveZonesByPlayer.Remove(zone);
         zone.isWaitingToBeReactivated = false;
-        Debug.Log(zone.name + " is now removed and ready to be reactivated.");
     }
 
     // Checks active zones and triggers nearby zones based on weight.
@@ -142,7 +139,6 @@ public class S_ZoneManager : MonoBehaviour
                         StartCoroutine(WatchZoneUntilFullyCharged(nearestZone));
                         zonesBeingWatched.Add(nearestZone);
                     }
-                    Debug.Log(nearestZone.name + " triggered by " + playerZone.name);
                     break;
                 }
             }
@@ -164,7 +160,6 @@ public class S_ZoneManager : MonoBehaviour
         {
             zone.StartWeightLossTimer();
             ActiveZonesByPlayer.Add(zone);
-            Debug.Log(zone.name + " reached full weight and is now activated by system");
         }
         // Stop watching this zone.
         zonesBeingWatched.Remove(zone);
