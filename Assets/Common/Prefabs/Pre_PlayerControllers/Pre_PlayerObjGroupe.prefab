@@ -5854,15 +5854,19 @@ MonoBehaviour:
   - level: 1
     requiredEnergy: 0
     graceTimer: 0
+    percentageGiveaway: 0
   - level: 2
     requiredEnergy: 3000
     graceTimer: 5
+    percentageGiveaway: 0.3
   - level: 3
     requiredEnergy: 15000
     graceTimer: 5
+    percentageGiveaway: 0.1
   - level: 4
     requiredEnergy: 50000
     graceTimer: 5
+    percentageGiveaway: 0.05
   energyDisplay: {fileID: 6788294273892150970}
   Gain_Palier: {fileID: 6127146839083381311}
   Loose_Palier: {fileID: 3203727517378176860}
@@ -6092,8 +6096,8 @@ MonoBehaviour:
     fireRate: 4
     damage: 5
     weekPointMultiplier: 100
-    energyConsumption: 3
-    dropBonus: 0
+    energyConsumption: 2.5
+    dropBonus: 10
     knockbackForce: 3
   - level: 2
     fireRate: 6
@@ -6208,7 +6212,6 @@ MonoBehaviour:
     m_Bits: 257
   angleThreshold: 45
   minimumGroundDistance: 10
-  PushForce: 50
 --- !u!114 &6386192446695717372
 MonoBehaviour:
   m_ObjectHideFlags: 0
