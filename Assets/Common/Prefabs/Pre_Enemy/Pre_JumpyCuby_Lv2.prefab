@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1020421795490251189}
   - component: {fileID: 1782568018022839216}
   - component: {fileID: 4248540126831999166}
-  - component: {fileID: 3328946320967846351}
+  - component: {fileID: 7151463268383644770}
   - component: {fileID: 938387544033349353}
   m_Layer: 9
   m_Name: Pre_JumpyCuby_Lv2
@@ -137,7 +137,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
---- !u!114 &3328946320967846351
+--- !u!114 &7151463268383644770
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -146,44 +146,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 2004354354198174285}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8e56040794c0914e84ca85088ee48ce, type: 3}
+  m_Script: {fileID: 11500000, guid: 8e59ad1fcd641b14a87cfbad2090c60c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useCollision: 0
-  collisionCooldown: 0
-  usePhysicCast: 1
-  physicCastCooldown: 1.5
+  physicCastCooldown: 0
   overlapType: 0
   withScaleSize: 0
-  ignoreChildren: 0
-  customSize: {x: 1.8, y: 1.8, z: 1.8}
+  ignoreChildren: 1
+  customSize: {x: 1.7, y: 1.7, z: 1.7}
   customOffset: {x: 0, y: 0, z: 0}
   sphereRadius: 1
   capsulePoint1: {x: 0, y: 0, z: 0}
   capsulePoint2: {x: 0, y: 1, z: 0}
   capsuleRadius: 1
-  collisionTags: []
-  collisionTargetComponentNames: []
   physicCastTags: []
   physicCastLayers:
     serializedVersion: 2
-    m_Bits: 1019
+    m_Bits: 841
   physicTargetComponentNames: []
-  OnTouchCalled:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 938387544033349353}
-        m_TargetAssemblyTypeName: S_JumpyCuby, Assembly-CSharp
-        m_MethodName: Jump
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &938387544033349353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,13 +190,18 @@ MonoBehaviour:
   enemyDeathSound: event:/Kill1
   extraWeakPointMaterial: {fileID: 2100000, guid: 152d9b433b056a84eac8846e6d4aff69, type: 2}
   weakPointRenderer: {fileID: 8239965984100750593}
-  jumpForce: 5
+  jumpForce: 8
   trackingForce: 10
   rotationSpeed: 5
   enableTracking: 1
   target: {fileID: 0}
-  idleThreshold: 2
-  activationForce: 5
+  squashDuration: 0.3
+  stretchDuration: 0.1
+  squashFactor: 0.8
+  stretchFactor: 1
+  minJumpInterval: 0.5
+  maxJumpInterval: 2
+  gravityForce: 2
 --- !u!1 &2324387078358081416
 GameObject:
   m_ObjectHideFlags: 0

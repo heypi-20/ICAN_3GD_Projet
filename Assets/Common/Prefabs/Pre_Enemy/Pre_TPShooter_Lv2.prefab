@@ -366,7 +366,7 @@ MonoBehaviour:
   enemyType: 5
   health: 200
   WeaknessExposureHealth: 180
-  enemyDamage: 250
+  enemyDamage: 400
   WeakPoint: {fileID: 1988549610118366224}
   energyPoint: {fileID: 284891634115185361, guid: 96c3cd77d45b4e442b666f6be32f86d1, type: 3}
   energyDropQuantity: 50
@@ -377,12 +377,12 @@ MonoBehaviour:
   extraWeakPointMaterial: {fileID: 2100000, guid: 88ed2fc4320abc049b8fbac9be0e16cd, type: 2}
   weakPointRenderer: {fileID: 8474245179614741032}
   teleportCd: 2
-  minDist: 10
-  maxDist: 20
+  negativeDist: 5
+  positiveDist: 10
   validPosLayer:
     serializedVersion: 2
     m_Bits: 257
-  range: 50
+  range: 75
   shootPoint: {fileID: 5861184455907349941}
   laserRadius: 1
   chargeTime: 0.4
