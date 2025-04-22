@@ -1,117 +1,162 @@
 using DG.Tweening;
 using UnityEngine;
-using Random = UnityEngine.Random;
+
 public class S_JumpyCuby_Behavior : EnemyBase
 {
-    [Header("Jump Settings")]
-    public float jumpForce = 10f; // The upward force applied when jumping
-    public float trackingForce = 5f; // The additional force applied to track a target
-    public float rotationSpeed = 1f;  
-    [Header("Tracking Settings")]
-    public bool enableTracking = false; // Whether the cube should track a target
-    public Transform target; // The target to track (if tracking is enabled)
-
-    [Header("Idle Activation Settings")]
-    public float idleThreshold = 5f; // Time in seconds before activating
-    public float activationForce = 5f; // Force to activate movement
-
+    #region Components
     private Rigidbody rb;
-    private float lastMovementTime;
-    private bool isJumping = false; // Prevent multiple jumps
+    private S_EnemyGroundCheck groundCheck;
+    private BoxCollider boxCollider;
+    private Vector3 originalBoxSize;
+    #endregion
 
+    #region Jump Settings
+    [Header("Jump Settings")]
+    public float jumpForce = 10f;                   // upward impulse when jumping
+    public float trackingForce = 5f;                // additional impulse toward target
+    public float rotationSpeed = 1f;                // rotation lerp speed
+    public bool enableTracking = false;             // track target during jump
+    public Transform target;                        // assigned target
+    public float squashDuration = 0.1f;             // time to compress
+    public float stretchDuration = 0.1f;            // time to expand
+    public float squashFactor = 0.8f;               // relative scale factor for squash
+    public float stretchFactor = 1.2f;              // relative scale factor for stretch
+    #endregion
 
+    #region Timing Settings
+    [Header("Jump Timing")]
+    public float minJumpInterval = 1f;              // minimum time between jumps
+    public float maxJumpInterval = 3f;              // maximum time between jumps
+    private float nextJumpTime = 0f;                // timestamp for next jump
+    #endregion
+
+    #region Gravity Simulation
+    [Header("Gravity Settings")]
+    public float gravityForce = 9.81f;               // downward acceleration when airborne
+    #endregion
+
+    #region Private Flags
+    private bool isSquashing = false;               // prevent overlapping squash animations
+    private bool wasGrounded = false;               // track ground state for scheduling
+    #endregion
+
+    #region Unity Callbacks
     private void Start()
     {
-        Cubyinitialize();
-        lastMovementTime = Time.time;
-    }
-
-    private void Cubyinitialize()
-    {
         rb = GetComponent<Rigidbody>();
-        if (rb == null)
+        groundCheck = GetComponent<S_EnemyGroundCheck>();
+        boxCollider = GetComponent<BoxCollider>();
+        if (boxCollider != null)
+            originalBoxSize = boxCollider.size;
+
+        // auto-find target if not assigned
+        if (target == null)
         {
-            Debug.LogError("Rigidbody component is missing on this GameObject!");
+            var player = FindObjectOfType<S_CustomCharacterController>();
+            if (player != null)
+                target = player.transform;
         }
-        S_CustomCharacterController playerShooting = FindObjectOfType<S_CustomCharacterController>();
-        if (playerShooting != null)
-        {
-            target = playerShooting.transform;
-        }
-        else
-        {
-            Debug.LogWarning("No object with S_PlayerShooting found in the scene!");
-        }
+
+        wasGrounded = false;
+        // schedule first jump when landing next
     }
 
     private void Update()
     {
-        CheckIdleState();
-        Quaternion startRot = transform.rotation;
-        Vector3 direction = (target.position - transform.position).normalized;
-        Quaternion endRot = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.Lerp(startRot, endRot, rotationSpeed*Time.deltaTime);
-    }
+        bool onGround = groundCheck != null && groundCheck.TriggerDetection();
 
-
-
-
-    // Method to make the cube jump
-    public void Jump()
-    {
-        if (rb == null || isJumping) return;
-
-        isJumping = true; // Lock
-
-        Vector3 originalScale = transform.localScale;
-        Vector3 punchScale = originalScale * 1.5f;
-
-        transform.DOScale(punchScale, 0.15f)
-            .SetEase(Ease.OutQuad)
-            .OnComplete(() =>
-            {
-                transform.DOScale(originalScale, 0.15f)
-                    .SetEase(Ease.InQuad)
-                    .OnComplete(() => isJumping = false); // Unlock after scale back
-
-                SoundManager.Instance.Meth_JumpyCuby_Jump();
-
-                rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-
-                if (enableTracking && target != null)
-                {
-                    Vector3 directionToTarget = (target.position - transform.position).normalized;
-                    rb.AddForce(directionToTarget * trackingForce, ForceMode.Impulse);
-                }
-                else
-                {
-                    Vector3 randomDirection = new Vector3(
-                        Random.Range(-1f, 1f),
-                        0f,
-                        Random.Range(-1f, 1f)).normalized;
-                    rb.AddForce(randomDirection * trackingForce, ForceMode.Impulse);
-                }
-
-                lastMovementTime = Time.time;
-            });
-    }
-    private void CheckIdleState()
-    {
-        // Check if the object has been idle for too long
-        if (Time.time - lastMovementTime > idleThreshold&&rb.velocity.magnitude<=0.1)
+        // schedule next jump when landing
+        if (onGround && !wasGrounded)
         {
-            ActivateMovement();
-            lastMovementTime = Time.time; // Reset the timer
+            ScheduleNextJump();
         }
-    }
+        wasGrounded = onGround;
 
-    private void ActivateMovement()
+        // handle rotation only when airborne
+        HandleRotation(!onGround);
+        // handle jump when grounded
+        if (onGround)
+            HandleJumpCheck();
+        // apply custom gravity when airborne
+        if (!onGround)
+            HandleGravity();
+    }
+    #endregion
+
+    #region Update Handlers
+    // rotate toward target if airborne
+    private void HandleRotation(bool isAirborne)
     {
-        Vector3 randomDirection = new Vector3(
-            Random.Range(-1f, 1f),
-            1f, // Always add upward force
-            Random.Range(-1f, 1f)).normalized;
-
-        rb.AddForce(randomDirection * activationForce, ForceMode.Impulse);
+        if (!isAirborne || target == null) return;
+        Quaternion startRot = transform.rotation;
+        Vector3 dir = (target.position - transform.position).normalized;
+        Quaternion endRot = Quaternion.LookRotation(dir);
+        transform.rotation = Quaternion.Lerp(startRot, endRot, rotationSpeed * Time.deltaTime);
     }
+
+    // trigger jump sequence if time reached and grounded
+    private void HandleJumpCheck()
+    {
+        if (isSquashing) return;
+        if (Time.time >= nextJumpTime)
+            StartSquashStretch();
+    }
+
+    // apply downward force when airborne
+    private void HandleGravity()
+    {
+        rb.AddForce(Vector3.down * gravityForce, ForceMode.Acceleration);
+    }
+    #endregion
+
+    #region Jump Sequence
+    private void ScheduleNextJump()
+    {
+        nextJumpTime = Time.time + Random.Range(minJumpInterval, maxJumpInterval);
+    }
+
+    private void StartSquashStretch()
+    {
+        isSquashing = true;
+        Vector3 originalScale = transform.localScale;
+        Vector3 squashScaleVec = originalScale * squashFactor;
+        Vector3 stretchScaleVec = originalScale * stretchFactor;
+
+        Sequence seq = DOTween.Sequence();
+        // squash transform and collider
+        seq.Append(transform.DOScale(squashScaleVec, squashDuration).SetEase(Ease.OutQuad));
+        if (boxCollider != null)
+            seq.Join(DOTween.To(() => boxCollider.size, x => boxCollider.size = x, originalBoxSize * squashFactor, squashDuration));
+
+        // stretch and then jump
+        seq.Append(transform.DOScale(stretchScaleVec, stretchDuration).SetEase(Ease.OutQuad));
+        if (boxCollider != null)
+            seq.Join(DOTween.To(() => boxCollider.size, x => boxCollider.size = x, originalBoxSize * stretchFactor, stretchDuration));
+
+        seq.AppendCallback(ExecuteJump);
+
+        // restore original scale and collider
+        seq.Append(transform.DOScale(originalScale, squashDuration).SetEase(Ease.InQuad));
+        if (boxCollider != null)
+            seq.Join(DOTween.To(() => boxCollider.size, x => boxCollider.size = x, originalBoxSize, squashDuration));
+
+        seq.OnComplete(() => isSquashing = false);
+    }
+
+    private void ExecuteJump()
+    {
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        if (enableTracking && target != null)
+        {
+            Vector3 dirToTarget = (target.position - transform.position).normalized;
+            rb.AddForce(dirToTarget * trackingForce, ForceMode.Impulse);
+        }
+        else
+        {
+            Vector3 randDir = new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f)).normalized;
+            rb.AddForce(randDir * trackingForce, ForceMode.Impulse);
+        }
+        // next jump scheduled on next landing
+    }
+    #endregion
 }
