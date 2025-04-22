@@ -36,6 +36,7 @@ public class S_TPShooter : EnemyBase
     private float shootTimer;
     private float lerpTimer;
 
+    private bool playerInRange;
     private bool canShoot;
     private bool isCharging;
     private bool laserCharged;
@@ -70,21 +71,52 @@ public class S_TPShooter : EnemyBase
         teleportTimer += Time.deltaTime;
 
         if (teleportTimer >= teleportCd) {
-            Teleport();
+            if (playerInRange)
+                Teleport();
+            else {
+                Vector3 playerPos = GetRandomPointInSphere(player.position, range);
+                TeleportTowardsPlayer(playerPos);
+            }
             teleportTimer = 0;
         }
         
         float dist = Vector3.Distance(transform.position, player.position);
 
         if (dist < range) {
-            if (!Physics.Raycast(shootPoint.position, player.position - transform.position, out hit, range))
-                return;
             if (!isCharging && canShoot)
-                transform.LookAt(hit.point);
-            if (canShoot)
+                transform.LookAt(player.position);
+            if (canShoot && Physics.Raycast(shootPoint.position, transform.forward, out hit, range))
                 LaserHandler();
+            playerInRange = true;
         } else {
             lr.SetPosition(1, shootPoint.position);
+            playerInRange = false;
+        }
+    }
+    
+    Vector3 GetRandomPointInSphere(Vector3 center, float radius)
+    {
+        return center + Random.insideUnitSphere * radius;
+    }
+
+
+    private void TeleportTowardsPlayer(Vector3 playerPos)
+    {
+        if (NavMesh.SamplePosition(playerPos, out NavMeshHit navMeshHit, range, validPosLayer)) {
+            agent.enabled = false;
+            transform.DOMove(navMeshHit.position, 0.1f)
+                     .SetEase(Ease.InOutQuad)
+                     .OnComplete(() =>
+                     {
+                         canShoot = true;
+                         agent.enabled = true;
+                     });
+        
+            Vector3 targetScale = new Vector3(1.1f, 1.5f, 1.1f); // Augmenter légèrement la taille
+            // Créer l'animation
+            transform.DOScale(targetScale, 0.5f) // Durée pour atteindre la taille cible (0.25s aller)
+                     .SetEase(Ease.InOutQuad)    // Easing fluide pour un effet agréable
+                     .SetLoops(-1, LoopType.Yoyo);
         }
     }
 
