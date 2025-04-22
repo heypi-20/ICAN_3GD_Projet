@@ -6,103 +6,80 @@ public class S_Jauge_Energy : MonoBehaviour
 {
     [Header("Références")]
     [SerializeField] private S_EnergyStorage energyStorage;
-    [SerializeField] private Renderer[] renderers; // 0 = gain, 1 = perte
+    [SerializeField] private Renderer targetRenderer;
+    
+    [Header("Curves & Durée")]
+    [SerializeField] private AnimationCurve emissionCurve;
+    [SerializeField] private AnimationCurve sharpnessCurve;
+    [SerializeField] private AnimationCurve fillCurve;
+    [SerializeField] private float duration = 1f;
 
-    [Header("Shader Settings")]
+    [Header("Valeurs visuelles")]
+    [SerializeField] private float baseEmission = 1f;
+    [SerializeField] private float maxEmission = 6f;
+    [SerializeField] private float baseSharpness = 2f;
+    [SerializeField] private float boostedSharpness = 10f;
+
+    private static readonly int GlobalEmissionID = Shader.PropertyToID("_GlobalEmission");
+    private static readonly int GradientSharpnessID = Shader.PropertyToID("_GradientSharpness");
     private static readonly int FillJaugeID = Shader.PropertyToID("_FillJauge");
-    private static readonly int EndFillColorAmountID = Shader.PropertyToID("_EndFillColorAmount");
-    private static readonly int EndIntensityID = Shader.PropertyToID("_EndIntensity");
-
-    [Header("Énergie dynamique (bord vert/rouge)")]
-    [SerializeField] private float maxGainPerSecond = 100f;
-    [SerializeField] private float maxWidth = 0.4f;
-    [SerializeField] private float minIntensity = 0.5f;
-    [SerializeField] private float maxIntensity = 2f;
-    [SerializeField] private float smoothTime = 0.5f;
-
-    private float lastEnergy = 0f;
-
-    // Valeurs brutes
-    private float rawGain = 0f;
-    private float rawLoss = 0f;
-
-    // Valeurs lissées
-    private float smoothedGain = 0f;
-    private float smoothedLoss = 0f;
 
     private MaterialPropertyBlock _mpb;
+    private Coroutine _effectRoutine;
 
     private void Awake()
     {
         _mpb = new MaterialPropertyBlock();
-        lastEnergy = energyStorage.currentEnergy;
+        energyStorage.OnLevelChange += OnLevelChangeReceived;
     }
 
-    private void Update()
+    private void OnDestroy()
     {
-        if (energyStorage == null || renderers.Length == 0 || energyStorage.energyLevels.Length == 0)
-            return;
-
-        float current = energyStorage.currentEnergy;
-        float delta = current - lastEnergy;
-
-        rawGain = delta > 0 ? delta / Time.deltaTime : 0f;
-        rawLoss = delta < 0 ? -delta / Time.deltaTime : 0f;
-
-        // Lissage
-        smoothedGain = Mathf.Lerp(smoothedGain, rawGain, Time.deltaTime / smoothTime);
-        smoothedLoss = Mathf.Lerp(smoothedLoss, rawLoss, Time.deltaTime / smoothTime);
-
-        lastEnergy = current;
-
-        UpdateShaderFill();
+        energyStorage.OnLevelChange -= OnLevelChangeReceived;
     }
 
-    private void UpdateShaderFill()
+    private void OnLevelChangeReceived(System.Enum state, int level)
     {
-        float current = energyStorage.currentEnergy;
-        int index = energyStorage.currentLevelIndex;
-
-        float min = energyStorage.energyLevels[index].requiredEnergy;
-        float max = (index + 1 < energyStorage.energyLevels.Length)
-            ? energyStorage.energyLevels[index + 1].requiredEnergy
-            : energyStorage.maxEnergy;
-
-        float ratio = Mathf.InverseLerp(min, max, current);
-        float fillValue = Mathf.Lerp(0.5f, 1.5f, 1f - ratio);
-
-        // Préparation des valeurs dynamiques
-        float gainClamped = Mathf.Clamp01(smoothedGain / maxGainPerSecond);
-        float lossClamped = Mathf.Clamp01(smoothedLoss / maxGainPerSecond);
-
-        float gainAmount = gainClamped * maxWidth;
-        float gainIntensity = Mathf.Lerp(minIntensity, maxIntensity, gainClamped);
-
-        float lossAmount = lossClamped * maxWidth;
-        float lossIntensity = Mathf.Lerp(minIntensity, maxIntensity, lossClamped);
-
-        for (int i = 0; i < renderers.Length; i++)
+        if (state.ToString() == "LevelUp")
         {
-            Renderer rend = renderers[i];
-            if (rend == null) continue;
-
-            rend.GetPropertyBlock(_mpb);
-            _mpb.SetFloat(FillJaugeID, fillValue);
-
-            if (i == 0)
-            {
-                // Jauge gain
-                _mpb.SetFloat(EndFillColorAmountID, gainAmount);
-                _mpb.SetFloat(EndIntensityID, gainIntensity);
-            }
-            else if (i == 1)
-            {
-                // Jauge perte
-                _mpb.SetFloat(EndFillColorAmountID, lossAmount);
-                _mpb.SetFloat(EndIntensityID, lossIntensity-0.3f);
-            }
-
-            rend.SetPropertyBlock(_mpb);
+            if (_effectRoutine != null) StopCoroutine(_effectRoutine);
+            _effectRoutine = StartCoroutine(PlayPalierUpgradeEffect());
         }
+    }
+
+    private IEnumerator PlayPalierUpgradeEffect()
+    {
+        float currentFill = GetFillFromShader();
+        float timer = 0f;
+
+        while (timer < duration)
+        {
+            float t = timer / duration;
+
+            float emission = Mathf.Lerp(baseEmission, maxEmission, emissionCurve.Evaluate(t));
+            float sharpness = Mathf.Lerp(baseSharpness, boostedSharpness, sharpnessCurve.Evaluate(t));
+            float fill = Mathf.Lerp(0.5f, currentFill, fillCurve.Evaluate(t));
+
+            targetRenderer.GetPropertyBlock(_mpb);
+            _mpb.SetFloat(GlobalEmissionID, emission);
+            _mpb.SetFloat(GradientSharpnessID, sharpness);
+            _mpb.SetFloat(FillJaugeID, fill);
+            targetRenderer.SetPropertyBlock(_mpb);
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        // Remise à la valeur finale exacte
+        targetRenderer.GetPropertyBlock(_mpb);
+        _mpb.SetFloat(GlobalEmissionID, baseEmission);
+        _mpb.SetFloat(GradientSharpnessID, baseSharpness);
+        _mpb.SetFloat(FillJaugeID, GetFillFromShader());
+        targetRenderer.SetPropertyBlock(_mpb);
+    }
+
+    private float GetFillFromShader()
+    {
+        return Mathf.Lerp(0f, 2f, 1f - (energyStorage.currentEnergy / energyStorage.maxEnergy));
     }
 }

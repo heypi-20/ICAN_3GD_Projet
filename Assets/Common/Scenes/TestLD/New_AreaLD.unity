@@ -369,6 +369,82 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pre_PlayerObjGroupe
       objectReference: {fileID: 0}
+    - target: {fileID: 5830135712720185359, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: targetRenderer
+      value: 
+      objectReference: {fileID: 410795127}
+    - target: {fileID: 5830135712720185359, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: fillCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5830135712720185359, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: emissionCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5830135712720185359, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: sharpnessCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5830135712720185359, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: fillCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5830135712720185359, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: fillCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5830135712720185359, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: fillCurve.m_Curve.Array.data[1].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5830135712720185359, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: emissionCurve.m_Curve.Array.data[0].time
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5830135712720185359, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: emissionCurve.m_Curve.Array.data[1].time
+      value: 0.9905776
+      objectReference: {fileID: 0}
+    - target: {fileID: 5830135712720185359, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: fillCurve.m_Curve.Array.data[1].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5830135712720185359, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: emissionCurve.m_Curve.Array.data[0].value
+      value: 1.0023499
+      objectReference: {fileID: 0}
+    - target: {fileID: 5830135712720185359, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: emissionCurve.m_Curve.Array.data[1].value
+      value: -0.0022343844
+      objectReference: {fileID: 0}
+    - target: {fileID: 5830135712720185359, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: sharpnessCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5830135712720185359, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: sharpnessCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5830135712720185359, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: emissionCurve.m_Curve.Array.data[1].inSlope
+      value: 0.006293254
+      objectReference: {fileID: 0}
+    - target: {fileID: 5830135712720185359, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: emissionCurve.m_Curve.Array.data[1].inWeight
+      value: 0.3692091
+      objectReference: {fileID: 0}
+    - target: {fileID: 5830135712720185359, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: emissionCurve.m_Curve.Array.data[1].outSlope
+      value: 0.006293254
+      objectReference: {fileID: 0}
+    - target: {fileID: 5830135712720185359, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: sharpnessCurve.m_Curve.Array.data[1].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5830135712720185359, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: sharpnessCurve.m_Curve.Array.data[1].outSlope
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8728408009053761971, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3795,6 +3871,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 109.17099, y: -30, z: 0}
+--- !u!23 &410795127 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1256986129642050906, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+  m_PrefabInstance: {fileID: 83086560}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &449395093 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7503010589162537126, guid: 87ba83fc416216045abb3918f8ee6faa, type: 3}
