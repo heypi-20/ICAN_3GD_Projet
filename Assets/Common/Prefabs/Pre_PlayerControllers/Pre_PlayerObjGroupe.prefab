@@ -8170,22 +8170,87 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   energyStorage: {fileID: 9046166951153555370}
-  renderers:
-  - {fileID: 1256986129642050906}
-  - {fileID: 4432589578744040820}
-  maxGainPerSecond: 100
-  maxWidth: 0.4
-  minIntensity: 0.5
-  maxIntensity: 2
-  smoothTime: 0.5
+  targetRenderer: {fileID: 1256986129642050906}
+  emissionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1.0023499
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.9905776
+      value: -0.0022343844
+      inSlope: 0.006293254
+      outSlope: 0.006293254
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.3692091
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  sharpnessCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  fillCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  duration: 1
+  baseEmission: 1
+  maxEmission: 6
+  baseSharpness: 2
+  boostedSharpness: 10
 --- !u!20 &4189595085616842902 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 5203951713334118074, guid: fcd19f56672fff5489c1a22bf8294375, type: 3}
-  m_PrefabInstance: {fileID: 8222526230067072556}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &4432589578744040820 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 5737569115696644952, guid: fcd19f56672fff5489c1a22bf8294375, type: 3}
   m_PrefabInstance: {fileID: 8222526230067072556}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &7048874531579905035 stripped
