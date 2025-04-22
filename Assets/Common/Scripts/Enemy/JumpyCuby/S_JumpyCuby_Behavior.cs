@@ -23,6 +23,14 @@ public class S_JumpyCuby_Behavior : EnemyBase
     public float stretchFactor = 1.2f;              // relative scale factor for stretch
     #endregion
 
+    #region Boss Settings
+    [Header("Boss Settings")]
+    public bool bossMode = false;                   // enable shockwave on landing
+    public float bossShakeRadius = 5f;              // radius of shockwave
+    public float bossShakeUpForce = 5f;             // upward force of shockwave
+    public float bossShakeOutwardForce = 5f;        // outward force of shockwave
+    #endregion
+
     #region Timing Settings
     [Header("Jump Timing")]
     public float minJumpInterval = 1f;              // minimum time between jumps
@@ -37,7 +45,8 @@ public class S_JumpyCuby_Behavior : EnemyBase
 
     #region Private Flags
     private bool isSquashing = false;               // prevent overlapping squash animations
-    private bool wasGrounded = false;               // track ground state for scheduling
+    private bool wasGrounded = false;               // track previous ground state
+    private bool hasJustJumped = false;             // track jump state for shockwave
     #endregion
 
     #region Unity Callbacks
@@ -58,17 +67,20 @@ public class S_JumpyCuby_Behavior : EnemyBase
         }
 
         wasGrounded = false;
-        // schedule first jump when landing next
+        hasJustJumped = false;
     }
 
     private void Update()
     {
         bool onGround = groundCheck != null && groundCheck.TriggerDetection();
 
-        // schedule next jump when landing
-        if (onGround && !wasGrounded)
+        // landing detection after jump
+        if (onGround && !wasGrounded && hasJustJumped)
         {
+            if (bossMode)
+                TriggerBossShockwave();
             ScheduleNextJump();
+            hasJustJumped = false;
         }
         wasGrounded = onGround;
 
@@ -133,7 +145,7 @@ public class S_JumpyCuby_Behavior : EnemyBase
         if (boxCollider != null)
             seq.Join(DOTween.To(() => boxCollider.size, x => boxCollider.size = x, originalBoxSize * stretchFactor, stretchDuration));
 
-        seq.AppendCallback(ExecuteJump);
+        seq.AppendCallback(() => { ExecuteJump(); hasJustJumped = true; });
 
         // restore original scale and collider
         seq.Append(transform.DOScale(originalScale, squashDuration).SetEase(Ease.InQuad));
@@ -157,6 +169,39 @@ public class S_JumpyCuby_Behavior : EnemyBase
             rb.AddForce(randDir * trackingForce, ForceMode.Impulse);
         }
         // next jump scheduled on next landing
+    }
+    #endregion
+
+    #region Boss Shockwave
+    // trigger spherical shockwave affecting other jumpy cubies
+    private void TriggerBossShockwave()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, bossShakeRadius);
+        foreach (var hit in hits)
+        {
+            if (hit.transform == transform) continue;
+            var other = hit.GetComponent<S_JumpyCuby_Behavior>();
+            if (other != null)
+            {
+                var otherRb = other.GetComponent<Rigidbody>();
+                if (otherRb != null)
+                {
+                    Vector3 dir = (hit.transform.position - transform.position).normalized;
+                    Vector3 force = dir * bossShakeOutwardForce + Vector3.up * bossShakeUpForce;
+                    otherRb.AddForce(force, ForceMode.Impulse);
+                }
+            }
+        }
+    }
+    #endregion
+
+    #region Gizmos
+    // draw shockwave radius when boss mode enabled
+    private void OnDrawGizmosSelected()
+    {
+        if (!bossMode) return;
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, bossShakeRadius);
     }
     #endregion
 }
