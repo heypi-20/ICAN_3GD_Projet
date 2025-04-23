@@ -61,25 +61,23 @@ public class S_TPShooter : EnemyBase
         lr.startWidth = 0.05f;
         lr.endWidth = 0.05f;
         lr.SetPosition(1, shootPoint.position);
-        agent.enabled = false;
+        
+        Vector3 groundHit = GroundCheck();
+        if (groundHit != Vector3.zero) {
+            transform.position = new Vector3(groundHit.x, groundHit.y + transform.localScale.y, groundHit.z);
+        }
+        
+        agent.enabled = true;
     }
     
-    void Update()
+    private void Update()
     {
         player = findPlayer.transform;
         
         lr.SetPosition(0, shootPoint.position);
-
-        (bool groundCheck, Vector3 groundHit) = GroundCheck();
-        if (groundCheck && Vector3.Distance(groundHit, transform.position) > transform.localScale.y) {
-            transform.position = groundHit;
-        }
-
-        if (groundCheck) {
-            agent.enabled = true;
-        }
+        
         teleportTimer += Time.deltaTime;
-
+        
         if (teleportTimer >= teleportCd) {
             if (playerInRange)
                 Teleport();
@@ -104,9 +102,12 @@ public class S_TPShooter : EnemyBase
         }
     }
 
-    private (bool, Vector3) GroundCheck()
+    private Vector3 GroundCheck()
     {
-        return (Physics.Raycast(transform.position, Vector3.down, out RaycastHit groundHit, 10000f, groundLayer), groundHit.point);
+        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit groundHit, Mathf.Infinity)) {
+            return groundHit.point;
+        }
+        return Vector3.zero;
     }
     
     private Vector3 GetRandomPointInSphere(Vector3 center, float radius)
@@ -212,12 +213,9 @@ public class S_TPShooter : EnemyBase
         Vector3 finalLaserDirection = (hit.point - transform.position).normalized;
 
         yield return new WaitForSeconds(shootDelay);
-        Debug.Log("Shooting laser at ");
 
         if (Physics.SphereCast(shootPoint.position, laserRadius, finalLaserDirection, out laserHit, range, playerLayer) && laserCharged) {
-            Debug.Log("Laser charged and hitting something " + laserHit.collider.name);
             if (laserHit.collider.CompareTag("Player")) {
-                Debug.Log("Hit player");
                 laserHit.collider.GetComponent<S_PlayerHitTrigger>().ReceiveDamage(enemyDamage);
             }
         }
