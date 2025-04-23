@@ -65,7 +65,11 @@
 			<destination>{8f615bd1-4d2d-4773-8827-1e2a108b88c6}</destination>
 		</relationship>
 	</object>
-	<object class="EventAutomatableProperties" id="{87da0fc4-5d3a-4d4e-8e2a-d6ada1f56db0}" />
+	<object class="EventAutomatableProperties" id="{87da0fc4-5d3a-4d4e-8e2a-d6ada1f56db0}">
+		<property name="maxVoices">
+			<value>5</value>
+		</property>
+	</object>
 	<object class="MarkerTrack" id="{98c093d3-7954-4927-909a-8195b56972ed}" />
 	<object class="GroupTrack" id="{283bcb9c-c518-43f5-a7f3-78ead888f598}">
 		<relationship name="mixerGroup">
@@ -122,6 +126,9 @@
 		<relationship name="effects">
 			<destination>{7ed7b4c1-64f7-49b9-94cd-814ae940f189}</destination>
 			<destination>{3dc1e7f4-989d-440f-9712-31136048b110}</destination>
+			<destination>{d76b8f83-e586-4a2d-9202-ed6ce4e4b2d3}</destination>
+			<destination>{36994469-4e48-4c85-9572-8db7fcbe6cd6}</destination>
+			<destination>{5ab20674-af2b-4c5b-a590-5a8b0f9e0071}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{1852bce0-aa35-496f-af76-37eb2893a2f6}" />
@@ -147,6 +154,30 @@
 	<object class="MixerBusPanner" id="{f4eec9b4-71b9-4bf3-8535-7a296da9a183}" />
 	<object class="MixerBusFader" id="{7ed7b4c1-64f7-49b9-94cd-814ae940f189}" />
 	<object class="SpatialiserEffect" id="{3dc1e7f4-989d-440f-9712-31136048b110}" />
+	<object class="DistortionEffect" id="{d76b8f83-e586-4a2d-9202-ed6ce4e4b2d3}">
+		<property name="level">
+			<value>0.699999988</value>
+		</property>
+	</object>
+	<object class="CompressorEffect" id="{36994469-4e48-4c85-9572-8db7fcbe6cd6}">
+		<property name="threshold">
+			<value>-10</value>
+		</property>
+		<property name="ratio">
+			<value>14.5</value>
+		</property>
+		<property name="attackTime">
+			<value>0.100000001</value>
+		</property>
+	</object>
+	<object class="LimiterEffect" id="{5ab20674-af2b-4c5b-a590-5a8b0f9e0071}">
+		<property name="boost">
+			<value>0.200000003</value>
+		</property>
+		<property name="ceiling">
+			<value>-2.5</value>
+		</property>
+	</object>
 	<object class="SingleSound" id="{104e0662-98d8-4815-8831-f30443ad2e25}">
 		<relationship name="audioFile">
 			<destination>{e136fe5a-c3b7-4e37-9c4d-e75cdcfcaef2}</destination>
