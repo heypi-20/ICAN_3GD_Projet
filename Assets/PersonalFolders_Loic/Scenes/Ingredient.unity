@@ -230,8 +230,8 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
 --- !u!114 &209335293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -434,7 +434,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &909150335
 Transform:
   m_ObjectHideFlags: 0
@@ -744,12 +744,13 @@ GameObject:
   - component: {fileID: 1480167945}
   - component: {fileID: 1480167944}
   - component: {fileID: 1480167943}
+  - component: {fileID: 1480167947}
   m_Layer: 8
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!64 &1480167943
 MeshCollider:
@@ -838,6 +839,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1480167947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1480167942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: f46d2d58
 --- !u!1 &1664733294
 GameObject:
   m_ObjectHideFlags: 0
@@ -1029,15 +1049,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 142422949018235692, guid: 372e2d5281005fc49848f81c06e705a9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -21.7
+      value: -0.7
       objectReference: {fileID: 0}
     - target: {fileID: 142422949018235692, guid: 372e2d5281005fc49848f81c06e705a9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3
+      value: 15.48
       objectReference: {fileID: 0}
     - target: {fileID: 142422949018235692, guid: 372e2d5281005fc49848f81c06e705a9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -21.6
+      value: -33.1
       objectReference: {fileID: 0}
     - target: {fileID: 142422949018235692, guid: 372e2d5281005fc49848f81c06e705a9, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1070,10 +1090,6 @@ PrefabInstance:
     - target: {fileID: 4897929555399485672, guid: 372e2d5281005fc49848f81c06e705a9, type: 3}
       propertyPath: m_Name
       value: TPShooter V2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4897929555399485672, guid: 372e2d5281005fc49848f81c06e705a9, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
