@@ -1,143 +1,67 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.AI;
-using Random = UnityEngine.Random;
+﻿using UnityEngine;
 
-[RequireComponent(typeof(NavMeshAgent))]
 public class S_Banshee : EnemyBase
 {
     [Header("Enemy Properties")]
-    public float idleTime = 2f;
-    public float minDist = 5f;
-    public float maxDist = 5f;
-    public float elevationRange = 3f;
-    public float elevationLimit = 10f;
-    public float flyHeight = 20f;
-    public float chaseRange = 10f;
-    public float stoppingRange = 0.5f;
-    
-    [Header("Attack Properties")]
-    public float screamRange = 10f;
-    
-    private NavMeshAgent agent;
-    private Transform findBody;
-    private GameObject body;
-    private S_CustomCharacterController findPlayer;
-    private Transform player;
-        
-    private float idleTimer;
-    private bool getNewPos = true;
-    private float randX;
-    private float randY;
-    private float randZ;
-    private float desiredY;
+    public float speed = 10f;
+    public float rotationSpeed = 5f;
+    public float avoidDist = 10f;
+    public LayerMask obstacleMask;
 
-    private bool canAttack;
+    [Header("Attack Properties")]
+    public float range = 50f;
+    
+    private Transform player;
+
+    private Rigidbody rb;
     
     private void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
-        findBody = transform.GetChild(0);
-
-        if (findBody.name != "Body") {
-            Debug.LogWarning("The body object should be named 'Body' and the 1st child in the hierarchy.");
-            return;
+        player = FindObjectOfType<S_CustomCharacterController>().transform;
+        if (player == null) {
+            Debug.LogWarning("No player found");
         }
         
-        findPlayer = FindObjectOfType<S_CustomCharacterController>();
-        if (findPlayer == null) {
-            Debug.LogWarning("No Character Controller");
-        }
-
-        findBody.position = new Vector3(transform.position.x, flyHeight, transform.position.z);
+        rb = GetComponent<Rigidbody>();
+        rb.useGravity = false;
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
     }
 
     private void Update()
     {
-        player = findPlayer.transform;
+        float dist = Vector3.Distance(player.position, transform.position);
 
-        float dist = Vector3.Distance(findBody.position, player.position);
-
-        if (dist < chaseRange) {
-            idleTimer = 0f;
-            agent.enabled = false;
+        if (dist < range) {
+            Attack();
+        } else {
             Chase();
-        } else if (!canAttack) {
-            agent.enabled = true;
-            Idle();
-        }
-    }
-
-    private void Idle()
-    {
-        if (!getNewPos) {
-            idleTimer += Time.deltaTime;
-        } else if (getNewPos) {
-            randX = Random.Range(-minDist, maxDist);
-            randY = Random.Range(-elevationRange, elevationRange);
-            randZ = Random.Range(-minDist, maxDist);
-            
-            Vector3 targetPosition = new Vector3(transform.position.x + randX, transform.position.y, transform.position.z + randZ);
-            agent.SetDestination(targetPosition);
-            desiredY = findBody.localPosition.y + randY;
-
-            if (desiredY >= flyHeight + elevationLimit) {
-                desiredY = flyHeight + elevationLimit;
-            } else if (desiredY <= flyHeight - elevationLimit) {
-                desiredY = flyHeight - elevationLimit;
-            }
-            
-            getNewPos = false;
-        }
-        
-        findBody.localPosition = new Vector3(
-            0f,
-            Mathf.Lerp(findBody.localPosition.y, desiredY, Time.deltaTime * (agent.speed/2f)),
-            0f
-        );
-    
-        if (idleTimer >= idleTime) {
-            getNewPos = true;
-            idleTimer = 0f;
         }
     }
 
     private void Chase()
     {
-        findBody.rotation = Quaternion.Slerp(findBody.rotation,
-            Quaternion.LookRotation(player.position - findBody.position), 3f * Time.deltaTime);
+        Vector3 toPlayer = (player.position - transform.position).normalized;
+
+        Quaternion targetRot = Quaternion.LookRotation(toPlayer);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * rotationSpeed);
         
-        if (Vector3.Distance(findBody.position, player.position) < stoppingRange) {
-            if (Physics.Raycast(findBody.position, player.position - findBody.position, out RaycastHit hit, stoppingRange)
-                && canAttack) {
-                Attack();
-            }
-            Debug.Log("In Attack Range");
+        if (Physics.SphereCast(transform.position, transform.localScale.y/2f, transform.forward, out RaycastHit hit, avoidDist, obstacleMask)) {
+            Vector3 avoidDir = Vector3.ProjectOnPlane(toPlayer, hit.normal).normalized;
+            
+            rb.velocity = avoidDir * speed;
+            Debug.Log("Avoiding");
         } else {
-            findBody.position += findBody.forward * (agent.speed * 2) * Time.deltaTime;
-            // Vector3 playerXZ = new Vector3(player.position.x, transform.position.y, player.position.z);
-            // agent.SetDestination(playerXZ);
-            //
-            // float desiredLocalY = player.position.y - findBody.localPosition.y;
-            // findBody.localPosition = new Vector3(
-            //     0f,
-            //     Mathf.Lerp(findBody.localPosition.y, desiredLocalY, Time.deltaTime * agent.speed),
-            //     0f
-            // );
+            rb.velocity = toPlayer * speed;
+            Debug.Log("Chasing");
+        }
+
+        if (transform.position.y < transform.localScale.y / 2) {
+            transform.position = new Vector3(transform.position.x, transform.localScale.y / 2, transform.position.z);
         }
     }
 
     private void Attack()
     {
-        Collider[] hits = Physics.OverlapSphere(findBody.position, screamRange, player.gameObject.layer);
         
-        Debug.Log("Attacking");
-        
-        foreach (Collider hit in hits) {
-            Debug.Log("Hit player");
-            hit.GetComponent<S_PlayerHitTrigger>()?.ReceiveDamage(enemyDamage);
-        }
-
-        canAttack = false;
     }
 }

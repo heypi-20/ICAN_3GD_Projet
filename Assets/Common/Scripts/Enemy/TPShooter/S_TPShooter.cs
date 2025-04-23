@@ -15,6 +15,7 @@ public class S_TPShooter : EnemyBase
     public float negativeDist = 5f;
     public float positiveDist = 5f;
     public LayerMask validPosLayer;
+    public LayerMask groundLayer;
 
     [Header("Shoot Properties")]
     public float range;
@@ -60,6 +61,7 @@ public class S_TPShooter : EnemyBase
         lr.startWidth = 0.05f;
         lr.endWidth = 0.05f;
         lr.SetPosition(1, shootPoint.position);
+        agent.enabled = false;
     }
     
     void Update()
@@ -67,7 +69,15 @@ public class S_TPShooter : EnemyBase
         player = findPlayer.transform;
         
         lr.SetPosition(0, shootPoint.position);
-        
+
+        (bool groundCheck, Vector3 groundHit) = GroundCheck();
+        if (groundCheck && Vector3.Distance(groundHit, transform.position) > transform.localScale.y) {
+            transform.position = groundHit;
+        }
+
+        if (groundCheck) {
+            agent.enabled = true;
+        }
         teleportTimer += Time.deltaTime;
 
         if (teleportTimer >= teleportCd) {
@@ -93,8 +103,13 @@ public class S_TPShooter : EnemyBase
             playerInRange = false;
         }
     }
+
+    private (bool, Vector3) GroundCheck()
+    {
+        return (Physics.Raycast(transform.position, Vector3.down, out RaycastHit groundHit, 10000f, groundLayer), groundHit.point);
+    }
     
-    Vector3 GetRandomPointInSphere(Vector3 center, float radius)
+    private Vector3 GetRandomPointInSphere(Vector3 center, float radius)
     {
         return center + Random.insideUnitSphere * radius;
     }
