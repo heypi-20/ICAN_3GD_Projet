@@ -21,8 +21,9 @@ public class S_Jauge_Energy : MonoBehaviour
     [SerializeField] private float maxIntensity = 1.5f;
     [SerializeField] private float smoothTime = 0.5f;
 
-    [Header("Effet gain palier")]
+    [Header("Effet visuel de gain de palier")]
     [SerializeField] private float effectDuration = 1f;
+    [SerializeField] private float returnDuration = 0.3f;
     [SerializeField] private AnimationCurve fillCurve;
     [SerializeField] private AnimationCurve emissionCurve;
     [SerializeField] private AnimationCurve sharpnessCurve;
@@ -126,24 +127,22 @@ public class S_Jauge_Energy : MonoBehaviour
     {
         float current = energyStorage.currentEnergy;
         int index = energyStorage.currentLevelIndex;
-        float trueEmission = baseEmission;
-        float trueSharpness = baseSharpness;
-        float trueFill = Mathf.Lerp(0f, 2f, 1f - Mathf.InverseLerp(minIntensity, maxIntensity, energyStorage.currentEnergy));
 
         float min = energyStorage.energyLevels[index].requiredEnergy;
         float max = (index + 1 < energyStorage.energyLevels.Length)
             ? energyStorage.energyLevels[index + 1].requiredEnergy
             : energyStorage.maxEnergy;
 
-        float finalFill = Mathf.Lerp(0f, 2f, 1f - Mathf.InverseLerp(min, max, current));
-        float timer = 0f;
+        float trueFill = Mathf.Lerp(0.5f, 1.5f, 1f - Mathf.InverseLerp(min, max, current));
 
+        float timer = 0f;
         while (timer < effectDuration)
         {
             float t = timer / effectDuration;
+
             float emission = Mathf.Lerp(baseEmission, boostedEmission, emissionCurve.Evaluate(t));
             float sharpness = Mathf.Lerp(baseSharpness, boostedSharpness, sharpnessCurve.Evaluate(t));
-            float fill = Mathf.Lerp(0.5f, finalFill, fillCurve.Evaluate(t));
+            float fill = Mathf.Lerp(0.5f, trueFill, fillCurve.Evaluate(t));
 
             foreach (Renderer rend in renderers)
             {
@@ -158,18 +157,44 @@ public class S_Jauge_Energy : MonoBehaviour
 
             timer += Time.deltaTime;
             yield return null;
-            
-            // Restaure les vraies valeurs après l’effet
+        }
+
+        // Retour smooth aux vraies valeurs
+        float returnTimer = 0f;
+        float startEmission = boostedEmission;
+        float startSharpness = boostedSharpness;
+        float startFill = 0.5f;
+
+        while (returnTimer < returnDuration)
+        {
+            float t = returnTimer / returnDuration;
+
+            float emission = Mathf.Lerp(startEmission, baseEmission, t);
+            float sharpness = Mathf.Lerp(startSharpness, baseSharpness, t);
+            float fill = Mathf.Lerp(startFill, trueFill, t);
+
             foreach (Renderer rend in renderers)
             {
                 if (rend == null) continue;
 
                 rend.GetPropertyBlock(_mpb);
-                _mpb.SetFloat(GlobalEmissionID, trueEmission);
-                _mpb.SetFloat(GradientSharpnessID, trueSharpness);
-                _mpb.SetFloat(FillJaugeID, trueFill);
+                _mpb.SetFloat(GlobalEmissionID, emission);
+                _mpb.SetFloat(GradientSharpnessID, sharpness);
+                _mpb.SetFloat(FillJaugeID, fill);
                 rend.SetPropertyBlock(_mpb);
             }
+
+            returnTimer += Time.deltaTime;
+            yield return null;
+        }
+        foreach (Renderer rend in renderers)
+        {
+            if (rend == null) continue;
+
+            rend.GetPropertyBlock(_mpb);
+            _mpb.SetFloat(GlobalEmissionID, baseEmission);
+            _mpb.SetFloat(GradientSharpnessID, baseSharpness);
+            rend.SetPropertyBlock(_mpb);
         }
     }
 }
