@@ -13,6 +13,10 @@ public class S_Jauge_Energy : MonoBehaviour
     private static readonly int EndIntensityID = Shader.PropertyToID("_EndIntensity");
     private static readonly int GlobalEmissionID = Shader.PropertyToID("_GlobalEmission");
     private static readonly int GradientSharpnessID = Shader.PropertyToID("_GradientSharpness");
+    private static readonly int PulseSpeedID = Shader.PropertyToID("_PulseSpeed");
+    private static readonly int WaveSpeedID = Shader.PropertyToID("_WaveSpeed");
+    private static readonly int WaveFrequencyID = Shader.PropertyToID("_WaveFrequency");
+    private static readonly int AmplitudeID = Shader.PropertyToID("_Amplitude");
 
     [Header("Énergie dynamique (bord vert/rouge)")]
     [SerializeField] private float maxGainPerSecond = 100f;
@@ -27,10 +31,24 @@ public class S_Jauge_Energy : MonoBehaviour
     [SerializeField] private AnimationCurve fillCurve;
     [SerializeField] private AnimationCurve emissionCurve;
     [SerializeField] private AnimationCurve sharpnessCurve;
+    [SerializeField] private AnimationCurve pulseCurve;
+    [SerializeField] private AnimationCurve waveSpeedCurve;
+    [SerializeField] private AnimationCurve waveFreqCurve;
+    [SerializeField] private AnimationCurve amplitudeCurve;
+
     [SerializeField] private float boostedEmission = 6f;
     [SerializeField] private float boostedSharpness = 8f;
+    [SerializeField] private float boostedPulseSpeed = 20f;
+    [SerializeField] private float boostedWaveSpeed = 5f;
+    [SerializeField] private float boostedWaveFrequency = 2f;
+    [SerializeField] private float boostedAmplitude = 2f;
+
     [SerializeField] private float baseEmission = 1f;
     [SerializeField] private float baseSharpness = 2f;
+    [SerializeField] private float basePulseSpeed = 0.5f;
+    [SerializeField] private float baseWaveSpeed = 1f;
+    [SerializeField] private float baseWaveFrequency = 1f;
+    [SerializeField] private float baseAmplitude = 1f;
 
     private float lastEnergy = 0f;
     private float smoothedGain = 0f;
@@ -143,6 +161,10 @@ public class S_Jauge_Energy : MonoBehaviour
             float emission = Mathf.Lerp(baseEmission, boostedEmission, emissionCurve.Evaluate(t));
             float sharpness = Mathf.Lerp(baseSharpness, boostedSharpness, sharpnessCurve.Evaluate(t));
             float fill = Mathf.Lerp(0.5f, trueFill, fillCurve.Evaluate(t));
+            float pulse = Mathf.Lerp(basePulseSpeed, boostedPulseSpeed, pulseCurve.Evaluate(t));
+            float waveSpeed = Mathf.Lerp(baseWaveSpeed, boostedWaveSpeed, waveSpeedCurve.Evaluate(t));
+            float waveFreq = Mathf.Lerp(baseWaveFrequency, boostedWaveFrequency, waveFreqCurve.Evaluate(t));
+            float amplitude = Mathf.Lerp(baseAmplitude, boostedAmplitude, amplitudeCurve.Evaluate(t));
 
             foreach (Renderer rend in renderers)
             {
@@ -152,6 +174,10 @@ public class S_Jauge_Energy : MonoBehaviour
                 _mpb.SetFloat(GlobalEmissionID, emission);
                 _mpb.SetFloat(GradientSharpnessID, sharpness);
                 _mpb.SetFloat(FillJaugeID, fill);
+                _mpb.SetFloat(PulseSpeedID, pulse);
+                _mpb.SetFloat(WaveSpeedID, waveSpeed);
+                _mpb.SetFloat(WaveFrequencyID, waveFreq);
+                _mpb.SetFloat(AmplitudeID, amplitude);
                 rend.SetPropertyBlock(_mpb);
             }
 
@@ -159,19 +185,19 @@ public class S_Jauge_Energy : MonoBehaviour
             yield return null;
         }
 
-        // Retour smooth aux vraies valeurs
+        // RESET smooth
         float returnTimer = 0f;
-        float startEmission = boostedEmission;
-        float startSharpness = boostedSharpness;
-        float startFill = 0.5f;
-
         while (returnTimer < returnDuration)
         {
             float t = returnTimer / returnDuration;
 
-            float emission = Mathf.Lerp(startEmission, baseEmission, t);
-            float sharpness = Mathf.Lerp(startSharpness, baseSharpness, t);
-            float fill = Mathf.Lerp(startFill, trueFill, t);
+            float emission = Mathf.Lerp(boostedEmission, baseEmission, t);
+            float sharpness = Mathf.Lerp(boostedSharpness, baseSharpness, t);
+            float fill = Mathf.Lerp(0.5f, trueFill, t);
+            float pulse = Mathf.Lerp(boostedPulseSpeed, basePulseSpeed, t);
+            float waveSpeed = Mathf.Lerp(boostedWaveSpeed, baseWaveSpeed, t);
+            float waveFreq = Mathf.Lerp(boostedWaveFrequency, baseWaveFrequency, t);
+            float amplitude = Mathf.Lerp(boostedAmplitude, baseAmplitude, t);
 
             foreach (Renderer rend in renderers)
             {
@@ -181,12 +207,18 @@ public class S_Jauge_Energy : MonoBehaviour
                 _mpb.SetFloat(GlobalEmissionID, emission);
                 _mpb.SetFloat(GradientSharpnessID, sharpness);
                 _mpb.SetFloat(FillJaugeID, fill);
+                _mpb.SetFloat(PulseSpeedID, pulse);
+                _mpb.SetFloat(WaveSpeedID, waveSpeed);
+                _mpb.SetFloat(WaveFrequencyID, waveFreq);
+                _mpb.SetFloat(AmplitudeID, amplitude);
                 rend.SetPropertyBlock(_mpb);
             }
 
             returnTimer += Time.deltaTime;
             yield return null;
         }
+
+        // Hard reset to ensure exact values
         foreach (Renderer rend in renderers)
         {
             if (rend == null) continue;
@@ -194,6 +226,11 @@ public class S_Jauge_Energy : MonoBehaviour
             rend.GetPropertyBlock(_mpb);
             _mpb.SetFloat(GlobalEmissionID, baseEmission);
             _mpb.SetFloat(GradientSharpnessID, baseSharpness);
+            _mpb.SetFloat(PulseSpeedID, basePulseSpeed);
+            _mpb.SetFloat(WaveSpeedID, baseWaveSpeed);
+            _mpb.SetFloat(WaveFrequencyID, baseWaveFrequency);
+            _mpb.SetFloat(AmplitudeID, baseAmplitude);
+            _mpb.SetFloat(FillJaugeID, trueFill);
             rend.SetPropertyBlock(_mpb);
         }
     }
