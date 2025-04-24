@@ -17,6 +17,8 @@ public class S_Jauge_Energy : MonoBehaviour
     private static readonly int WaveSpeedID = Shader.PropertyToID("_WaveSpeed");
     private static readonly int WaveFrequencyID = Shader.PropertyToID("_WaveFrequency");
     private static readonly int AmplitudeID = Shader.PropertyToID("_Amplitude");
+    private static readonly int NoiseIntensityID = Shader.PropertyToID("_NoiseIntensity");
+    private static readonly int ColorTintID = Shader.PropertyToID("_ColorTint");
 
     [Header("Énergie dynamique (bord vert/rouge)")]
     [SerializeField] private float maxGainPerSecond = 100f;
@@ -50,11 +52,23 @@ public class S_Jauge_Energy : MonoBehaviour
     [SerializeField] private float baseWaveFrequency = 1f;
     [SerializeField] private float baseAmplitude = 1f;
 
+    [Header("Effet visuel de perte de palier (grace period)")]
+    [SerializeField] private float graceTransitionDuration = 0.5f;
+    [SerializeField] private float graceEmission = 4f;
+    [SerializeField] private float gracePulseSpeed = 15f;
+    [SerializeField] private float graceWaveSpeed = 3f;
+    [SerializeField] private float graceWaveFrequency = 1.5f;
+    [SerializeField] private float graceAmplitude = 2f;
+    [SerializeField] private float graceNoiseIntensity = 1.5f;
+    [SerializeField] private float graceGradient = 1f;
+    [SerializeField] private Color graceColor = Color.red;
+
     private float lastEnergy = 0f;
     private float smoothedGain = 0f;
     private float smoothedLoss = 0f;
     private MaterialPropertyBlock _mpb;
     private Coroutine _palierEffectRoutine;
+    private Coroutine _graceEffectRoutine;
 
     private void Awake()
     {
@@ -139,6 +153,16 @@ public class S_Jauge_Energy : MonoBehaviour
             if (_palierEffectRoutine != null) StopCoroutine(_palierEffectRoutine);
             _palierEffectRoutine = StartCoroutine(PlayPalierEffect());
         }
+        else if (state.ToString() == "StartGrace")
+        {
+            if (_graceEffectRoutine != null) StopCoroutine(_graceEffectRoutine);
+            _graceEffectRoutine = StartCoroutine(SmoothGraceEffect(true));
+        }
+        else if (state.ToString() == "EndGrace")
+        {
+            if (_graceEffectRoutine != null) StopCoroutine(_graceEffectRoutine);
+            _graceEffectRoutine = StartCoroutine(SmoothGraceEffect(false));
+        }
     }
 
     private IEnumerator PlayPalierEffect()
@@ -185,7 +209,6 @@ public class S_Jauge_Energy : MonoBehaviour
             yield return null;
         }
 
-        // RESET smooth
         float returnTimer = 0f;
         while (returnTimer < returnDuration)
         {
@@ -217,21 +240,48 @@ public class S_Jauge_Energy : MonoBehaviour
             returnTimer += Time.deltaTime;
             yield return null;
         }
+    }
 
-        // Hard reset to ensure exact values
-        foreach (Renderer rend in renderers)
+    private IEnumerator SmoothGraceEffect(bool entering)
+    {
+        float timer = 0f;
+
+        float startEmission = entering ? baseEmission : graceEmission;
+        float endEmission = entering ? graceEmission : baseEmission;
+        float startPulse = entering ? basePulseSpeed : gracePulseSpeed;
+        float endPulse = entering ? gracePulseSpeed : basePulseSpeed;
+        float startWaveSpeed = entering ? baseWaveSpeed : graceWaveSpeed;
+        float endWaveSpeed = entering ? graceWaveSpeed : baseWaveSpeed;
+        float startWaveFreq = entering ? baseWaveFrequency : graceWaveFrequency;
+        float endWaveFreq = entering ? graceWaveFrequency : baseWaveFrequency;
+        float startAmplitude = entering ? baseAmplitude : graceAmplitude;
+        float endAmplitude = entering ? graceAmplitude : baseAmplitude;
+        float startNoise = entering ? 1f : graceNoiseIntensity;
+        float endNoise = entering ? graceNoiseIntensity : 1f;
+        Color startColor = entering ? Color.white : graceColor;
+        Color endColor = entering ? graceColor : Color.white;
+        while (timer < graceTransitionDuration)
         {
-            if (rend == null) continue;
+            float t = timer / graceTransitionDuration;
 
-            rend.GetPropertyBlock(_mpb);
-            _mpb.SetFloat(GlobalEmissionID, baseEmission);
-            _mpb.SetFloat(GradientSharpnessID, baseSharpness);
-            _mpb.SetFloat(PulseSpeedID, basePulseSpeed);
-            _mpb.SetFloat(WaveSpeedID, baseWaveSpeed);
-            _mpb.SetFloat(WaveFrequencyID, baseWaveFrequency);
-            _mpb.SetFloat(AmplitudeID, baseAmplitude);
-            _mpb.SetFloat(FillJaugeID, trueFill);
-            rend.SetPropertyBlock(_mpb);
+            foreach (Renderer rend in renderers)
+            {
+                if (rend == null) continue;
+                rend.GetPropertyBlock(_mpb);
+
+                _mpb.SetFloat(GlobalEmissionID, Mathf.Lerp(startEmission, endEmission, t));
+                _mpb.SetFloat(PulseSpeedID, Mathf.Lerp(startPulse, endPulse, t));
+                _mpb.SetFloat(WaveSpeedID, Mathf.Lerp(startWaveSpeed, endWaveSpeed, t));
+                _mpb.SetFloat(WaveFrequencyID, Mathf.Lerp(startWaveFreq, endWaveFreq, t));
+                _mpb.SetFloat(AmplitudeID, Mathf.Lerp(startAmplitude, endAmplitude, t));
+                _mpb.SetFloat(NoiseIntensityID, Mathf.Lerp(startNoise, endNoise, t));
+                _mpb.SetColor(ColorTintID, Color.Lerp(startColor, endColor, t));
+
+                rend.SetPropertyBlock(_mpb);
+            }
+
+            timer += Time.deltaTime;
+            yield return null;
         }
     }
 }
