@@ -6,14 +6,21 @@ public class S_Banshee : EnemyBase
     public float speed = 10f;
     public float rotationSpeed = 5f;
     public float avoidDist = 10f;
-    public LayerMask obstacleMask;
+    public LayerMask obstacleLayer;
 
     [Header("Attack Properties")]
-    public float range = 50f;
+    public float range = 10f;
+    public float runTime = 2f;
+    public LayerMask playerLayer;
+
     
     private Transform player;
 
     private Rigidbody rb;
+
+    private bool canAttack = true;
+    private bool isRunning;
+    private float runTimer;
     
     private void Start()
     {
@@ -31,8 +38,10 @@ public class S_Banshee : EnemyBase
     {
         float dist = Vector3.Distance(player.position, transform.position);
 
-        if (dist < range) {
+        if (dist < range && canAttack && !isRunning) {
             Attack();
+        } else if (!canAttack && isRunning) {
+            Run();
         } else {
             Chase();
         }
@@ -45,9 +54,8 @@ public class S_Banshee : EnemyBase
         Quaternion targetRot = Quaternion.LookRotation(toPlayer);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * rotationSpeed);
         
-        if (Physics.SphereCast(transform.position, transform.localScale.y/2f, transform.forward, out RaycastHit hit, avoidDist, obstacleMask)) {
+        if (Physics.SphereCast(transform.position, transform.localScale.y/2f, transform.forward, out RaycastHit hit, avoidDist, obstacleLayer)) {
             Vector3 avoidDir = Vector3.ProjectOnPlane(toPlayer, hit.normal).normalized;
-            
             rb.velocity = avoidDir * speed;
             Debug.Log("Avoiding");
         } else {
@@ -62,6 +70,41 @@ public class S_Banshee : EnemyBase
 
     private void Attack()
     {
+        rb.velocity = Vector3.zero;
+        Debug.Log("Attacking");
         
+        Collider[] hits = Physics.OverlapSphere(transform.position, range, playerLayer);
+
+        if (hits.Length == 0) {
+            return;
+        }
+        foreach (Collider hit in hits) {
+            if (hit.gameObject.CompareTag("Player")) {
+                player.GetComponent<S_PlayerHitTrigger>().ReceiveDamage(enemyDamage);
+            }
+        }
+        canAttack = false;
+        isRunning = true;
+        runTimer = 0f;
+    }
+
+    private void Run()
+    {
+        Debug.Log("Running");
+        runTimer += Time.deltaTime;
+            
+        Vector3 awayFromPlayer = (transform.position - player.position).normalized;
+
+        Quaternion targetRot = Quaternion.LookRotation(awayFromPlayer);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * rotationSpeed);
+            
+        rb.velocity = awayFromPlayer * speed;
+            
+        if (runTimer >= runTime) {
+            Debug.Log("finished run");
+            canAttack = true;
+            runTimer = 0;
+            isRunning = false;
+        }
     }
 }
