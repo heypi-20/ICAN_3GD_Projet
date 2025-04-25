@@ -7,12 +7,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MagicCircle
+  m_Name: Demo_MagicCircle
   m_Shader: {fileID: 4800000, guid: 47ae2d54feece3c4497714c08613da45, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _INVERT_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -109,10 +110,10 @@ Material:
     - _AlphaToMask: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
-    - _BorderEmissionStrength: 3.75
-    - _BorderFade: 0.5
-    - _BorderNoiseScale: 0.79
-    - _BorderNoiseStrength: 0.172
+    - _BorderEmissionStrength: 3.89
+    - _BorderFade: 0.013
+    - _BorderNoiseScale: 1.22
+    - _BorderNoiseStrength: 0.265
     - _BorderWidth: 0.1
     - _BumpScale: 1
     - _ClearCoatMask: 0
@@ -124,23 +125,23 @@ Material:
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EdgeWidth: 0
-    - _EmissionStrength: 1.73
+    - _EmissionStrength: 3.17
     - _EnvironmentReflections: 1
-    - _FlameEmissionStrength: 0
+    - _FlameEmissionStrength: 2.08
     - _FlameSpeed: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _Invert: 0
+    - _Invert: 1
     - _Metallic: 0
-    - _NoiseScale: 1
+    - _NoiseScale: 0.5
     - _OcclusionStrength: 1
     - _Parallax: 0.005
-    - _Progress: 0
+    - _Progress: 0.738
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _RevealMode: 0
+    - _RevealMode: 1
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -153,14 +154,14 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _BorderColor: {r: 1, g: 0, b: 0, a: 1}
-    - _BorderEmissionColor: {r: 0.8773585, g: 0.29383236, b: 0.29383236, a: 1}
+    - _BorderColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BorderEmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ColorEnd: {r: 1, g: 1, b: 1, a: 1}
     - _ColorStart: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _FlameColor: {r: 1, g: 1, b: 1, a: 1}
-    - _FlameEmissionColor: {r: 0.04798267, g: 0.9716981, b: 0.0045834924, a: 1}
+    - _FlameEmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &3984273252498211192
