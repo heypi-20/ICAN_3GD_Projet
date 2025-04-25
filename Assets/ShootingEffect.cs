@@ -4,46 +4,47 @@ using UnityEngine;
 
 public class ShootingEffect : MonoBehaviour
 {
-
-    // Référence au matériau de l'objet
     private Material objectMaterial;
-
-    // Couleur de base de l'émissive
     public Color mycolor = Color.white;
 
-    // Intensité maximale et minimale pour l'émissive
     public float maxEmissionIntensity = 20f;
     public float minEmissionIntensity = 5f;
-
-    // Nom de la propriété émissive dans le shader (souvent "_EmissionColor")
-    private static readonly string EmissionColorProperty = "_EmissionColor";
-
-    // Variable pour stocker l'intensité actuelle
     private float currentIntensity;
 
+    private static readonly string EmissionColorProperty = "_EmissionColor";
+
+    public GameObject RingA;
+    public GameObject RingB;
+    public int Speed;
+    private float currentRotationSpeed = 0f;
+    public float rotationLerpSpeed = 5f;
+
     public S_PlayerStateObserver playerStateObserver;
+
     void Start()
     {
-        // Récupérer le matériau du renderer de l'objet
         objectMaterial = GetComponent<Renderer>().material;
-
-        // Définir l'intensité initiale (au départ, pas de clic)
         currentIntensity = minEmissionIntensity;
     }
 
     void Update()
     {
-        
-        //if (playerStateObserver.PlayerStates.ShootState.IsShooting)
-        //{
-        //    currentIntensity = Mathf.Lerp(currentIntensity, maxEmissionIntensity, Time.deltaTime * 5f);
-        //}
-        //else
-        //{
-        //    currentIntensity = Mathf.Lerp(currentIntensity, minEmissionIntensity, Time.deltaTime * 5f);
-        //}
+        if (Input.GetKey(KeyCode.K))
+        {
+            currentIntensity = Mathf.Lerp(currentIntensity, maxEmissionIntensity, Time.deltaTime * 5f);
+            currentRotationSpeed = Mathf.Lerp(currentRotationSpeed, Speed, Time.deltaTime * rotationLerpSpeed);
+        }
+        else
+        {
+            currentIntensity = Mathf.Lerp(currentIntensity, minEmissionIntensity, Time.deltaTime * 5f);
+            currentRotationSpeed = Mathf.Lerp(currentRotationSpeed, 0f, Time.deltaTime * rotationLerpSpeed);
+        }
 
-        // Appliquer l'émissive avec la couleur et l'intensité actuelle
+        // Appliquer la rotation fluide
+        RingA.transform.Rotate(0, 0, currentRotationSpeed * Time.deltaTime);
+        RingB.transform.Rotate(0, 0, -currentRotationSpeed * Time.deltaTime);
+
+        // Appliquer l'émissive
         objectMaterial.SetColor(EmissionColorProperty, mycolor * currentIntensity);
     }
 }
