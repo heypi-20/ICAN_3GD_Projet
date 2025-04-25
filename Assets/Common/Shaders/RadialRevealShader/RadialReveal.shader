@@ -1,4 +1,4 @@
-Shader "Universal Render Pipeline/Unlit/RadialReveal_FX_AutoEdgeZero"
+Shader "Universal Render Pipeline/Unlit/RadialReveal_NoHalo"
 {
     Properties
     {
