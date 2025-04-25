@@ -8151,7 +8151,8 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4919729441661158801, guid: f6c3ab47ee06acb43b6b700b02c6e860, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2245475816378663903, guid: f6c3ab47ee06acb43b6b700b02c6e860, type: 3}
@@ -8173,11 +8174,6 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 6404481064250122662, guid: f6c3ab47ee06acb43b6b700b02c6e860, type: 3}
   m_PrefabInstance: {fileID: 7117137736266557744}
   m_PrefabAsset: {fileID: 0}
---- !u!23 &4432589578744040820 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 6865350246135833668, guid: f6c3ab47ee06acb43b6b700b02c6e860, type: 3}
-  m_PrefabInstance: {fileID: 7117137736266557744}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &9073820089010694895 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2245475816378663903, guid: f6c3ab47ee06acb43b6b700b02c6e860, type: 3}
@@ -8196,14 +8192,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   energyStorage: {fileID: 9046166951153555370}
-  renderers:
-  - {fileID: 1256986129642050906}
-  - {fileID: 4432589578744040820}
-  maxGainPerSecond: 100
-  maxWidth: 0.4
+  jaugeRenderer: {fileID: 1256986129642050906}
+  fillMin: 0.5
+  fillMax: 1.5
+  maxDeltaPerSecond: 100
   minIntensity: 0.5
   maxIntensity: 1.5
-  smoothTime: 0.5
+  maxFillAmount: 0.2
+  refreshInterval: 0.2
+  positiveColor: {r: 1, g: 0.9831489, b: 0, a: 1}
+  negativeColor: {r: 1, g: 0.12143275, b: 0, a: 1}
   effectDuration: 0
   returnDuration: 1
   fillCurve:
@@ -8313,13 +8311,61 @@ MonoBehaviour:
   basePulseSpeed: 0.5
   baseWaveSpeed: 1
   baseWaveFrequency: 0.1
-  baseAmplitude: 1
-  graceTransitionDuration: 0.3
+  baseAmplitude: 0.1
+  graceEnterDuration: 5
+  graceExitDuration: 0.2
   graceEmission: 4
   gracePulseSpeed: 30
   graceWaveSpeed: 20
   graceWaveFrequency: 5
   graceAmplitude: 2
   graceNoiseIntensity: 6
-  graceGradient: 1
   graceColor: {r: 1, g: 0, b: 0, a: 1}
+  graceEnterCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  graceExitCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
