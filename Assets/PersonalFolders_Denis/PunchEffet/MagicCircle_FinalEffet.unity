@@ -199,7 +199,7 @@ Transform:
   m_GameObject: {fileID: 49314736}
   serializedVersion: 2
   m_LocalRotation: {x: 0.57370365, y: -0.41335675, z: -0.41335553, w: 0.5737052}
-  m_LocalPosition: {x: -2.55, y: -0.16000003, z: 14.610249}
+  m_LocalPosition: {x: -2.55, y: 0, z: 14}
   m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -282,8 +282,8 @@ Transform:
   m_GameObject: {fileID: 88164351}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071079, y: -0.0000009379263, z: -0.0000011273909, w: 0.70710576}
-  m_LocalPosition: {x: -2.55, y: -0.20999998, z: 14.610249}
-  m_LocalScale: {x: 0.64055, y: 0.64054996, z: 0.54633}
+  m_LocalPosition: {x: -2.55, y: 0, z: 14}
+  m_LocalScale: {x: 0.5499634, y: 0.54996336, z: 0.469068}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1466806116}
@@ -365,7 +365,7 @@ Transform:
   m_GameObject: {fileID: 336183082}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071058, y: 0.000000976026, z: 0.0000010728835, w: 0.7071078}
-  m_LocalPosition: {x: -2.55, y: -0.16000003, z: 14.610249}
+  m_LocalPosition: {x: -2.55, y: 0, z: 14}
   m_LocalScale: {x: 0.28712735, y: 0.28712735, z: 0.2727193}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -496,13 +496,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1448473494}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00000102818, y: 0.7071058, z: 0.7071078, w: 0.0000010430812}
-  m_LocalPosition: {x: -2.55, y: -0.16000003, z: 14.610249}
-  m_LocalScale: {x: 0.87176484, y: 0.99924904, z: 0.99924904}
+  m_LocalRotation: {x: -0.653283, y: -0.27059647, z: -0.27059725, w: -0.65328103}
+  m_LocalPosition: {x: -2.55, y: 0, z: 14}
+  m_LocalScale: {x: 0.7935669, y: 0.8461541, z: 0.8243402}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1466806116}
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 45, y: -270, z: 90}
 --- !u!1 &1454201416
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,6 +513,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1454201417}
   - component: {fileID: 1454201418}
+  - component: {fileID: 1454201419}
   m_Layer: 0
   m_Name: ShaderPlayer
   m_TagString: Untagged
@@ -548,7 +549,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   revealEntries:
-  - material: {fileID: 2100000, guid: 6a1d637e7a9cb96409fce37ac6d29a19, type: 2}
+  - targetRenderer: {fileID: 1768115824}
     curve:
       serializedVersion: 2
       m_Curve:
@@ -573,8 +574,126 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    duration: 1
-  - material: {fileID: 2100000, guid: d39db589273df7349abad6cace4f1683, type: 2}
+    duration: 0.5
+  - targetRenderer: {fileID: 49314737}
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    duration: 0.5
+  - targetRenderer: {fileID: 1448473495}
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    duration: 0.5
+  - targetRenderer: {fileID: 88164352}
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    duration: 0.5
+  - targetRenderer: {fileID: 336183083}
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 1
+        outSlope: 1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    duration: 0.5
+--- !u!114 &1454201419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1454201416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e25c8f0aacafb34eb0d37cc3eed4921, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dissolveEntries:
+  - targetRenderer: {fileID: 1768115824}
+    noiseTexture: {fileID: 2800000, guid: 734932e5c8ead884785901b3c63f906c, type: 3}
     curve:
       serializedVersion: 2
       m_Curve:
@@ -599,34 +718,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    duration: 1
-  - material: {fileID: 2100000, guid: 1afb032b1f6c6284f8d6084dba27ce5b, type: 2}
-    curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 1
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    duration: 1
-  - material: {fileID: 2100000, guid: 661371a68a3af9046a6925602a81108e, type: 2}
+    duration: 0.3
+  - targetRenderer: {fileID: 49314737}
+    noiseTexture: {fileID: 2800000, guid: 734932e5c8ead884785901b3c63f906c, type: 3}
     curve:
       serializedVersion: 2
       m_Curve:
@@ -651,33 +745,88 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    duration: 1
-  - material: {fileID: 2100000, guid: f36417032a841f240bb66102b2efae57, type: 2}
+    duration: 0.3
+  - targetRenderer: {fileID: 1448473495}
+    noiseTexture: {fileID: 2800000, guid: 734932e5c8ead884785901b3c63f906c, type: 3}
     curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
-        inSlope: 1
-        outSlope: 1
+        value: 1
+        inSlope: -1
+        outSlope: -1
         tangentMode: 34
         weightedMode: 0
         inWeight: 0
-        outWeight: 0
+        outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: 1
-        inSlope: 1
-        outSlope: 1
+        value: 0
+        inSlope: -1
+        outSlope: -1
         tangentMode: 34
         weightedMode: 0
-        inWeight: 0
+        inWeight: 0.33333334
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    duration: 1
+    duration: 0.3
+  - targetRenderer: {fileID: 88164352}
+    noiseTexture: {fileID: 2800000, guid: 734932e5c8ead884785901b3c63f906c, type: 3}
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: -1
+        outSlope: -1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: -1
+        outSlope: -1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    duration: 0.3
+  - targetRenderer: {fileID: 336183083}
+    noiseTexture: {fileID: 2800000, guid: 734932e5c8ead884785901b3c63f906c, type: 3}
+    curve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: -1
+        outSlope: -1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: -1
+        outSlope: -1
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    duration: 0.3
 --- !u!1 &1466806112
 GameObject:
   m_ObjectHideFlags: 0
@@ -898,7 +1047,7 @@ Transform:
   m_GameObject: {fileID: 1768115822}
   serializedVersion: 2
   m_LocalRotation: {x: 0.4999993, y: 0.4999993, z: 0.5000007, w: 0.5000007}
-  m_LocalPosition: {x: -2.55, y: -0.16000003, z: 14.610249}
+  m_LocalPosition: {x: -2.55, y: 0, z: 14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
