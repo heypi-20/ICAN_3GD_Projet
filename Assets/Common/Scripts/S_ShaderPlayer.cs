@@ -2,33 +2,26 @@ using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 
-[System.Serializable]
+[Serializable]
 public class MaterialRevealEntry
 {
-    [Tooltip("The material using the special shader with a '_Progress' property.")]
+    // Material using the shader with a '_Progress' property
     public Material material;
 
-    [Tooltip("Animation curve defining progress over normalized time (0 to 1).")]
-    public AnimationCurve curve = AnimationCurve.Linear(0, 0, 1, 1);
+    // Curve defining progress over normalized time (0 to 1)
+    public AnimationCurve curve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
 
-    [Tooltip("Duration in seconds for the progress to go from 0 to 1.")]
+    // Duration for the progress animation (in seconds)
     public float duration = 1f;
 }
 
-/// <summary>
-/// Controls reveal animations on a list of materials by updating their '_Progress' shader value according to specified curves.
-/// Attach this component to any GameObject in your scene.
-/// </summary>
 public class S_ShaderPlayer : MonoBehaviour
 {
-    [Tooltip("List of material entries, each with its own curve and duration.")]
+    // List of material entries with their curves and durations
     public List<MaterialRevealEntry> revealEntries = new List<MaterialRevealEntry>();
 
-    /// <summary>
-    /// Starts reveal animations for all configured material entries.
-    /// </summary>
+    // Press Space to play all reveals
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -37,6 +30,7 @@ public class S_ShaderPlayer : MonoBehaviour
         }
     }
 
+    // Play reveal animation for all materials in the list
     public void PlayAll()
     {
         foreach (var entry in revealEntries)
@@ -46,10 +40,7 @@ public class S_ShaderPlayer : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Plays reveal animation for a specific entry by its index in the list.
-    /// </summary>
-    /// <param name="index">Index of the entry to play.</param>
+    // Play reveal animation for a single entry by index
     public void PlayAtIndex(int index)
     {
         if (index >= 0 && index < revealEntries.Count)
@@ -60,24 +51,25 @@ public class S_ShaderPlayer : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"PlayAtIndex: Index {index} is out of range (0 to {revealEntries.Count - 1}).");
+            Debug.LogWarning("PlayAtIndex: Index " + index + " is out of range.");
         }
     }
 
+    // Coroutine that updates the '_Progress' property over time
     private IEnumerator AnimateMaterialProgress(MaterialRevealEntry entry)
     {
         float elapsed = 0f;
-        // Reset initial value
         entry.material.SetFloat("_Progress", entry.curve.Evaluate(0f));
+
         while (elapsed < entry.duration)
         {
-            float normalizedTime = elapsed / entry.duration;
-            float progressValue = entry.curve.Evaluate(normalizedTime);
-            entry.material.SetFloat("_Progress", progressValue);
+            float t = elapsed / entry.duration;
+            float value = entry.curve.Evaluate(t);
+            entry.material.SetFloat("_Progress", value);
             elapsed += Time.deltaTime;
             yield return null;
         }
-        // Ensure final value at end of duration
+
         entry.material.SetFloat("_Progress", entry.curve.Evaluate(1f));
     }
 }
