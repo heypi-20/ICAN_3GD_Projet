@@ -7,5 +7,6 @@
     Cuby_Boss,
     TpShooter,
     TpShooter_lv2,
-    OunOun
+    OunOun,
+    Banshee
 }
