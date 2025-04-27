@@ -1,18 +1,32 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+
+[ExecuteInEditMode]
+public class CheckVar : MonoBehaviour
+{
+    private void OnValidate()
+    {
+        S_Banshee script = gameObject.GetComponent<S_Banshee>();
+        
+        if (script.avoidDist > script.range)
+        {
+            Debug.LogWarning($"[Example] valueA ({script.avoidDist}) is greater than valueB ({script.range})", this);
+        }
+    }
+}
 
 public class S_Banshee : EnemyBase
 {
     [Header("Enemy Properties")]
     public float speed = 10f;
-    public float rotationSpeed = 5f;
-    public float avoidDist = 10f;
+    public float rotationSpeed = 50f;
+    public float avoidDist = 7f;
     public LayerMask obstacleLayer;
 
     [Header("Attack Properties")]
     public float range = 10f;
     public float runTime = 2f;
     public LayerMask playerLayer;
-
     
     private Transform player;
 
@@ -21,6 +35,8 @@ public class S_Banshee : EnemyBase
     private bool canAttack = true;
     private bool isRunning;
     private float runTimer;
+
+    
     
     private void Start()
     {
@@ -40,11 +56,11 @@ public class S_Banshee : EnemyBase
 
         if (dist < range && canAttack && !isRunning) {
             Attack();
+        } else if (dist > range && canAttack && !isRunning) {
+            Chase();
         } else if (!canAttack && isRunning) {
             Run();
-        } else {
-            Chase();
-        }
+        } 
     }
 
     private void Chase()
