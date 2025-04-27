@@ -30,8 +30,8 @@ public class S_Dashooter : EnemyBase
     [Header("Laser Settings")]
     public float chargeDuration = 1f;
     public float chargeRotationSpeed = 180f;            // degrees per second
-    [Tooltip("Min/max prediction time in seconds")]
-    public Vector2 anticipationTimeRange = new Vector2(0.1f, 0.5f);
+    [Range(0f,1f)]
+    public float predictionAccuracy = 1f;               // 0 = no offset, 1 = full predictive lead
     public float laserSpeed = 20f;
     public LayerMask laserBlockMask;
     public TrailRenderer laserTrailPrefab;
@@ -140,11 +140,9 @@ public class S_Dashooter : EnemyBase
             yield return null;
         }
 
-        // 5) At fire moment, compute predicted direction and fire
-        float predictTime = (anticipationTimeRange != Vector2.zero)
-            ? Random.Range(anticipationTimeRange.x, anticipationTimeRange.y)
-            : 0f;
-        Vector3 predictedPos = player.position + playerVelocity * predictTime;
+        // 5) At fire moment, compute predictive aim
+        float travelTime = distToPlayer / laserSpeed;
+        Vector3 predictedPos = player.position + playerVelocity * (travelTime * predictionAccuracy);
         Vector3 fireDir = (predictedPos - transform.position).normalized;
 
         var trail = Instantiate(
@@ -212,6 +210,7 @@ public class S_Dashooter : EnemyBase
             foreach (var h in hits)
                 if (((1 << h.gameObject.layer) & groundLayerMask) == 0)
                     blockers++;
+
             if (hits.Length == 0 || (float)blockers / hits.Length <= 0.1f)
                 return cand;
         }
@@ -278,7 +277,7 @@ public class S_Dashooter : EnemyBase
             return true;
         }
 
-        highPoint = Vector3.zero;
+        highPoint = transform.position;
         return false;
     }
 
