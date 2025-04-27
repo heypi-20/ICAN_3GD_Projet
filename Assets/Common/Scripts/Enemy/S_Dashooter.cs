@@ -6,230 +6,221 @@ using UnityEngine;
 public class S_Dashooter : EnemyBase
 {
     [Header("Dash Settings")]
-    [Tooltip("Maximum distance for dash target search")] // Search radius for dash
     public float dashRadius = 5f;
-
-    [Tooltip("Distance below which enemy is considered too close to player")] // Close threshold
+    public float minDashDistance = 1f;
     public float closeDistance = 2f;
-
-    [Tooltip("Distance above which enemy is considered too far from player")] // Far threshold
     public float farDistance = 8f;
-
-    [Tooltip("Random interval range (seconds) between dash actions")] // Dash interval range
     public Vector2 dashInterval = new Vector2(1f, 3f);
-
-    [Tooltip("Speed at which enemy moves during dash (units/sec)")] // Movement speed during dash
     public float dashSpeed = 15f;
-
-    [Tooltip("Time (seconds) enemy spends looking at dash target before dashing")] // Preparation duration
     public float prepareDuration = 1f;
+    [Range(0f,1f)]
+    public float highPointChance = 0.8f;
 
-    [Tooltip("Layer mask for ground detection")] // Ground layer mask
+    [Header("High-Point Grid")]
+    public int gridCountX = 5;
+    public int gridCountZ = 5;
+    public float gridSpacing = 1f;
+    public float gridHeight = 5f;
+    public float rayLength = 10f;
     public LayerMask groundLayerMask;
-
-    [Tooltip("Maximum number of random samples for target search")] // Sampling attempts
-    public int maxSpawnAttempts = 10;
-
-    [Tooltip("Maximum height difference considered for vertical dash (units)")] // Max vertical difference
-    public float maxVerticalDashHeight = 3f;
-
-    [Tooltip("Number of attempts to find a high point for dash")] // Attempts for high point search
-    public int highPointSearchAttempts = 5;
-
-    [Tooltip("Minimum horizontal distance when sampling high point (units)")] // Min horizontal offset
-    public float minHighPointHorizontal = 1f;
-
-    [Tooltip("Rotation speed when facing target or player (rad/sec)")] // Rotation speed
-    public float rotationSpeed = 5f;
-
-    [Tooltip("Vertical offset applied when landing on high point (units)")] // Y offset on high point
+    public LayerMask ceilingLayerMask;
     public float highPointYOffset = 0.5f;
+    public float ignoreGridRadius = 1f;
 
-    [Header("Fall Settings")]
-    [Tooltip("Acceleration applied when in free fall (units/sec^2)")] // Gravity acceleration
+    [Header("Laser Settings")]
+    public float chargeDuration = 1f;
+    public float chargeRotationSpeed = 180f;            // degrees per second
+    [Tooltip("Min/max prediction time in seconds")]
+    public Vector2 anticipationTimeRange = new Vector2(0.1f, 0.5f);
+    public float laserSpeed = 20f;
+    public LayerMask laserBlockMask;
+    public TrailRenderer laserTrailPrefab;
+    public float fireDistance = 7f;      // must be within this to fire
+    public float maxBeamDistance = 7f;   // beam travel limit
+
+    [Header("Rotation & Gravity")]
+    public float rotationSpeed = 90f;    // degrees per second
     public float fallAcceleration = 30f;
 
-    // Private fields
-    private Transform player;               // Reference to player transform
-    private float dashTimer;                // Countdown timer for next dash
-    private Vector3 nextDashTarget;         // Next target position for dash
-    private bool isPreparing;               // Flag indicating preparation phase
-    private float prepareTimer;             // Countdown timer for preparation
-    private bool isDashing;                 // Flag indicating dash in progress
-    private Rigidbody rb;                   // Cached Rigidbody component
-    private Collider col;                   // Cached Collider component
-    private S_EnemyGroundCheck groundCheck; // Reference to ground check helper
+    private Rigidbody rb;
+    private Collider col;
+    private S_EnemyGroundCheck groundCheck;
+    private Transform player;
+    private float dashTimer;
+    private Vector3 nextDashTarget;
+    private bool isPreparing;
+    private float prepareTimer;
+    private bool isDashing;
 
-    // Initialization
+    // for velocity-based prediction
+    private Vector3 lastPlayerPos;
+    private Vector3 playerVelocity;
+
+    private const int horizontalAttempts = 10;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
         groundCheck = GetComponentInChildren<S_EnemyGroundCheck>();
-        if (groundCheck != null)
-        {
-            groundCheck.physicCastCooldown = 0f; // Ensure immediate ground detection
-        }
-        rb.useGravity = true;
-        rb.isKinematic = false;
-        nextDashTarget = transform.position; // Initialize target to current position
+        if (groundCheck != null) groundCheck.physicCastCooldown = 0f;
+        nextDashTarget = transform.position;
     }
 
-    // Cache player reference and schedule first dash
     private void Start()
     {
         player = FindObjectOfType<S_CustomCharacterController>()?.transform;
+        if (player != null)
+            lastPlayerPos = player.position;
         ScheduleNextDash();
     }
 
-    // Main update loop handles fall, preparation, and dash timing
     private void Update()
     {
         if (player == null || isDashing)
             return;
 
-        // If not grounded, apply free fall acceleration
+        // update approximate player velocity
+        playerVelocity = (player.position - lastPlayerPos) / Time.deltaTime;
+        lastPlayerPos = player.position;
+
+        // if off ground, apply fall acceleration
         if (groundCheck != null && !groundCheck.TriggerDetection())
         {
             rb.AddForce(Vector3.down * fallAcceleration, ForceMode.Acceleration);
             return;
         }
 
-        // During preparation, rotate towards dash target
+        // preparing to dash: face target
         if (isPreparing)
         {
-            PrepareLook();
+            RotateTowards(nextDashTarget, rotationSpeed);
+            prepareTimer -= Time.deltaTime;
+            if (prepareTimer <= 0f)
+            {
+                isPreparing = false;
+                StartCoroutine(DashAndFire());
+            }
             return;
         }
 
-        // Rotate to face player when idle
-        FacePlayer();
-
-        // Countdown to next dash
+        // idle: face player and countdown
+        RotateTowards(player.position, rotationSpeed);
         dashTimer -= Time.deltaTime;
         if (dashTimer <= 0f)
         {
+            ScheduleNextDash();
             isPreparing = true;
             prepareTimer = prepareDuration;
         }
     }
 
-    // Preparation phase: look at target and countdown
-    private void PrepareLook()
+    private IEnumerator DashAndFire()
     {
-        Vector3 dir = nextDashTarget - transform.position;
-        if (dir.sqrMagnitude > 0.001f)
+        // 1) Dash to the chosen point
+        yield return StartCoroutine(DashTo(nextDashTarget));
+
+        // 2) Immediately face the player
+        RotateTowards(player.position, rotationSpeed);
+
+        // 3) If too far, skip firing
+        float distToPlayer = Vector3.Distance(transform.position, player.position);
+        if (distToPlayer > fireDistance)
         {
-            Quaternion targetRot = Quaternion.LookRotation(dir);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * rotationSpeed);
+            ScheduleNextDash();
+            yield break;
         }
 
-        prepareTimer -= Time.deltaTime;
-        if (prepareTimer <= 0f)
+        // 4) Charge laser while continuously facing the player
+        float t = chargeDuration;
+        while (t > 0f)
         {
-            isPreparing = false;
-            StartCoroutine(DashTo(nextDashTarget)); // Begin dash
-            ScheduleNextDash(); // Reset timer for next dash
+            RotateTowards(player.position, chargeRotationSpeed);
+            t -= Time.deltaTime;
+            yield return null;
         }
+
+        // 5) At fire moment, compute predicted direction and fire
+        float predictTime = (anticipationTimeRange != Vector2.zero)
+            ? Random.Range(anticipationTimeRange.x, anticipationTimeRange.y)
+            : 0f;
+        Vector3 predictedPos = player.position + playerVelocity * predictTime;
+        Vector3 fireDir = (predictedPos - transform.position).normalized;
+
+        var trail = Instantiate(
+            laserTrailPrefab,
+            transform.position,
+            Quaternion.LookRotation(fireDir)
+        );
+
+        int playerLayer = LayerMask.NameToLayer("Player");
+        int mask = laserBlockMask | groundLayerMask | (1 << playerLayer);
+
+        float traveled = 0f;
+        while (traveled < maxBeamDistance)
+        {
+            float step = laserSpeed * Time.deltaTime;
+            Vector3 prev = trail.transform.position;
+            trail.transform.position += fireDir * step;
+
+            if (Physics.Raycast(prev, fireDir, out RaycastHit hitInfo, step, mask, QueryTriggerInteraction.Ignore))
+            {
+                int hitLayer = hitInfo.collider.gameObject.layer;
+                // hit wall or ground
+                if ((laserBlockMask & (1 << hitLayer)) != 0 ||
+                    (groundLayerMask & (1 << hitLayer)) != 0)
+                {
+                    break;
+                }
+                // hit player
+                if (hitLayer == playerLayer)
+                {
+                    var trigger = hitInfo.collider.GetComponent<S_PlayerHitTrigger>();
+                    if (trigger != null)
+                        trigger.ReceiveDamage(enemyDamage);
+                    break;
+                }
+            }
+
+            traveled += step;
+            yield return null;
+        }
+
+        Destroy(trail.gameObject, 2f);
+
+        // 6) Schedule next dash
+        ScheduleNextDash();
     }
 
-    // Schedule next dash by randomizing timer and computing target
     private void ScheduleNextDash()
     {
         dashTimer = Random.Range(dashInterval.x, dashInterval.y);
-        TryFindDashPoint(out nextDashTarget);
-    }
-
-    // Rotate to face the player horizontally
-    private void FacePlayer()
-    {
-        Vector3 dir = player.position - transform.position;
-        dir.y = 0f;
-        if (dir.sqrMagnitude > 0.001f)
-        {
-            Quaternion targetRot = Quaternion.LookRotation(dir);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * rotationSpeed);
-        }
-    }
-
-    // Determine a valid dash target: prefer high points in mid-range
-    private bool TryFindDashPoint(out Vector3 result)
-    {
-        float dist = Vector3.Distance(player.position, transform.position);
-        if (dist >= closeDistance && dist <= farDistance && TryFindHighPoint(out Vector3 highPos))
-        {
-            result = highPos;
-            return true;
-        }
-
-        // Otherwise sample random points
-        for (int i = 0; i < maxSpawnAttempts; i++)
-        {
-            Vector3 cand = CalculateCandidatePoint();
-            if (ValidatePoint(cand, out Vector3 adjusted))
-            {
-                result = adjusted;
-                return true;
-            }
-        }
-
-        result = transform.position;
-        return false;
-    }
-
-    // Generate a random candidate around the enemy, biased by player position
-    private Vector3 CalculateCandidatePoint()
-    {
-        Vector3 dirToPlayer = (player.position - transform.position).normalized;
-        float dist = Vector3.Distance(player.position, transform.position);
-        Vector3[] options;
-
-        // Choose direction based on distance: forward, angled, or side moves
-        if (dist > farDistance)
-            options = new[] { Quaternion.AngleAxis(-45, Vector3.up) * dirToPlayer, dirToPlayer, Quaternion.AngleAxis(45, Vector3.up) * dirToPlayer };
-        else if (dist < closeDistance)
-            options = new[] { Quaternion.AngleAxis(135, Vector3.up) * dirToPlayer, -dirToPlayer, Quaternion.AngleAxis(-135, Vector3.up) * dirToPlayer };
+        Vector3 candidate;
+        if (Random.value <= highPointChance && TryFindHighPoint(out candidate))
+            nextDashTarget = candidate;
         else
-            options = new[] { Quaternion.AngleAxis(90, Vector3.up) * dirToPlayer, Quaternion.AngleAxis(-90, Vector3.up) * dirToPlayer };
-
-        Vector3 bias = options[Random.Range(0, options.Length)];
-        float r = Random.Range(0f, dashRadius);
-        return transform.position + bias * r;
+            nextDashTarget = FindValidHorizontal();
     }
 
-    // Validate candidate by projecting down to ground and applying vertical offset
-    private bool ValidatePoint(Vector3 cand, out Vector3 finalPos)
+    private Vector3 FindValidHorizontal()
     {
-        finalPos = cand;
-        float rayHeight = maxVerticalDashHeight + 1f;
-        if (Physics.Raycast(cand + Vector3.up * rayHeight, Vector3.down, out RaycastHit hit, rayHeight + 1f, groundLayerMask))
+        for (int i = 0; i < horizontalAttempts; i++)
         {
-            finalPos = hit.point + Vector3.up * highPointYOffset;
+            TryFindHorizontalPoint(out Vector3 cand);
+            Collider[] hits = Physics.OverlapSphere(cand, col.bounds.extents.magnitude);
+            int blockers = 0;
+            foreach (var h in hits)
+                if (((1 << h.gameObject.layer) & groundLayerMask) == 0)
+                    blockers++;
+            if (hits.Length == 0 || (float)blockers / hits.Length <= 0.1f)
+                return cand;
         }
-        return true;
+        // fallback: random direction at exactly minDashDistance
+        Vector2 rnd = Random.insideUnitCircle.normalized;
+        Vector3 dir = new Vector3(rnd.x, 0f, rnd.y);
+        return transform.position + dir * minDashDistance;
     }
 
-    // Attempt to find a nearby elevated point for tactical advantage
-    private bool TryFindHighPoint(out Vector3 highPoint)
-    {
-        highPoint = transform.position;
-        float searchHeight = maxVerticalDashHeight;
-
-        for (int i = 0; i < highPointSearchAttempts; i++)
-        {
-            Vector2 circle = Random.insideUnitCircle.normalized * Random.Range(minHighPointHorizontal, dashRadius);
-            Vector3 startPos = transform.position + new Vector3(circle.x, searchHeight + 1f, circle.y);
-            if (Physics.Raycast(startPos, Vector3.down, out RaycastHit hit, searchHeight + 2f, groundLayerMask)
-                && hit.point.y > transform.position.y + 0.1f)
-            {
-                highPoint = hit.point + Vector3.up * highPointYOffset;
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // Perform the dash movement over time
     private IEnumerator DashTo(Vector3 target)
     {
         isDashing = true;
@@ -237,15 +228,13 @@ public class S_Dashooter : EnemyBase
         rb.useGravity = false;
         rb.isKinematic = true;
 
-        Vector3 start = transform.position;
-        float dist = Vector3.Distance(start, target);
-        float traveled = 0f;
-
-        while (traveled < dist)
+        float dist = Vector3.Distance(transform.position, target);
+        float moved = 0f;
+        while (moved < dist)
         {
             float step = dashSpeed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, target, step);
-            traveled += step;
+            moved += step;
             yield return null;
         }
 
@@ -254,5 +243,102 @@ public class S_Dashooter : EnemyBase
         rb.isKinematic = false;
         rb.useGravity = true;
         isDashing = false;
+    }
+
+    private bool TryFindHighPoint(out Vector3 highPoint)
+    {
+        var candidates = new List<Vector3>();
+        float halfX = (gridCountX - 1) * 0.5f * gridSpacing;
+        float halfZ = (gridCountZ - 1) * 0.5f * gridSpacing;
+
+        for (int ix = 0; ix < gridCountX; ix++)
+        for (int iz = 0; iz < gridCountZ; iz++)
+        {
+            float ox = ix * gridSpacing - halfX;
+            float oz = iz * gridSpacing - halfZ;
+            if (new Vector2(ox, oz).magnitude < ignoreGridRadius) continue;
+
+            Vector3 origin = transform.position + new Vector3(ox, gridHeight, oz);
+            if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, rayLength, groundLayerMask))
+            {
+                Vector3 pt = hit.point + Vector3.up * highPointYOffset;
+                float d = Vector3.Distance(transform.position, pt);
+                if (d >= minDashDistance && d <= dashRadius
+                    && !Physics.Raycast(pt + Vector3.up * 0.1f, Vector3.up, 1f, ceilingLayerMask)
+                    && Vector3.Distance(player.position, pt) <= farDistance)
+                {
+                    candidates.Add(pt);
+                }
+            }
+        }
+
+        if (candidates.Count > 0)
+        {
+            highPoint = candidates[Random.Range(0, candidates.Count)];
+            return true;
+        }
+
+        highPoint = Vector3.zero;
+        return false;
+    }
+
+    private bool TryFindHorizontalPoint(out Vector3 result)
+    {
+        float dist = Vector3.Distance(player.position, transform.position);
+        Vector3 toP = (player.position - transform.position).normalized;
+        Vector3 dir;
+
+        if (dist > farDistance)
+            dir = toP;
+        else if (dist < closeDistance)
+            dir = -toP;
+        else if (Random.value < 0.8f)
+            dir = Vector3.Cross(toP, Vector3.up) * (Random.value < 0.5f ? 1f : -1f);
+        else
+        {
+            var rnd = Random.insideUnitCircle;
+            dir = new Vector3(rnd.x, 0f, rnd.y).normalized;
+        }
+
+        float r = Random.Range(minDashDistance, dashRadius);
+        result = transform.position + dir * r;
+        result.y = transform.position.y;
+        return true;
+    }
+
+    private void RotateTowards(Vector3 target, float maxDegPerSec)
+    {
+        Vector3 d = target - transform.position;
+        d.y = 0f;
+        if (d.sqrMagnitude < 0.001f) return;
+        Quaternion targetRot = Quaternion.LookRotation(d);
+        transform.rotation = Quaternion.RotateTowards(
+            transform.rotation,
+            targetRot,
+            maxDegPerSec * Time.deltaTime
+        );
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.cyan;
+        float halfX = (gridCountX - 1) * 0.5f * gridSpacing;
+        float halfZ = (gridCountZ - 1) * 0.5f * gridSpacing;
+
+        for (int ix = 0; ix < gridCountX; ix++)
+        for (int iz = 0; iz < gridCountZ; iz++)
+        {
+            float x = ix * gridSpacing - halfX;
+            float z = iz * gridSpacing - halfZ;
+            if (new Vector2(x, z).magnitude < ignoreGridRadius) continue;
+            Vector3 p = transform.position + new Vector3(x, gridHeight, z);
+            Gizmos.DrawWireSphere(p, 0.1f);
+            Gizmos.DrawLine(p, p + Vector3.down * rayLength);
+        }
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, dashRadius);
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, minDashDistance);
     }
 }
