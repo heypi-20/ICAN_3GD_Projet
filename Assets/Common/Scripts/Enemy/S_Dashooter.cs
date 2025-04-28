@@ -27,6 +27,16 @@ public class S_Dashooter : EnemyBase
     public float highPointYOffset = 0.5f;
     public float ignoreGridRadius = 1f;
 
+    [Header("Teleport Settings")]
+    [Tooltip("Distance above which we attempt a teleport near the player")]
+    public float teleportDistanceThreshold = 15f;
+    [Tooltip("Radius around the player to search for valid landing points")]
+    public float teleportSearchRadius = 5f;
+    [Tooltip("Height above candidate points to raycast down from")]
+    public float teleportSearchHeight = 10f;
+    [Tooltip("Number of random samples when searching for a teleport landing")]
+    public int teleportSearchAttempts = 20;
+
     [Header("Laser Settings")]
     public float chargeDuration = 1f;
     public float chargeRotationSpeed = 180f;            // degrees per second
@@ -77,21 +87,20 @@ public class S_Dashooter : EnemyBase
 
     private void Update()
     {
-        if (player == null || isDashing)
-            return;
+        if (player == null || isDashing) return;
 
         // update approximate player velocity
         playerVelocity = (player.position - lastPlayerPos) / Time.deltaTime;
         lastPlayerPos = player.position;
 
-        // if off ground, apply fall acceleration
+        // if off ground, apply gravity
         if (groundCheck != null && !groundCheck.TriggerDetection())
         {
             rb.AddForce(Vector3.down * fallAcceleration, ForceMode.Acceleration);
             return;
         }
 
-        // preparing to dash: face target
+        // preparing to dash: face the dash target
         if (isPreparing)
         {
             RotateTowards(nextDashTarget, rotationSpeed);
@@ -104,7 +113,7 @@ public class S_Dashooter : EnemyBase
             return;
         }
 
-        // idle: face player and countdown
+        // idle: face player and count down to next dash
         RotateTowards(player.position, rotationSpeed);
         dashTimer -= Time.deltaTime;
         if (dashTimer <= 0f)
@@ -193,11 +202,51 @@ public class S_Dashooter : EnemyBase
     private void ScheduleNextDash()
     {
         dashTimer = Random.Range(dashInterval.x, dashInterval.y);
+
+        // 1) compute full 3D distance to player
+        float distToPlayer = Vector3.Distance(transform.position, player.position);
+
         Vector3 candidate;
+        // 2) if beyond threshold, try teleport near player
+        if (distToPlayer >= teleportDistanceThreshold
+            && TryFindTeleportPoint(out candidate))
+        {
+            nextDashTarget = candidate;
+            return;
+        }
+
+        // 3) else normal high-point or horizontal dash
         if (Random.value <= highPointChance && TryFindHighPoint(out candidate))
             nextDashTarget = candidate;
         else
             nextDashTarget = FindValidHorizontal();
+    }
+
+    // attempt to find a valid landing point around the player
+    private bool TryFindTeleportPoint(out Vector3 teleportPoint)
+    {
+        for (int i = 0; i < teleportSearchAttempts; i++)
+        {
+            Vector2 rnd = Random.insideUnitCircle * teleportSearchRadius;
+            Vector3 origin = new Vector3(
+                player.position.x + rnd.x,
+                player.position.y + teleportSearchHeight,
+                player.position.z + rnd.y
+            );
+
+            if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, teleportSearchHeight + rayLength, groundLayerMask))
+            {
+                Vector3 pt = hit.point + Vector3.up * highPointYOffset;
+                // ensure no ceiling overhead
+                if (!Physics.Raycast(pt + Vector3.up * 0.1f, Vector3.up, 1f, ceilingLayerMask))
+                {
+                    teleportPoint = pt;
+                    return true;
+                }
+            }
+        }
+        teleportPoint = Vector3.zero;
+        return false;
     }
 
     private Vector3 FindValidHorizontal()
@@ -210,11 +259,10 @@ public class S_Dashooter : EnemyBase
             foreach (var h in hits)
                 if (((1 << h.gameObject.layer) & groundLayerMask) == 0)
                     blockers++;
-
             if (hits.Length == 0 || (float)blockers / hits.Length <= 0.1f)
                 return cand;
         }
-        // fallback: random direction at exactly minDashDistance
+        // fallback: random direction at minDashDistance
         Vector2 rnd = Random.insideUnitCircle.normalized;
         Vector3 dir = new Vector3(rnd.x, 0f, rnd.y);
         return transform.position + dir * minDashDistance;
@@ -294,10 +342,7 @@ public class S_Dashooter : EnemyBase
         else if (Random.value < 0.8f)
             dir = Vector3.Cross(toP, Vector3.up) * (Random.value < 0.5f ? 1f : -1f);
         else
-        {
-            var rnd = Random.insideUnitCircle;
-            dir = new Vector3(rnd.x, 0f, rnd.y).normalized;
-        }
+            dir = new Vector3(Random.Range(-1f,1f), 0f, Random.Range(-1f,1f)).normalized;
 
         float r = Random.Range(minDashDistance, dashRadius);
         result = transform.position + dir * r;
@@ -339,5 +384,19 @@ public class S_Dashooter : EnemyBase
         Gizmos.DrawWireSphere(transform.position, dashRadius);
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, minDashDistance);
+        
+        if (player != null)
+        {
+            Gizmos.color = Color.blue;
+            Vector3 basePos = player.position;
+            Vector3 topPos  = player.position + Vector3.up * teleportSearchHeight;
+            Gizmos.DrawLine(basePos, topPos);
+
+            Gizmos.color = new Color(0f, 0.5f, 1f, 0.3f);
+            Gizmos.DrawWireSphere(topPos, teleportSearchRadius);
+
+            Gizmos.color = new Color(0f, 0.5f, 1f, 0.1f);
+            Gizmos.DrawSphere(basePos, teleportSearchRadius);
+        }
     }
 }

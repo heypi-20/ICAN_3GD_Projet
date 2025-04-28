@@ -63,10 +63,20 @@ public class S_MeleeAttack_Module : MonoBehaviour
     {
         MeleeAttackLevel currentLevel = GetCurrentAttackLevel();
         currentAttackCD = currentLevel.attackCooldown;
+        if (S_PlayerStateObserver.Instance.LastGroundPoundState != null)
+        {
+            _inputManager.MeleeAttackInput = false;
+            return;
+        }
         
         // Check input, cooldown, and energy conditions, and ensure windup is not already in progress
-        if (_inputManager.MeleeAttackInput && _attackCooldownTimer <= 0f &&S_PlayerStateObserver.Instance.LastGroundPoundState==null
-            && S_PlayerStateObserver.Instance.LastMeleeState == null && !_isWindupInProgress)
+        if (_inputManager.MeleeAttackInput 
+            && 
+            _attackCooldownTimer <= 0f 
+            && 
+            S_PlayerStateObserver.Instance.LastMeleeState == null 
+            && 
+            !_isWindupInProgress)
         {
             _isWindupInProgress = true;
             // Trigger the start attack event

@@ -15,8 +15,11 @@ public class ExplosionEffect : MonoBehaviour
     private bool In_Ground;
     private Material ShockwaveMaterial;
     public float Shock_Wave_Speed_Multiplayer = 1f;
+    public float Fade_Multiplier = 2f;
     private bool timer_work;
     private float timer_groundpound;
+    public float Min_Fade = 300f;
+    private float Fade_Distance = 300f;
 
     private void Start()
     {
@@ -24,22 +27,22 @@ public class ExplosionEffect : MonoBehaviour
         {
             S_PlayerStateObserver.Instance.OnGroundPoundStateEvent += ReceiceGroudPoundEvevent;
         }
+
+        Fade_Distance = Min_Fade;
     }
 
     private void Update()
     {
         if (In_Ground)
         {
-            distanceShockwave += Time.deltaTime * Shock_Wave_Speed_Multiplayer;
             ShockwaveMaterial.SetFloat("_Distance", distanceShockwave);
-            float amplitude = Mathf.Lerp(10f, 0f, distanceShockwave / 200f);
-            ShockwaveMaterial.SetFloat("_Amplitude", amplitude);
         }
 
         if (timer_work)
         {
             timer_groundpound += Time.deltaTime;
-            Shock_Wave_Speed_Multiplayer += Time.deltaTime * 2;
+            distanceShockwave += Time.deltaTime * Shock_Wave_Speed_Multiplayer;
+            Fade_Distance += Time.deltaTime * Fade_Multiplier;
         }
     }
     private void ReceiceGroudPoundEvevent(Enum state)
@@ -60,7 +63,9 @@ public class ExplosionEffect : MonoBehaviour
         ShockwaveMaterial = ShockWave.GetComponent<Renderer>().material;
         In_Ground = true;
         timer_work = true;
+        ShockwaveMaterial.SetFloat("_Max_FadeDistance", Fade_Distance);
         Destroy(ShockWave, 3f);
         Destroy(Onde,2f);
+        Fade_Distance = Min_Fade;
     }
 }
