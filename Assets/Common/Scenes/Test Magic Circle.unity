@@ -25246,7 +25246,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 2063236645}
-  StartShootAnim: Palier1ActivationCircle
+  StartShootAnimPalier1: Palier1ActivationCircle
+  StartShootAnimPalier2: Palier2ActivationCircle
+  StartShootAnimPalier3: Palier3ActivationCircle
+  StartShootAnimPalier4: Palier4ActivationCircle
+  StopShootAnimPalier1: Palier1StopActivationCircle
+  StopShootAnimPalier2: Palier2StopActivationCircle
+  StopShootAnimPalier3: Palier3StopActivationCircle
+  StopShootAnimPalier4: Palier4StopActivationCircle
+  IsShootingAnimPalier1: Palier1IsShooting
+  IsShootingAnimPalier2: Palier2IsShooting
+  IsShootingAnimPalier3: Palier3IsShooting
+  IsShootingAnimPalier4: Palier4IsShooting
 --- !u!1 &2071996486
 GameObject:
   m_ObjectHideFlags: 0
@@ -25818,25 +25829,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2063236644}
     m_Modifications:
-    - target: {fileID: 825184477761268377, guid: a7c4c734c93e41f43b1009a2568775e4, type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 3423069750497603742, guid: a7c4c734c93e41f43b1009a2568775e4, type: 3}
       propertyPath: m_Name
       value: Magic Circle 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3423069750497603742, guid: a7c4c734c93e41f43b1009a2568775e4, type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 3788083936331994624, guid: a7c4c734c93e41f43b1009a2568775e4, type: 3}
-      propertyPath: RingB
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4559958207064882067, guid: a7c4c734c93e41f43b1009a2568775e4, type: 3}
-      propertyPath: m_Layer
-      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4929148756649707974, guid: a7c4c734c93e41f43b1009a2568775e4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -25878,42 +25873,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7718664745074761768, guid: a7c4c734c93e41f43b1009a2568775e4, type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 7718664745074761768, guid: a7c4c734c93e41f43b1009a2568775e4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7919694717270439968, guid: a7c4c734c93e41f43b1009a2568775e4, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7919694717270439968, guid: a7c4c734c93e41f43b1009a2568775e4, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7919694717270439968, guid: a7c4c734c93e41f43b1009a2568775e4, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7919694717270439968, guid: a7c4c734c93e41f43b1009a2568775e4, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7919694717270439968, guid: a7c4c734c93e41f43b1009a2568775e4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7919694717270439968, guid: a7c4c734c93e41f43b1009a2568775e4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 7919694717270439968, guid: a7c4c734c93e41f43b1009a2568775e4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 90
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -25927,14 +25886,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2063236644}
     m_Modifications:
-    - target: {fileID: 655181055515933603, guid: c62714f9648a446429435dfbe214b4b4, type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 910279724643161850, guid: c62714f9648a446429435dfbe214b4b4, type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 2355062920553977354, guid: c62714f9648a446429435dfbe214b4b4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.0159988
@@ -25975,21 +25926,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4022389988058366456, guid: c62714f9648a446429435dfbe214b4b4, type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 4499395029502838172, guid: c62714f9648a446429435dfbe214b4b4, type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 6849423200689360285, guid: c62714f9648a446429435dfbe214b4b4, type: 3}
       propertyPath: m_Name
       value: Magic Circle 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 6849423200689360285, guid: c62714f9648a446429435dfbe214b4b4, type: 3}
-      propertyPath: m_Layer
-      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -26007,10 +25946,6 @@ PrefabInstance:
     - target: {fileID: 3225846817731773257, guid: afa58c721d4a63f478b465737ec5f321, type: 3}
       propertyPath: m_Name
       value: Magic Circle 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3225846817731773257, guid: afa58c721d4a63f478b465737ec5f321, type: 3}
-      propertyPath: m_Layer
-      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6146652386496420820, guid: afa58c721d4a63f478b465737ec5f321, type: 3}
       propertyPath: m_LocalPosition.x
@@ -26051,18 +25986,6 @@ PrefabInstance:
     - target: {fileID: 6146652386496420820, guid: afa58c721d4a63f478b465737ec5f321, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6748469980037162345, guid: afa58c721d4a63f478b465737ec5f321, type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 6780057806135787895, guid: afa58c721d4a63f478b465737ec5f321, type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 9094447346164634473, guid: afa58c721d4a63f478b465737ec5f321, type: 3}
-      propertyPath: m_Layer
-      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -26117,29 +26040,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4947938056368929398, guid: af9d9be3548f9774baa96332f8178c3b, type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 5077436379864131177, guid: af9d9be3548f9774baa96332f8178c3b, type: 3}
       propertyPath: m_Name
       value: Magic Circle 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5077436379864131177, guid: af9d9be3548f9774baa96332f8178c3b, type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 5925427347726154858, guid: af9d9be3548f9774baa96332f8178c3b, type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 5925427347726154858, guid: af9d9be3548f9774baa96332f8178c3b, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8633174746675168015, guid: af9d9be3548f9774baa96332f8178c3b, type: 3}
-      propertyPath: m_Layer
-      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
