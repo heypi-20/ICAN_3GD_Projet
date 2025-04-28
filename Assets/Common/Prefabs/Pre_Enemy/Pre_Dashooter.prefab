@@ -315,25 +315,25 @@ MonoBehaviour:
   enemyName: 
   enemyType: 5
   health: 100
-  WeaknessExposureHealth: 80
-  enemyDamage: 50
+  WeaknessExposureHealth: 95
+  enemyDamage: 150
   WeakPoint: {fileID: 0}
   energyPoint: {fileID: 284891634115185361, guid: 729892a8825d4f64599abe6ea5c6f84b, type: 3}
-  energyDropQuantity: 25
+  energyDropQuantity: 50
   enemyGetHitVFX: {fileID: 2014564717100583912, guid: de8051323aef0554fb4a4ee3dd46ebed, type: 3}
   enemyDeathVFX: {fileID: 2014564717100583912, guid: 332f5cf35c013464e8ebf4ac6d81eedc, type: 3}
   enemyGetHitSound: 
   enemyDeathSound: 
   extraWeakPointMaterial: {fileID: 2100000, guid: 88ed2fc4320abc049b8fbac9be0e16cd, type: 2}
   weakPointRenderer: {fileID: 2678103955430349603}
-  dashRadius: 31.9
-  minDashDistance: 5
+  dashRadius: 50
+  minDashDistance: 15
   closeDistance: 15
-  farDistance: 30
+  farDistance: 50
   dashInterval: {x: 0.5, y: 1}
   dashSpeed: 120
   prepareDuration: 0.5
-  highPointChance: 0.8
+  highPointChance: 0.4
   gridCountX: 5
   gridCountZ: 5
   gridSpacing: 7
@@ -353,7 +353,7 @@ MonoBehaviour:
   teleportSearchAttempts: 20
   chargeDuration: 0.5
   chargeRotationSpeed: 900
-  predictionAccuracy: 1
+  predictionAccuracy: 0.8
   laserSpeed: 300
   laserBlockMask:
     serializedVersion: 2
