@@ -26,24 +26,24 @@ public class S_Ounouns : EnemyBase
         agent = GetComponent<NavMeshAgent>();
 
         findPlayer = FindObjectOfType<S_CustomCharacterController>();
-        if (findPlayer == null)
-        {
+        if (findPlayer == null) {
             Debug.LogWarning("No Character Controller found in scene.");
         }
     }
 
     private void Update()
     {
-        if (findPlayer == null) return;
+        if (findPlayer == null)
+            return;
 
         player = findPlayer.transform;
 
-        MoveTowardsPlayer();
-
         shootTimer += Time.deltaTime;
         float dist = Vector3.Distance(transform.position, player.position);
-        if (dist < range && shootTimer >= fireRate)
-        {
+        
+        MoveTowardsPlayer(dist);
+
+        if (dist < range && shootTimer >= fireRate) {
             Shoot();
             shootTimer = 0f;
         }
@@ -53,20 +53,15 @@ public class S_Ounouns : EnemyBase
     /// Moves the enemy toward the player if farther than stopDistance.
     /// Rotates to face the player horizontally only (Y axis).
     /// </summary>
-    private void MoveTowardsPlayer()
+    private void MoveTowardsPlayer(float dist)
     {
-        float dist = Vector3.Distance(transform.position, player.position);
-
         if (dist > stopDistance)
-        {
             agent.SetDestination(player.position);
-        }
 
         // Look at the player horizontally (ignore vertical difference)
         Vector3 lookDirection = player.position - transform.position;
         lookDirection.y = 0f;
-        if (lookDirection != Vector3.zero)
-        {
+        if (lookDirection != Vector3.zero) {
             transform.rotation = Quaternion.LookRotation(lookDirection);
         }
     }
@@ -80,14 +75,11 @@ public class S_Ounouns : EnemyBase
         Vector3 shootDirection = (player.position - shootPoint.position).normalized;
 
         // Check for line of sight to the player
-        if (Physics.Raycast(shootPoint.position, shootDirection, out hit, range))
-        {
-            if (hit.transform == player)
-            {
+        if (Physics.Raycast(shootPoint.position, shootDirection, out hit, range)) {
+            if (hit.transform == player) {
                 // Instantiate and launch the projectile toward the player
                 Transform projectile = Instantiate(projectilePrefab, shootPoint.position, Quaternion.LookRotation(shootDirection));
                 projectile.GetComponent<S_ProjectileSpeed>().speed = projectileSpeed;
-
             }
         }
     }

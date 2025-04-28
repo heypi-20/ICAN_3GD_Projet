@@ -65,7 +65,7 @@ public class S_MeleeAttack_Module : MonoBehaviour
         currentAttackCD = currentLevel.attackCooldown;
         
         // Check input, cooldown, and energy conditions, and ensure windup is not already in progress
-        if (_inputManager.MeleeAttackInput && _attackCooldownTimer <= 0f && _energyStorage.currentEnergy >= currentLevel.energyConsumption 
+        if (_inputManager.MeleeAttackInput && _attackCooldownTimer <= 0f &&S_PlayerStateObserver.Instance.LastGroundPoundState==null
             && S_PlayerStateObserver.Instance.LastMeleeState == null && !_isWindupInProgress)
         {
             _isWindupInProgress = true;
@@ -126,7 +126,6 @@ public class S_MeleeAttack_Module : MonoBehaviour
             yield return null;
         }
         // yield return new WaitUntil(() => elapsed >= duration);
-        Debug.Log("handle Damage");
         Rigidbody targetRB = hit.GetComponentInParent<Rigidbody>();
         if (targetRB != null)
         {
@@ -136,12 +135,10 @@ public class S_MeleeAttack_Module : MonoBehaviour
         if (hit.CompareTag("WeakPoint"))
         {
             hit.GetComponentInParent<EnemyBase>()?.ReduceHealth(currentLevel.attackDamage * 100, currentLevel.dropBonus + currentLevel.WeakPointDropBonus);
-            Debug.Log("Touch Weak Point " + currentLevel.attackDamage * 100);
         }
         else
         {
             hit.GetComponent<EnemyBase>()?.ReduceHealth(currentLevel.attackDamage, currentLevel.dropBonus);
-            Debug.Log("Didn't Touch Weak Point");
         }
     }
 

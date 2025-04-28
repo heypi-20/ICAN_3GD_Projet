@@ -9,6 +9,7 @@ public class EnergyLevel
     public int level; // Énergie actuelle du niveau
     public float requiredEnergy; // Énergie requise pour atteindre ce niveau
     public float graceTimer; // Temps de grâce pour maintenir le niveau si l'énergie est insuffisante
+    public float percentageGiveaway;
 }
 
 public class S_EnergyStorage : MonoBehaviour
@@ -129,7 +130,7 @@ public class S_EnergyStorage : MonoBehaviour
             {
                 SetNewLevel(i); // Définit le nouveau niveau
                 SoundManager.Instance.Meth_Gain_Palier();
-                AddEnergy(energyLevels[i].requiredEnergy*0.2f);
+                AddEnergy(energyLevels[i].requiredEnergy*energyLevels[i].percentageGiveaway);
                 //trigger upgrade level event
                 EnergyLevelObserverEvent(PlayerStates.LevelState.LevelUp, i+1);
                 

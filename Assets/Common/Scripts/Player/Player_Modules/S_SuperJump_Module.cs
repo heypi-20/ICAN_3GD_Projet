@@ -147,7 +147,7 @@ public class S_SuperJump_Module : MonoBehaviour
         foreach (var col in colliders)
         {
             Rigidbody rb = col.GetComponent<Rigidbody>();
-            if (rb != null)
+            if (rb != null&&!col.CompareTag("BossType"))
             {
                 affectedBodies.Add(rb);
             }

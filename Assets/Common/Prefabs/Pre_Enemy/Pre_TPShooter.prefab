@@ -178,7 +178,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4897929555399485672}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 1479372276
   m_Radius: 0.5000001
   m_Speed: 0
@@ -310,13 +310,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyName: 
-  enemyType: 4
+  enemyType: 5
   health: 60
   WeaknessExposureHealth: 50
-  enemyDamage: 50
+  enemyDamage: 200
   WeakPoint: {fileID: 7863619899726797280}
   energyPoint: {fileID: 284891634115185361, guid: 729892a8825d4f64599abe6ea5c6f84b, type: 3}
-  energyDropQuantity: 45
+  energyDropQuantity: 30
   enemyGetHitVFX: {fileID: 2014564717100583912, guid: de8051323aef0554fb4a4ee3dd46ebed, type: 3}
   enemyDeathVFX: {fileID: 2014564717100583912, guid: 332f5cf35c013464e8ebf4ac6d81eedc, type: 3}
   enemyGetHitSound: 
@@ -324,12 +324,15 @@ MonoBehaviour:
   extraWeakPointMaterial: {fileID: 2100000, guid: 88ed2fc4320abc049b8fbac9be0e16cd, type: 2}
   weakPointRenderer: {fileID: 7510187380995108401}
   teleportCd: 2
-  minDist: 5
-  maxDist: 10
+  negativeDist: 5
+  positiveDist: 5
   validPosLayer:
     serializedVersion: 2
     m_Bits: 257
-  range: 50
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  range: 75
   shootPoint: {fileID: 3908267692789166098}
   laserRadius: 1
   chargeTime: 0.8

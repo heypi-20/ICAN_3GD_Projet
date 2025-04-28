@@ -233,7 +233,7 @@ public class S_FireRateGun_Module : MonoBehaviour
                     }
                     else
                     {
-                        enemy.ReduceHealth(damage,GetCurrentFireRateLevel().dropBonus);
+                        enemy.ReduceHealth(damage,GetCurrentFireRateLevel().dropBonus,hit.point);
                     }
                     Vector3 hitDirection = (enemy.transform.position - transform.position).normalized;
                     enemy.GetComponent<Rigidbody>().AddForce(hitDirection*GetCurrentFireRateLevel().knockbackForce, ForceMode.Impulse);

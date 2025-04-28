@@ -61,15 +61,19 @@ public class EnemyBase : MonoBehaviour
     }
 
     // Reduces health by a given amount, shows hit effects, and triggers death if needed.
-    public void ReduceHealth(float amount, int DropBonus)
+    public void ReduceHealth(float amount, int DropBonus,Vector3 hitPosition=default)
     {
         if (isDead) return;
         currentHealth -= amount;
+        if (hitPosition == default)
+        {
+            hitPosition = transform.position;
+        }
 
         // Show hit effect if available.
         if (enemyGetHitVFX != null)
         {
-            S_VFXPoolManager.Instance.SpawnVFX(enemyGetHitVFX, transform.position, transform.rotation, 3f);
+            S_VFXPoolManager.Instance.SpawnVFX(enemyGetHitVFX, hitPosition, transform.rotation, 3f);
 
         }
 
