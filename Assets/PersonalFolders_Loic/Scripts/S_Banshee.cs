@@ -1,15 +1,15 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
-[ExecuteInEditMode]
+[ExecuteAlways]
 public class CheckVar : MonoBehaviour
 {
     private void OnValidate()
     {
         S_Banshee script = gameObject.GetComponent<S_Banshee>();
         
-        if (script.avoidDist > script.range)
-        {
+        if (script.avoidDist > script.range) {
             Debug.LogWarning($"[Example] valueA ({script.avoidDist}) is greater than valueB ({script.range})", this);
         }
     }
@@ -25,18 +25,21 @@ public class S_Banshee : EnemyBase
 
     [Header("Attack Properties")]
     public float range = 10f;
-    public float runTime = 2f;
     public LayerMask playerLayer;
+    
+    [Header("Run Properties")]
+    public float runTime = 2f;
+    public float runSpeed = 50f;
+    public float timeBfRun = 1f;
     
     private Transform player;
 
     private Rigidbody rb;
 
     private bool canAttack = true;
+    private bool canRun;
     private bool isRunning;
     private float runTimer;
-
-    
     
     private void Start()
     {
@@ -59,7 +62,10 @@ public class S_Banshee : EnemyBase
         } else if (dist > range && canAttack && !isRunning) {
             Chase();
         } else if (!canAttack && isRunning) {
-            Run();
+            StartCoroutine(Waiter());
+            
+            if (canRun)
+                Run();
         } 
     }
 
@@ -104,6 +110,12 @@ public class S_Banshee : EnemyBase
         runTimer = 0f;
     }
 
+    private IEnumerator Waiter()
+    {
+        yield return new WaitForSeconds(timeBfRun);
+        canRun = true;
+    }
+
     private void Run()
     {
         Debug.Log("Running");
@@ -114,13 +126,14 @@ public class S_Banshee : EnemyBase
         Quaternion targetRot = Quaternion.LookRotation(awayFromPlayer);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * rotationSpeed);
             
-        rb.velocity = awayFromPlayer * speed;
+        rb.velocity = awayFromPlayer * runSpeed;
             
         if (runTimer >= runTime) {
             Debug.Log("finished run");
             canAttack = true;
-            runTimer = 0;
             isRunning = false;
+            canRun = false;
+            runTimer = 0;
         }
     }
 }
