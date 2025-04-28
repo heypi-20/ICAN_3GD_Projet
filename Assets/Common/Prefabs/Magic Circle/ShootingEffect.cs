@@ -15,11 +15,16 @@ public class ShootingEffect : MonoBehaviour
 
     public GameObject RingA;
     public GameObject RingB;
+    public GameObject RingC;
     public int Speed;
     private float currentRotationSpeed = 0f;
     public float rotationLerpSpeed = 5f;
 
     public S_PlayerStateObserver playerStateObserver;
+
+    public bool RingAOn;
+    public bool RingBOn;
+    public bool RingCOn;
 
     void Start()
     {
@@ -41,8 +46,18 @@ public class ShootingEffect : MonoBehaviour
         }
 
         // Appliquer la rotation fluide
-        RingA.transform.Rotate(0, 0, currentRotationSpeed * Time.deltaTime);
-        RingB.transform.Rotate(0, 0, -currentRotationSpeed * Time.deltaTime);
+        if(RingAOn)
+        {
+            RingA.transform.Rotate(0, currentRotationSpeed * Time.deltaTime, 0);
+        }
+        if (RingBOn)
+        {
+            RingB.transform.Rotate(0, -currentRotationSpeed * Time.deltaTime, 0);
+        }
+        if (RingCOn)
+        {
+            RingC.transform.Rotate(0, currentRotationSpeed * Time.deltaTime, 0);
+        }
 
         // Appliquer l'émissive
         objectMaterial.SetColor(EmissionColorProperty, mycolor * currentIntensity);
