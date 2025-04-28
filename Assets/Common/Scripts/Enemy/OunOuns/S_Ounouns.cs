@@ -2,20 +2,19 @@
 using UnityEngine.AI;
 
 [RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(NavMeshAgent))]
 public class S_Ounouns : EnemyBase
 {
+    [Header("Movement Properties")]
+    public float moveSpeed = 2f;
+    public float stopDistance = 5f;     
+    
     [Header("Shoot Properties")]
     public float fireRate;                          // Time between shots
     public float range;                             // Detection and shooting range
     public Transform projectilePrefab;              // Prefab of the projectile
     public Transform shootPoint;                    // Starting point of the projectile
     public float projectileSpeed = 10f;             // Speed of the projectile
-
-    [Header("Movement Properties")]
-    public float stopDistance = 5f;                 // Distance at which enemy stops moving
-
-    private NavMeshAgent agent;
+    
     private S_CustomCharacterController findPlayer;
     private Transform player;
     private RaycastHit hit;
@@ -23,8 +22,6 @@ public class S_Ounouns : EnemyBase
 
     private void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
-
         findPlayer = FindObjectOfType<S_CustomCharacterController>();
         if (findPlayer == null) {
             Debug.LogWarning("No Character Controller found in scene.");
@@ -55,8 +52,12 @@ public class S_Ounouns : EnemyBase
     /// </summary>
     private void MoveTowardsPlayer(float dist)
     {
-        if (dist > stopDistance)
-            agent.SetDestination(player.position);
+        if (dist > stopDistance) {
+            Vector3 direction = (player.position - transform.position).normalized;
+
+            // Move toward the player
+            transform.position += direction * moveSpeed * Time.deltaTime;
+        }
 
         // Look at the player horizontally (ignore vertical difference)
         Vector3 lookDirection = player.position - transform.position;
