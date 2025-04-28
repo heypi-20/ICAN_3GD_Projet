@@ -2,18 +2,7 @@
 using System.Collections;
 using UnityEngine;
 
-[ExecuteAlways]
-public class CheckVar : MonoBehaviour
-{
-    private void OnValidate()
-    {
-        S_Banshee script = gameObject.GetComponent<S_Banshee>();
-        
-        if (script.avoidDist > script.range) {
-            Debug.LogWarning($"[Example] valueA ({script.avoidDist}) is greater than valueB ({script.range})", this);
-        }
-    }
-}
+
 
 public class S_Banshee : EnemyBase
 {

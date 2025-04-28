@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7171761225838574247}
   - component: {fileID: 5613484529044704741}
   - component: {fileID: 5996538019166040397}
+  - component: {fileID: 3812918859397826283}
   m_Layer: 9
   m_Name: Banshee
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271168493937148557}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 20.9, z: -69.2}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
@@ -162,12 +163,26 @@ MonoBehaviour:
   weakPointRenderer: {fileID: 0}
   speed: 15
   rotationSpeed: 10
-  avoidDist: 10
+  avoidDist: 7
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 64
-  range: 7
-  runTime: 2
+  range: 10
   playerLayer:
     serializedVersion: 2
     m_Bits: 8
+  runTime: 2
+  runSpeed: 50
+  timeBfRun: 1
+--- !u!114 &3812918859397826283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1271168493937148557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e761c3e07227446982052e580598dc3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
