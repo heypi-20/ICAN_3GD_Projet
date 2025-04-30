@@ -1,19 +1,17 @@
-Shader "Unlit/ComboTextGlow"
+﻿Shader "URP/Unlit/WaveInsideMask_AutoAnim"
 {
     Properties
     {
-        _MainTex       ("Font Texture", 2D) = "white" {}
-        _GlowColor     ("Glow Color", Color) = (1,1,1,1)
-        _GlowStrength  ("Glow Strength", Float) = 1.5
-        _PulseSpeed    ("Pulse Speed", Float) = 2
-        _PulseAmount   ("Pulse Intensity", Range(0, 2)) = 0.5
-        _Softness      ("Edge Softness", Range(0, 1)) = 0.2
+        _MaskTex ("Shape Mask (Alpha)", 2D) = "white" {}
+        _WaveTex ("Wave Texture", 2D) = "white" {}
+        _WaveSpeed ("Wave Speed", Float) = 1
+        _WaveScale ("Wave Scale", Float) = 1
+        _WaveColor ("Wave Color", Color) = (1,1,1,1)
     }
 
     SubShader
     {
-        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
-        LOD 100
+        Tags { "RenderPipeline"="UniversalPipeline" "Queue"="Transparent" "RenderType"="Transparent" }
         Blend SrcAlpha OneMinusSrcAlpha
         ZWrite Off
         Cull Off
@@ -25,41 +23,45 @@ Shader "Unlit/ComboTextGlow"
             #pragma fragment frag
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
-            TEXTURE2D(_MainTex); SAMPLER(sampler_MainTex);
-            float4 _GlowColor;
-            float _GlowStrength;
-            float _PulseSpeed;
-            float _PulseAmount;
-            float _Softness;
+            sampler2D _MaskTex;
+            sampler2D _WaveTex;
 
-            struct Attributes {
-                float4 positionOS : POSITION;
-                float2 uv : TEXCOORD0;
-            };
+            float4 _MaskTex_ST;
+            float4 _WaveTex_ST;
 
-            struct Varyings {
-                float4 positionCS : SV_POSITION;
-                float2 uv : TEXCOORD0;
-            };
+            float _WaveSpeed;
+            float _WaveScale;
+            float4 _WaveColor;
+
+            struct Attributes { float4 posOS : POSITION; float2 uv : TEXCOORD0; };
+            struct Varyings { float4 posCS : SV_POSITION; float2 uv : TEXCOORD0; };
 
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
-                OUT.positionCS = TransformObjectToHClip(IN.positionOS);
+                OUT.posCS = TransformObjectToHClip(IN.posOS);
                 OUT.uv = IN.uv;
                 return OUT;
             }
 
             half4 frag(Varyings IN) : SV_Target
             {
-                float alpha = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv).a;
-                float pulse = 1.0 + sin(_Time.y * _PulseSpeed) * _PulseAmount;
+                float2 uv = IN.uv;
 
-                // Soft glow based on edge falloff
-                float glow = smoothstep(0.0, _Softness, alpha);
-                float finalGlow = glow * _GlowStrength * pulse;
+                // Masque alpha
+                float alpha = tex2D(_MaskTex, uv).a;
+                if (alpha < 0.01)
+                    discard;
 
-                return half4(_GlowColor.rgb * finalGlow, finalGlow);
+                // Animation permanente dans l’UV
+                float2 waveUV = uv * _WaveScale + float2(_Time.y * _WaveSpeed, 0.0);
+                float wave = tex2D(_WaveTex, waveUV).r;
+
+                // Combine avec la couleur des vagues et masque alpha
+                float4 col = _WaveColor * wave;
+                col.a = wave * alpha;
+
+                return col;
             }
             ENDHLSL
         }
