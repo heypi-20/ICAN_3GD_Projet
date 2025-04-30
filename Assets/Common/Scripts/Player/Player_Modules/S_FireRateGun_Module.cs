@@ -146,7 +146,7 @@ public class S_FireRateGun_Module : MonoBehaviour
         if (_energyStorage.currentLevelIndex + 1 == 4)
         {
             GameObject BulletPalier4 = Instantiate(bulletPalier4Prefab, spawnBulletPoint.position, spawnBulletPoint.rotation);
-            BulletPalier4.GetComponent<S_Projectile_useForDeco>().InitializeProjectile(3, 800);
+            BulletPalier4.GetComponent<S_Projectile_useForDeco>().InitializeProjectile(3, bulletSpeed);
         }
         else
         {
