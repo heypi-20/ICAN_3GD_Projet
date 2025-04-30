@@ -25,6 +25,7 @@ public class S_FireRateGun_Module : MonoBehaviour
     public Transform shootPoint; // Point d'origine de la direction de tir
     public Transform spawnBulletPoint;
     public GameObject bulletPrefab;
+    public GameObject bulletPalier4Prefab;
     public LayerMask obstacleLayer; // Layer des obstacles
     public float raycastLength = 50f; // Longueur maximale de la portée du tir
     public float raycastSpread = 5f; // Angle de déviation des rayons secondaires
@@ -48,8 +49,6 @@ public class S_FireRateGun_Module : MonoBehaviour
     private bool ShootStoppedUseForEvent;
     private bool ShootPrepared;
     private bool coroutineStarted;
-
-    
 
     private void Start()
     {
@@ -144,8 +143,16 @@ public class S_FireRateGun_Module : MonoBehaviour
             PerformSpreadRaycast(shootPoint.position, shootDirection, raycastLength, currentLevel.damage);
         }
 
-        GameObject Bullet = Instantiate(bulletPrefab, spawnBulletPoint.position, spawnBulletPoint.rotation);
-        Bullet.GetComponent<S_Projectile_useForDeco>().InitializeProjectile(3,bulletSpeed);
+        if (1 == 1)
+        {
+            GameObject BulletPalier4 = Instantiate(bulletPalier4Prefab, spawnBulletPoint.position, spawnBulletPoint.rotation);
+            BulletPalier4.GetComponent<S_Projectile_useForDeco>().InitializeProjectile(3, 800);
+        }
+        else
+        {
+            GameObject Bullet = Instantiate(bulletPrefab, spawnBulletPoint.position, spawnBulletPoint.rotation);
+            Bullet.GetComponent<S_Projectile_useForDeco>().InitializeProjectile(3, bulletSpeed);
+        }
     }
 
     private IEnumerator SimulateBullet(Vector3 shootDirection, FireRateLevel currentLevel)
