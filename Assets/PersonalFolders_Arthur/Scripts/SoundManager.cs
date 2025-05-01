@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 using FMODUnity;
 using FMOD.Studio;
@@ -80,7 +81,13 @@ public class SoundManager : MonoBehaviour
     public string JumpyCuby_Jump;
 
     [Header("Musique")]
-    public string Globale_Musique;
+    public string Music_Lvl1;
+    public string Music_Lvl2;
+    public string Music_Lvl3;
+    public string Music_Lvl4;
+    public string Gain_Pallier;
+    public string Loose_Pallier;
+    private int actuallevel;
     
     //public S_Jauge_Tmp Jauge;
     public void Meth_Shoot_No_Hit(int currentLevel)
@@ -176,32 +183,13 @@ public class SoundManager : MonoBehaviour
     {
         // Modifier le param�tre global dans FMOD
         FMOD.RESULT result = RuntimeManager.StudioSystem.setParameterByName("Palier", value);
-        
     }
 
-    public void Meth_Globale_Musique(int currentLevel)
-    {
-        if (currentLevel == 0)
-        {
-            SetParameter(0.3f);
-        }
-        if (currentLevel == 1)
-        {
-            SetParameter(1.3f);
-        }
-        if (currentLevel == 2)
-        {
-            SetParameter(2.3f);
-        }
-        if (currentLevel == 3)
-        {
-            SetParameter(3f);
-        }
-    }
-
-    private void Start()
-    {
-        FMODUnity.RuntimeManager.PlayOneShot(Globale_Musique);
-    }
-
+    // private void Start()
+    // {
+    //     if (S_PlayerStateObserver.Instance.OnLevelUpStateEvent(PlayerStates.LevelState.LevelUp, ))
+    //     {
+    //        
+    //     }
+    // }
 }
