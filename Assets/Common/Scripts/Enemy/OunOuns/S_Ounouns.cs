@@ -56,7 +56,7 @@ public class S_Ounouns : EnemyBase
             Vector3 direction = (player.position - transform.position).normalized;
 
             // Move toward the player
-            transform.position += direction * moveSpeed * Time.deltaTime;
+            transform.position += direction * (moveSpeed * Time.deltaTime);
         }
 
         // Look at the player horizontally (ignore vertical difference)
@@ -67,7 +67,7 @@ public class S_Ounouns : EnemyBase
         }
     }
 
-    /// <summary>
+    /// <summary>   
     /// Shoots a projectile toward the player if within line of sight.
     /// </summary>
     private void Shoot()

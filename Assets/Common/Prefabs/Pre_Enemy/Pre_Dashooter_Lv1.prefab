@@ -51,8 +51,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.99999964, y: 1, z: 1.2210693}
+  m_Center: {x: 0, y: 0, z: 0.11053467}
 --- !u!1 &5916809960135275563
 GameObject:
   m_ObjectHideFlags: 0
@@ -152,7 +152,7 @@ GameObject:
   - component: {fileID: 7519805034748081474}
   - component: {fileID: 5431389019751865463}
   m_Layer: 9
-  m_Name: Pre_Dashooter
+  m_Name: Pre_Dashooter_Lv1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -316,10 +316,10 @@ MonoBehaviour:
   enemyType: 5
   health: 100
   WeaknessExposureHealth: 95
-  enemyDamage: 150
-  WeakPoint: {fileID: 0}
+  enemyDamage: 80
+  WeakPoint: {fileID: 1883239479840324293}
   energyPoint: {fileID: 284891634115185361, guid: 729892a8825d4f64599abe6ea5c6f84b, type: 3}
-  energyDropQuantity: 50
+  energyDropQuantity: 30
   enemyGetHitVFX: {fileID: 2014564717100583912, guid: de8051323aef0554fb4a4ee3dd46ebed, type: 3}
   enemyDeathVFX: {fileID: 2014564717100583912, guid: 332f5cf35c013464e8ebf4ac6d81eedc, type: 3}
   enemyGetHitSound: 
@@ -330,14 +330,14 @@ MonoBehaviour:
   minDashDistance: 15
   closeDistance: 15
   farDistance: 50
-  dashInterval: {x: 0.5, y: 1}
+  dashInterval: {x: 1, y: 1.5}
   dashSpeed: 120
   prepareDuration: 0.5
   highPointChance: 0.8
   gridCountX: 10
   gridCountZ: 10
   gridSpacing: 9.53
-  gridHeight: 50
+  gridHeight: 25
   rayLength: 15
   groundLayerMask:
     serializedVersion: 2
@@ -353,13 +353,13 @@ MonoBehaviour:
   teleportSearchAttempts: 20
   chargeDuration: 0.5
   chargeRotationSpeed: 900
-  predictionAccuracy: 0.2
+  predictionAccuracy: 0.4
   laserSpeed: 300
   laserBlockMask:
     serializedVersion: 2
     m_Bits: 257
   laserTrailPrefab: {fileID: 3143253893264037667, guid: 5bd871b0e5eeaf74f8ddf6abed605868, type: 3}
-  fireDistance: 180
-  maxBeamDistance: 180
+  fireDistance: 120
+  maxBeamDistance: 120
   rotationSpeed: 5
   fallAcceleration: 30

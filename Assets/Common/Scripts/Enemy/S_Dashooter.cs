@@ -205,10 +205,11 @@ public class S_Dashooter : EnemyBase
         }
         transform.position = target;
 
-        col.enabled = true;
-        rb.isKinematic = false;
-        rb.useGravity = true;
         isDashing = false;
+        rb.isKinematic = false;
+        col.enabled = true;
+        rb.useGravity = true;
+        
     }
 
     private void ScheduleNextDash()

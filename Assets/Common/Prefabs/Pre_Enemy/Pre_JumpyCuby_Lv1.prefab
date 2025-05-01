@@ -262,8 +262,8 @@ MonoBehaviour:
   enemyName: 
   enemyType: 0
   health: 40
-  WeaknessExposureHealth: 20
-  enemyDamage: 50
+  WeaknessExposureHealth: 30
+  enemyDamage: 30
   WeakPoint: {fileID: 0}
   energyPoint: {fileID: 284891634115185361, guid: 7ffcda2ccc95748469e58c3af6c7c58f, type: 3}
   energyDropQuantity: 25
@@ -273,8 +273,8 @@ MonoBehaviour:
   enemyDeathSound: event:/Kill1
   extraWeakPointMaterial: {fileID: 2100000, guid: 152d9b433b056a84eac8846e6d4aff69, type: 2}
   weakPointRenderer: {fileID: 9163132484602687829}
-  jumpForce: 6
-  trackingForce: 10
+  jumpForce: 12
+  trackingForce: 8
   rotationSpeed: 5
   enableTracking: 1
   target: {fileID: 0}
@@ -282,6 +282,10 @@ MonoBehaviour:
   stretchDuration: 0.1
   squashFactor: 0.8
   stretchFactor: 1
+  bossMode: 0
+  bossShakeRadius: 5
+  bossShakeUpForce: 5
+  bossShakeOutwardForce: 5
   minJumpInterval: 0.5
   maxJumpInterval: 2
   gravityForce: 2
