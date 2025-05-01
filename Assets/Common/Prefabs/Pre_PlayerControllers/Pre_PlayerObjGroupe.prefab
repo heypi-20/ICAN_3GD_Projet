@@ -5806,7 +5806,7 @@ MonoBehaviour:
   raycastLength: 500
   raycastSpread: 0.5
   simulateBulletSpeed: 0
-  bulletSpeed: 120
+  bulletSpeed: 300
   fireRateLevels:
   - level: 1
     fireRate: 4
@@ -6743,8 +6743,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7881909655561821250}
   - component: {fileID: 4001390082554915747}
+  - component: {fileID: 5586089342190246847}
   m_Layer: 0
-  m_Name: SpawnBulletPoint
+  m_Name: BulletSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -6784,6 +6785,24 @@ MonoBehaviour:
   useDelayFollow: 0
   followDelay: 0.1
   rotationDelay: 0.1
+--- !u!114 &5586089342190246847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7724206884446061659}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 147cbccc73b37024baa260c0fbaf0322, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ProjectilePrefab_Lv1: {fileID: 3953531229119934194, guid: a99bbd84083b8384b86ee4590c4a1dec, type: 3}
+  ProjectilePrefab_Lv2: {fileID: 3953531229119934194, guid: a99bbd84083b8384b86ee4590c4a1dec, type: 3}
+  ProjectilePrefab_Lv3: {fileID: 3953531229119934194, guid: a99bbd84083b8384b86ee4590c4a1dec, type: 3}
+  ProjectilePrefab_Lv4: {fileID: 3953531229119934194, guid: f198e14c66f2eba4c87ed26fb5bc46a9, type: 3}
+  Speed: 300
+  ProjectileLifeTime: 3
 --- !u!1 &7772408927903293088
 GameObject:
   m_ObjectHideFlags: 0
