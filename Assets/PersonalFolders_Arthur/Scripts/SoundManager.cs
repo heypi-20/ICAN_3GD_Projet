@@ -81,6 +81,7 @@ public class SoundManager : MonoBehaviour
 
     [Header("Musique")]
     public string Globale_Musique;
+    
     //public S_Jauge_Tmp Jauge;
     public void Meth_Shoot_No_Hit(int currentLevel)
     {
