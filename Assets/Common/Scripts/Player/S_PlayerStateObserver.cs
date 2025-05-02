@@ -104,7 +104,7 @@ public class S_PlayerStateObserver : MonoBehaviour
 
     private void OnLevelStateChange(Enum state, int level)
     {
-        UpdateStateUI(state);
+        UpdateStateUI(state,level);
         OnLevelUpStateEvent?.Invoke(state, level);
     }
 
@@ -125,20 +125,31 @@ public class S_PlayerStateObserver : MonoBehaviour
     }
 
 
-    private void UpdateStateUI(Enum state)
-    {// Convert enum to string
+    private void UpdateStateUI(Enum state, float? levelValue = null)
+    {
+        // Convert the enum to its name
         string stateString = state.ToString();
 
-        // Add the new state to the queue
-        stateHistory.Enqueue(stateString);
-
-        // Ensure only the last 5 states are stored
-        if (stateHistory.Count > maxHistory)
+        // If a level value was provided, append it
+        if (levelValue.HasValue)
         {
-            stateHistory.Dequeue(); // Remove the oldest entry
+            // If the value is whole, drop the “.0”; otherwise show up to two decimals
+            string levelText = levelValue.Value % 1 == 0
+                ? ((int)levelValue.Value).ToString()
+                : levelValue.Value.ToString("0.##");
+            stateString += $" (Level: {levelText})";
         }
 
-        // Update the UI text
+        // Enqueue the new state string
+        stateHistory.Enqueue(stateString);
+
+        // Keep only the most recent maxHistory entries
+        if (stateHistory.Count > maxHistory)
+        {
+            stateHistory.Dequeue();
+        }
+
+        // Update the UI text field
         stateText.text = string.Join("\n", stateHistory);
     }
     
