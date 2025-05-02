@@ -95,6 +95,8 @@ public class SoundManager : MonoBehaviour
     public EventReference Music_Lvl4;
     private EventInstance Instance_Music_Lvl4;
     
+    public string Secret_surprise;
+    
     
     private int actuallevel;
     //public S_EnergyStorage energy_storage;
@@ -304,6 +306,14 @@ public class SoundManager : MonoBehaviour
                 Instance_CAC_Used = RuntimeManager.CreateInstance(Used_CAC);
                 Instance_CAC_Used.start();
                 break;
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            FMODUnity.RuntimeManager.PlayOneShot(Secret_surprise);
         }
     }
 }
