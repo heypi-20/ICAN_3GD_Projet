@@ -17,6 +17,16 @@ public class DisplayEffect : MonoBehaviour
     {
         startPosition = transform.position;
 
+        if (GetComponent<Renderer>() != null)
+        {
+            // Définir le centre de l'objet pour que la rotation soit centrée
+            objectCenter = GetComponent<Renderer>().bounds.center;
+        }
+        
+    }
+
+    void Update()
+    {
         // Définit l'axe de rotation
         switch (rotationAxis)
         {
@@ -24,18 +34,7 @@ public class DisplayEffect : MonoBehaviour
             case RotationAxis.Y: rotationVector = transform.up; break;
             case RotationAxis.Z: rotationVector = transform.forward; break;
         }
-
-        if (GetComponent<Renderer>() != null)
-        {
-            // Définir le centre de l'objet pour que la rotation soit centrée
-            objectCenter = GetComponent<Renderer>().bounds.center;
-        }
-
-
-    }
-
-    void Update()
-    {
+        
         // Mouvement vertical
         float newY = startPosition.y + Mathf.Sin(Time.time * floatSpeed) * floatHeight;
         transform.position = new Vector3(transform.position.x, newY, transform.position.z);
