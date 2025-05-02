@@ -2011,7 +2011,7 @@ Transform:
   m_GameObject: {fileID: 3801643264983334931}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -22, y: 15.5, z: 8.53}
+  m_LocalPosition: {x: 0, y: 0.4, z: 0.13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3017,7 +3017,7 @@ Transform:
   m_GameObject: {fileID: 5268579106117334288}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -22, y: 15.5, z: 8.53}
+  m_LocalPosition: {x: 0, y: 0.4, z: 0.13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3065,7 +3065,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 3071
+    m_Bits: 11263
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -3959,7 +3959,7 @@ Transform:
   m_GameObject: {fileID: 6376292503174423671}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -22, y: 15.1, z: 8.4}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3983,7 +3983,7 @@ CharacterController:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 4
+    m_Bits: 8196
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -4133,8 +4133,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detectionRadius: 25
-  maxDetectedObjects: 40
-  pullSpeed: 200
+  maxDetectedObjects: 200
+  energyLayerMask:
+    serializedVersion: 2
+    m_Bits: 8192
+  pullSpeed: 120
 --- !u!114 &4618156451083959548
 MonoBehaviour:
   m_ObjectHideFlags: 0
