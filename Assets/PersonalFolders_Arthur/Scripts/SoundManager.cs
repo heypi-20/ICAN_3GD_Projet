@@ -244,6 +244,41 @@ public class SoundManager : MonoBehaviour
                 Instance_Music_Lvl4.start();
                 Instance_Music_Lvl3.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 break;
+            case PlayerStates.LevelState.StartGrace when Level == 2:
+                StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl2, 1f, 0f, 5f));
+                break;
+
+            case PlayerStates.LevelState.EndGrace when Level == 2:
+                StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl2, 0f, 1f, 0.2f));
+                break;
+
+            case PlayerStates.LevelState.StartGrace when Level == 3:
+                StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl3, 1f, 0f, 5f));
+                break;
+
+            case PlayerStates.LevelState.EndGrace when Level == 3:
+                StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl3, 0f, 1f, 0.2f));
+                break;
+
+            case PlayerStates.LevelState.StartGrace when Level == 4:
+                StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl4, 1f, 0f, 5f));
+                break;
+
+            case PlayerStates.LevelState.EndGrace when Level == 4:
+                StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl4, 0f, 1f, 0.2f));
+                break;
+        }
+        IEnumerator ChangePitchOverTime(EventInstance musicInstance, float from, float to, float duration)
+        {
+            float elapsed = 0f;
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float value = Mathf.Lerp(from, to, elapsed / duration);
+                musicInstance.setParameterByName("Pitch_Music", value);
+                yield return null;
+            }
+            musicInstance.setParameterByName("Pitch_Music", to); // Assure la valeur finale
         }
     }
 }
