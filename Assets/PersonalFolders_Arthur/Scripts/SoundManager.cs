@@ -88,6 +88,7 @@ public class SoundManager : MonoBehaviour
     public string Gain_Pallier;
     public string Loose_Pallier;
     private int actuallevel;
+    public S_EnergyStorage energy_storage;
     
     //public S_Jauge_Tmp Jauge;
     public void Meth_Shoot_No_Hit(int currentLevel)
@@ -185,11 +186,24 @@ public class SoundManager : MonoBehaviour
         FMOD.RESULT result = RuntimeManager.StudioSystem.setParameterByName("Palier", value);
     }
 
-    // private void Start()
-    // {
-    //     if (S_PlayerStateObserver.Instance.OnLevelUpStateEvent(PlayerStates.LevelState.LevelUp, ))
-    //     {
-    //        
-    //     }
-    // }
+    private void Update()
+    {
+        actuallevel = energy_storage.currentLevelIndex;
+    }
+
+    private void Start()
+    {
+        S_PlayerStateObserver.Instance.OnLevelUpStateEvent += LevelChanged;
+    }
+
+    private void LevelChanged(Enum state,int Level)
+    {
+        switch (state)
+        {
+            case PlayerStates.LevelState.LevelUp when Level == 1 : 
+                
+                
+                break;
+        }
+    }
 }
