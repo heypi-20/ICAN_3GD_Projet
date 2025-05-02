@@ -130,7 +130,7 @@ public class S_ComboSystem : MonoBehaviour
     private void ResetCombo()
     {
         comboActive = false;
-        currentComboMultiplier = 0f;
+        currentComboMultiplier = 1f;
         comboActuelTimer = 0f;
         comboKillCount = 0;
         currentComboSetting = null;
