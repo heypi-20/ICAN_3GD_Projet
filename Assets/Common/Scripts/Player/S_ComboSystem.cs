@@ -23,9 +23,10 @@ public class S_ComboSystem : MonoBehaviour
     private S_EnergyStorage energyStorage;
 
     // Current combo state variables.
-    private bool comboActive = false;
+    public bool comboActive = false;
     public float currentComboMultiplier = 0f;
-    private float comboTimer = 0f;
+    public float comboActuelTimer = 0f;
+    public int comboKillCount;
     private ComboSettings currentComboSetting = null;
 
     // Reference to the TextMeshProUGUI component to display combo information.
@@ -65,7 +66,7 @@ public class S_ComboSystem : MonoBehaviour
             // Start the combo for the first kill.
             currentComboSetting = newSetting;
             currentComboMultiplier = currentComboSetting.minComboMultiplier;
-            comboTimer = currentComboSetting.comboTime;
+            comboActuelTimer = currentComboSetting.comboTime;
             comboActive = true;
             // Display initial combo information.
             comboText.text = $"Combo started, multiplier: {currentComboMultiplier:F2}";
@@ -78,17 +79,18 @@ public class S_ComboSystem : MonoBehaviour
                 // Update combo settings for new energy level while keeping current multiplier.
                 currentComboSetting = newSetting;
                 // Reset combo timer using new settings.
-                comboTimer = currentComboSetting.comboTime;
+                comboActuelTimer = currentComboSetting.comboTime;
                 comboText.text = $"Energy level upgraded, combo updated, multiplier remains: {currentComboMultiplier:F2}";
             }
             else
             {
                 // Reset combo timer.
-                comboTimer = currentComboSetting.comboTime;
+                comboActuelTimer = currentComboSetting.comboTime;
             }
 
             // Increase combo multiplier, but do not exceed maximum.
             currentComboMultiplier += currentComboSetting.GainPerKill;
+            comboKillCount += 1;
             if (currentComboMultiplier > currentComboSetting.maxComboMultiplier)
             {
                 currentComboMultiplier = currentComboSetting.maxComboMultiplier;
@@ -102,10 +104,10 @@ public class S_ComboSystem : MonoBehaviour
         // If combo is active, decrease timer and update text.
         if (comboActive)
         {
-            comboTimer -= Time.deltaTime;
+            comboActuelTimer -= Time.deltaTime;
             // Update text to show current multiplier and remaining time.
-            comboText.text = $"Combo multiplier: {currentComboMultiplier:F2} | Time left: {comboTimer:F2}";
-            if (comboTimer <= 0)
+            comboText.text = $"Combo multiplier: {currentComboMultiplier:F2} | Time left: {comboActuelTimer:F2}";
+            if (comboActuelTimer <= 0)
             {
                 // Combo timed out, reset combo state.
                 ResetCombo();
@@ -129,7 +131,8 @@ public class S_ComboSystem : MonoBehaviour
     {
         comboActive = false;
         currentComboMultiplier = 0f;
-        comboTimer = 0f;
+        comboActuelTimer = 0f;
+        comboKillCount = 0;
         currentComboSetting = null;
         comboText.text = "";
     }

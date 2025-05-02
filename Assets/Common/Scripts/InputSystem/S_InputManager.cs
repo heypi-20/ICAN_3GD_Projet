@@ -38,25 +38,33 @@ public class S_InputManager : MonoBehaviour
 
     private void OnMovePerformed(InputAction.CallbackContext ctx)
     {
-        if (S_PlayerStateObserver.Instance.LastGroundPoundState != null)
-            return;
+        if (S_PlayerStateObserver.Instance != null)
+        {
+            if (S_PlayerStateObserver.Instance.LastGroundPoundState != null)
+                return;
+        }
     
         MoveInput = ctx.ReadValue<Vector2>();
     }
 
     private void OnJumpPerformed(InputAction.CallbackContext ctx)
     {
-        if (S_PlayerStateObserver.Instance.LastGroundPoundState != null)
-            return;
+        if (S_PlayerStateObserver.Instance != null)
+        {
+            if (S_PlayerStateObserver.Instance.LastGroundPoundState != null)
+                return;
+        }
     
         JumpInput = true;
     }
 
     private void OnSprintPerformed(InputAction.CallbackContext ctx)
     {
-        if (S_PlayerStateObserver.Instance.LastGroundPoundState != null)
-            return;
-    
+        if (S_PlayerStateObserver.Instance != null)
+        {
+            if (S_PlayerStateObserver.Instance.LastGroundPoundState != null)
+                return;
+        }
         SprintInput = true;
     }
 
@@ -67,9 +75,11 @@ public class S_InputManager : MonoBehaviour
 
     private void OnShootPerformed(InputAction.CallbackContext ctx)
     {
-        if (S_PlayerStateObserver.Instance.LastGroundPoundState != null)
-            return;
-    
+        if (S_PlayerStateObserver.Instance != null)
+        {
+            if (S_PlayerStateObserver.Instance.LastGroundPoundState != null)
+                return;
+        }
         ShootInput = true;
     }
 
@@ -80,8 +90,11 @@ public class S_InputManager : MonoBehaviour
 
     private void OnMeleeAttackPerformed(InputAction.CallbackContext ctx)
     {
-        if (S_PlayerStateObserver.Instance.LastGroundPoundState != null)
-            return;
+        if (S_PlayerStateObserver.Instance != null)
+        {
+            if (S_PlayerStateObserver.Instance.LastGroundPoundState != null)
+                return;
+        }
     
         MeleeAttackInput = true;
     }

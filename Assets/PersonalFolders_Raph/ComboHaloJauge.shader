@@ -1,12 +1,15 @@
-﻿Shader "URP/Unlit/WaveInsideMask_AutoAnim"
+﻿Shader "URP/Unlit/RotatingHaloMasked"
 {
     Properties
     {
         _MaskTex ("Shape Mask (Alpha)", 2D) = "white" {}
-        _WaveTex ("Wave Texture", 2D) = "white" {}
-        _WaveSpeed ("Wave Speed", Float) = 1
-        _WaveScale ("Wave Scale", Float) = 1
-        _WaveColor ("Wave Color", Color) = (1,1,1,1)
+        _HaloColor ("Halo Color", Color) = (1,1,1,1)
+        _HaloAlpha ("Halo Transparency", Range(0.0, 1.0)) = 0.5
+        _HaloWidth ("Halo Width", Range(0.01, 1.0)) = 0.1
+        _HaloSharpness ("Halo Sharpness", Range(1, 50)) = 10
+        _Speed ("Rotation Speed", Float) = 1.0
+        _AngleOffset ("Angle Offset", Float) = 0
+        [Toggle] _InvertDirection ("Invert Rotation (Clockwise)", Float) = 0
     }
 
     SubShader
@@ -24,27 +27,37 @@
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
             sampler2D _MaskTex;
-            sampler2D _WaveTex;
-
             float4 _MaskTex_ST;
-            float4 _WaveTex_ST;
 
-            float _WaveSpeed;
-            float _WaveScale;
-            float4 _WaveColor;
+            float4 _HaloColor;
+            float _HaloAlpha;
+            float _HaloWidth;
+            float _HaloSharpness;
+            float _Speed;
+            float _AngleOffset;
+            float _InvertDirection;
 
-            struct Attributes { float4 posOS : POSITION; float2 uv : TEXCOORD0; };
-            struct Varyings { float4 posCS : SV_POSITION; float2 uv : TEXCOORD0; };
+            struct Attributes
+            {
+                float4 positionOS : POSITION;
+                float2 uv : TEXCOORD0;
+            };
 
-            Varyings vert(Attributes IN)
+            struct Varyings
+            {
+                float4 positionCS : SV_POSITION;
+                float2 uv : TEXCOORD0;
+            };
+
+            Varyings vert (Attributes IN)
             {
                 Varyings OUT;
-                OUT.posCS = TransformObjectToHClip(IN.posOS);
-                OUT.uv = IN.uv;
+                OUT.positionCS = TransformObjectToHClip(IN.positionOS);
+                OUT.uv = TRANSFORM_TEX(IN.uv, _MaskTex);
                 return OUT;
             }
 
-            half4 frag(Varyings IN) : SV_Target
+            half4 frag (Varyings IN) : SV_Target
             {
                 float2 uv = IN.uv;
 
@@ -53,15 +66,24 @@
                 if (alpha < 0.01)
                     discard;
 
-                // Animation permanente dans l’UV
-                float2 waveUV = uv * _WaveScale + float2(_Time.y * _WaveSpeed, 0.0);
-                float wave = tex2D(_WaveTex, waveUV).r;
+                // Coordonnées centrées pour calcul d’angle
+                float2 centeredUV = uv * 2.0 - 1.0;
+                float angle = atan2(centeredUV.y, centeredUV.x);
+                angle = (angle + 3.14159265) / (2.0 * 3.14159265); // Normalize [0..1]
 
-                // Combine avec la couleur des vagues et masque alpha
-                float4 col = _WaveColor * wave;
-                col.a = wave * alpha;
+                // Sens du temps
+                float direction = (_InvertDirection > 0.5) ? -1.0 : 1.0;
+                float rotation = frac(angle + (direction * _Time.y * _Speed) + _AngleOffset);
 
-                return col;
+                // Forme du halo
+                float halo = exp(-pow((rotation - 0.5) / _HaloWidth, 2.0) * _HaloSharpness);
+
+                float intensity = halo * alpha;
+
+                float4 finalColor = _HaloColor * intensity;
+                finalColor.a = intensity * _HaloAlpha;
+
+                return finalColor;
             }
             ENDHLSL
         }
