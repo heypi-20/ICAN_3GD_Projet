@@ -81,13 +81,19 @@ public class SoundManager : MonoBehaviour
     public string JumpyCuby_Jump;
 
     [Header("Musique")]
-    public string Music_Lvl1;
-    public string Music_Lvl2;
-    public string Music_Lvl3;
-    public string Music_Lvl4;
+    public EventReference Music_Lvl1;
+    private EventInstance Instance_Music_Lvl1;
+    public EventReference Music_Lvl2;
+    private EventInstance Instance_Music_Lvl2;
+    public EventReference Music_Lvl3;
+    private EventInstance Instance_Music_Lvl3;
+    public EventReference Music_Lvl4;
+    private EventInstance Instance_Music_Lvl4;
+    
     public string Gain_Pallier;
     public string Loose_Pallier;
     private int actuallevel;
+    public S_EnergyStorage energy_storage;
     
     //public S_Jauge_Tmp Jauge;
     public void Meth_Shoot_No_Hit(int currentLevel)
@@ -185,11 +191,94 @@ public class SoundManager : MonoBehaviour
         FMOD.RESULT result = RuntimeManager.StudioSystem.setParameterByName("Palier", value);
     }
 
-    // private void Start()
-    // {
-    //     if (S_PlayerStateObserver.Instance.OnLevelUpStateEvent(PlayerStates.LevelState.LevelUp, ))
-    //     {
-    //        
-    //     }
-    // }
+    private void Update()
+    {
+        actuallevel = energy_storage.currentLevelIndex;
+    }
+
+    private void Start()
+    {
+        S_PlayerStateObserver.Instance.OnLevelUpStateEvent += LevelChanged;
+        Instance_Music_Lvl1 = RuntimeManager.CreateInstance(Music_Lvl1);
+        Instance_Music_Lvl1.start();
+    }
+
+    private void LevelChanged(Enum state,int Level)
+    {
+        switch (state)
+        {
+            case PlayerStates.LevelState.LevelDown when Level == 1 : 
+                FMODUnity.RuntimeManager.PlayOneShot(Loose_Pallier);
+                Instance_Music_Lvl1.start();
+                Instance_Music_Lvl2.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                break;
+            
+            case PlayerStates.LevelState.LevelDown when Level == 2 : 
+                FMODUnity.RuntimeManager.PlayOneShot(Loose_Pallier);
+                Instance_Music_Lvl2.start();
+                Instance_Music_Lvl3.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                break;
+            case PlayerStates.LevelState.LevelDown when Level == 3 : 
+                FMODUnity.RuntimeManager.PlayOneShot(Loose_Pallier);
+                Instance_Music_Lvl3.start();
+                Instance_Music_Lvl4.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                break;
+            
+            
+            
+            case PlayerStates.LevelState.LevelUp when Level == 2 : 
+                FMODUnity.RuntimeManager.PlayOneShot(Gain_Pallier);
+                Instance_Music_Lvl2 = RuntimeManager.CreateInstance(Music_Lvl2);
+                Instance_Music_Lvl2.start();
+                Instance_Music_Lvl1.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                break;
+            case PlayerStates.LevelState.LevelUp when Level == 3 : 
+                Instance_Music_Lvl3 = RuntimeManager.CreateInstance(Music_Lvl3);
+                FMODUnity.RuntimeManager.PlayOneShot(Gain_Pallier);
+                Instance_Music_Lvl3.start();
+                Instance_Music_Lvl2.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                break;
+            case PlayerStates.LevelState.LevelUp when Level == 4 : 
+                Instance_Music_Lvl4 = RuntimeManager.CreateInstance(Music_Lvl4);
+                FMODUnity.RuntimeManager.PlayOneShot(Gain_Pallier);
+                Instance_Music_Lvl4.start();
+                Instance_Music_Lvl3.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                break;
+            case PlayerStates.LevelState.StartGrace when Level == 2:
+                StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl2, 1f, 0f, 5f));
+                break;
+
+            case PlayerStates.LevelState.EndGrace when Level == 2:
+                StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl2, 0f, 1f, 0.2f));
+                break;
+
+            case PlayerStates.LevelState.StartGrace when Level == 3:
+                StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl3, 1f, 0f, 5f));
+                break;
+
+            case PlayerStates.LevelState.EndGrace when Level == 3:
+                StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl3, 0f, 1f, 0.2f));
+                break;
+
+            case PlayerStates.LevelState.StartGrace when Level == 4:
+                StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl4, 1f, 0f, 5f));
+                break;
+
+            case PlayerStates.LevelState.EndGrace when Level == 4:
+                StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl4, 0f, 1f, 0.2f));
+                break;
+        }
+        IEnumerator ChangePitchOverTime(EventInstance musicInstance, float from, float to, float duration)
+        {
+            float elapsed = 0f;
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float value = Mathf.Lerp(from, to, elapsed / duration);
+                musicInstance.setParameterByName("Pitch_Music", value);
+                yield return null;
+            }
+            musicInstance.setParameterByName("Pitch_Music", to); // Assure la valeur finale
+        }
+    }
 }
