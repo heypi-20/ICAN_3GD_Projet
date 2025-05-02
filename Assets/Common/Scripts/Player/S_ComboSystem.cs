@@ -27,7 +27,7 @@ public class S_ComboSystem : MonoBehaviour
     public float currentComboMultiplier = 0f;
     public float comboActuelTimer = 0f;
     public int comboKillCount;
-    private ComboSettings currentComboSetting = null;
+    public ComboSettings currentComboSetting = null;
 
     // Reference to the TextMeshProUGUI component to display combo information.
     public TextMeshProUGUI comboText;
@@ -69,7 +69,7 @@ public class S_ComboSystem : MonoBehaviour
             comboActuelTimer = currentComboSetting.comboTime;
             comboActive = true;
             // Display initial combo information.
-            comboText.text = $"Combo started, multiplier: {currentComboMultiplier:F2}";
+            //comboText.text = $"Combo started, multiplier: {currentComboMultiplier:F2}";
         }
         else
         {
@@ -80,7 +80,7 @@ public class S_ComboSystem : MonoBehaviour
                 currentComboSetting = newSetting;
                 // Reset combo timer using new settings.
                 comboActuelTimer = currentComboSetting.comboTime;
-                comboText.text = $"Energy level upgraded, combo updated, multiplier remains: {currentComboMultiplier:F2}";
+                //comboText.text = $"Energy level upgraded, combo updated, multiplier remains: {currentComboMultiplier:F2}";
             }
             else
             {
@@ -95,7 +95,7 @@ public class S_ComboSystem : MonoBehaviour
             {
                 currentComboMultiplier = currentComboSetting.maxComboMultiplier;
             }
-            comboText.text = $"Combo updated, multiplier: {currentComboMultiplier:F2}";
+            //comboText.text = $"Combo updated, multiplier: {currentComboMultiplier:F2}";
         }
     }
 
@@ -106,7 +106,7 @@ public class S_ComboSystem : MonoBehaviour
         {
             comboActuelTimer -= Time.deltaTime;
             // Update text to show current multiplier and remaining time.
-            comboText.text = $"Combo multiplier: {currentComboMultiplier:F2} | Time left: {comboActuelTimer:F2}";
+            //comboText.text = $"Combo multiplier: {currentComboMultiplier:F2} | Time left: {comboActuelTimer:F2}";
             if (comboActuelTimer <= 0)
             {
                 // Combo timed out, reset combo state.
