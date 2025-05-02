@@ -23,6 +23,13 @@ public class ComboEffect : MonoBehaviour
     public TextMeshPro killText;
     public TextMeshPro multiplicateurText;
 
+    [Header("Lissage d'affichage")]
+    [Tooltip("Vitesse de lissage pour le compteur de kills")]
+    public float killLerpSpeed = 5f;
+
+    // valeur interne lissée pour le compteur de kills
+    private float displayedKills = 0f;
+
     void Update()
     {
         if (comboSystem == null) return;
@@ -31,39 +38,41 @@ public class ComboEffect : MonoBehaviour
         if (comboSystem.comboActive)
         {
             // Montrer les visuels
-            if (redBarObject != null) redBarObject.SetActive(true);
-            if (haloObject != null) haloObject.SetActive(true);
-            if (killText != null) killText.gameObject.SetActive(true);
-            if (multiplicateurText != null) multiplicateurText.gameObject.SetActive(true);
+            redBarObject?.SetActive(true);
+            haloObject?.SetActive(true);
+            killText?.gameObject.SetActive(true);
+            multiplicateurText?.gameObject.SetActive(true);
 
             // Calcul du ratio combo
             float ratio = Mathf.Clamp01(1f - comboSystem.comboActuelTimer / comboSystem.currentComboSetting.comboTime);
             float mapped = 0.5f + 0.5f * ratio;
             redBarMaterial?.SetFloat(redBarProgressProperty, mapped);
-            Debug.Log("rqtio:" + mapped);
-            // MAJ jauge rouge (shader)
 
             // MAJ halo (shader)
-            if (haloMaterial != null)
-            {
-                haloMaterial.SetFloat(haloCutoffProperty, ratio);
-                haloMaterial.SetFloat(haloProgressProperty, ratio);
-            }
+            haloMaterial?.SetFloat(haloCutoffProperty, ratio);
+            haloMaterial?.SetFloat(haloProgressProperty, ratio);
 
-            // MAJ textes
+            // —— Lissage du compteur de kills ——
+            float targetKills = comboSystem.comboKillCount;
+            displayedKills = Mathf.Lerp(displayedKills, targetKills, Time.deltaTime * killLerpSpeed);
+            int shownKills = Mathf.FloorToInt(displayedKills + 0.5f);
             if (killText != null)
-                killText.text = $" {comboSystem.comboKillCount}";
+                killText.text = shownKills.ToString();
 
+            // MAJ multiplicateur (sans lissage)
             if (multiplicateurText != null)
                 multiplicateurText.text = $"x{comboSystem.currentComboMultiplier:F2}";
         }
         else
         {
             // Combo inactif → cacher les éléments
-            if (redBarObject != null) redBarObject.SetActive(false);
-            if (haloObject != null) haloObject.SetActive(false);
-            if (killText != null) killText.gameObject.SetActive(false);
-            if (multiplicateurText != null) multiplicateurText.gameObject.SetActive(false);
+            redBarObject?.SetActive(false);
+            haloObject?.SetActive(false);
+            killText?.gameObject.SetActive(false);
+            multiplicateurText?.gameObject.SetActive(false);
+
+            // Réinitialiser le lissage
+            displayedKills = 0f;
         }
     }
 }
