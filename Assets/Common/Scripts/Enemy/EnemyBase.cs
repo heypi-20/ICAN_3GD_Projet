@@ -34,7 +34,7 @@ public class EnemyBase : MonoBehaviour
     
     // Called when the object is enabled (e.g., when reused from the pool)
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         FindWeakPoint();             // Find and disable the weak point
         currentHealth = health;      // Reset health

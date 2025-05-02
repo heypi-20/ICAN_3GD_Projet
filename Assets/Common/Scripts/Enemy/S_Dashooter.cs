@@ -76,6 +76,12 @@ public class S_Dashooter : EnemyBase
         ScheduleNextDash();
     }
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        isDashing = false;
+    }
+
     private void Update()
     {
         if (player == null || isDashing) return;
