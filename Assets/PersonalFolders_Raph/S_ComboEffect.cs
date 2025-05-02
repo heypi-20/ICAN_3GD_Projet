@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 using TMPro;
 
-public class ComboEffect : MonoBehaviour
+[ExecuteAlways]
+public class S_ComboEffect : MonoBehaviour
 {
     [Header("Références système combo")]
     public S_ComboSystem comboSystem;
@@ -27,11 +29,31 @@ public class ComboEffect : MonoBehaviour
     [Tooltip("Vitesse de lissage pour le compteur de kills")]
     public float killLerpSpeed = 5f;
 
+    [Header("Dotween Animation")]
+    [Tooltip("Le DOTweenPlayer qui animera le KillText")]
+    public S_DotweenPlayer dotweenPlayer;
+    [Tooltip("Temps minimal (s) entre deux déclenchements")]
+    public float tweenCooldown = 0.1f;
+
+    // variables internes pour limiter la fréquence
+    private int lastKillCount = 0;
+    private float lastTweenTime = -Mathf.Infinity;
+
     // valeur interne lissée pour le compteur de kills
     private float displayedKills = 0f;
 
     void Update()
     {
+        // Si on est dans l’éditeur et pas en train de jouer :
+        if (!Application.isPlaying)
+        {
+            redBarObject?.SetActive(true);
+            haloObject?.SetActive(true);
+            killText?.gameObject.SetActive(true);
+            multiplicateurText?.gameObject.SetActive(true);
+            return;   // on ne fait rien d’autre
+        }
+
         if (comboSystem == null) return;
 
         // Combo actif
@@ -58,6 +80,15 @@ public class ComboEffect : MonoBehaviour
             int shownKills = Mathf.FloorToInt(displayedKills + 0.5f);
             if (killText != null)
                 killText.text = shownKills.ToString();
+
+            if (comboSystem.comboKillCount > lastKillCount
+            && Time.time - lastTweenTime >= tweenCooldown
+            && dotweenPlayer != null)
+            {
+                dotweenPlayer.Play();
+                lastTweenTime = Time.time;
+            }
+            lastKillCount = comboSystem.comboKillCount;
 
             // MAJ multiplicateur (sans lissage)
             if (multiplicateurText != null)

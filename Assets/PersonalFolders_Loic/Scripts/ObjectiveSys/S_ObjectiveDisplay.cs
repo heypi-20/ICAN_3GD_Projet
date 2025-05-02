@@ -8,7 +8,7 @@ public class S_ObjectiveDisplay : MonoBehaviour {
     
     private Objective _objective;
 
-    private void Start()
+    private void Awake()
     {
         _objectiveText = GetComponent<TextMeshProUGUI>();
     }

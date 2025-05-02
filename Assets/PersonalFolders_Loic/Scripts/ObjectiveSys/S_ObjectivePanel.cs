@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class S_ObjectivePanel : MonoBehaviour
@@ -10,8 +11,19 @@ public class S_ObjectivePanel : MonoBehaviour
     private Transform _objectiveDisplayParent;
 
     private readonly List<S_ObjectiveDisplay> _listDisplay = new();
+    private S_ObjectiveManager ObjectiveManager;
 
-    void Start() {
+    private void Start()
+    {
+        ObjectiveManager = FindObjectOfType<S_ObjectiveSystem>().ObjectiveManager;
+        
+        if (ObjectiveManager == null)
+            return;
+        
+        foreach(Objective objective in ObjectiveManager.Objectives) {
+            AddObjective(objective);
+        }
+        ObjectiveManager.OnObjectiveAdded += AddObjective;
         // Assumes you have a GameManager Singleton with the ObjectiveManager
         // foreach (var objective in GameManager.Instance.Objectives.Objectives) {
         //     AddObjective(objective);
