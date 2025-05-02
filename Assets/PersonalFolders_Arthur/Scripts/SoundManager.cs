@@ -54,9 +54,14 @@ public class SoundManager : MonoBehaviour
     public string Shoot_Kill2;
     public string Shoot_Kill3;
     public string Shoot_Kill4;
-    
+
     [Header("CAC")] 
-    public string CAC_Active;
+    public EventReference Active_CAC;
+    private EventInstance Instance_CAC_Active;
+    public EventReference Used_CAC;
+    private EventInstance Instance_CAC_Used;
+    public EventReference Dash_CAC;
+    private EventInstance Instance_Dash_CAC;
     
     [Header("Jump")] 
     public string Used_Jump;
@@ -138,10 +143,10 @@ public class SoundManager : MonoBehaviour
             FMODUnity.RuntimeManager.PlayOneShot(Shoot_Kill4);
         }
     }
-
-    public void Meth_Active_CAC()
+    public void Meth_Used_CAC()
     {
-        FMODUnity.RuntimeManager.PlayOneShot(CAC_Active);
+        Instance_CAC_Used = RuntimeManager.CreateInstance(Used_CAC);
+        Instance_CAC_Used.start();
     }
     public void Meth_Used_Jump()
     {
@@ -193,6 +198,7 @@ public class SoundManager : MonoBehaviour
     private void Start()
     {
         S_PlayerStateObserver.Instance.OnLevelUpStateEvent += LevelChanged;
+        S_PlayerStateObserver.Instance.OnMeleeAttackStateEvent += MeleeState;
         Instance_Music_Lvl1 = RuntimeManager.CreateInstance(Music_Lvl1);
         Instance_Music_Lvl1.start();
     }
@@ -276,6 +282,28 @@ public class SoundManager : MonoBehaviour
                 yield return null;
             }
             musicInstance.setParameterByName("Pitch_Music", to); // Assure la valeur finale
+        }
+    }
+
+
+    private void MeleeState(Enum State,int Level)
+    {
+        switch (State)
+        {
+            case PlayerStates.MeleeState.StartMeleeAttack : 
+                Instance_CAC_Active = RuntimeManager.CreateInstance(Active_CAC);
+                Instance_CAC_Active.start();
+                break;
+            
+            case PlayerStates.MeleeState.DashingBeforeMelee : 
+                Instance_Dash_CAC = RuntimeManager.CreateInstance(Dash_CAC);
+                Instance_Dash_CAC.start();
+                break;
+            case PlayerStates.MeleeState.MeleeAttackHit :
+                Debug.Log("HitHithit");
+                Instance_CAC_Used = RuntimeManager.CreateInstance(Used_CAC);
+                Instance_CAC_Used.start();
+                break;
         }
     }
 }

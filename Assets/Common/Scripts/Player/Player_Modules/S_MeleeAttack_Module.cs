@@ -100,9 +100,6 @@ public class S_MeleeAttack_Module : MonoBehaviour
         
         // Wait for the windup time
         yield return new WaitForSeconds(windupTime);
-
-        // Play the attack sound effect (executed after the windup ends)
-        SoundManager.Instance.Meth_Active_CAC();
         
         // Execute the melee attack logic
         PerformMeleeAttack(currentLevel);
