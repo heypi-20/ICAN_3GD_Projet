@@ -90,8 +90,7 @@ public class SoundManager : MonoBehaviour
     public EventReference Music_Lvl4;
     private EventInstance Instance_Music_Lvl4;
     
-    public string Gain_Pallier;
-    public string Loose_Pallier;
+    
     private int actuallevel;
     public S_EnergyStorage energy_storage;
     
@@ -208,18 +207,18 @@ public class SoundManager : MonoBehaviour
         switch (state)
         {
             case PlayerStates.LevelState.LevelDown when Level == 1 : 
-                FMODUnity.RuntimeManager.PlayOneShot(Loose_Pallier);
+                FMODUnity.RuntimeManager.PlayOneShot(Loose_Palier);
                 Instance_Music_Lvl1.start();
                 Instance_Music_Lvl2.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 break;
             
             case PlayerStates.LevelState.LevelDown when Level == 2 : 
-                FMODUnity.RuntimeManager.PlayOneShot(Loose_Pallier);
+                FMODUnity.RuntimeManager.PlayOneShot(Loose_Palier);
                 Instance_Music_Lvl2.start();
                 Instance_Music_Lvl3.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 break;
             case PlayerStates.LevelState.LevelDown when Level == 3 : 
-                FMODUnity.RuntimeManager.PlayOneShot(Loose_Pallier);
+                FMODUnity.RuntimeManager.PlayOneShot(Loose_Palier);
                 Instance_Music_Lvl3.start();
                 Instance_Music_Lvl4.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 break;
@@ -227,20 +226,20 @@ public class SoundManager : MonoBehaviour
             
             
             case PlayerStates.LevelState.LevelUp when Level == 2 : 
-                FMODUnity.RuntimeManager.PlayOneShot(Gain_Pallier);
+                FMODUnity.RuntimeManager.PlayOneShot(Gain_Palier);
                 Instance_Music_Lvl2 = RuntimeManager.CreateInstance(Music_Lvl2);
                 Instance_Music_Lvl2.start();
                 Instance_Music_Lvl1.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 break;
             case PlayerStates.LevelState.LevelUp when Level == 3 : 
                 Instance_Music_Lvl3 = RuntimeManager.CreateInstance(Music_Lvl3);
-                FMODUnity.RuntimeManager.PlayOneShot(Gain_Pallier);
+                FMODUnity.RuntimeManager.PlayOneShot(Gain_Palier);
                 Instance_Music_Lvl3.start();
                 Instance_Music_Lvl2.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 break;
             case PlayerStates.LevelState.LevelUp when Level == 4 : 
                 Instance_Music_Lvl4 = RuntimeManager.CreateInstance(Music_Lvl4);
-                FMODUnity.RuntimeManager.PlayOneShot(Gain_Pallier);
+                FMODUnity.RuntimeManager.PlayOneShot(Gain_Palier);
                 Instance_Music_Lvl4.start();
                 Instance_Music_Lvl3.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 break;
@@ -249,6 +248,7 @@ public class SoundManager : MonoBehaviour
                 break;
 
             case PlayerStates.LevelState.EndGrace when Level == 2:
+                StopAllCoroutines();
                 StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl2, 0f, 1f, 0.2f));
                 break;
 
@@ -257,6 +257,7 @@ public class SoundManager : MonoBehaviour
                 break;
 
             case PlayerStates.LevelState.EndGrace when Level == 3:
+                StopAllCoroutines();
                 StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl3, 0f, 1f, 0.2f));
                 break;
 
@@ -265,6 +266,7 @@ public class SoundManager : MonoBehaviour
                 break;
 
             case PlayerStates.LevelState.EndGrace when Level == 4:
+                StopAllCoroutines();
                 StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl4, 0f, 1f, 0.2f));
                 break;
         }
@@ -276,6 +278,7 @@ public class SoundManager : MonoBehaviour
                 elapsed += Time.deltaTime;
                 float value = Mathf.Lerp(from, to, elapsed / duration);
                 musicInstance.setParameterByName("Pitch_Music", value);
+                Debug.Log(value);
                 yield return null;
             }
             musicInstance.setParameterByName("Pitch_Music", to); // Assure la valeur finale
