@@ -2,9 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
-using UnityEngine.Serialization;
-using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(S_EnergyStorage))]
 public class S_FireRateGun_Module : MonoBehaviour
@@ -23,9 +20,6 @@ public class S_FireRateGun_Module : MonoBehaviour
 
     [Header("Shooting Settings")]
     public Transform shootPoint; // Point d'origine de la direction de tir
-    public Transform spawnBulletPoint;
-    public GameObject bulletPrefab;
-    public GameObject bulletPalier4Prefab;
     public LayerMask obstacleLayer; // Layer des obstacles
     public float raycastLength = 50f; // Longueur maximale de la portée du tir
     public float raycastSpread = 5f; // Angle de déviation des rayons secondaires
@@ -142,17 +136,19 @@ public class S_FireRateGun_Module : MonoBehaviour
         {
             PerformSpreadRaycast(shootPoint.position, shootDirection, raycastLength, currentLevel.damage);
         }
-
-        if (_energyStorage.currentLevelIndex + 1 == 4)
-        {
-            GameObject BulletPalier4 = Instantiate(bulletPalier4Prefab, spawnBulletPoint.position, spawnBulletPoint.rotation);
-            BulletPalier4.GetComponent<S_Projectile_useForDeco>().InitializeProjectile(3, bulletSpeed);
-        }
-        else
-        {
-            GameObject Bullet = Instantiate(bulletPrefab, spawnBulletPoint.position, spawnBulletPoint.rotation);
-            Bullet.GetComponent<S_Projectile_useForDeco>().InitializeProjectile(3, bulletSpeed);
-        }
+        
+        
+        //Feedback Projectile
+        // if (_energyStorage.currentLevelIndex + 1 == 4)
+        // {
+        //     GameObject BulletPalier4 = Instantiate(bulletPalier4Prefab, spawnBulletPoint.position, spawnBulletPoint.rotation);
+        //     BulletPalier4.GetComponent<S_Projectile_useForDeco>().InitializeProjectile(3, bulletSpeed);
+        // }
+        // else
+        // {
+        //     GameObject Bullet = Instantiate(bulletPrefab, spawnBulletPoint.position, spawnBulletPoint.rotation);
+        //     Bullet.GetComponent<S_Projectile_useForDeco>().InitializeProjectile(3, bulletSpeed);
+        // }
     }
 
     private IEnumerator SimulateBullet(Vector3 shootDirection, FireRateLevel currentLevel)
