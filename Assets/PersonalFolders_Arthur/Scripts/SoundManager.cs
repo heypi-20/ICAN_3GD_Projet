@@ -92,7 +92,7 @@ public class SoundManager : MonoBehaviour
     
     
     private int actuallevel;
-    public S_EnergyStorage energy_storage;
+    //public S_EnergyStorage energy_storage;
     
     //public S_Jauge_Tmp Jauge;
     public void Meth_Shoot_No_Hit(int currentLevel)
@@ -190,11 +190,6 @@ public class SoundManager : MonoBehaviour
         FMOD.RESULT result = RuntimeManager.StudioSystem.setParameterByName("Palier", value);
     }
 
-    private void Update()
-    {
-        actuallevel = energy_storage.currentLevelIndex;
-    }
-
     private void Start()
     {
         S_PlayerStateObserver.Instance.OnLevelUpStateEvent += LevelChanged;
@@ -278,7 +273,6 @@ public class SoundManager : MonoBehaviour
                 elapsed += Time.deltaTime;
                 float value = Mathf.Lerp(from, to, elapsed / duration);
                 musicInstance.setParameterByName("Pitch_Music", value);
-                Debug.Log(value);
                 yield return null;
             }
             musicInstance.setParameterByName("Pitch_Music", to); // Assure la valeur finale
