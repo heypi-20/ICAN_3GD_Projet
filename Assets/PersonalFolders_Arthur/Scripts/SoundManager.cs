@@ -81,10 +81,15 @@ public class SoundManager : MonoBehaviour
     public string JumpyCuby_Jump;
 
     [Header("Musique")]
-    public string Music_Lvl1;
-    public string Music_Lvl2;
-    public string Music_Lvl3;
-    public string Music_Lvl4;
+    public EventReference Music_Lvl1;
+    private EventInstance Instance_Music_Lvl1;
+    public EventReference Music_Lvl2;
+    private EventInstance Instance_Music_Lvl2;
+    public EventReference Music_Lvl3;
+    private EventInstance Instance_Music_Lvl3;
+    public EventReference Music_Lvl4;
+    private EventInstance Instance_Music_Lvl4;
+    
     public string Gain_Pallier;
     public string Loose_Pallier;
     private int actuallevel;
@@ -194,15 +199,50 @@ public class SoundManager : MonoBehaviour
     private void Start()
     {
         S_PlayerStateObserver.Instance.OnLevelUpStateEvent += LevelChanged;
+        Instance_Music_Lvl1 = RuntimeManager.CreateInstance(Music_Lvl1);
+        Instance_Music_Lvl1.start();
     }
 
     private void LevelChanged(Enum state,int Level)
     {
         switch (state)
         {
-            case PlayerStates.LevelState.LevelUp when Level == 1 : 
-                
-                
+            case PlayerStates.LevelState.LevelDown when Level == 1 : 
+                FMODUnity.RuntimeManager.PlayOneShot(Loose_Pallier);
+                Instance_Music_Lvl1.start();
+                Instance_Music_Lvl2.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                break;
+            
+            case PlayerStates.LevelState.LevelDown when Level == 2 : 
+                FMODUnity.RuntimeManager.PlayOneShot(Loose_Pallier);
+                Instance_Music_Lvl2.start();
+                Instance_Music_Lvl3.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                break;
+            case PlayerStates.LevelState.LevelDown when Level == 3 : 
+                FMODUnity.RuntimeManager.PlayOneShot(Loose_Pallier);
+                Instance_Music_Lvl3.start();
+                Instance_Music_Lvl4.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                break;
+            
+            
+            
+            case PlayerStates.LevelState.LevelUp when Level == 2 : 
+                FMODUnity.RuntimeManager.PlayOneShot(Gain_Pallier);
+                Instance_Music_Lvl2 = RuntimeManager.CreateInstance(Music_Lvl2);
+                Instance_Music_Lvl2.start();
+                Instance_Music_Lvl1.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                break;
+            case PlayerStates.LevelState.LevelUp when Level == 3 : 
+                Instance_Music_Lvl3 = RuntimeManager.CreateInstance(Music_Lvl3);
+                FMODUnity.RuntimeManager.PlayOneShot(Gain_Pallier);
+                Instance_Music_Lvl3.start();
+                Instance_Music_Lvl2.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                break;
+            case PlayerStates.LevelState.LevelUp when Level == 4 : 
+                Instance_Music_Lvl4 = RuntimeManager.CreateInstance(Music_Lvl4);
+                FMODUnity.RuntimeManager.PlayOneShot(Gain_Pallier);
+                Instance_Music_Lvl4.start();
+                Instance_Music_Lvl3.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 break;
         }
     }
