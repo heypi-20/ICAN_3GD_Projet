@@ -30,7 +30,7 @@ public class S_ComboSystem : MonoBehaviour
     public ComboSettings currentComboSetting = null;
 
     // Reference to the TextMeshProUGUI component to display combo information.
-    public TextMeshProUGUI comboText;
+    //public TextMeshProUGUI comboText;
 
     private void Start()
     {
@@ -113,14 +113,14 @@ public class S_ComboSystem : MonoBehaviour
                 ResetCombo();
             }
         }
-        else
-        {
-            // Clear combo text when no combo is active.
-            if (!string.IsNullOrEmpty(comboText.text))
-            {
-                comboText.text = "";
-            }
-        }
+        // else
+        // {
+        //     // Clear combo text when no combo is active.
+        //     if (!string.IsNullOrEmpty(comboText.text))
+        //     {
+        //         comboText.text = "";
+        //     }
+        // }
     }
 
 
@@ -134,6 +134,6 @@ public class S_ComboSystem : MonoBehaviour
         comboActuelTimer = 0f;
         comboKillCount = 0;
         currentComboSetting = null;
-        comboText.text = "";
+        //comboText.text = "";
     }
 }
