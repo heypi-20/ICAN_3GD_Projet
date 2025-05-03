@@ -1935,7 +1935,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ImpulseDefinition:
-    m_ImpulseChannel: 1
+    m_ImpulseChannel: -1
     m_ImpulseShape: 3
     m_CustomImpulseShape:
       serializedVersion: 2
@@ -1974,7 +1974,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 2, y: 1, z: 2}
+  m_DefaultVelocity: {x: 2, y: 1, z: 0}
 --- !u!114 &7487571207341063171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3235,12 +3235,9 @@ MonoBehaviour:
   CameraShakeCAC_Lvl2: 0.2
   CameraShakeCAC_Lvl3: 0.4
   CameraShakeCAC_Lvl4: 0.8
-  _WobbleCountPillonage: 4
-  _WobbleAngle: 10
-  _DuraionWobble: 0.05
-  _RecoverDurationWobble: 0.1
-  startimpulseshakeforce: 3
-  _imulseMultiplicator: 2
+  _impulseSource: {fileID: 4015919512211726238}
+  startimpulseshakeforce: 1
+  _imulseMultiplicator: 4
   stopDuration: 0.2
   effectFPS: 10
   duration: 0.1
