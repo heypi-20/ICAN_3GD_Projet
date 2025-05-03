@@ -1,4 +1,4 @@
-Shader "URP/Unlit/RotatingHaloMasked"
+ï»¿Shader "URP/Unlit/RotatingHaloMasked"
 {
     Properties
     {
@@ -66,7 +66,7 @@ Shader "URP/Unlit/RotatingHaloMasked"
                 if (alpha < 0.01)
                     discard;
 
-                // Coordonnées centrées pour calcul d’angle
+                // CoordonnÃ©es centrÃ©es pour calcul dâ€™angle
                 float2 centeredUV = uv * 2.0 - 1.0;
                 float angle = atan2(centeredUV.y, centeredUV.x);
                 angle = (angle + 3.14159265) / (2.0 * 3.14159265); // Normalize [0..1]
