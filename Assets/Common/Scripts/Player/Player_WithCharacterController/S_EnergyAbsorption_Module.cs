@@ -112,9 +112,6 @@ public class S_EnergyAbsorption_Module : MonoBehaviour
         {
             var go = col.gameObject;
             var energyType = go.GetComponent<EnergyType>();
-
-            Debug.Log($"[Detect] Pulling {go.name} at distance {(go.transform.position - transform.position).magnitude:F2}");
-
             _pullingObjects.Add(go);
             SoundManager.Instance.Meth_Gain_Energy();
             StartCoroutine(PullAndDestroyObject(go, energyType.energyGivenUseForType));
@@ -126,8 +123,6 @@ public class S_EnergyAbsorption_Module : MonoBehaviour
         // Debug the calculated energy amount
         float multiplier = _comboSystem.currentComboMultiplier;
         float amount = givenPoint * multiplier;
-        Debug.Log($"[Energy] givenPoint={givenPoint}, multiplier={multiplier}, toAdd={amount}");
-
         // Pull object towards player until close enough
         while (obj != null)
         {
@@ -147,8 +142,6 @@ public class S_EnergyAbsorption_Module : MonoBehaviour
             // Remove from pulling set and add energy
             _pullingObjects.Remove(obj);
             _energyStorage.AddEnergy(amount);
-            Debug.Log($"[Energy] After AddEnergy: {_energyStorage.currentEnergy}/{_energyStorage.maxEnergy}");
-
             // Return to pool if support component exists, otherwise destroy
             if (obj.TryGetComponent(out S_AddEnergyTypeWithDelay energySetting))
                 S_EnergyPointPoolManager.Instance.ReturnToPool(obj, energySetting.selfPrefab);
