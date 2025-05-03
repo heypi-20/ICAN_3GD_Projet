@@ -4333,16 +4333,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shootPoint: {fileID: 6187556473507325879}
-  spawnBulletPoint: {fileID: 7881909655561821250}
-  bulletPrefab: {fileID: 3953531229119934194, guid: a99bbd84083b8384b86ee4590c4a1dec, type: 3}
-  bulletPalier4Prefab: {fileID: 3953531229119934194, guid: f198e14c66f2eba4c87ed26fb5bc46a9, type: 3}
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 65
   raycastLength: 500
   raycastSpread: 0.5
   simulateBulletSpeed: 0
-  bulletSpeed: 300
+  bulletSpeed: 900
   fireRateLevels:
   - level: 1
     fireRate: 4
@@ -5038,7 +5035,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 4750812657611663464}
-  distanceFromCamera: 2.5
+  distanceFromCamera: 1.5
   positionOffset: {x: 0.5, y: -0.25, z: 0}
   rotationOffset: {x: 0, y: 0, z: 0}
   useDelayFollow: 0
@@ -5051,7 +5048,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7724206884446061659}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 147cbccc73b37024baa260c0fbaf0322, type: 3}
   m_Name: 
@@ -5060,8 +5057,42 @@ MonoBehaviour:
   ProjectilePrefab_Lv2: {fileID: 3953531229119934194, guid: a99bbd84083b8384b86ee4590c4a1dec, type: 3}
   ProjectilePrefab_Lv3: {fileID: 3953531229119934194, guid: a99bbd84083b8384b86ee4590c4a1dec, type: 3}
   ProjectilePrefab_Lv4: {fileID: 3953531229119934194, guid: f198e14c66f2eba4c87ed26fb5bc46a9, type: 3}
-  Speed: 300
+  Speed: 120
   ProjectileLifeTime: 3
+  FollowTime: 0.05
+  SpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 3
+      inSlope: -6.5277033
+      outSlope: -6.5277033
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.40488368
+      value: 0.35703936
+      inSlope: 1.3636415
+      outSlope: 1.3636415
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.1832044
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.5999489
+      outSlope: -0.5999489
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &7921834895967407360
 GameObject:
   m_ObjectHideFlags: 0
