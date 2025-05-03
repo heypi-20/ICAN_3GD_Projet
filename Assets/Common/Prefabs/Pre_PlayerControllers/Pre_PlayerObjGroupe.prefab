@@ -1936,16 +1936,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ImpulseDefinition:
     m_ImpulseChannel: 1
-    m_ImpulseShape: 4
+    m_ImpulseShape: 3
     m_CustomImpulseShape:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    m_ImpulseDuration: 0.2
-    m_ImpulseType: 1
-    m_DissipationRate: 0.25
+    m_ImpulseDuration: 0.5
+    m_ImpulseType: 0
+    m_DissipationRate: 0.5
     m_RawSignal: {fileID: 0}
     m_AmplitudeGain: 1
     m_FrequencyGain: 1
@@ -1974,7 +1974,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 0, y: -1, z: 0}
+  m_DefaultVelocity: {x: 2, y: 1, z: 2}
 --- !u!114 &7487571207341063171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3231,9 +3231,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  CameraShakeCAC_Lvl1: 0.2
-  CameraShakeCAC_Lvl2: 0.4
-  CameraShakeCAC_Lvl3: 0.6
+  CameraShakeCAC_Lvl1: 0.1
+  CameraShakeCAC_Lvl2: 0.2
+  CameraShakeCAC_Lvl3: 0.4
   CameraShakeCAC_Lvl4: 0.8
   _WobbleCountPillonage: 4
   _WobbleAngle: 10
@@ -5736,6 +5736,10 @@ PrefabInstance:
       value: ComboSystemEffect
       objectReference: {fileID: 0}
     - target: {fileID: 3639456556389322549, guid: 0d8df28d6c38fc241bf4d6c9e2377484, type: 3}
+      propertyPath: m_text
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3639456556389322549, guid: 0d8df28d6c38fc241bf4d6c9e2377484, type: 3}
       propertyPath: m_fontAsset
       value: 
       objectReference: {fileID: 11400000, guid: b397953c67b329641b6a28c0dfb9426f, type: 2}
@@ -5743,6 +5747,10 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: 2151403588676768122, guid: b397953c67b329641b6a28c0dfb9426f, type: 2}
+    - target: {fileID: 6569826664086729025, guid: 0d8df28d6c38fc241bf4d6c9e2377484, type: 3}
+      propertyPath: m_text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6569826664086729025, guid: 0d8df28d6c38fc241bf4d6c9e2377484, type: 3}
       propertyPath: m_fontAsset
       value: 
