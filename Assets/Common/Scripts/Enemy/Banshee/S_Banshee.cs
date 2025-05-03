@@ -74,9 +74,9 @@ public class S_Banshee : EnemyBase
             Debug.Log("Chasing");
         }
 
-        if (transform.position.y < transform.localScale.y / 2) {
-            transform.position = new Vector3(transform.position.x, transform.localScale.y / 2, transform.position.z);
-        }
+        // if (transform.position.y < transform.localScale.y / 2) {
+        //     transform.position = new Vector3(transform.position.x, transform.localScale.y / 2, transform.position.z);
+        // }
     }
 
     private void Attack()
