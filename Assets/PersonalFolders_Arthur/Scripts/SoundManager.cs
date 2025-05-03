@@ -55,13 +55,7 @@ public class SoundManager : MonoBehaviour
     public string Shoot_Kill3;
     public string Shoot_Kill4;
 
-    [Header("CAC")] 
-    public EventReference Active_CAC;
-    private EventInstance Instance_CAC_Active;
-    public EventReference Used_CAC;
-    private EventInstance Instance_CAC_Used;
-    public EventReference Dash_CAC;
-    private EventInstance Instance_Dash_CAC;
+    
     
     [Header("Jump")] 
     public string Used_Jump;
@@ -84,24 +78,12 @@ public class SoundManager : MonoBehaviour
     public string Dashoot_Dash;
     public string Dashoot_Shoot;
     public string JumpyCuby_Jump;
-
-    [Header("Musique")]
-    public EventReference Music_Lvl1;
-    private EventInstance Instance_Music_Lvl1;
-    public EventReference Music_Lvl2;
-    private EventInstance Instance_Music_Lvl2;
-    public EventReference Music_Lvl3;
-    private EventInstance Instance_Music_Lvl3;
-    public EventReference Music_Lvl4;
-    private EventInstance Instance_Music_Lvl4;
     
     public string Secret_surprise;
     
     
     private int actuallevel;
-    //public S_EnergyStorage energy_storage;
     
-    //public S_Jauge_Tmp Jauge;
     public void Meth_Shoot_No_Hit(int currentLevel)
     {
         if (currentLevel == 1)
@@ -166,14 +148,6 @@ public class SoundManager : MonoBehaviour
     {
         FMODUnity.RuntimeManager.PlayOneShot(Pillonage_Explosion);
     }
-    public void Meth_Gain_Palier()
-    {
-        FMODUnity.RuntimeManager.PlayOneShot(Gain_Palier);
-    }
-    public void Meth_Lose_Palier()
-    {
-        FMODUnity.RuntimeManager.PlayOneShot(Loose_Palier);
-    }
     public void Meth_Gain_Energy()
     {
         FMODUnity.RuntimeManager.PlayOneShot(Gain_Energy);
@@ -199,6 +173,16 @@ public class SoundManager : MonoBehaviour
         Instance_Music_Lvl1.start();
     }
 
+    #region LevelChanged
+    [Header("Musique")]
+    public EventReference Music_Lvl1;
+    private EventInstance Instance_Music_Lvl1;
+    public EventReference Music_Lvl2;
+    private EventInstance Instance_Music_Lvl2;
+    public EventReference Music_Lvl3;
+    private EventInstance Instance_Music_Lvl3;
+    public EventReference Music_Lvl4;
+    private EventInstance Instance_Music_Lvl4;
     private void LevelChanged(Enum state,int Level)
     {
         switch (state)
@@ -286,8 +270,16 @@ public class SoundManager : MonoBehaviour
             musicInstance.setParameterByName("Pitch_Music", to); // Assure la valeur finale
         }
     }
+    #endregion
 
-
+    #region MeleeSound
+    [Header("CAC")] 
+    public EventReference Active_CAC;
+    private EventInstance Instance_CAC_Active;
+    public EventReference Used_CAC;
+    private EventInstance Instance_CAC_Used;
+    public EventReference Dash_CAC;
+    private EventInstance Instance_Dash_CAC;
     private void MeleeState(Enum State,int Level)
     {
         switch (State)
@@ -308,6 +300,7 @@ public class SoundManager : MonoBehaviour
                 break;
         }
     }
+    #endregion
 
     private void Update()
     {

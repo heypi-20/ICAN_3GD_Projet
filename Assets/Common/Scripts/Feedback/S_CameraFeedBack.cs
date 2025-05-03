@@ -34,18 +34,16 @@ public class S_CameraFeedBack : MonoBehaviour
     public float CameraShakeCAC_Lvl2;
     public float CameraShakeCAC_Lvl3;
     public float CameraShakeCAC_Lvl4;
-    private CinemachineImpulseSource _impulseSource;
+    public CinemachineImpulseSource _impulseSource;
+    //public SignalSourceAsset shortImpulse;
     
     [Header("Pillonage Shake")]
-    [Space(5)]
     private float _timer_of_groundpound;
-    public int _WobbleCountPillonage = 4;
-    public float _WobbleAngle = 10f;
-    public float _DuraionWobble = 0.05f;
-    public float _RecoverDurationWobble = 0.1f;
     public float startimpulseshakeforce = 3f;
     private float impulseforceonGround;
     public float _imulseMultiplicator = 0f;
+    
+    //public SignalSourceAsset PillonageImpulse;
     
     [Header("ChangeFPS")]
     public float stopDuration = 0.2f;
@@ -290,7 +288,7 @@ public class S_CameraFeedBack : MonoBehaviour
     {
         if (state.Equals(PlayerStates.GroundPoundState.EndGroundPound))
         {
-            CameraDutchWobbleWithImpulse(_WobbleCountPillonage,_WobbleAngle,_DuraionWobble,_RecoverDurationWobble,impulseforceonGround);
+            ImpulseGroundPound(impulseforceonGround);
             StartCoroutine(TimeStopCoroutine());
             if (!isActive)
             {
@@ -315,18 +313,11 @@ public class S_CameraFeedBack : MonoBehaviour
             _timer_of_groundpound = 0f;
         }
     }
-    public void CameraDutchWobbleWithImpulse(int wobbleCount, float wobbleAngle, float wobbleSpeed, float recoverDuration,
-        float impulseStrength)
+    public void ImpulseGroundPound(float impulseStrength)
     {
         if (_impulseSource != null)
         {
-            Vector3 impulseDirection = new Vector3(
-                Random.Range(-0.5f, 0.5f),
-                Random.Range(-0.5f, 0.5f),
-                Random.Range(-0.2f, 0.2f)
-            ).normalized;
-
-            _impulseSource.GenerateImpulse(impulseDirection * impulseStrength);
+            _impulseSource.GenerateImpulse(impulseStrength);
         }
     }
     
