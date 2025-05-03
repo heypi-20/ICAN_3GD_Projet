@@ -15,11 +15,7 @@ public class S_ComboEffect : MonoBehaviour
     public Material redBarMaterial; // Shader "ComboJauge"
     public string redBarProgressProperty = "_Progress";
 
-    [Header("Halo")]
-    public GameObject haloObject; // GameObject contenant le halo (barre grise)
-    public Material haloMaterial; // Shader "RotatingHaloMasked"
-    public string haloCutoffProperty = "_CutoffX";
-    public string haloProgressProperty = "_Progress"; // masque aussi avec _Progress
+    // ── Partie "Halo" supprimée ──
 
     [Header("Textes 3D")]
     public TextMeshPro killText;
@@ -48,7 +44,7 @@ public class S_ComboEffect : MonoBehaviour
         if (!Application.isPlaying)
         {
             redBarObject?.SetActive(true);
-            haloObject?.SetActive(true);
+            // haloObject supprimé
             killText?.gameObject.SetActive(true);
             multiplicateurText?.gameObject.SetActive(true);
             return;   // on ne fait rien d’autre
@@ -61,7 +57,7 @@ public class S_ComboEffect : MonoBehaviour
         {
             // Montrer les visuels
             redBarObject?.SetActive(true);
-            haloObject?.SetActive(true);
+            // haloObject supprimé
             killText?.gameObject.SetActive(true);
             multiplicateurText?.gameObject.SetActive(true);
 
@@ -70,9 +66,7 @@ public class S_ComboEffect : MonoBehaviour
             float mapped = 0.5f + 0.5f * ratio;
             redBarMaterial?.SetFloat(redBarProgressProperty, mapped);
 
-            // MAJ halo (shader)
-            haloMaterial?.SetFloat(haloCutoffProperty, ratio);
-            haloMaterial?.SetFloat(haloProgressProperty, ratio);
+            // MAJ halo supprimée
 
             // —— Lissage du compteur de kills ——
             float targetKills = comboSystem.comboKillCount;
@@ -82,8 +76,8 @@ public class S_ComboEffect : MonoBehaviour
                 killText.text = shownKills.ToString();
 
             if (comboSystem.comboKillCount > lastKillCount
-            && Time.time - lastTweenTime >= tweenCooldown
-            && dotweenPlayer != null)
+                && Time.time - lastTweenTime >= tweenCooldown
+                && dotweenPlayer != null)
             {
                 dotweenPlayer.Play();
                 lastTweenTime = Time.time;
@@ -98,7 +92,7 @@ public class S_ComboEffect : MonoBehaviour
         {
             // Combo inactif → cacher les éléments
             redBarObject?.SetActive(false);
-            haloObject?.SetActive(false);
+            // haloObject supprimé
             killText?.gameObject.SetActive(false);
             multiplicateurText?.gameObject.SetActive(false);
 
