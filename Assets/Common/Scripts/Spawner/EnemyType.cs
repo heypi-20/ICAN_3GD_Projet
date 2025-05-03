@@ -8,5 +8,7 @@
     TpShooter,
     TpShooter_lv2,
     OunOun,
-    Banshee
+    Banshee,
+    Banshee_lv2,
+    Banshee_Boss
 }
