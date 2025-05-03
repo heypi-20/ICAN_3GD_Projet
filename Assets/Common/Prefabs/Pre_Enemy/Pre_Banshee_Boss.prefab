@@ -69,7 +69,7 @@ GameObject:
   - component: {fileID: 6525248300773529948}
   - component: {fileID: 2134551375223587756}
   m_Layer: 9
-  m_Name: Pre_Banshee_Arthur
+  m_Name: Pre_Banshee_Boss
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -85,7 +85,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 101.63802, y: 59.9, z: -106.41095}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 29.876823, y: 29.876823, z: 29.876823}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1562603062179070286}
@@ -204,31 +204,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: 
   enemyType: 8
-  health: 40
-  WeaknessExposureHealth: 35
-  enemyDamage: 5
+  health: 9000
+  WeaknessExposureHealth: 500
+  enemyDamage: 1000
   WeakPoint: {fileID: 3717288643238252612}
   energyPoint: {fileID: 284891634115185361, guid: 729892a8825d4f64599abe6ea5c6f84b, type: 3}
-  energyDropQuantity: 15
+  energyDropQuantity: 3000
   enemyGetHitVFX: {fileID: 2014564717100583912, guid: de8051323aef0554fb4a4ee3dd46ebed, type: 3}
   enemyDeathVFX: {fileID: 2014564717100583912, guid: 332f5cf35c013464e8ebf4ac6d81eedc, type: 3}
   enemyGetHitSound: 
   enemyDeathSound: 
   extraWeakPointMaterial: {fileID: 2100000, guid: 152d9b433b056a84eac8846e6d4aff69, type: 2}
   weakPointRenderer: {fileID: 7224620345448154444}
-  chaseSpeedRange: {x: 4, y: 10}
+  chaseSpeedRange: {x: 50, y: 90}
   speedSwitchIntervalRange: {x: 0.2, y: 1}
   rotationSpeed: 10
-  avoidDist: 1
+  avoidDist: 3
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 320
-  range: 3
+  range: 20
   playerLayer:
     serializedVersion: 2
     m_Bits: 8
   runTime: 0.5
-  runSpeed: 100
+  runSpeed: 800
   timeBfRun: 0.5
 --- !u!114 &2134551375223587756
 MonoBehaviour:
