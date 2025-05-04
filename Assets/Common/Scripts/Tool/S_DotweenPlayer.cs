@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
@@ -14,13 +15,13 @@ public enum TweenType {
 [Serializable]
 public class TweenData {
     public TweenType type;
-    
+
     [Tooltip("Additional delay (seconds) relative to TweenItem.startDelay")]
     public float startDelay;
-    
+
     [Tooltip("Duration of this tween (seconds)")]
     public float duration;
-    
+
     [Tooltip("Easing function for this tween")]
     public Ease ease = Ease.Linear;
 
@@ -51,10 +52,10 @@ public class TweenData {
 public class TweenItem {
     [Tooltip("The GameObject this item targets")]
     public GameObject target;
-    
+
     [Tooltip("Overall delay (seconds) before this item's animations start")]
     public float startDelay;
-    
+
     [Tooltip("List of individual tween configurations")]
     public List<TweenData> tweens = new List<TweenData>();
 }
@@ -67,7 +68,11 @@ public class S_DotweenPlayer : MonoBehaviour {
     [Tooltip("Play automatically on Start()")]
     public bool playOnStart = true;
 
+    [Tooltip("If true, the animation will loop continuously")]
+    public bool loopPlay = false;
+
     private List<Sequence> sequences = new List<Sequence>();
+    private Coroutine loopCoroutine;
 
     // Cached initial states
     private Dictionary<Transform, Vector3> initPos = new Dictionary<Transform, Vector3>();
@@ -82,12 +87,7 @@ public class S_DotweenPlayer : MonoBehaviour {
     void Start() {
         if (playOnStart) Play();
     }
-
-    private void Update() {
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            Play();
-        }
-    }
+    
 
     /// <summary>
     /// Cache the initial transform of all target objects.
@@ -112,8 +112,11 @@ public class S_DotweenPlayer : MonoBehaviour {
     ///   1) Kill any existing tweens
     ///   2) Reset all targets to their initial states
     ///   3) Create and play new Sequences
+    ///   4) Optionally restart after completion if loopPlay is true
     /// </summary>
     public void Play() {
+        StopLoop(); // Stop previous loop coroutine if active
+
         // Ensure initial states are cached
         CacheInitialStates();
 
@@ -128,10 +131,12 @@ public class S_DotweenPlayer : MonoBehaviour {
             var tr = kv.Key;
             tr.localPosition = initPos[tr];
             tr.localRotation = initRot[tr];
-            tr.localScale    = initScale[tr];
+            tr.localScale = initScale[tr];
         }
 
         // 3) Create and play new Sequences
+        float maxDuration = 0f; // Used to determine when to replay if looping
+
         foreach (var item in items) {
             if (item.target == null) continue;
 
@@ -148,16 +153,13 @@ public class S_DotweenPlayer : MonoBehaviour {
                             ? tr.DOLocalMove(td.targetPosition, td.duration)
                             : tr.DOMove(td.targetPosition, td.duration);
                         break;
-
                     case TweenType.Scale:
                         Vector3 baseScale = initScale[tr];
                         t = tr.DOScale(baseScale * td.scaleMultiplier, td.duration);
                         break;
-
                     case TweenType.Rotate:
                         t = tr.DORotate(td.rotationEuler, td.duration, td.rotateMode);
                         break;
-
                     case TweenType.ContinuousRotate:
                         float loopDur = 360f / Mathf.Max(td.rotateSpeed, 1e-3f);
                         t = tr.DORotate(td.rotateAxis.normalized * 360f, loopDur, RotateMode.FastBeyond360)
@@ -167,14 +169,47 @@ public class S_DotweenPlayer : MonoBehaviour {
                 }
 
                 if (t != null) {
-                    t.SetEase(td.ease)
-                     .SetDelay(t0);
+                    t.SetEase(td.ease).SetDelay(t0);
                     seq.Insert(t0, t);
+                    if (td.type != TweenType.ContinuousRotate)
+                        maxDuration = Mathf.Max(maxDuration, t0 + td.duration);
                 }
             }
 
             seq.Play();
             sequences.Add(seq);
         }
+
+        // 4) If loopPlay is true and the animation has a defined end, start replay coroutine
+        if (loopPlay && maxDuration > 0f) {
+            loopCoroutine = StartCoroutine(ReplayAfterDelay(maxDuration));
+        }
+    }
+
+    /// <summary>
+    /// Coroutine to replay animation after delay (for loopPlay)
+    /// </summary>
+    private IEnumerator ReplayAfterDelay(float delay) {
+        yield return new WaitForSeconds(delay);
+        Play();
+    }
+
+    /// <summary>
+    /// Stop any existing replay coroutine
+    /// </summary>
+    public void StopLoop() {
+        if (loopCoroutine != null) {
+            StopCoroutine(loopCoroutine);
+            loopCoroutine = null;
+        }
+    }
+
+    /// <summary>
+    /// Toggle looping manually (e.g. from UI button)
+    /// </summary>
+    public void ToggleLoopPlay() {
+        loopPlay = !loopPlay;
+        if (!loopPlay) StopLoop();
+        else Play();
     }
 }
