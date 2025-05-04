@@ -27,6 +27,8 @@ public static class PlayerStates
         StartShoot,
         IsShooting,
         StopShoot,
+        hitEnemy,
+        hitWeakPoint
     }
     
     public enum LevelState

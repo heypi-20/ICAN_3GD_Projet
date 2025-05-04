@@ -135,19 +135,6 @@ public class S_FireRateGun_Module : MonoBehaviour
         {
             PerformSpreadRaycast(shootPoint.position, shootDirection, raycastLength, currentLevel.damage);
         }
-        
-        
-        //Feedback Projectile
-        // if (_energyStorage.currentLevelIndex + 1 == 4)
-        // {
-        //     GameObject BulletPalier4 = Instantiate(bulletPalier4Prefab, spawnBulletPoint.position, spawnBulletPoint.rotation);
-        //     BulletPalier4.GetComponent<S_Projectile_useForDeco>().InitializeProjectile(3, bulletSpeed);
-        // }
-        // else
-        // {
-        //     GameObject Bullet = Instantiate(bulletPrefab, spawnBulletPoint.position, spawnBulletPoint.rotation);
-        //     Bullet.GetComponent<S_Projectile_useForDeco>().InitializeProjectile(3, bulletSpeed);
-        // }
     }
 
     private IEnumerator SimulateBullet(Vector3 shootDirection, FireRateLevel currentLevel)
@@ -231,10 +218,12 @@ public class S_FireRateGun_Module : MonoBehaviour
                     // Appliquer les degats
                     if(hit.collider.gameObject.CompareTag("WeakPoint"))
                     {
+                        ShootingObserverEvent(PlayerStates.ShootState.hitWeakPoint,GetCurrentFireRateLevel());
                         enemy.ReduceHealth(damage*GetCurrentFireRateLevel().weekPointMultiplier,GetCurrentFireRateLevel().dropBonus);
                     }
                     else
                     {
+                        ShootingObserverEvent(PlayerStates.ShootState.hitEnemy,GetCurrentFireRateLevel());
                         enemy.ReduceHealth(damage,GetCurrentFireRateLevel().dropBonus,hit.point);
                     }
                     Vector3 hitDirection = (enemy.transform.position - transform.position).normalized;
