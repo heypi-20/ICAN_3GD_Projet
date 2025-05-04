@@ -141,10 +141,12 @@ public class S_MeleeAttack_Module : MonoBehaviour
         }
         if (hit.CompareTag("WeakPoint"))
         {
+            MeleeAttackObserverEvent(PlayerStates.MeleeState.MeleeAttackHitWeakness, currentLevel.level);
             hit.GetComponentInParent<EnemyBase>()?.ReduceHealth(currentLevel.attackDamage * 100, currentLevel.dropBonus + currentLevel.WeakPointDropBonus);
         }
         else
         {
+            MeleeAttackObserverEvent(PlayerStates.MeleeState.MeleeAttackHit, currentLevel.level);
             hit.GetComponent<EnemyBase>()?.ReduceHealth(currentLevel.attackDamage, currentLevel.dropBonus);
         }
     }
@@ -183,7 +185,7 @@ public class S_MeleeAttack_Module : MonoBehaviour
             }
             if (bestHit != null)
             {
-                MeleeAttackObserverEvent(PlayerStates.MeleeState.MeleeAttackHit, currentLevel.level);
+                //MeleeAttackObserverEvent(PlayerStates.MeleeState.MeleeAttackHit, currentLevel.level);
                 StartCoroutine(AttackMovementCoroutine(dashDuration, bestHit.transform.position,bestHit,currentLevel));
                 return;
             }

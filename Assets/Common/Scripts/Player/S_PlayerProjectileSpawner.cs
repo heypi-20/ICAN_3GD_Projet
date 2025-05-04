@@ -89,7 +89,7 @@ public class S_PlayerProjectileSpawner : MonoBehaviour
             else
             {
                 // Phase 2: detach and move independently in world space
-                if (t.parent != null&&t!=null)
+                if (t.parent != null)
                     t.SetParent(null);  // Detach from spawner
 
                 // Move forward along its current forward direction in world space
