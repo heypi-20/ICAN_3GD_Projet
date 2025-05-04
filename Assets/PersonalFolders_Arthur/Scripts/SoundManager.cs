@@ -289,7 +289,7 @@ public class SoundManager : MonoBehaviour
                 Instance_CAC_Active.start();
                 break;
             
-            case PlayerStates.MeleeState.DashingBeforeMelee : 
+            case PlayerStates.MeleeState.MeleeAttackHitWeakness : 
                 Instance_Dash_CAC = RuntimeManager.CreateInstance(Dash_CAC);
                 Instance_Dash_CAC.start();
                 break;
