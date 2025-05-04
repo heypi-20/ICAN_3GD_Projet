@@ -46,10 +46,6 @@ public class SoundManager : MonoBehaviour
     [Header("Jump")] 
     public string Used_Jump;
     
-    [Header("Sprint")] 
-    public string Active_Sprint;
-    public string Desactive_Sprint;
-    
     [Header("Pillonage")] 
     public string Pillonage_Explosion;
     public string Pillonage_Activate;
@@ -101,19 +97,40 @@ public class SoundManager : MonoBehaviour
     
 
     #endregion
+
+    #region Sprint
+
+    [Header("Sprint")]
+    public EventReference Start_Sprint;
+    private EventInstance Instance_StartSprint;
+    public EventReference End_Sprint;
+    private EventInstance Instance_EndSprint;
+
+    private void SprintState(Enum state, int level)
+    {
+        switch (state)
+        {
+            case PlayerStates.SprintState.StartSprinting :
+                Instance_StartSprint = RuntimeManager.CreateInstance(Start_Sprint);
+                Instance_StartSprint.start();
+                break;
+            case PlayerStates.SprintState.StopSprinting :
+                Instance_EndSprint = RuntimeManager.CreateInstance(End_Sprint);
+                Instance_EndSprint.start();
+                break;
+            case PlayerStates.SprintState.SprintHit :
+                Instance_Hit_Shoot = RuntimeManager.CreateInstance(Hit_Shoot);
+                Instance_Hit_Shoot.start();
+                break;
+        }
+    }
     
+
+    #endregion
     
     public void Meth_Used_Jump()
     {
         FMODUnity.RuntimeManager.PlayOneShot(Used_Jump);
-    }
-    public void Meth_Active_Sprint()
-    {
-        FMODUnity.RuntimeManager.PlayOneShot(Active_Sprint);
-    }
-    public void Meth_Desactive_Sprint()
-    {
-        FMODUnity.RuntimeManager.PlayOneShot(Desactive_Sprint);
     }
     public void Meth_Pillonage_Explosion()
     {
@@ -141,6 +158,7 @@ public class SoundManager : MonoBehaviour
         S_PlayerStateObserver.Instance.OnLevelUpStateEvent += LevelChanged;
         S_PlayerStateObserver.Instance.OnMeleeAttackStateEvent += MeleeState;
         S_PlayerStateObserver.Instance.OnShootStateEvent += ShootState;
+        S_PlayerStateObserver.Instance.OnSprintStateEvent += SprintState;
         Instance_Music_Lvl1 = RuntimeManager.CreateInstance(Music_Lvl1);
         Instance_Music_Lvl1.start();
     }
