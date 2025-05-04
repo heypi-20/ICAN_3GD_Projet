@@ -42,20 +42,6 @@ public class SoundManager : MonoBehaviour
         }
     }
     #endregion
-    [Header("Shoot_No_Hit")]
-    [Space(10)]
-    public string Shoot_No_Hit1;
-    public string Shoot_No_Hit2;
-    public string Shoot_No_Hit3;
-    public string Shoot_No_Hit4;
-    [Header("Shoot_Kill")]
-    [Space(10)]
-    public string Shoot_Kill1;
-    public string Shoot_Kill2;
-    public string Shoot_Kill3;
-    public string Shoot_Kill4;
-
-    
     
     [Header("Jump")] 
     public string Used_Jump;
@@ -80,58 +66,28 @@ public class SoundManager : MonoBehaviour
     public string JumpyCuby_Jump;
     
     public string Secret_surprise;
-    
-    
     private int actuallevel;
+
+
+    #region Shoot
+
+    public EventReference Classique_Shoot;
+    private EventInstance Instance_Classique_Shoot;
+
+    private void ShootState(Enum state, int level)
+    {
+        switch (state)
+        {
+            case PlayerStates.ShootState.IsShooting :
+                Instance_Classique_Shoot = RuntimeManager.CreateInstance(Classique_Shoot);
+                Instance_Classique_Shoot.start();
+                break;
+        }
+    }
+
+    #endregion
     
-    public void Meth_Shoot_No_Hit(int currentLevel)
-    {
-        if (currentLevel == 1)
-        {
-            FMODUnity.RuntimeManager.PlayOneShot(Shoot_No_Hit1);
-        }
-
-        if (currentLevel == 2)
-        {
-            FMODUnity.RuntimeManager.PlayOneShot(Shoot_No_Hit2);
-        }
-        if (currentLevel == 3)
-        {
-            FMODUnity.RuntimeManager.PlayOneShot(Shoot_No_Hit3);
-        }
-
-        if (currentLevel == 4)
-        {
-            FMODUnity.RuntimeManager.PlayOneShot(Shoot_No_Hit4);
-        }
-        
-    }
-    public void Meth_Shoot_Kill(int currentLevel)
-    {
-        if (currentLevel == 1)
-        {
-            FMODUnity.RuntimeManager.PlayOneShot(Shoot_Kill1);
-        }
-
-        if (currentLevel == 2)
-        {
-            FMODUnity.RuntimeManager.PlayOneShot(Shoot_Kill2);
-        }
-        if (currentLevel == 3)
-        {
-            FMODUnity.RuntimeManager.PlayOneShot(Shoot_Kill3);
-        }
-
-        if (currentLevel == 4)
-        {
-            FMODUnity.RuntimeManager.PlayOneShot(Shoot_Kill4);
-        }
-    }
-    public void Meth_Used_CAC()
-    {
-        Instance_CAC_Used = RuntimeManager.CreateInstance(Used_CAC);
-        Instance_CAC_Used.start();
-    }
+    
     public void Meth_Used_Jump()
     {
         FMODUnity.RuntimeManager.PlayOneShot(Used_Jump);
@@ -169,6 +125,7 @@ public class SoundManager : MonoBehaviour
     {
         S_PlayerStateObserver.Instance.OnLevelUpStateEvent += LevelChanged;
         S_PlayerStateObserver.Instance.OnMeleeAttackStateEvent += MeleeState;
+        S_PlayerStateObserver.Instance.OnShootStateEvent += ShootState;
         Instance_Music_Lvl1 = RuntimeManager.CreateInstance(Music_Lvl1);
         Instance_Music_Lvl1.start();
     }
