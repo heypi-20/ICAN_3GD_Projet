@@ -38,6 +38,9 @@ public class S_MeleeMCAnimationPlayer : MonoBehaviour
             case PlayerStates.MeleeState.MeleeAttackHit:
                 PlayAnimation (PunchHitAnim);
                 break;
+            case PlayerStates.MeleeState.MeleeAttackHitWeakness:
+                PlayAnimation (PunchHitAnim);
+                break;
             case PlayerStates.MeleeState.MeleeAttackMissed:
                 PlayAnimation (PunchMissAnim);
                 break;
