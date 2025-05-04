@@ -32,6 +32,7 @@ public class S_PlayerStateObserver : MonoBehaviour
     public Action<Enum> OnJumpStateEvent;
     public Action<Enum> OnGroundPoundStateEvent;
     public Action<Enum,int> OnLevelUpStateEvent;
+    public Action<Enum,int> OnSprintStateEvent; 
 
     public Enum LastMeleeState;
     public Enum LastGroundPoundState;
@@ -92,7 +93,7 @@ public class S_PlayerStateObserver : MonoBehaviour
     {
         //Done
         UpdateStateUI(state);
-
+        OnSprintStateEvent?.Invoke(state, level);
     }
 
     private void OnShootStateChanged(Enum state,int level)

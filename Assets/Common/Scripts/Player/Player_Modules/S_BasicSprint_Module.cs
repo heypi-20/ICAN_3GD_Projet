@@ -194,6 +194,8 @@ public class S_BasicSprint_Module : MonoBehaviour
 
                     // Apply damage to the enemy
                     enemy.ReduceHealth(currentSprintLevel.sprintDamage, currentSprintLevel.dropBonus);
+                    OnSprintStateChange?.Invoke(PlayerStates.SprintState.SprintHit, currentSprintLevel.level);
+
                     // Mark this enemy as already damaged
                     alreadyDamagedEnemies.Add(enemy);
                 }

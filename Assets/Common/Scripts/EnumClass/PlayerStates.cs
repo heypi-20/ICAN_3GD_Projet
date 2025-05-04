@@ -13,6 +13,7 @@ public static class PlayerStates
         StartSprinting,
         IsSprinting,
         StopSprinting,
+        SprintHit
     }
 
     public enum JumpState
