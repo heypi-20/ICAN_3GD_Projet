@@ -42,6 +42,7 @@ public class S_CameraFeedBack : MonoBehaviour
     public float startimpulseshakeforce = 3f;
     private float impulseforceonGround;
     public float _imulseMultiplicator = 0f;
+    public float Weak_shake_Multiplayer = 1.5f;
     
     //public SignalSourceAsset PillonageImpulse;
     
@@ -263,6 +264,25 @@ public class S_CameraFeedBack : MonoBehaviour
                     break;
                 case 4:
                     CameraShake(CameraShakeCAC_Lvl4);
+                    break;
+            }
+        }
+
+        if (state.Equals(PlayerStates.MeleeState.MeleeAttackHitWeakness))
+        {
+            switch (level)
+            {
+                case 1:
+                    CameraShake(CameraShakeCAC_Lvl1* Weak_shake_Multiplayer);
+                    break;
+                case 2:
+                    CameraShake(CameraShakeCAC_Lvl2 * Weak_shake_Multiplayer);
+                    break;
+                case 3:
+                    CameraShake(CameraShakeCAC_Lvl3 * Weak_shake_Multiplayer);
+                    break;
+                case 4:
+                    CameraShake(CameraShakeCAC_Lvl4* Weak_shake_Multiplayer);
                     break;
             }
         }

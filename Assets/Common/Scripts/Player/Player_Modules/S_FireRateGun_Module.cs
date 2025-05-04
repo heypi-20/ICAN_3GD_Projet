@@ -89,7 +89,6 @@ public class S_FireRateGun_Module : MonoBehaviour
             //reset stop shot to prepare trigger stop shoot event
             ShootStoppedUseForEvent = false;
             
-            SoundManager.Instance.Meth_Shoot_No_Hit(_energyStorage.currentLevelIndex+1);
             UpdateFireCooldown(currentLevel);
             ConsumeEnergy(currentLevel);
         }
