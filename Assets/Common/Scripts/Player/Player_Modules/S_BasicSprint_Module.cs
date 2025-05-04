@@ -225,7 +225,7 @@ public class S_BasicSprint_Module : MonoBehaviour
                 
                 //Trigger event
                 SprintObserverEvent(PlayerStates.SprintState.StartSprinting,_energyStorage.currentLevelIndex+1);
-                SoundManager.Instance.Meth_Active_Sprint();
+                
                 UpdateCameraFOV(GetLevelFOV());
             }
             
@@ -241,8 +241,6 @@ public class S_BasicSprint_Module : MonoBehaviour
     
             //Trigger event
             SprintObserverEvent(PlayerStates.SprintState.StopSprinting,_energyStorage.currentLevelIndex+1);
-            
-            SoundManager.Instance.Meth_Desactive_Sprint();
             UpdateCameraFOV(normalFOV);
         }
     }
