@@ -292,9 +292,10 @@ public class SoundManager : MonoBehaviour
             case PlayerStates.MeleeState.MeleeAttackHitWeakness : 
                 Instance_Dash_CAC = RuntimeManager.CreateInstance(Dash_CAC);
                 Instance_Dash_CAC.start();
+                Instance_CAC_Used = RuntimeManager.CreateInstance(Used_CAC);
+                Instance_CAC_Used.start();
                 break;
             case PlayerStates.MeleeState.MeleeAttackHit :
-                Debug.Log("HitHithit");
                 Instance_CAC_Used = RuntimeManager.CreateInstance(Used_CAC);
                 Instance_CAC_Used.start();
                 break;
