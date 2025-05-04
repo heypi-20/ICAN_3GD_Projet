@@ -1,164 +1,120 @@
 ﻿using UnityEngine;
-using UnityEditor;
-using System.Collections.Generic;
-using Debug = FMOD.Debug;
+using System.Collections;
+using TMPro;
 
-public class CustomSpreadsheetWindow : EditorWindow
+public class DemoGaugeAnimator : MonoBehaviour
 {
-    private Vector2 scrollPos; // Stocke la position du scroll dans la fenêtre de l'éditeur
-    private const float cellWidth = 100f; // Largeur d'une cellule du tableau
-    private const float cellHeight = 25f; // Hauteur d'une cellule du tableau
+    [Header("Réf. Matériel jauge")]
+    public Material gaugeMaterial;
+    public string gaugeProperty = "_Progress";  // 0.49 plein → 1 vide
 
-    // Identifiants pour récupérer les données du Google Sheet
-    public string id = "1iK0tbb5mA7bE84rOALNWjRPUHevWIe_9UdO3_IYTQSo"; // INTERDICTION DE TOUCHER
-    public string sheetName = "Test_Case";
-    public string[] sheetDropdown = {"Test_Case", "Bug_Report"};
-    public string apiKey = "AIzaSyDx_lUzjEyCufDkxhLlN-LfXyNG0k_jIdo"; // INTERDICTION DE TOUCHER
+    [Header("Textes 3D")]
+    public TextMeshPro killText;
+    public TextMeshPro multiplicateurText;
 
-    private bool canModifyKey = false; // Contrôle si l'utilisateur peut modifier l'API Key
-    private bool isLoading = false; // Empêche le rechargement multiple pendant une requête
+    [Header("DOTween")]
+    public S_DotweenPlayer dotweenPlayer;
 
-    [MenuItem("Tools/QA/Spreadsheet Viewer")]
-    public static void ShowWindow()
+    [Header("Durée démo")]
+    [Tooltip("Durée totale de la démo en secondes")]
+    public float demoDuration = 60f;
+
+    [Header("Cycle aléatoire jauge")]
+    [Tooltip("Durée min du vidage (secondes)")]
+    public float minEmptyDuration = 1f;
+    [Tooltip("Durée max du vidage (secondes)")]
+    public float maxEmptyDuration = 5f;
+    [Range(0f, 1f)]
+    [Tooltip("Niveau max de vide (borne supérieure du Lerp)")]
+    public float maxEmptyLevel = 0.8f;
+
+    [Header("Simulation kills")]
+    [Tooltip("Kills simulés min par cycle")]
+    public int minKillsPerCycle = 1;
+    [Tooltip("Kills simulés max par cycle")]
+    public int maxKillsPerCycle = 3;
+    [Tooltip("Pause entre chaque kill simulé (secondes)")]
+    public float killInterval = 0.1f;
+
+    [Header("Simulation combo")]
+    [Tooltip("Incrément multip lorsque le seuil est atteint")]
+    public float comboIncreaseAmount = 0.2f;
+    [Tooltip("Nombre de cycles de vidage avant d’incrémenter le combo")]
+    public int cyclesPerComboIncrease = 2;
+    [Tooltip("Valeur de départ du combo")]
+    public float startMultiplier = 1f;
+
+    // État interne
+    private int fakeKillCount;
+    private float fakeMultiplier;
+    private int cycleCount;
+
+    void Start()
     {
-        var window = GetWindow<CustomSpreadsheetWindow>(); // Ouvre ou crée une instance de la fenêtre
-        window.titleContent = new GUIContent("Spreadsheet Viewer"); // Définit le titre de la fenêtre
-        window.minSize = new Vector2(400, 300); // Définit la taille minimale de la fenêtre
-        window.position = new Rect(Screen.width / 2, Screen.height / 2, 500, 400); // Centre la fenêtre à l'écran
-        window.Show(); // Affiche la fenêtre
+        // Validation rapide
+        if (gaugeMaterial == null || killText == null || multiplicateurText == null)
+        {
+            Debug.LogError("Assigne Gauge Material + Textes dans l'Inspector !");
+            enabled = false;
+            return;
+        }
+
+        fakeKillCount = 0;
+        fakeMultiplier = startMultiplier;
+        cycleCount = 0;
+
+        // Initial UI
+        killText.text = "0";
+        multiplicateurText.text = $"x{fakeMultiplier:F2}";
+
+        StartCoroutine(PlayDemo());
     }
 
-    private void OnEnable()
+    private IEnumerator PlayDemo()
     {
-        QATool.FetchSheetData(id, sheetName, apiKey); // Charge les données dès que la fenêtre s'ouvre
-    }
+        float elapsed = 0f;
 
-    private void OnGUI()
-    {
-        GUILayout.Label("Custom Spreadsheet", EditorStyles.boldLabel); // Affiche un titre en gras
-        EditorGUILayout.HelpBox("INTERDICTION DE TOUCHER A L'ID ET A L'API KEY", MessageType.Warning);
-
-        // Champs de texte pour saisir l'ID et le nom de la feuille Google Sheets
-        GUI.enabled = false;
-        id = EditorGUILayout.TextField("Spreadsheet ID", id);
-        GUI.enabled = true;
-        
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.PrefixLabel("Sheet Name");
-        int sheetNameIndex = Mathf.Max(0, System.Array.IndexOf(sheetDropdown, sheetName));
-        sheetNameIndex = EditorGUILayout.Popup(sheetNameIndex, sheetDropdown);
-        sheetName = sheetDropdown[sheetNameIndex];
-        EditorGUILayout.EndHorizontal();
-
-        string keyButtonText; // Texte temporaire du bouton pour modifier l'API Key
-
-        EditorGUILayout.BeginHorizontal();
-        if (canModifyKey) // Afficher le champ sous forme de Texte
+        while (elapsed < demoDuration)
         {
-            apiKey = EditorGUILayout.TextField("API Key", apiKey);
-            keyButtonText = "Valider la clé API"; // Modification du texte temportaire
-        }
-        else // Sinon, affiche le champ sous forme de mot de passe
-        {
-            GUI.enabled = canModifyKey;
-            apiKey = EditorGUILayout.PasswordField("API Key", apiKey);
-            GUI.enabled = true;
-            keyButtonText = "Modifier la clé API"; // Modification du texte temportaire
-        }
+            // — VIDAGE de la jauge (0.49 → random emptyLevel) —
+            float emptyLevel = Random.Range(0f, maxEmptyLevel);
+            float durEmpty = Random.Range(minEmptyDuration, maxEmptyDuration);
+            float t = 0f;
 
-        // Bouton pour activer/désactiver l'édition de l'API Key
-        if (GUILayout.Button(keyButtonText, GUILayout.Width(200))) canModifyKey = !canModifyKey;
-        EditorGUILayout.EndHorizontal();
-
-        // Bouton pour charger les données du Google Sheet - Evite trop de Request
-        if (GUILayout.Button("Rafraichir les données du Google Sheet"))
-        {
-            // Passer le callback pour arrêter le chargement après la fin de la requête
-            QATool.FetchSheetData(id, sheetName, apiKey);
-        }
-
-        scrollPos = EditorGUILayout.BeginScrollView(scrollPos); // Ajoute une barre de défilement
-
-        // Vérifie si des données ont été chargées
-        if (SpreadsheetUtils.SheetData != null && SpreadsheetUtils.SheetData.Count > 0)
-        {
-            // Calcule la taille du contenu en fonction des données récupérées
-            float contentHeight = SpreadsheetUtils.SheetData.Count * cellHeight;
-            float contentWidth = SpreadsheetUtils.SheetData[0].Count * cellWidth;
-
-            EditorGUILayout.BeginVertical(GUILayout.Width(contentWidth));
-            GUILayout.Space(contentHeight);
-
-            // Déterminer le nombre de colonnes
-            int columnCount = SpreadsheetUtils.SheetData[0].Count;
-            int rowCount = SpreadsheetUtils.SheetData.Count;
-            List<float> columnWidths = new List<float>(new float[columnCount]);
-            List<float> rowHeights = new List<float>(new float[rowCount]);
-
-            // Étape 1 : Trouver la largeur maximale de chaque colonne
-            for (int j = 0; j < columnCount; j++)
+            while (t < durEmpty && elapsed < demoDuration)
             {
-                float maxWidth = cellWidth; // Valeur par défaut
+                float dt = Time.deltaTime;
+                t += dt;
+                elapsed += dt;
 
-                for (int i = 0; i < rowCount; i++)
-                {
-                    string cellText = SpreadsheetUtils.SheetData[i][j];
-                    float textWidth = EditorStyles.textField.CalcSize(new GUIContent(cellText)).x + 10;
-                    maxWidth = Mathf.Max(maxWidth, textWidth);
-                }
+                float reveal = Mathf.Lerp(0.49f, emptyLevel, t / durEmpty);
+                gaugeMaterial.SetFloat(gaugeProperty, reveal);
 
-                columnWidths[j] = maxWidth; // Stocker la largeur maximale de cette colonne
+                yield return null;
             }
 
-            // Étape 2 : Trouver la hauteur maximale de chaque ligne
-            for (int i = 0; i < rowCount; i++)
+            // Incrément du compteur de cycles
+            cycleCount++;
+
+            // — SIMULATION des kills pour ce cycle —
+            int killsThisCycle = Random.Range(minKillsPerCycle, maxKillsPerCycle + 1);
+            for (int k = 0; k < killsThisCycle; k++)
             {
-                float maxHeight = cellHeight; // Valeur par défaut
-
-                for (int j = 0; j < columnCount; j++)
-                {
-                    string cellText = SpreadsheetUtils.SheetData[i][j];
-                    float textHeight = EditorStyles.textField.CalcSize(new GUIContent(cellText)).y + 10;
-                    maxHeight = Mathf.Max(maxHeight, textHeight);
-                }
-
-                rowHeights[i] = maxHeight; // Stocker la hauteur maximale de cette ligne
+                fakeKillCount++;
+                killText.text = fakeKillCount.ToString();
+                dotweenPlayer?.Play();
+                yield return new WaitForSeconds(killInterval);
             }
 
-            // Étape 3 : Dessiner les cellules avec la bonne largeur par colonne et hauteur par ligne
-            float yOffset = 0f;
-            for (int i = 0; i < rowCount; i++)
+            // — Refill instantané à plein (0.49) —
+            gaugeMaterial.SetFloat(gaugeProperty, 0.49f);
+
+            // — Incrément du combo seulement tous les N cycles —
+            if (cycleCount % cyclesPerComboIncrease == 0)
             {
-                float rowHeight = rowHeights[i]; // Récupérer la hauteur de la ligne
-                float xOffset = 0f;
-
-                for (int j = 0; j < columnCount; j++)
-                {
-                    float columnWidth = columnWidths[j]; // Récupérer la largeur de la colonne
-
-                    Rect cellRect = new Rect(xOffset, yOffset, columnWidth, rowHeight);
-                    GUI.Box(cellRect, GUIContent.none, EditorStyles.helpBox);
-
-                    GUI.enabled = false;
-                    SpreadsheetUtils.SheetData[i][j] = EditorGUI.TextArea(cellRect, SpreadsheetUtils.SheetData[i][j],
-                        EditorStyles.textField);
-                    GUI.enabled = true;
-
-                    xOffset += columnWidth; // Déplacer la position X pour la colonne suivante
-                }
-
-                yOffset += rowHeight; // Déplacer la position Y pour la ligne suivante
+                fakeMultiplier += comboIncreaseAmount;
+                multiplicateurText.text = $"x{fakeMultiplier:F2}";
             }
-
-            EditorGUILayout.EndVertical();
         }
-        else
-        {
-            GUILayout.Label("Aucune donnée chargée.");
-        }
-
-        EditorGUILayout.EndScrollView();
-
-        Repaint();
     }
 }
