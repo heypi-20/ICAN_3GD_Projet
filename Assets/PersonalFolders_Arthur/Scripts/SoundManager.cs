@@ -70,9 +70,13 @@ public class SoundManager : MonoBehaviour
 
 
     #region Shoot
-
+    [Header("Shoot")]
     public EventReference Classique_Shoot;
     private EventInstance Instance_Classique_Shoot;
+    public EventReference Hit_Shoot;
+    private EventInstance Instance_Hit_Shoot;
+    public EventReference Weak_Shoot;
+    private EventInstance Instace_Weak_Shoot;
 
     private void ShootState(Enum state, int level)
     {
@@ -82,8 +86,19 @@ public class SoundManager : MonoBehaviour
                 Instance_Classique_Shoot = RuntimeManager.CreateInstance(Classique_Shoot);
                 Instance_Classique_Shoot.start();
                 break;
+            case PlayerStates.ShootState.hitEnemy :
+                Instance_Hit_Shoot = RuntimeManager.CreateInstance(Hit_Shoot);
+                Instance_Hit_Shoot.start();
+                break;
+            case PlayerStates.ShootState.hitWeakPoint : 
+                Instance_Hit_Shoot = RuntimeManager.CreateInstance(Hit_Shoot);
+                Instance_Hit_Shoot.start();
+                Instace_Weak_Shoot = RuntimeManager.CreateInstance(Weak_Shoot);
+                Instace_Weak_Shoot.start();
+                break;
         }
     }
+    
 
     #endregion
     
@@ -129,7 +144,7 @@ public class SoundManager : MonoBehaviour
         Instance_Music_Lvl1 = RuntimeManager.CreateInstance(Music_Lvl1);
         Instance_Music_Lvl1.start();
     }
-
+    
     #region LevelChanged
     [Header("Musique")]
     public EventReference Music_Lvl1;
