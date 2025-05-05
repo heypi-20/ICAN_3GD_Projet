@@ -24,12 +24,6 @@ public class S_ObjectivePanel : MonoBehaviour
             AddObjective(objective);
         }
         ObjectiveManager.OnObjectiveAdded += AddObjective;
-        // Assumes you have a GameManager Singleton with the ObjectiveManager
-        // foreach (var objective in GameManager.Instance.Objectives.Objectives) {
-        //     AddObjective(objective);
-        // }
-        //
-        // GameManager.Instance.Objectives.OnObjectiveAdded += AddObjective;
     }
 
     private void AddObjective(Objective obj) {

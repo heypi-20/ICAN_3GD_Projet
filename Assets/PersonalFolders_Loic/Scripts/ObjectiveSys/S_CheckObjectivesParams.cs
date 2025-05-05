@@ -10,20 +10,26 @@ public class S_CheckObjectivesParams : MonoBehaviour
     private void Start()
     {
         MonoBehaviour[] objectivesArr = GetComponents<MonoBehaviour>();
+        
+        if (objectivesArr.Length == 0)
+            return;
+
         objectives = new List<MonoBehaviour>(objectivesArr);
-        objectives.RemoveAt(0);
-        objectives.RemoveAt(0);
+        if (objectives.Count > 2) {
+            objectives.RemoveAt(0);
+            objectives.RemoveAt(0);
+        }
     }
     
-    private void Update()
+    private void OnValidate()
     {
+        if (objectives == null)
+            return;
         foreach(MonoBehaviour objective in objectives) {
             FieldInfo[] fields = objective.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
 
             foreach(FieldInfo fieldInfo in fields) {
-                Debug.Log("Check fields : " + fieldInfo.GetValue(objective));
                 if (fieldInfo.GetValue(objective).GetType() == typeof(ObjectiveParams)) {
-                    Debug.Log("Get Objective Params");
                     ObjectiveParams objParams = (ObjectiveParams)fieldInfo.GetValue(objective);
                     CheckObjectiveParams(objParams);
                 }
@@ -37,7 +43,7 @@ public class S_CheckObjectivesParams : MonoBehaviour
             Debug.LogError("Event trigger cannot be empty!");
         }
         if (objectiveParams.eventText == string.Empty) {
-            Debug.LogError("Event text cannot be empty and have a fix format : EventName : '{0}/{1}");
+            Debug.LogError("Event text format example : EventName : '{0}/{1}'");
         }
         if (objectiveParams.maxValue <= 0) {
             Debug.LogError("Max value must be greater than zero!");
