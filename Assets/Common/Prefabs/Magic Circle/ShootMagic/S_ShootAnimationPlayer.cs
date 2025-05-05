@@ -51,18 +51,6 @@ public class S_ShootAnimationPlayer : MonoBehaviour
                 PlayAnimation(StartShootAnimPalier4);
                 break;
 
-            case PlayerStates.ShootState.StopShoot when level == 1:
-                PlayAnimation(StopShootAnimPalier1);
-                break;
-            case PlayerStates.ShootState.StopShoot when level == 2:
-                PlayAnimation(StopShootAnimPalier2);
-                break;
-            case PlayerStates.ShootState.StopShoot when level == 3:
-                PlayAnimation(StopShootAnimPalier3);
-                break;
-            case PlayerStates.ShootState.StopShoot when level == 4:
-                PlayAnimation(StopShootAnimPalier4);
-                break;
 
             case PlayerStates.ShootState.IsShooting when level == 1:
                 PlayAnimation(IsShootingAnimPalier1);
@@ -75,6 +63,20 @@ public class S_ShootAnimationPlayer : MonoBehaviour
                 break;
             case PlayerStates.ShootState.IsShooting when level == 4:
                 PlayAnimation(IsShootingAnimPalier4);
+                break;
+
+
+            case PlayerStates.ShootState.StopShoot when level == 1:
+                PlayAnimation(StopShootAnimPalier1);
+                break;
+            case PlayerStates.ShootState.StopShoot when level == 2:
+                PlayAnimation(StopShootAnimPalier2);
+                break;
+            case PlayerStates.ShootState.StopShoot when level == 3:
+                PlayAnimation(StopShootAnimPalier3);
+                break;
+            case PlayerStates.ShootState.StopShoot when level == 4:
+                PlayAnimation(StopShootAnimPalier4);
                 break;
         }
     }
