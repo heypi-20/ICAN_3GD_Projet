@@ -39,11 +39,7 @@ public class S_ComboSystem : MonoBehaviour
         // Subscribe to enemy kill event.
         EnemyBase.OnEnemyKilled += StartCombo;
     }
-
-    private void OnDestroy()
-    {
-        EnemyBase.OnEnemyKilled -= StartCombo;
-    }
+    
 
     /// <summary>
     /// Called each time an enemy is killed.
