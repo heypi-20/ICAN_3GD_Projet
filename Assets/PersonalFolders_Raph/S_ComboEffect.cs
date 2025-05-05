@@ -80,7 +80,7 @@ public class S_ComboEffect : MonoBehaviour
             // —— Lissage du compteur de kills ——
             float targetKills = comboSystem.comboKillCount;
             displayedKills = Mathf.Lerp(displayedKills, targetKills, Time.deltaTime * killLerpSpeed);
-            int shownKills = Mathf.FloorToInt(displayedKills + 0.5f);
+            int shownKills = Mathf.FloorToInt(displayedKills + 0.5f)+1;
             if (killText != null)
                 killText.text = shownKills.ToString();
 
