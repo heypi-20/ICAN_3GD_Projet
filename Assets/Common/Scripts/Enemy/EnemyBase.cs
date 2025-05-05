@@ -29,7 +29,7 @@ public class EnemyBase : MonoBehaviour
     private S_PLayerInfoDebugDisplay _sPLayerInfoDebugDisplay;
 
 
-    public static event Action OnEnemyKillForCombo; // Global event for combo tracking
+    public static event Action<EnemyType> OnEnemyKilled; // Global event for combo tracking
     public event Action<EnemyBase> OnKilled; // Instance event for pooling
     
     // Called when the object is enabled (e.g., when reused from the pool)
@@ -125,7 +125,7 @@ public class EnemyBase : MonoBehaviour
         }
 
         // Trigger global and instance death events.
-        OnEnemyKillForCombo?.Invoke();
+        OnEnemyKilled?.Invoke(enemyType);
         OnKilled?.Invoke(this);
 
         // Play kill sound and drop energy items.

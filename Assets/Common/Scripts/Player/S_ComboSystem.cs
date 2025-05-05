@@ -37,18 +37,18 @@ public class S_ComboSystem : MonoBehaviour
         // Get energy storage component (modify as needed).
         energyStorage = FindObjectOfType<S_EnergyStorage>();
         // Subscribe to enemy kill event.
-        EnemyBase.OnEnemyKillForCombo += StartCombo;
+        EnemyBase.OnEnemyKilled += StartCombo;
     }
 
     private void OnDestroy()
     {
-        EnemyBase.OnEnemyKillForCombo -= StartCombo;
+        EnemyBase.OnEnemyKilled -= StartCombo;
     }
 
     /// <summary>
     /// Called each time an enemy is killed.
     /// </summary>
-    private void StartCombo()
+    private void StartCombo(EnemyType enemyType)
     {
         // Get current energy level from energyStorage.
         int currentLevel = energyStorage.currentLevelIndex + 1;

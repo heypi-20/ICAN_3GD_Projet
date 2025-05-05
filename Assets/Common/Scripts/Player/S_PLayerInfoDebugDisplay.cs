@@ -46,15 +46,15 @@ public class S_PLayerInfoDebugDisplay : MonoBehaviour
 
     private void OnEnable()
     {
-        EnemyBase.OnEnemyKillForCombo += HandleKill; // Subscribe to kill event
+        EnemyBase.OnEnemyKilled += HandleKill; // Subscribe to kill event
     }
 
     private void OnDisable()
     {
-        EnemyBase.OnEnemyKillForCombo -= HandleKill; // Unsubscribe
+        EnemyBase.OnEnemyKilled -= HandleKill; // Unsubscribe
     }
 
-    public void HandleKill()
+    public void HandleKill(EnemyType enemyType)
     {
         AddScore();
         RecordKillTimestamp();
