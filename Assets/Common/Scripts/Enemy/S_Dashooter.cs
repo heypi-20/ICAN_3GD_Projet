@@ -80,6 +80,9 @@ public class S_Dashooter : EnemyBase
     {
         base.OnEnable();
         isDashing = false;
+        rb.isKinematic = false;
+        col.enabled = true;
+        rb.useGravity = true;
     }
 
     private void Update()
