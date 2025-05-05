@@ -1,5 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+
+[Serializable]
+public class ObjectiveParams
+{
+    public string eventTrigger;
+    public string eventText;
+    public int maxValue;
+}
 
 public class S_ObjectiveSystem : MonoBehaviour
 {
@@ -9,8 +18,10 @@ public class S_ObjectiveSystem : MonoBehaviour
     {
         ObjectiveManager = new S_ObjectiveManager();
 
-        Objective killObjective = new Objective("KillEnemy", "Killed : {0}/{1}", 10);
-        ObjectiveManager.AddObjective(killObjective);
+        // foreach(ObjectiveParam objectiveParam in objectives) {
+        //     Objective objective = new Objective(objectiveParam.eventTrigger, String.Concat(objectiveParam.eventText, " {0}/{1}"), objectiveParam.maxValue);
+        //     ObjectiveManager.AddObjective(objective);
+        // }
     }   
 }
 

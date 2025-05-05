@@ -1,16 +1,16 @@
 ﻿using System;
 using UnityEngine;
 
-public class TestObjective : MonoBehaviour
+public class S_MainObjective : MonoBehaviour
 {
     [Header("Objective Properties")]
     public ObjectiveParams objectiveParams;
     [SerializeField]
     private S_ObjectiveDisplay objectiveDisplay;
-
+    
     private S_ObjectiveManager ObjectiveManager;
     private Objective killObjective;
-    
+
     private void Start()
     {
         ObjectiveManager = GetComponent<S_ObjectiveSystem>().ObjectiveManager;
@@ -26,7 +26,7 @@ public class TestObjective : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K)) {
+        if (Input.GetKeyDown(KeyCode.E)) {
             killObjective.AddProgress(1);
         }
     }
