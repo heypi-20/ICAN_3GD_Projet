@@ -82,17 +82,14 @@ public class S_Banshee : EnemyBase
         if (Physics.SphereCast(transform.position, transform.localScale.y/2f, transform.forward, out RaycastHit hit, avoidDist, obstacleLayer)) {
             Vector3 avoidDir = Vector3.ProjectOnPlane(toPlayer, hit.normal).normalized;
             rb.velocity = avoidDir * currentChaseSpeed;
-            Debug.Log($"Avoiding at speed {currentChaseSpeed}");
         } else {
             rb.velocity = toPlayer * currentChaseSpeed;
-            Debug.Log($"Chasing at speed {currentChaseSpeed}");
         }
     }
 
     private void Attack()
     {
         rb.velocity = Vector3.zero;
-        Debug.Log("Attacking");
         
         Collider[] hits = Physics.OverlapSphere(transform.position, range, playerLayer);
 
@@ -117,7 +114,6 @@ public class S_Banshee : EnemyBase
 
     private void Run()
     {
-        Debug.Log("Running");
         runTimer += Time.deltaTime;
             
         Vector3 awayFromPlayer = (transform.position - player.position).normalized;
@@ -127,7 +123,6 @@ public class S_Banshee : EnemyBase
         rb.velocity = awayFromPlayer * runSpeed;
             
         if (runTimer >= runTime) {
-            Debug.Log("Finished running");
             canAttack = true;
             isRunning = false;
             canRun = false;
@@ -143,7 +138,6 @@ public class S_Banshee : EnemyBase
     private void PickNewChaseSpeed()
     {
         currentChaseSpeed = Random.Range(chaseSpeedRange.x, chaseSpeedRange.y);
-        Debug.Log($"New chase speed: {currentChaseSpeed}");
     }
 
     /// <summary>
@@ -152,7 +146,6 @@ public class S_Banshee : EnemyBase
     private void PickNewSpeedSwitchInterval()
     {
         timeUntilNextSpeedChange = Random.Range(speedSwitchIntervalRange.x, speedSwitchIntervalRange.y);
-        Debug.Log($"Next speed change in: {timeUntilNextSpeedChange} seconds");
     }
 
     #endregion
