@@ -12,10 +12,7 @@ public class S_ComboEffect : MonoBehaviour
 
     [Header("Barre visuelle")]
     public GameObject redBarObject; // GameObject contenant la barre rouge
-    public Material redBarMaterial; // Shader "ComboJauge"
     public string redBarProgressProperty = "_Progress";
-
-    // ── Partie "Halo" supprimée ──
 
     [Header("Textes 3D")]
     public TextMeshPro killText;
@@ -31,42 +28,54 @@ public class S_ComboEffect : MonoBehaviour
     [Tooltip("Temps minimal (s) entre deux déclenchements")]
     public float tweenCooldown = 0.1f;
 
-    // variables internes pour limiter la fréquence
     private int lastKillCount = 0;
     private float lastTweenTime = -Mathf.Infinity;
-
-    // valeur interne lissée pour le compteur de kills
     private float displayedKills = 0f;
+
+    // --- Nouvelles variables pour l'instance de matériau ---
+    private Renderer redBarRenderer;
+    private MaterialPropertyBlock propertyBlock;
+
+    void OnEnable()
+    {
+        if (redBarObject != null)
+        {
+            redBarRenderer = redBarObject.GetComponent<Renderer>();
+            propertyBlock = new MaterialPropertyBlock();
+        }
+    }
 
     void Update()
     {
-        // Si on est dans l’éditeur et pas en train de jouer :
+        // En mode éditeur sans Play, on garde l'affichage
         if (!Application.isPlaying)
         {
             redBarObject?.SetActive(true);
-            // haloObject supprimé
             killText?.gameObject.SetActive(true);
             multiplicateurText?.gameObject.SetActive(true);
-            return;   // on ne fait rien d’autre
+            return;
         }
 
-        if (comboSystem == null) return;
+        if (comboSystem == null)
+            return;
 
-        // Combo actif
         if (comboSystem.comboActive)
         {
-            // Montrer les visuels
             redBarObject?.SetActive(true);
-            // haloObject supprimé
             killText?.gameObject.SetActive(true);
             multiplicateurText?.gameObject.SetActive(true);
 
             // Calcul du ratio combo
             float ratio = Mathf.Clamp01(1f - comboSystem.comboActuelTimer / comboSystem.currentComboSetting.comboTime);
             float mapped = 0.5f + 0.5f * ratio;
-            redBarMaterial?.SetFloat(redBarProgressProperty, mapped);
 
-            // MAJ halo supprimée
+            // Appliquer la propriété sur l'instance du matériau sans modifier l'asset
+            if (redBarRenderer != null)
+            {
+                redBarRenderer.GetPropertyBlock(propertyBlock);
+                propertyBlock.SetFloat(redBarProgressProperty, mapped);
+                redBarRenderer.SetPropertyBlock(propertyBlock);
+            }
 
             // —— Lissage du compteur de kills ——
             float targetKills = comboSystem.comboKillCount;
@@ -90,13 +99,9 @@ public class S_ComboEffect : MonoBehaviour
         }
         else
         {
-            // Combo inactif → cacher les éléments
             redBarObject?.SetActive(false);
-            // haloObject supprimé
             killText?.gameObject.SetActive(false);
             multiplicateurText?.gameObject.SetActive(false);
-
-            // Réinitialiser le lissage
             displayedKills = 0f;
         }
     }
