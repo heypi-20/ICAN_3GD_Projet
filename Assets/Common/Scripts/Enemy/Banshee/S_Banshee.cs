@@ -29,6 +29,9 @@ public class S_Banshee : EnemyBase
     private bool canRun;
     private bool isRunning;
     private float runTimer;
+    
+    private Vector3 runDirection;
+    private bool hasRunDirection = false;
 
     // Current chase speed and timer until next speed change
     private float currentChaseSpeed;
@@ -76,15 +79,20 @@ public class S_Banshee : EnemyBase
         }
 
         Vector3 toPlayer = (player.position - transform.position).normalized;
-        Quaternion targetRot = Quaternion.LookRotation(toPlayer);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * rotationSpeed);
+        Vector3 avoidDirection = Vector3.zero;
         
         if (Physics.SphereCast(transform.position, transform.localScale.y/2f, transform.forward, out RaycastHit hit, avoidDist, obstacleLayer)) {
-            Vector3 avoidDir = Vector3.ProjectOnPlane(toPlayer, hit.normal).normalized;
-            rb.velocity = avoidDir * currentChaseSpeed;
-        } else {
-            rb.velocity = toPlayer * currentChaseSpeed;
+            Vector3 right = Vector3.Cross(Vector3.up, hit.normal).normalized;
+            Vector3 repel = hit.normal * 0.5f;
+            avoidDirection = (right + repel).normalized;
         }
+        
+        Vector3 chaseDirection = (toPlayer + avoidDirection * 1.5f).normalized;
+        
+        Quaternion targetRot = Quaternion.LookRotation(chaseDirection);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * rotationSpeed);
+        
+        rb.velocity = chaseDirection * currentChaseSpeed;
     }
 
     private void Attack()
@@ -115,12 +123,20 @@ public class S_Banshee : EnemyBase
     private void Run()
     {
         runTimer += Time.deltaTime;
-            
-        Vector3 awayFromPlayer = (transform.position - player.position).normalized;
-        Quaternion targetRot = Quaternion.LookRotation(awayFromPlayer);
+
+        if (!hasRunDirection) {
+            runDirection = (transform.position - player.position).normalized;
+            hasRunDirection = true;
+        }
+
+        if (Physics.SphereCast(transform.position, transform.localScale.y/2, runDirection, out RaycastHit hit, avoidDist, obstacleLayer)) {
+            runDirection = Vector3.Reflect(runDirection, hit.normal).normalized;
+        }
+        
+        Quaternion targetRot = Quaternion.LookRotation(runDirection);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * rotationSpeed);
             
-        rb.velocity = awayFromPlayer * runSpeed;
+        rb.velocity = runDirection * runSpeed;
             
         if (runTimer >= runTime) {
             canAttack = true;
