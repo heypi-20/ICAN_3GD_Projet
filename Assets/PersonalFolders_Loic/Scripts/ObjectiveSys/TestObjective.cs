@@ -22,13 +22,13 @@ public class TestObjective : MonoBehaviour
             Debug.LogError("No Objective Display assigned!");
         }
         objectiveDisplay.Init(killObjective);
+        
+        EnemyBase.OnEnemyKilled += AddProgress;
     }
 
-    private void Update()
+    private void AddProgress(EnemyType enemyType)
     {
-        if (Input.GetKeyDown(KeyCode.K)) {
-            killObjective.AddProgress(1);
-        }
+        killObjective.AddProgress(1);
     }
 }
 
