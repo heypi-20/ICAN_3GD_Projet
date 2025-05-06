@@ -22,6 +22,7 @@ public class S_MainObjective : MonoBehaviour
             Debug.LogError("No Objective Display assigned!");
         }
         objectiveDisplay.Init(killObjective);
+        
         EnemyBase.OnEnemyKilled += AddProgress;
     }
 
