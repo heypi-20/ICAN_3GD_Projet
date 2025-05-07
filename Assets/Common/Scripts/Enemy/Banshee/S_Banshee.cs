@@ -142,6 +142,7 @@ public class S_Banshee : EnemyBase
             canAttack = true;
             isRunning = false;
             canRun = false;
+            hasRunDirection = false;
             runTimer = 0;
         }
     }
