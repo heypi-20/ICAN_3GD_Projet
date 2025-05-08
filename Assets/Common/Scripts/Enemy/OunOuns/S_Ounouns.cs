@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
-using UnityEngine.AI;
 
 [RequireComponent(typeof(Rigidbody))]
 public class S_Ounouns : EnemyBase
 {
     [Header("Movement Properties")]
     public float moveSpeed = 2f;
-    public float stopDistance = 5f;     
+    public float stopDistance = 5f;
+    public float rotationSpeed = 10f;
     
     [Header("Shoot Properties")]
     public float fireRate;                          // Time between shots
@@ -19,6 +19,9 @@ public class S_Ounouns : EnemyBase
     private Transform player;
     private RaycastHit hit;
     private float shootTimer;
+    
+    private S_EnemyGroundCheck groundCheck;
+    private Rigidbody rb;
 
     private void Start()
     {
@@ -26,13 +29,13 @@ public class S_Ounouns : EnemyBase
         if (findPlayer == null) {
             Debug.LogWarning("No Character Controller found in scene.");
         }
+
+        groundCheck = GetComponent<S_EnemyGroundCheck>();
+        rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
-        if (findPlayer == null)
-            return;
-
         player = findPlayer.transform;
 
         shootTimer += Time.deltaTime;
@@ -44,6 +47,10 @@ public class S_Ounouns : EnemyBase
             Shoot();
             shootTimer = 0f;
         }
+
+        if (!groundCheck.TriggerDetection()) {
+            transform.position += transform.up * (-9.81f * Time.deltaTime);
+        }
     }
 
     /// <summary>
@@ -52,19 +59,15 @@ public class S_Ounouns : EnemyBase
     /// </summary>
     private void MoveTowardsPlayer(float dist)
     {
+        Vector3 direction = (player.position - transform.position).normalized;
+        // direction.y = 0;
         if (dist > stopDistance) {
-            Vector3 direction = (player.position - transform.position).normalized;
-
             // Move toward the player
-            transform.position += direction * (moveSpeed * Time.deltaTime);
+            rb.velocity = direction * (moveSpeed * Time.deltaTime);
         }
 
-        // Look at the player horizontally (ignore vertical difference)
-        Vector3 lookDirection = player.position - transform.position;
-        lookDirection.y = 0f;
-        if (lookDirection != Vector3.zero) {
-            transform.rotation = Quaternion.LookRotation(lookDirection);
-        }
+        Quaternion targetRot = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * rotationSpeed);
     }
 
     /// <summary>   

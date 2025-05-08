@@ -7,6 +7,7 @@ using UnityEngine;
 public class S_CheckObjectivesParams : MonoBehaviour
 {
     private List<MonoBehaviour> objectives;
+    
     private void Start()
     {
         MonoBehaviour[] objectivesArr = GetComponents<MonoBehaviour>();
@@ -50,4 +51,3 @@ public class S_CheckObjectivesParams : MonoBehaviour
         }
     }
 }
-
