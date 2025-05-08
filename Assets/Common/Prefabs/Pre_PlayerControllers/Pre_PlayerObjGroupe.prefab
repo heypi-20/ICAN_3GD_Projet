@@ -1590,7 +1590,6 @@ GameObject:
   - component: {fileID: 6210231085428147088}
   - component: {fileID: 5084237123966516071}
   - component: {fileID: 1265785143488936355}
-  - component: {fileID: 7931846162190892996}
   m_Layer: 0
   m_Name: SprintEffect
   m_TagString: Untagged
@@ -1661,9 +1660,9 @@ VisualEffect:
       m_Array:
       - m_Value:
           serializedVersion: 2
-          key0: {r: 1, g: 0, b: 0, a: 0}
-          key1: {r: 0.5, g: 0.5, b: 0.5, a: 0}
-          key2: {r: 0, g: 0, b: 0, a: 0.8}
+          key0: {r: 1, g: 0, b: 0, a: 0.26862746}
+          key1: {r: 1, g: 0, b: 0, a: 1}
+          key2: {r: 0.5, g: 0.5, b: 0.5, a: 0.8}
           key3: {r: 0, g: 0, b: 0, a: 0}
           key4: {r: 0, g: 0, b: 0, a: 0}
           key5: {r: 0, g: 0, b: 0, a: 0}
@@ -1671,24 +1670,24 @@ VisualEffect:
           key7: {r: 0, g: 0, b: 0, a: 0}
           ctime0: 0
           ctime1: 65535
-          ctime2: 0
+          ctime2: 65535
           ctime3: 0
           ctime4: 0
           ctime5: 0
           ctime6: 0
           ctime7: 0
           atime0: 0
-          atime1: 65535
-          atime2: 52428
+          atime1: 257
+          atime2: 64636
           atime3: 65535
           atime4: 0
           atime5: 0
           atime6: 0
           atime7: 0
           m_Mode: 0
-          m_ColorSpace: -1
+          m_ColorSpace: 1
           m_NumColorKeys: 2
-          m_NumAlphaKeys: 2
+          m_NumAlphaKeys: 4
         m_Name: ColorGradient
         m_Overridden: 1
     m_NamedObject:
@@ -1753,25 +1752,6 @@ MonoBehaviour:
   sprintFOV: 80
   gunFollowCamera: {fileID: 1265785143488936355}
 --- !u!114 &1265785143488936355
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3942367488064149510}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8427ff4bbce4ca5439ca22e287ca6d2b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainCamera: {fileID: 4750812657611663464}
-  distanceFromCamera: 2.22
-  positionOffset: {x: 0, y: -0.4, z: 0}
-  rotationOffset: {x: 0, y: 0, z: 0}
-  useDelayFollow: 0
-  followDelay: 0.1
-  rotationDelay: 0.1
---- !u!114 &7931846162190892996
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4979,6 +4959,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8728408009053761971}
     m_Modifications:
+    - target: {fileID: 2044297892813829013, guid: c06f799dbb2f0164ab15b0e6361f014f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2897695941795852934, guid: c06f799dbb2f0164ab15b0e6361f014f, type: 3}
       propertyPath: comboSystem
       value: 
@@ -4987,6 +4971,18 @@ PrefabInstance:
       propertyPath: energyStorage
       value: 
       objectReference: {fileID: 9046166951153555370}
+    - target: {fileID: 3760858739423757888, guid: c06f799dbb2f0164ab15b0e6361f014f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5466974028439452932, guid: c06f799dbb2f0164ab15b0e6361f014f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6459941764251615623, guid: c06f799dbb2f0164ab15b0e6361f014f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6484292578763415361, guid: c06f799dbb2f0164ab15b0e6361f014f, type: 3}
       propertyPath: mainCamera
       value: 
