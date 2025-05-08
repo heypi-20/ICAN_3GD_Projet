@@ -2,7 +2,6 @@
 using UnityEngine.VFX;
 using System.Collections;
 
-[RequireComponent(typeof(S_BasicSprint_Module))]
 [RequireComponent(typeof(VisualEffect))]
 public class S_SprintEffect : MonoBehaviour
 {
@@ -16,7 +15,7 @@ public class S_SprintEffect : MonoBehaviour
 
     private void Awake()
     {
-        sprintModule = GetComponent<S_BasicSprint_Module>();
+        sprintModule = FindAnyObjectByType<S_BasicSprint_Module>();
         vfx = GetComponent<VisualEffect>();
 
         // On lit tes valeurs de base une fois pour toutes
