@@ -16,7 +16,6 @@ public class S_BasicSprint_Module : MonoBehaviour
         public float sprintSpeed; // Vitesse de sprint pour ce niveau
         public float energyConsumptionRate; // Consommation d'énergie pour ce niveau
         public float sprintDamage;
-        public float SprintingSpeedFOV;
         public int dropBonus;
     }
     [Header("Sprint Levels")]
@@ -38,11 +37,6 @@ public class S_BasicSprint_Module : MonoBehaviour
     public AnimationCurve accelerationCurve = AnimationCurve.Linear(0, 0, 1, 1);
     public float decelerationTime = 0.5f;
     public AnimationCurve decelerationCurve = AnimationCurve.Linear(0, 1, 1, 0);
-
-    [Header("Camera Settings")]
-    public CinemachineVirtualCamera cinemachineCamera; // Caméra du joueur pour ajuster le FOV
-    private float normalFOV = 60f; // FOV normal
-    public float fovTransitionTime = 0.2f; // Durée de transition du FOV
     
     [Header("Gizmos Settings")]
     public bool drawSprintDamageGizmo = true;
@@ -74,12 +68,6 @@ public class S_BasicSprint_Module : MonoBehaviour
         _characterController = GetComponent<S_CustomCharacterController>();
         _energyStorage = GetComponent<S_EnergyStorage>();
         _inputManager = FindObjectOfType<S_InputManager>();
-        
-        // Initialiser le FOV de la caméra
-        if (cinemachineCamera != null)
-        {
-            normalFOV = cinemachineCamera.m_Lens.FieldOfView;
-        }
     }
 
     private void Update()
@@ -221,12 +209,8 @@ public class S_BasicSprint_Module : MonoBehaviour
                 if (IsSprintCoroutineRunning()) StopCoroutine(_currentCoroutine);
                 _currentCoroutine = StartCoroutine(AccelerateToSprintSpeed());
                 _isSprinting = true;
-                
-                
                 //Trigger event
                 SprintObserverEvent(PlayerStates.SprintState.StartSprinting,_energyStorage.currentLevelIndex+1);
-                
-                UpdateCameraFOV(GetLevelFOV());
             }
             
             
@@ -241,7 +225,6 @@ public class S_BasicSprint_Module : MonoBehaviour
     
             //Trigger event
             SprintObserverEvent(PlayerStates.SprintState.StopSprinting,_energyStorage.currentLevelIndex+1);
-            UpdateCameraFOV(normalFOV);
         }
     }
     // Vérifie si une coroutine de sprint est en cours
@@ -299,33 +282,11 @@ public class S_BasicSprint_Module : MonoBehaviour
         _energyStorage.currentEnergy -=energyConsumptionRate*Time.deltaTime;
     }
 
-    private void UpdateCameraFOV(float targetFOV)
-    {
-        if (cinemachineCamera != null)
-        {
-            DOTween.Kill(cinemachineCamera); // Arrête les animations FOV précédentes
-            DOTween.To(
-                () => cinemachineCamera.m_Lens.FieldOfView, // Getter pour le FOV actuel
-                x => cinemachineCamera.m_Lens.FieldOfView = x, // Setter pour appliquer le nouveau FOV
-                targetFOV, // Valeur cible
-                fovTransitionTime // Durée de la transition
-            ).SetEase(Ease.OutQuad);
-        }
-    }
-
     // Obtient la vitesse de sprint pour le niveau d'énergie actuel
     private SprintLevel GetCurrentSprintLevels()
     {
         int currentLevel = _energyStorage.currentLevelIndex + 1; // Ajuste pour correspondre au niveau dans SprintLevel
         return sprintLevels.Find(level => level.level == currentLevel);;
-    }
-    
-
-    private float GetLevelFOV()
-    {
-        int currentLevel = _energyStorage.currentLevelIndex + 1;
-        SprintLevel level = sprintLevels.Find(l => l.level == currentLevel);
-        return level != null ? level.SprintingSpeedFOV : 0f;
     }
     
     // Gizmos drawing to visualize the sprint damage range
