@@ -1,21 +1,27 @@
 ﻿using UnityEngine;
 using UnityEngine.VFX;
 using System.Collections;
+using Cinemachine;
+using DG.Tweening;
 
 [RequireComponent(typeof(VisualEffect))]
 public class S_SprintEffect : MonoBehaviour
 {
-    private S_BasicSprint_Module sprintModule;
+    [Header("VFX Settings")]
     private VisualEffect vfx;
     private float _initialSpawnRate;
     private float _initialSpeed;
     public float fadeDuration = 0.5f;
-
     private Coroutine fadeRoutine;
+
+    [Header("Camera Settings")]
+    public CinemachineVirtualCamera cinemachineCamera; // Caméra du joueur pour ajuster le FOV
+    public float fovTransitionTime = 0.2f; // Durée de transition du FOV
+    public float SprintFOV = 60f; // FOV sprint
+    private float normalFOV = 60f; // FOV normal
 
     private void Awake()
     {
-        sprintModule = FindAnyObjectByType<S_BasicSprint_Module>();
         vfx = GetComponent<VisualEffect>();
 
         // On lit tes valeurs de base une fois pour toutes
@@ -25,13 +31,16 @@ public class S_SprintEffect : MonoBehaviour
         // On part de 0 si on veut qu'il n'y ait aucun effet au menu par exemple
         vfx.SetFloat("SpawnRate", 0f);
         vfx.SetFloat("Speed", 0f);
-
-        sprintModule.OnSprintStateChange += HandleSprintState;
     }
 
-    private void OnDestroy()
+    private void Start()
     {
-        sprintModule.OnSprintStateChange -= HandleSprintState;
+        S_PlayerStateObserver.Instance.OnSprintStateEvent += HandleSprintState;
+
+        if (cinemachineCamera != null)
+        {
+            normalFOV = cinemachineCamera.m_Lens.FieldOfView;
+        }
     }
 
     private void HandleSprintState(System.Enum stateEnum, int level)
@@ -40,9 +49,11 @@ public class S_SprintEffect : MonoBehaviour
         {
             case PlayerStates.SprintState.StartSprinting:
                 StartFade(0f, 1f);
+                UpdateCameraFOV(SprintFOV);
                 break;
             case PlayerStates.SprintState.StopSprinting:
                 StartFade(1f, 0f);
+                UpdateCameraFOV(normalFOV);
                 break;
         }
     }
@@ -73,5 +84,19 @@ public class S_SprintEffect : MonoBehaviour
         vfx.SetFloat("Speed", to * _initialSpeed);
 
         fadeRoutine = null;
+    }
+
+    private void UpdateCameraFOV(float targetFOV)
+    {
+        if (cinemachineCamera != null)
+        {
+            DOTween.Kill(cinemachineCamera); // Arrête les animations FOV précédentes
+            DOTween.To(
+                () => cinemachineCamera.m_Lens.FieldOfView, // Getter pour le FOV actuel
+                x => cinemachineCamera.m_Lens.FieldOfView = x, // Setter pour appliquer le nouveau FOV
+                targetFOV, // Valeur cible
+                fovTransitionTime // Durée de la transition
+            ).SetEase(Ease.OutQuad);
+        }
     }
 }
