@@ -2949,6 +2949,7 @@ GameObject:
   - component: {fileID: 6210231085428147088}
   - component: {fileID: 5084237123966516071}
   - component: {fileID: 1265785143488936355}
+  - component: {fileID: 7931846162190892996}
   m_Layer: 0
   m_Name: SprintEffect
   m_TagString: Untagged
@@ -3110,6 +3111,25 @@ MonoBehaviour:
   fovTransitionTime: 0.2
   SprintFOV: 60
 --- !u!114 &1265785143488936355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3942367488064149510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8427ff4bbce4ca5439ca22e287ca6d2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 4750812657611663464}
+  distanceFromCamera: 2.22
+  positionOffset: {x: 0, y: -0.4, z: 0}
+  rotationOffset: {x: 0, y: 0, z: 0}
+  useDelayFollow: 0
+  followDelay: 0.1
+  rotationDelay: 0.1
+--- !u!114 &7931846162190892996
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
