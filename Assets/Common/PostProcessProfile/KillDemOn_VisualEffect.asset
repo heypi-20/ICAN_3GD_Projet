@@ -47,6 +47,44 @@ MonoBehaviour:
   dirtIntensity:
     m_OverrideState: 0
     m_Value: 0
+--- !u!114 &-7729268933827090676
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d6e299dc3638154bbc6de09e3382285, type: 3}
+  m_Name: Blur
+  m_EditorClassIdentifier: 
+  active: 0
+  mode:
+    m_OverrideState: 1
+    m_Value: 0
+  highQuality:
+    m_OverrideState: 1
+    m_Value: 0
+  distanceFade:
+    m_OverrideState: 1
+    m_Value: 1
+  startFadeDistance:
+    m_OverrideState: 1
+    m_Value: 50
+  endFadeDistance:
+    m_OverrideState: 1
+    m_Value: 100
+  amount:
+    m_OverrideState: 1
+    m_Value: 0.06
+  iterations:
+    m_OverrideState: 0
+    m_Value: 1
+  downscaling:
+    m_OverrideState: 0
+    m_Value: 1
+  shader: {fileID: 4800000, guid: fa78272576207e243bc6ec9f8a6c4f73, type: 3}
 --- !u!114 &-6690028159576540560
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -75,7 +113,7 @@ MonoBehaviour:
   rounded:
     m_OverrideState: 0
     m_Value: 0
---- !u!114 &-4259472660434585122
+--- !u!114 &-3590337696283669294
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -84,37 +122,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97c23e3b12dc18c42a140437e53d3951, type: 3}
-  m_Name: Tonemapping
+  m_Script: {fileID: 11500000, guid: 36e21a9f18817d444b2c00478e04a58e, type: 3}
+  m_Name: Posterize
   m_EditorClassIdentifier: 
-  active: 0
-  mode:
+  active: 1
+  hsvMode:
     m_OverrideState: 1
-    m_Value: 1
-  neutralHDRRangeReductionMode:
-    m_OverrideState: 0
-    m_Value: 2
-  acesPreset:
-    m_OverrideState: 0
-    m_Value: 3
-  hueShiftAmount:
-    m_OverrideState: 0
     m_Value: 0
-  detectPaperWhite:
+  levels:
+    m_OverrideState: 1
+    m_Value: 17
+  hue:
     m_OverrideState: 0
-    m_Value: 0
-  paperWhite:
+    m_Value: 256
+  saturation:
     m_OverrideState: 0
-    m_Value: 300
-  detectBrightnessLimits:
+    m_Value: 256
+  value:
     m_OverrideState: 0
-    m_Value: 1
-  minNits:
-    m_OverrideState: 0
-    m_Value: 0.005
-  maxNits:
-    m_OverrideState: 0
-    m_Value: 1000
+    m_Value: 256
+  shader: {fileID: 0}
 --- !u!114 &-1736034418316754122
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -127,68 +154,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90ce1611ace1a9a4a8284d45a924bdcd, type: 3}
   m_Name: Dithering
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   lut:
     m_OverrideState: 1
-    m_Value: {fileID: 2800000, guid: 039004ec2fad19949bfc60fa90b758a6, type: 3}
+    m_Value: {fileID: 2800000, guid: 7147116fdb6b7f04db776591baf515e6, type: 3}
     dimension: 1
   intensity:
     m_OverrideState: 1
-    m_Value: 0.832
+    m_Value: 0.473
   luminanceThreshold:
     m_OverrideState: 1
-    m_Value: 0.474
+    m_Value: 0.494
   tiling:
     m_OverrideState: 1
-    m_Value: 1.11
+    m_Value: 1.25
   shader: {fileID: 4800000, guid: 9dfd4d129fd660d43a2fb5c40d119ca4, type: 3}
---- !u!114 &-359255258248137043
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b2db86121404754db890f4c8dfe81b2, type: 3}
-  m_Name: Bloom
-  m_EditorClassIdentifier: 
-  active: 0
-  skipIterations:
-    m_OverrideState: 0
-    m_Value: 1
-  threshold:
-    m_OverrideState: 1
-    m_Value: 1
-  intensity:
-    m_OverrideState: 1
-    m_Value: 1
-  scatter:
-    m_OverrideState: 0
-    m_Value: 0.7
-  clamp:
-    m_OverrideState: 0
-    m_Value: 65472
-  tint:
-    m_OverrideState: 0
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
-  highQualityFiltering:
-    m_OverrideState: 0
-    m_Value: 0
-  downscale:
-    m_OverrideState: 0
-    m_Value: 0
-  maxIterations:
-    m_OverrideState: 0
-    m_Value: 6
-  dirtTexture:
-    m_OverrideState: 0
-    m_Value: {fileID: 0}
-    dimension: 1
-  dirtIntensity:
-    m_OverrideState: 0
-    m_Value: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,17 +179,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
-  m_Name: SC Retro
+  m_Name: KillDemOn_VisualEffect
   m_EditorClassIdentifier: 
   components:
-  - {fileID: -359255258248137043}
-  - {fileID: -4259472660434585122}
-  - {fileID: 3581891975692024863}
-  - {fileID: 4426486076645699277}
-  - {fileID: 8747503827489424069}
-  - {fileID: 5818028678491684855}
   - {fileID: -1736034418316754122}
---- !u!114 &3581891975692024863
+  - {fileID: -3590337696283669294}
+  - {fileID: 4426486076645699277}
+  - {fileID: 3787594193344909167}
+  - {fileID: 5818028678491684855}
+  - {fileID: 3424685163429398363}
+  - {fileID: -7729268933827090676}
+--- !u!114 &3424685163429398363
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -218,25 +198,46 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 899c54efeace73346a0a16faa3afe726, type: 3}
-  m_Name: Vignette
+  m_Script: {fileID: 11500000, guid: 7969232a53c3c2148a7764600324f3ae, type: 3}
+  m_Name: TubeDistortion
   m_EditorClassIdentifier: 
   active: 0
-  color:
+  mode:
     m_OverrideState: 1
-    m_Value: {r: 0, g: 0, b: 0, a: 1}
-  center:
-    m_OverrideState: 0
-    m_Value: {x: 0.5, y: 0.5}
-  intensity:
-    m_OverrideState: 1
-    m_Value: 0.2
-  smoothness:
-    m_OverrideState: 0
-    m_Value: 0.2
-  rounded:
-    m_OverrideState: 0
     m_Value: 0
+  amount:
+    m_OverrideState: 1
+    m_Value: 0
+  shader: {fileID: 4800000, guid: 2270ba0b69c63bc459598cad50f09a1d, type: 3}
+--- !u!114 &3787594193344909167
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dfc0ecd934e74246bcf9791abe617b0, type: 3}
+  m_Name: Pixelize
+  m_EditorClassIdentifier: 
+  active: 0
+  amount:
+    m_OverrideState: 1
+    m_Value: 1
+  resolution:
+    m_OverrideState: 1
+    m_Value: 141
+  resolutionPreset:
+    m_OverrideState: 1
+    m_Value: 480
+  preserveAspectRatio:
+    m_OverrideState: 1
+    m_Value: 0
+  centerPixel:
+    m_OverrideState: 1
+    m_Value: 1
+  shader: {fileID: 0}
 --- !u!114 &4426486076645699277
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -249,13 +250,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb18596b54f897e47b3e758ff2305d7f, type: 3}
   m_Name: ColorSplit
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   mode:
     m_OverrideState: 1
     m_Value: 0
   offset:
     m_OverrideState: 1
-    m_Value: 0.05
+    m_Value: 0.15
   edgeMasking:
     m_OverrideState: 1
     m_Value: 0
@@ -315,40 +316,11 @@ MonoBehaviour:
   active: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0.625
+    m_Value: 0.5
   amount:
     m_OverrideState: 1
-    m_Value: 257
+    m_Value: 200
   speed:
     m_OverrideState: 1
-    m_Value: 0.13
+    m_Value: 0.5
   shader: {fileID: 4800000, guid: 9a37ab67e535e704b8e007d86c2be9ff, type: 3}
---- !u!114 &8747503827489424069
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36e21a9f18817d444b2c00478e04a58e, type: 3}
-  m_Name: Posterize
-  m_EditorClassIdentifier: 
-  active: 0
-  hsvMode:
-    m_OverrideState: 1
-    m_Value: 0
-  levels:
-    m_OverrideState: 1
-    m_Value: 15
-  hue:
-    m_OverrideState: 1
-    m_Value: 77
-  saturation:
-    m_OverrideState: 1
-    m_Value: 256
-  value:
-    m_OverrideState: 1
-    m_Value: 19
-  shader: {fileID: 4800000, guid: 40279b644fb7ed248b6b89369b5ae060, type: 3}
