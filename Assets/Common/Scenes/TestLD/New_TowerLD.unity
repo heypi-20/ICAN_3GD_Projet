@@ -204,14 +204,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pre_PlayerObjGroupe
       objectReference: {fileID: 0}
-    - target: {fileID: 5084237123966516071, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
-      propertyPath: cinemachineCamera
-      value: 
-      objectReference: {fileID: 83086561}
-    - target: {fileID: 5942673443579084825, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 2.35
-      objectReference: {fileID: 0}
     - target: {fileID: 8728408009053761971, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -262,6 +254,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5359037014503768839, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 3942367488064149510, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 442713411}
   m_SourcePrefab: {fileID: 100100000, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
 --- !u!114 &83086561 stripped
 MonoBehaviour:
@@ -1219,6 +1214,30 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 424674325}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &442713406 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3942367488064149510, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+  m_PrefabInstance: {fileID: 83086560}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &442713411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 442713406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8427ff4bbce4ca5439ca22e287ca6d2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 1591740645}
+  distanceFromCamera: 2.22
+  positionOffset: {x: 0, y: -0.4, z: 0}
+  rotationOffset: {x: 0, y: 0, z: 0}
+  useDelayFollow: 0
+  followDelay: 0.1
+  rotationDelay: 0.1
 --- !u!4 &449395093 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7503010589162537126, guid: 87ba83fc416216045abb3918f8ee6faa, type: 3}
@@ -3163,6 +3182,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1456519162}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!20 &1591740645 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 4750812657611663464, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+  m_PrefabInstance: {fileID: 83086560}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1643375907
 GameObject:
   m_ObjectHideFlags: 0
