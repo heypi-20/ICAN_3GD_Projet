@@ -217,7 +217,7 @@ public class S_BasicSprint_Module : MonoBehaviour
         }
         else if (_isSprinting)
         {
-            if(GetCurrentSprintLevels()==null)return;
+            //if(GetCurrentSprintLevels()==null)return;
             // Arrêter le sprint si l'input n'est plus actif
             if (IsSprintCoroutineRunning()) StopCoroutine(_currentCoroutine);
             _currentCoroutine = StartCoroutine(DecelerateToNormalSpeed());
