@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8193632311914020444
+--- !u!114 &-4451223887944775261
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,16 +20,18 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TestShockWave 1
-  m_Shader: {fileID: -6465566751694194690, guid: ddf29cdf04d64ea488295fcdf1866075, type: 3}
+  m_Name: Mat_Extern_1_MC_DA
+  m_Shader: {fileID: 4800000, guid: 373c8530c14a6bb48807cecfcccd24f3, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _INVERT_ON
+  - _USEHALONOISE_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
@@ -38,6 +40,14 @@ Material:
     m_TexEnvs:
     - _BaseMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BorderGradientTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BorderNoiseTex:
+        m_Texture: {fileID: 2800000, guid: 3869fc2c17fbf5042b21015c96e0fcc4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -60,12 +70,24 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _MainTex:
+    - _FlameTex:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _HaloTex:
+        m_Texture: {fileID: 2800000, guid: 3869fc2c17fbf5042b21015c96e0fcc4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 786867c0d20721c49ae2328eeba8f2b1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 2800000, guid: a77fc24330728764e83e4267ec390e6f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -96,51 +118,64 @@ Material:
     m_Floats:
     - _AlphaClip: 0
     - _AlphaToMask: 0
-    - _Amplitude: 29.2
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
+    - _BorderEmissionStrength: 1
+    - _BorderFade: 0
+    - _BorderNoiseScale: 2
+    - _BorderNoiseStrength: 0.035
+    - _BorderWidth: 0.0449
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 2
-    - _CurveShape: 0.001
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _Dist: 8
-    - _Distance: 0.87
     - _DstBlend: 0
     - _DstBlendAlpha: 0
+    - _EdgeWidth: 0
+    - _EmissionStrength: 5.5
     - _EnvironmentReflections: 1
-    - _FadeDistance: -8.18
-    - _Frequency: -0.44
+    - _FlameEmissionStrength: 8.03
+    - _FlameSpeed: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _Max_FadeDistance: 2
+    - _HaloEmissionStrength: 0
+    - _HaloNoiseScale: 0.1
+    - _HaloStrength: 0
+    - _Invert: 1
     - _Metallic: 0
+    - _NoiseScale: 1
     - _OcclusionStrength: 1
     - _Parallax: 0.005
-    - _QueueControl: 0
+    - _Progress: 1
     - _QueueOffset: 0
     - _ReceiveShadows: 1
+    - _RevealAlpha: 1
+    - _RevealMode: 3
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _Speed: 7.48
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
-    - _StartTime: 0
     - _Surface: 0
-    - _WaveLength: 0.66
+    - _UseBorderGradient: 0
+    - _UseHaloNoise: 1
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Center: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 1, g: 0.67668825, b: 0, a: 0.7372549}
-    - _Color1: {r: 0.5566038, g: 0.11891978, b: 0.04988429, a: 0}
-    - _Color2: {r: 0.33962262, g: 0, b: 0.110195585, a: 0.59607846}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _BorderColor: {r: 1, g: 0.5, b: 0, a: 1}
+    - _BorderEmissionColor: {r: 1, g: 0.5, b: 0, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _ColorEnd: {r: 1, g: 0.8980393, b: 0.57254905, a: 1}
+    - _ColorStart: {r: 1, g: 0.8990011, b: 0.5707547, a: 1}
+    - _EmissionColor: {r: 1, g: 0.31226623, b: 0, a: 1}
+    - _FlameColor: {r: 1, g: 0.06666667, b: 0, a: 1}
+    - _FlameEmissionColor: {r: 1, g: 0.06666667, b: 0, a: 1}
+    - _HaloColor: {r: 0, g: 0, b: 0, a: 1}
+    - _HaloEmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []

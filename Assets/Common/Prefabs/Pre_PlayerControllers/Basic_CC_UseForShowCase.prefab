@@ -326,6 +326,31 @@ MonoBehaviour:
   ProjectilePrefab_Lv4: {fileID: 3953531229119934194, guid: f198e14c66f2eba4c87ed26fb5bc46a9, type: 3}
   Speed: 300
   ProjectileLifeTime: 3
+  FollowTime: 0.1
+  SpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &3067188605988808966
 GameObject:
   m_ObjectHideFlags: 0
@@ -357,7 +382,7 @@ Transform:
   m_GameObject: {fileID: 3067188605988808966}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.3400002, z: 0.13}
+  m_LocalPosition: {x: -0.00000027947317, y: 2.3399992, z: 0.13000488}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -372,7 +397,7 @@ Camera:
   m_GameObject: {fileID: 3067188605988808966}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 2
   m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -396,7 +421,7 @@ Camera:
     height: 1
   near clip plane: 0.01
   far clip plane: 1000
-  field of view: 60
+  field of view: 90
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -521,13 +546,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3067188605988808966}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_IsGlobal: 1
-  priority: 0
+  priority: 1
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: fc723267deb8d5943b22ee27a50c5499, type: 2}
@@ -617,7 +642,7 @@ MonoBehaviour:
   m_VerticalAxis:
     Value: 0
     m_SpeedMode: 1
-    m_MaxSpeed: 0.1
+    m_MaxSpeed: 0.5
     m_AccelTime: 0.1
     m_DecelTime: 0
     m_InputAxisName: Mouse Y
@@ -641,7 +666,7 @@ MonoBehaviour:
   m_HorizontalAxis:
     Value: 0
     m_SpeedMode: 1
-    m_MaxSpeed: 0.1
+    m_MaxSpeed: 0.5
     m_AccelTime: 0.1
     m_DecelTime: 0
     m_InputAxisName: Mouse X
@@ -851,12 +876,12 @@ MonoBehaviour:
   - m_Script
   m_LockStageInInspector: 
   m_StreamingVersion: 20170927
-  m_Priority: 10
+  m_Priority: 0
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 60826091439302408}
   m_Lens:
-    FieldOfView: 60
+    FieldOfView: 90
     OrthographicSize: 5
     NearClipPlane: 0.01
     FarClipPlane: 1000
@@ -1210,7 +1235,7 @@ GameObject:
   - component: {fileID: 8051317258864304930}
   m_Layer: 0
   m_Name: Basic_CC_UseForShowCase
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
