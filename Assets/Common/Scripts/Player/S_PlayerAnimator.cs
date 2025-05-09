@@ -145,9 +145,9 @@ public class S_PlayerAnimator : MonoBehaviour
             case PlayerStates.ShootState.StartShoot when S_PlayerStateObserver.Instance.LastMeleeState == null:
                 handAnimator.CrossFade("StartShoot", 0.2f);
                 break;
-            case PlayerStates.ShootState.IsShooting when S_PlayerStateObserver.Instance.LastMeleeState == null:
-                handAnimator.CrossFade("HoldShoot", 0.2f);
-                break;
+            // case PlayerStates.ShootState.IsShooting when S_PlayerStateObserver.Instance.LastMeleeState == null:
+            //     handAnimator.CrossFade("HoldShoot", 0.2f);
+            //     break;
             case PlayerStates.ShootState.StopShoot when S_PlayerStateObserver.Instance.LastMeleeState == null:
                 handAnimator.CrossFade("EndShoot", 0.2f);
                 break;
@@ -174,8 +174,8 @@ public class S_PlayerAnimator : MonoBehaviour
         {
             case PlayerStates.JumpState.Jump:
                 // Record the time when the player goes airborne
-                handAnimator.SetLayerWeight(skillLayerIndex, 1f);
-                handAnimator.Play("UseRune", skillLayerIndex, 0f);
+                // handAnimator.SetLayerWeight(skillLayerIndex, 1f);
+                // handAnimator.Play("UseRune", skillLayerIndex, 0f);
                 JumpHandAnimation();
                 break;
             case PlayerStates.JumpState.OnAir:
@@ -208,9 +208,9 @@ public class S_PlayerAnimator : MonoBehaviour
             case PlayerStates.GroundPoundState.StartGroundPound:
                 handAnimator.CrossFade("StartGroundPound", 0.2f);
                 break;
-            case PlayerStates.GroundPoundState.isGroundPounding:
-                handAnimator.CrossFade("HoldGroundPound", 0.2f);
-                break;
+            // case PlayerStates.GroundPoundState.isGroundPounding:
+            //     handAnimator.CrossFade("HoldGroundPound", 0.2f);
+            //     break;
             case PlayerStates.GroundPoundState.EndGroundPound:
                 handAnimator.CrossFade("EndGroundPound", 0.2f);
                 break;
