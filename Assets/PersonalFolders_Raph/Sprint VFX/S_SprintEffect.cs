@@ -5,10 +5,6 @@ using Cinemachine;
 [RequireComponent(typeof(VisualEffect))]
 public class S_SprintEffect : MonoBehaviour
 {
-    [Header("Input Settings")]
-    [Tooltip("Touche pour sprinter")]
-    public KeyCode sprintKey = KeyCode.LeftShift;
-
     [Header("VFX Settings")]
     private VisualEffect vfx;
     private float initialSpawnRate;
@@ -23,37 +19,51 @@ public class S_SprintEffect : MonoBehaviour
     public S_GunFollowCamera gunFollowCamera;
     private float defaultDistance;
 
+    // On passe en actif uniquement lorsque le vrai sprint démarre
     private bool isActive = false;
 
     private void Awake()
     {
         vfx = GetComponent<VisualEffect>();
-        // on lit la valeur d'origine
         initialSpawnRate = vfx.GetFloat("SpawnRate");
         initialSpeed = vfx.GetFloat("Speed");
-        // on désactive tout au démarrage
+
+        // Désactivé par défaut
         vfx.SetFloat("SpawnRate", 0f);
         vfx.SetFloat("Speed", 0f);
     }
 
     private void Start()
     {
-        // mémoriser le FOV "normal" et la distance à FOV normal (2.22 dans ton cas)
+        // Récupère les valeurs de référence
         if (cinemachineCamera != null)
             normalFOV = cinemachineCamera.m_Lens.FieldOfView;
         if (gunFollowCamera != null)
             defaultDistance = gunFollowCamera.distanceFromCamera;
+
+        // S’abonner aux événements de sprint
+        var obs = S_PlayerStateObserver.Instance;
+        obs.OnSprintStateEvent += HandleSprintState;
     }
 
-    private void Update()
+    private void HandleSprintState(System.Enum stateEnum, int level)
     {
-        // appui → on active les speedlines
-        if (Input.GetKeyDown(sprintKey) && !isActive)
-            ActivateSpeedlines();
+        // Supposons que level 1 = pas de sprint, level >=2 = sprint autorisé
+        bool canSprint = level >= 2;
 
-        // relâchement → on désactive
-        if (Input.GetKeyUp(sprintKey) && isActive)
-            DeactivateSpeedlines();
+        switch (stateEnum)
+        {
+            case PlayerStates.SprintState.StartSprinting:
+                if (canSprint)
+                    ActivateSpeedlines();
+                break;
+
+            case PlayerStates.SprintState.StopSprinting:
+                // dès que le sprint s’arrête (sol ou air),
+                // on coupe à coup sûr
+                DeactivateSpeedlines();
+                break;
+        }
     }
 
     private void ActivateSpeedlines()
@@ -61,8 +71,7 @@ public class S_SprintEffect : MonoBehaviour
         isActive = true;
         vfx.SetFloat("SpawnRate", initialSpawnRate);
         vfx.SetFloat("Speed", initialSpeed);
-        // on calcule tout de suite pour positionner correctement
-        AdjustDistance();
+        AdjustDistance(); // positionne tout de suite correctement
     }
 
     private void DeactivateSpeedlines()
@@ -70,15 +79,13 @@ public class S_SprintEffect : MonoBehaviour
         isActive = false;
         vfx.SetFloat("SpawnRate", 0f);
         vfx.SetFloat("Speed", 0f);
-        // ne remet pas la distance à defaultDistance ici : on veut
-        // voir les particules restantes se réajuster au FOV actuel
+        // on laisse la distance ajustée pour les particules restantes
     }
 
     private void LateUpdate()
     {
-        // tant que la caméra et le script de suivi sont branchés,
-        // on recalculera la distance à chaque frame (même en ground-pound)
-        if (cinemachineCamera == null || gunFollowCamera == null)
+        // Recalcule en permanence la distance pendant le sprint actif
+        if (!isActive || cinemachineCamera == null || gunFollowCamera == null)
             return;
 
         AdjustDistance();
@@ -92,5 +99,11 @@ public class S_SprintEffect : MonoBehaviour
         float ratio = Mathf.Tan(halfNormRad) / Mathf.Tan(halfCurrentRad);
 
         gunFollowCamera.distanceFromCamera = defaultDistance * ratio;
+    }
+
+    private void OnDisable()
+    {
+        if (S_PlayerStateObserver.Instance != null)
+            S_PlayerStateObserver.Instance.OnSprintStateEvent -= HandleSprintState;
     }
 }
