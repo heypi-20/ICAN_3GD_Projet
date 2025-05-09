@@ -13153,7 +13153,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3807163472671212036, guid: c98a3e5541fbce24ebede57ea69ad038, type: 3}
       propertyPath: m_CullingMask.m_Bits
-      value: 4294967295
+      value: 16351
       objectReference: {fileID: 0}
     - target: {fileID: 6930588632035586381, guid: c98a3e5541fbce24ebede57ea69ad038, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14191,6 +14191,7 @@ GameObject:
   - component: {fileID: 787294191}
   - component: {fileID: 787294193}
   - component: {fileID: 787294192}
+  - component: {fileID: 787294194}
   m_Layer: 5
   m_Name: ComboSystemEffect
   m_TagString: Untagged
@@ -14338,6 +14339,34 @@ MonoBehaviour:
   killLerpSpeed: 5
   dotweenPlayer: {fileID: 787294192}
   tweenCooldown: 0.1
+--- !u!114 &787294194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787294190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb27a5a99cba84645b63b26532eb7dd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gaugeMaterial: {fileID: 2100000, guid: 63ee3239c11d85e47940bc10beb87f1e, type: 2}
+  gaugeProperty: _Progress
+  killText: {fileID: 1310449063}
+  multiplicateurText: {fileID: 1766041740}
+  dotweenPlayer: {fileID: 787294192}
+  demoDuration: 60
+  minEmptyDuration: 1
+  maxEmptyDuration: 5
+  minEmptyLevel: 0.49
+  maxEmptyLevel: 0.8
+  minKillsPerCycle: 1
+  maxKillsPerCycle: 3
+  killInterval: 0.1
+  comboIncreaseAmount: 0.2
+  cyclesPerComboIncrease: 2
+  startMultiplier: 1
 --- !u!1 &799222387
 GameObject:
   m_ObjectHideFlags: 0
