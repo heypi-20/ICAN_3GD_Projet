@@ -102,12 +102,6 @@ public class S_SuperJump_Module : MonoBehaviour
         JumpLevel currentLevel = GetCurrentJumpLevel();
         if (currentLevel == null || _currentJumpCount >= currentLevel.maxJumpCount) return;
 
-        // Vérifier si l'énergie est suffisante pour sauter
-        if (_energyStorage.currentEnergy < currentLevel.energyConsumption)
-        {
-            return;
-        }
-
         // Consommer l'énergie pour le saut
         _energyStorage.RemoveEnergy(currentLevel.energyConsumption);
         
