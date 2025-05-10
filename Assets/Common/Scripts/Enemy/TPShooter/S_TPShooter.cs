@@ -216,7 +216,7 @@ public class S_TPShooter : EnemyBase
 
         if (Physics.SphereCast(shootPoint.position, laserRadius, finalLaserDirection, out laserHit, range, playerLayer) && laserCharged) {
             if (laserHit.collider.CompareTag("Player")) {
-                laserHit.collider.GetComponent<S_PlayerHitTrigger>().ReceiveDamage(enemyDamage);
+                laserHit.collider.GetComponent<S_PlayerDamageReceiver>().ReceiveDamage(enemyDamage);
             }
         }
         

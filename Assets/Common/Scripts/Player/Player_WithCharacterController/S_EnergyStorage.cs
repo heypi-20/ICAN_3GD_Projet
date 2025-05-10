@@ -29,17 +29,10 @@ public class S_EnergyStorage : MonoBehaviour
     [Header("UI Settings")]
     public TextMeshProUGUI energyDisplay; // Affichage de l'énergie et du niveau
 
-    [Header("UI Gain Loose Palier")] 
-    public GameObject Gain_Palier; //Ui quand on gagne un palier
-    public GameObject Loose_Palier; //UI quand on perd un palier
-    public float animationDuration = 0.5f; // Durée pour l'apparition/disparition
-    public float activeTime = 2f;          // Temps pendant lequel l'objet reste actif
-    public Vector3 active_scale = new Vector3(0.3f, 0.3f, 0.3f);
-
     public int currentLevelIndex{ get; private set; } // Index du niveau actuel
     private float _graceTimer = 0f; // Temps de grâce restant
-    private bool isGraceActive = false; // Indique si le temps de grâce est en cours
-    private bool hasDeathTriggered = false; // Indique si la logique de mort a été déclenchée
+    [HideInInspector]
+    public bool isGraceActive = false; // Indique si le temps de grâce est en cours
     
     public event Action<Enum,int> OnLevelChange; 
     private bool EndGraceEventSended;
@@ -82,12 +75,6 @@ public class S_EnergyStorage : MonoBehaviour
     public void AddEnergy(float amount)
     {
         currentEnergy = Mathf.Clamp(currentEnergy + amount, 0, maxEnergy);
-
-        // Si l'énergie redevient positive après la mort, réinitialise l'état
-        if (hasDeathTriggered && currentEnergy > 0f)
-        {
-            ResetDeathState();
-        }
     }
 
     // Méthode permettant de retirer de l'énergie
@@ -108,8 +95,6 @@ public class S_EnergyStorage : MonoBehaviour
     // Met à jour le niveau d'énergie en fonction de l'énergie actuelle
     private void UpdateEnergyLevel()
     {
-        if (hasDeathTriggered) return;
-
         // Vérifie les conditions pour augmenter de niveau
         if (CheckUpgradeLevel())
         {
@@ -132,8 +117,6 @@ public class S_EnergyStorage : MonoBehaviour
                 AddEnergy(energyLevels[i].requiredEnergy*energyLevels[i].percentageGiveaway);
                 //trigger upgrade level event
                 EnergyLevelObserverEvent(PlayerStates.LevelState.LevelUp, i+1);
-                
-                ShowAndHideGainPalier();
                 return true;
             }
         }
@@ -159,18 +142,12 @@ public class S_EnergyStorage : MonoBehaviour
             
             if (_graceTimer <= 0f)
             { 
-                //Fin du compte à rebours : énergie négative, début du compte à rebours de mort.
-                if (currentEnergy <= 0f)
-                {
-                    HandleDeath();
-                }
                 //Fin du compte à rebours : énergie positive, ajustement au niveau correspondant.
                 int newLevelIndex = FindLevelIndexForEnergy();
                 
                 //Trigger down level event
                 EnergyLevelObserverEvent(PlayerStates.LevelState.LevelDown, newLevelIndex+1);
                 
-                ShowAndHideLoosePalier();
                
                 SetNewLevel(newLevelIndex);
                 ResetGracePeriod();
@@ -225,50 +202,5 @@ public class S_EnergyStorage : MonoBehaviour
         }
 
         return 0; // Si aucune correspondance, retourne le niveau le plus bas
-    }
-
-    // Logique de gestion de la mort
-    private void HandleDeath()
-    {
-        Debug.Log("Le joueur est mort. Implémentez la logique ici.");
-        hasDeathTriggered = true;
-    }
-
-    // Réinitialise l'état de mort
-    private void ResetDeathState()
-    {
-        hasDeathTriggered = false;
-        ResetGracePeriod();
-        Debug.Log("Réinitialisation après la mort.");
-    }
-    public void ShowAndHideGainPalier()
-    {
-        Gain_Palier.SetActive(true); // Active l'objet
-
-        // Apparition
-        Gain_Palier.transform.localScale = Vector3.zero; // Commence à scale 0
-        Gain_Palier.transform.DOScale(active_scale, animationDuration).SetEase(Ease.OutBack).OnComplete(() =>
-        {
-            // Attend `activeTime` avant de disparaître
-            Gain_Palier.transform.DOScale(Vector3.zero, animationDuration).SetEase(Ease.InBack).SetDelay(activeTime).OnComplete(() =>
-            {
-                Gain_Palier.SetActive(false); // Désactive l'objet une fois invisible
-            });
-        });
-    }
-    public void ShowAndHideLoosePalier()
-    {
-        Loose_Palier.SetActive(true); // Active l'objet
-
-        // Apparition
-        Loose_Palier.transform.localScale = Vector3.zero; // Commence à scale 0
-        Loose_Palier.transform.DOScale(active_scale, animationDuration).SetEase(Ease.OutBack).OnComplete(() =>
-        {
-            // Attend `activeTime` avant de disparaître
-            Loose_Palier.transform.DOScale(Vector3.zero, animationDuration).SetEase(Ease.InBack).SetDelay(activeTime).OnComplete(() =>
-            {
-                Loose_Palier.SetActive(false); // Désactive l'objet une fois invisible
-            });
-        });
     }
 }

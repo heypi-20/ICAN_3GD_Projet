@@ -24,7 +24,7 @@ public class S_PlayerStateObserver : MonoBehaviour
     private S_FireRateGun_Module m_FireRateGun_Module;
     private S_MeleeAttack_Module m_MeleeAttack_Module;
     private S_GroundPound_Module m_GroundPound_Module;
-    private S_PlayerHitTrigger m_PlayerHitTrigger;
+    private S_PlayerDamageReceiver _mPlayerDamageReceiver;
 
     public Action<Enum, Vector2> OnMoveStateEvent;
     public Action<Enum, int> OnMeleeAttackStateEvent;
@@ -62,7 +62,7 @@ public class S_PlayerStateObserver : MonoBehaviour
         m_FireRateGun_Module = player.GetComponent<S_FireRateGun_Module>();
         m_MeleeAttack_Module = player.GetComponent<S_MeleeAttack_Module>();
         m_GroundPound_Module = player.GetComponent<S_GroundPound_Module>();
-        m_PlayerHitTrigger = player.GetComponent<S_PlayerHitTrigger>();
+        _mPlayerDamageReceiver = player.GetComponent<S_PlayerDamageReceiver>();
 
         m_CharacterController.OnMoveStateChange += OnMoveStateChanged;
         m_BasicSprint_Module.OnSprintStateChange += OnSprintStateChanged;

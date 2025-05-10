@@ -106,7 +106,7 @@ public class S_Banshee : EnemyBase
         }
         foreach (Collider hit in hits) {
             if (hit.gameObject.CompareTag("Player")) {
-                player.GetComponent<S_PlayerHitTrigger>().ReceiveDamage(enemyDamage);
+                player.GetComponent<S_PlayerDamageReceiver>().ReceiveDamage(enemyDamage);
             }
         }
         canAttack = false;

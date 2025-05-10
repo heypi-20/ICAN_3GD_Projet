@@ -180,7 +180,7 @@ public class S_Dashooter : EnemyBase
                 }
                 if (hitLayer == playerLayer)
                 {
-                    var trigger = hitInfo.collider.GetComponent<S_PlayerHitTrigger>();
+                    var trigger = hitInfo.collider.GetComponent<S_PlayerDamageReceiver>();
                     if (trigger != null) trigger.ReceiveDamage(enemyDamage);
                     break;
                 }
