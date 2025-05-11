@@ -735,7 +735,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4347050850364713306
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3512,7 +3512,7 @@ MonoBehaviour:
   m_RendererIndex: -1
   m_VolumeLayerMask:
     serializedVersion: 2
-    m_Bits: 32
+    m_Bits: 4294967295
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 1
@@ -4527,6 +4527,8 @@ MonoBehaviour:
   duration: 0.1
   fov_multiplicator: 130
   fov_transition_time: 1
+  CAC_fov_Multiplier: 0
+  CAC_Fov_transition_time: 0
 --- !u!1 &5782617889939652586
 GameObject:
   m_ObjectHideFlags: 0
@@ -5199,7 +5201,6 @@ GameObject:
   - component: {fileID: 537605952385676786}
   - component: {fileID: 3605016965288028042}
   - component: {fileID: 6915564590874781277}
-  - component: {fileID: 3634394382484587394}
   m_Layer: 3
   m_Name: Player_V5
   m_TagString: Player
@@ -5721,7 +5722,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c38433cc78643b54c957d99f6b12aec4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graceDuration: 5
+  graceDuration: 2
 --- !u!136 &537605952385676786
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5815,20 +5816,6 @@ MonoBehaviour:
     maxComboMultiplier: 0
     comboTime: 0
     GainPerKill: 0
---- !u!114 &3634394382484587394
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6376292503174423671}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5ad3873eb979d7489ee6585efbff73b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  circlePrefab: {fileID: 1670796071380426236, guid: fa7fea8d59213b14fafce6d5af32f090, type: 3}
-  haloPrefab: {fileID: 7531264365167348019, guid: c3360df46aa80e0469c4ab48b947fdaa, type: 3}
 --- !u!1 &6418473037106372350
 GameObject:
   m_ObjectHideFlags: 0
@@ -6092,6 +6079,7 @@ GameObject:
   - component: {fileID: 987764169850812397}
   - component: {fileID: 6991382054198792620}
   - component: {fileID: 1255385392227939331}
+  - component: {fileID: 7776074246294509383}
   m_Layer: 5
   m_Name: GetHitFeedBack
   m_TagString: Untagged
@@ -6156,6 +6144,27 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7776074246294509383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6879784887786236051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c8ea44d174bee5478c081d22c6f055d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  feedbackImage: {fileID: 1255385392227939331}
+  progressRange: {x: 0.9, y: 0.4}
+  hitsToMax: 4
+  fallDelay: 0.5
+  approachToXSpeed: 0.5
+  approachToYSpeed: 5
+  oneHitProgressRange: {x: 0.9, y: 0.3}
+  oneHitApproachSpeed: 0.2
+  oneHitReturnSpeed: 1.5
 --- !u!1 &7161786904926102830
 GameObject:
   m_ObjectHideFlags: 0

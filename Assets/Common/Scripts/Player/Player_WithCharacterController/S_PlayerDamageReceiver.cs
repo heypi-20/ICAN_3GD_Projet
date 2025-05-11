@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,21 +13,44 @@ public class S_PlayerDamageReceiver : MonoBehaviour
     private bool oneHitMode;
     private bool isInvulnerable;
     private bool isDead;
+    private Coroutine graceCoroutine;
 
-    // expose current energy for UI or other systems
-    public float CurrentEnergy => _energyStorage != null ? _energyStorage.currentEnergy : 0f;
+    public event Action<Enum> OnPlayerHealthState;
 
     private void Start()
     {
-        // cache reference for performance
+        // Cache reference for performance
         _energyStorage = GetComponent<S_EnergyStorage>();
+    }
+
+    private void Update()
+    {
+        if (_energyStorage == null)
+            return;
+
+        // If player has entered one-hit mode but regained energy, reset modes
+        if (oneHitMode && _energyStorage.currentEnergy > 0f)
+        {
+            ResetOneHitKillMode();
+        }
+
+        // Check energy depletion outside of damage events
+        if (!oneHitMode && !_energyStorage.isGraceActive && !isDead && _energyStorage.currentEnergy <= 0f)
+        {
+            ActivateOneHitKillMode();
+        }
+    }
+
+    private void OnPlayerHealthStateChange(Enum state)
+    {
+        OnPlayerHealthState?.Invoke(state);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (_energyStorage == null) return;
 
-        // only one method handles damage now
+        // Only one method handles damage now
         EnemyBase enemy = other.GetComponent<EnemyBase>();
         if (enemy != null)
         {
@@ -40,7 +64,7 @@ public class S_PlayerDamageReceiver : MonoBehaviour
         }
     }
 
-    // called by triggers or other scripts to apply damage
+    // Called by triggers or other scripts to apply damage
     public void ReceiveDamage(float damage)
     {
         if (isDead)
@@ -49,19 +73,20 @@ public class S_PlayerDamageReceiver : MonoBehaviour
         if (oneHitMode)
         {
             if (isInvulnerable)
-                // ignore hits during local grace period
+                // Ignore hits during local grace period
                 return;
 
-            // local grace over: next hit kills
+            // Next hit kills
             isDead = true;
             HandleDeath();
             return;
         }
 
-        // normal damage: remove energy
+        // Normal damage: remove energy
+        OnPlayerHealthStateChange(PlayerStates.PlayerHealthState.PlayerGetHit);
         _energyStorage.RemoveEnergy(damage);
 
-        // check S_EnergyStorage's external grace flag before activating one–hit mode
+        // Check energy and activate one–hit mode if depleted
         if (_energyStorage.currentEnergy <= 0f && !oneHitMode && !_energyStorage.isGraceActive)
         {
             ActivateOneHitKillMode();
@@ -73,22 +98,45 @@ public class S_PlayerDamageReceiver : MonoBehaviour
         oneHitMode = true;
         isInvulnerable = true;
         Debug.Log("Activate one hit kill mode");
-        // start timer for invulnerability
-        StartCoroutine(GracePeriodCoroutine());
+        OnPlayerHealthStateChange(PlayerStates.PlayerHealthState.PlayerOneHitModeStart);
+
+        // Start timer for invulnerability
+        graceCoroutine = StartCoroutine(GracePeriodCoroutine());
     }
 
     private IEnumerator GracePeriodCoroutine()
     {
-        // allow player time to react
+        // Allow player time to react
         Debug.Log("Grace period started");
         yield return new WaitForSeconds(graceDuration);
-        // end invulnerability so next damage will kill
+
+        // End invulnerability so next damage will kill
         isInvulnerable = false;
+
+        // Clear coroutine reference
+        graceCoroutine = null;
+    }
+
+    /// <summary>
+    /// Resets one-hit kill and invulnerability states when energy is restored
+    /// </summary>
+    private void ResetOneHitKillMode()
+    {
+        // Stop any running grace coroutine
+        if (graceCoroutine != null)
+        {
+            StopCoroutine(graceCoroutine);
+            graceCoroutine = null;
+        }
+
+        oneHitMode = false;
+        isInvulnerable = false;
+        OnPlayerHealthStateChange(PlayerStates.PlayerHealthState.PlayerOneHitModeEnd);
     }
 
     private void HandleDeath()
     {
-        // death logic (animations, UI, respawn) goes here
+        // Death logic (animations, UI, respawn) goes here
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

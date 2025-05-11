@@ -56,5 +56,18 @@ public static class PlayerStates
         isGroundPounding,
         EndGroundPound,
     }
+
+    public enum PlayerHealthState
+    {
+        PlayerGetHit,
+        PlayerInvulnerabilityStart,
+        PlayerIsInvulnerable,
+        PlayerInvulnerabilityEnd,
+        PlayerOneHitModeStart,
+        PlayerInOneHitMode,
+        PlayerOneHitModeEnd,
+        PlayerIsDead
+        
+    }
     
 }
