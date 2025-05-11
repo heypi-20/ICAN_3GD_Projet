@@ -142,9 +142,6 @@ public class S_GroundPound_Module : MonoBehaviour
         {
             TriggerGroundPoundEffect(); // Exécuter l'effet au sol
             GroundPoundObserverEvent(PlayerStates.GroundPoundState.EndGroundPound);
-            
-            //add feedback
-            SoundManager.Instance.Meth_Pillonage_Explosion();
 
         }
         _characterController.excludeLayers = savedLayerMask;

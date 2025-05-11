@@ -5,7 +5,7 @@
 			<value>Pillonage_Start</value>
 		</property>
 		<property name="outputFormat">
-			<value>0</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{74083a8a-cd61-4dc8-91ae-3770fec91e38}</destination>
@@ -90,7 +90,11 @@
 			<destination>{64b4784f-88b0-4ddb-87ae-a6a363d2f7c9}</destination>
 		</relationship>
 	</object>
-	<object class="MultiSound" id="{2a758157-fbe4-467e-a859-13362c60716f}" />
+	<object class="MultiSound" id="{2a758157-fbe4-467e-a859-13362c60716f}">
+		<relationship name="sounds">
+			<destination>{51663ec9-90df-4f08-a0e9-a107048667ea}</destination>
+		</relationship>
+	</object>
 	<object class="MixerBusEffectChain" id="{28cdeb95-cd53-419e-9bea-d0acef5b77a3}">
 		<relationship name="effects">
 			<destination>{543ef13f-2a3b-455a-bfc8-ee4b2409426e}</destination>
@@ -117,6 +121,23 @@
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{7265a9cb-b1af-47d6-afa4-f3cb8b72399f}" />
+	<object class="MultiSound" id="{51663ec9-90df-4f08-a0e9-a107048667ea}">
+		<property name="startOffset">
+			<value>13.5</value>
+		</property>
+		<property name="volume">
+			<value>-3.5</value>
+		</property>
+		<property name="pitch">
+			<value>5</value>
+		</property>
+		<relationship name="modulators">
+			<destination>{3c693367-b47d-4f3a-a90b-23a4e9545f99}</destination>
+		</relationship>
+		<relationship name="sounds">
+			<destination>{577baa01-66ee-491a-b7a9-59d777ab637a}</destination>
+		</relationship>
+	</object>
 	<object class="MixerBusFader" id="{543ef13f-2a3b-455a-bfc8-ee4b2409426e}" />
 	<object class="MixerBusEffectChain" id="{8f747f38-3b23-4b42-a6e0-5c12703debab}">
 		<relationship name="effects">
@@ -125,5 +146,21 @@
 	</object>
 	<object class="MixerBusPanner" id="{d2588d06-0429-4f7f-b7db-0e23b9b37783}" />
 	<object class="MixerBusFader" id="{6ee36726-63b6-4db5-a2e6-763f73891668}" />
+	<object class="RandomizerModulator" id="{3c693367-b47d-4f3a-a90b-23a4e9545f99}">
+		<property name="nameOfPropertyBeingModulated">
+			<value>pitch</value>
+		</property>
+		<property name="amount">
+			<value>5</value>
+		</property>
+	</object>
+	<object class="SingleSound" id="{577baa01-66ee-491a-b7a9-59d777ab637a}">
+		<property name="startOffset">
+			<value>20</value>
+		</property>
+		<relationship name="audioFile">
+			<destination>{64647919-55c9-4b50-ba54-756409cb25de}</destination>
+		</relationship>
+	</object>
 	<object class="MixerBusFader" id="{0cc0e153-81fb-4ab4-9d5e-774a8acb8fdc}" />
 </objects>

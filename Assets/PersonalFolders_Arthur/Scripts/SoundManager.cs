@@ -154,10 +154,38 @@ public class SoundManager : MonoBehaviour
     }
 
     #endregion
-    public void Meth_Pillonage_Explosion()
+
+    #region Pillonage
+
+    [Header("Pillonage")] 
+    public EventReference ExplosionPillonage;
+    private EventInstance Instance_ExplosionPillonage;
+    public EventReference Fall_Pillonage;
+    private EventInstance Instance_Fall_Pillonage;
+    public EventReference Used_Pillonage;
+    private EventInstance Instance_Used_Pillonage;
+
+    private void PillonageState(Enum state)
     {
-        FMODUnity.RuntimeManager.PlayOneShot(Pillonage_Explosion);
+        switch (state)
+        {
+            case PlayerStates.GroundPoundState.StartGroundPound :
+                Instance_Used_Pillonage = RuntimeManager.CreateInstance(Used_Pillonage);
+                Instance_Used_Pillonage.start();
+                break;
+            case PlayerStates.GroundPoundState.isGroundPounding :
+                Instance_Fall_Pillonage = RuntimeManager.CreateInstance(Fall_Pillonage);
+                Instance_Fall_Pillonage.start();
+                break;
+            case PlayerStates.GroundPoundState.EndGroundPound :
+                Instance_ExplosionPillonage = RuntimeManager.CreateInstance(ExplosionPillonage);
+                Instance_ExplosionPillonage.start();
+                Instance_Fall_Pillonage.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                break;
+        }
     }
+
+    #endregion
     public void Meth_Gain_Energy()
     {
         FMODUnity.RuntimeManager.PlayOneShot(Gain_Energy);
@@ -182,6 +210,7 @@ public class SoundManager : MonoBehaviour
         S_PlayerStateObserver.Instance.OnShootStateEvent += ShootState;
         S_PlayerStateObserver.Instance.OnSprintStateEvent += SprintState;
         S_PlayerStateObserver.Instance.OnJumpStateEvent += JumpState;
+        S_PlayerStateObserver.Instance.OnGroundPoundStateEvent += PillonageState;
         Instance_Music_Lvl1 = RuntimeManager.CreateInstance(Music_Lvl1);
         Instance_Music_Lvl1.start();
     }
