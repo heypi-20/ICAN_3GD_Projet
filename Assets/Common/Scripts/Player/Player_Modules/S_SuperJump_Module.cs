@@ -108,9 +108,6 @@ public class S_SuperJump_Module : MonoBehaviour
         //Ignore enemy layer
         _CC.excludeLayers = enemyLayer+_playerBackupLayer;
         
-        //Audio OnJump
-        SoundManager.Instance.Meth_Used_Jump();
-        
         //Active Vortex
         JumpVortex();
         

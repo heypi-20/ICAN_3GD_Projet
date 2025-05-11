@@ -44,7 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afc451294581e704e95156f76e307bb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Used_Jump: event:/Player/Jump/Jump_High
   Pillonage_Explosion: event:/Player/Pillonage/Pillonage_Explosion
   Pillonage_Activate: event:/Player/Pillonage/Pillonage_Start
   Pillonage_Fall: event:/Player/Pillonage/Pillonage_Fall
@@ -54,7 +53,7 @@ MonoBehaviour:
   Dashoot_Dash: event:/Ennemy/Dashoot/Dashoot_Dash
   Dashoot_Shoot: event:/Ennemy/Dashoot/Dashoot_Shoot
   JumpyCuby_Jump: event:/Ennemy/JumyCuby/Jump_Cuby_Jump
-  Secret_surprise: event:/Player/Shoot/Shoot_Kill/KeepSecret/SecretSurprise
+  Secret_surprise: event:/Player/Shoot/KeepSecret/SecretSurprise
   Classique_Shoot:
     Guid:
       Data1: 635193507
@@ -76,6 +75,20 @@ MonoBehaviour:
       Data3: -637855588
       Data4: 44840456
     Path: event:/Player/Shoot/Shoot_Hit_Weak
+  Used_Jump:
+    Guid:
+      Data1: -351952521
+      Data2: 1202936607
+      Data3: -1945579109
+      Data4: 1665199539
+    Path: event:/Player/Jump/Jump_High
+  Toutched_Ground:
+    Guid:
+      Data1: -1427441749
+      Data2: 1322670393
+      Data3: -495918444
+      Data4: 303608041
+    Path: event:/Player/Jump/On_Ground
   Start_Sprint:
     Guid:
       Data1: -1862359227

@@ -5,6 +5,7 @@ using Cinemachine;
 using UnityEngine;
 using FMODUnity;
 using FMOD.Studio;
+using Unity.VisualScripting;
 
 public class SoundManager : MonoBehaviour
 {
@@ -42,9 +43,6 @@ public class SoundManager : MonoBehaviour
         }
     }
     #endregion
-    
-    [Header("Jump")] 
-    public string Used_Jump;
     
     [Header("Pillonage")] 
     public string Pillonage_Explosion;
@@ -98,6 +96,32 @@ public class SoundManager : MonoBehaviour
 
     #endregion
 
+    #region Jump
+
+    [Header("Jump")] 
+    public EventReference Used_Jump;
+    private EventInstance Instance_Used_Jump;
+    public EventReference Toutched_Ground;
+    private EventInstance Instance_Touched_Ground;
+
+    private void JumpState(Enum state)
+    {
+        switch (state)
+        {
+            case PlayerStates.JumpState.Jump :
+                Instance_Used_Jump = RuntimeManager.CreateInstance(Used_Jump);
+                Instance_Used_Jump.start();
+                break;
+            case PlayerStates.JumpState.OnGround :
+                Instance_Touched_Ground = RuntimeManager.CreateInstance(Toutched_Ground);
+                Instance_Touched_Ground.start();
+                break;
+        }
+    }
+    
+    #endregion
+    
+    
     #region Sprint
 
     [Header("Sprint")]
@@ -124,14 +148,8 @@ public class SoundManager : MonoBehaviour
                 break;
         }
     }
-    
 
     #endregion
-    
-    public void Meth_Used_Jump()
-    {
-        FMODUnity.RuntimeManager.PlayOneShot(Used_Jump);
-    }
     public void Meth_Pillonage_Explosion()
     {
         FMODUnity.RuntimeManager.PlayOneShot(Pillonage_Explosion);
@@ -159,6 +177,7 @@ public class SoundManager : MonoBehaviour
         S_PlayerStateObserver.Instance.OnMeleeAttackStateEvent += MeleeState;
         S_PlayerStateObserver.Instance.OnShootStateEvent += ShootState;
         S_PlayerStateObserver.Instance.OnSprintStateEvent += SprintState;
+        S_PlayerStateObserver.Instance.OnJumpStateEvent += JumpState;
         Instance_Music_Lvl1 = RuntimeManager.CreateInstance(Music_Lvl1);
         Instance_Music_Lvl1.start();
     }
