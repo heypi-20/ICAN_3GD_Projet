@@ -60,6 +60,11 @@ public class S_CameraFeedBack : MonoBehaviour
     private float Start_FOV;
     private bool isIncreasing;
     private float timePassed;
+
+    [Header("CAC_FOV")] 
+    public float CAC_fov_Multiplier;
+    public float CAC_Fov_transition_time;
+    private bool CAC_IsIncreasing;
         
    
     private CinemachineRecomposer _recomposer;
@@ -108,6 +113,12 @@ public class S_CameraFeedBack : MonoBehaviour
             timePassed += Time.deltaTime;
             impulseforceonGround = startimpulseshakeforce + timePassed * _imulseMultiplicator;
             _cinemachineVirtualCamera.m_Lens.FieldOfView = Start_FOV + timePassed * fov_multiplicator;
+        }
+
+        if (CAC_IsIncreasing)
+        {
+            timePassed += Time.deltaTime;
+            _cinemachineVirtualCamera.m_Lens.FieldOfView = Start_FOV + timePassed * CAC_fov_Multiplier;
         }
     }
 
@@ -266,6 +277,14 @@ public class S_CameraFeedBack : MonoBehaviour
                     CameraShake(CameraShakeCAC_Lvl4);
                     break;
             }
+            CAC_IsIncreasing = false;
+            float currentFOV = _cinemachineVirtualCamera.m_Lens.FieldOfView;
+            currentTween = DOTween.To(
+                () => currentFOV,
+                x => _cinemachineVirtualCamera.m_Lens.FieldOfView = x,
+                Start_FOV,
+                CAC_Fov_transition_time
+            ).SetEase(Ease.OutSine);
         }
 
         if (state.Equals(PlayerStates.MeleeState.MeleeAttackHitWeakness))
@@ -285,8 +304,24 @@ public class S_CameraFeedBack : MonoBehaviour
                     CameraShake(CameraShakeCAC_Lvl4* Weak_shake_Multiplayer);
                     break;
             }
+            CAC_IsIncreasing = false;
+            float currentFOV = _cinemachineVirtualCamera.m_Lens.FieldOfView;
+            currentTween = DOTween.To(
+                () => currentFOV,
+                x => _cinemachineVirtualCamera.m_Lens.FieldOfView = x,
+                Start_FOV,
+                CAC_Fov_transition_time
+            ).SetEase(Ease.OutSine);
+        }
+
+        if (state.Equals(PlayerStates.MeleeState.DashingBeforeMelee))
+        {
+            Start_FOV = _cinemachineVirtualCamera.m_Lens.FieldOfView;
+            CAC_IsIncreasing = true;
+            timePassed = 0f;
         }
     }
+    
     public void CameraShake(float intensity = 1f)
     {
         if (_impulseSource != null)
