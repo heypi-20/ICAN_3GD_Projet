@@ -2,30 +2,30 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class S_GetHitFeedBack : MonoBehaviour
+public class S_GetHitFeedback : MonoBehaviour
 {
     [Header("References")]
-    [Tooltip("Assign the UI Image whose material has the _Progress property")]
+    [Tooltip("UI Image with a material that has the _Progress property")]
     public Image feedbackImage;
 
     [Header("Normal Mode")]
-    [Tooltip("Progress Range (min, max)")]
+    [Tooltip("Progress value range for normal mode (min, max)")]
     public Vector2 progressRange = new Vector2(0f, 1f);
-    [Tooltip("连续命中次数达到此值时，Progress 达到最大值")]
+    [Tooltip("Number of hits to reach max progress")]
     public int hitsToMax = 5;
-    [Tooltip("持续多少秒后开始归拢到最小值")]
+    [Tooltip("Seconds to wait before falling back to min progress")]
     public float fallDelay = 2f;
-    [Tooltip("Lerp 百分比／秒，用于向最大值靠近 (Normal Mode)")]
+    [Tooltip("Lerp speed per second to approach max in normal mode")]
     public float approachToXSpeed = 2f;
-    [Tooltip("Lerp 百分比／秒，用于向最小值归拢 (Normal Mode)")]
+    [Tooltip("Lerp speed per second to return to min in normal mode")]
     public float approachToYSpeed = 1f;
 
     [Header("One Hit Mode")]
-    [Tooltip("Progress Range (min, max) During One Hit Mode")]
+    [Tooltip("Progress value range during one hit mode (min, max)")]
     public Vector2 oneHitProgressRange = new Vector2(0f, 1f);
-    [Tooltip("Lerp 百分比／秒，当进入 One Hit Mode 时向最大值靠近")]
+    [Tooltip("Lerp speed per second to approach max when entering one hit mode")]
     public float oneHitApproachSpeed = 3f;
-    [Tooltip("Lerp 百分比／秒，当退出 One Hit Mode 时向最小值归拢")]
+    [Tooltip("Lerp speed per second to return to min when exiting one hit mode")]
     public float oneHitReturnSpeed = 5f;
 
     private Material runtimeMaterial;
@@ -37,7 +37,7 @@ public class S_GetHitFeedBack : MonoBehaviour
 
     private void Start()
     {
-        // 克隆材质实例，避免修改原 Asset
+        // Clone material to isolate runtime changes from the original asset
         if (feedbackImage != null && feedbackImage.material != null)
         {
             runtimeMaterial = Instantiate(feedbackImage.material);
@@ -47,18 +47,20 @@ public class S_GetHitFeedBack : MonoBehaviour
         currentProgress = targetProgress = progressRange.x;
         SetMaterialProgress(currentProgress);
 
-        S_PlayerStateObserver.Instance.OnPlayerHealthStateEvent += handlePlayerStateEvent;
+        // Subscribe to player health state events
+        S_PlayerStateObserver.Instance.OnPlayerHealthStateEvent += HandlePlayerStateEvent;
     }
 
     private void OnDestroy()
     {
+        // Unsubscribe to prevent memory leaks
         if (S_PlayerStateObserver.Instance != null)
-            S_PlayerStateObserver.Instance.OnPlayerHealthStateEvent -= handlePlayerStateEvent;
+            S_PlayerStateObserver.Instance.OnPlayerHealthStateEvent -= HandlePlayerStateEvent;
     }
 
     private void Update()
     {
-        // Normal Mode 下超过延迟则归拢到 Normal min
+        // In normal mode, after delay, start falling back to min
         if (!isInOneHitMode &&
             Time.time - lastHitTime > fallDelay &&
             !Mathf.Approximately(targetProgress, progressRange.x))
@@ -68,21 +70,16 @@ public class S_GetHitFeedBack : MonoBehaviour
 
         if (!Mathf.Approximately(currentProgress, targetProgress))
         {
-            // 根据当前模式和增减方向选择对应的 Lerp 速率
-            float lerpPct;
-            if (isInOneHitMode)
-                lerpPct = (currentProgress < targetProgress)
-                    ? oneHitApproachSpeed
-                    : oneHitReturnSpeed;
-            else
-                lerpPct = (currentProgress < targetProgress)
-                    ? approachToXSpeed
-                    : approachToYSpeed;
+            // Choose lerp speed based on mode and direction
+            float lerpSpeed = isInOneHitMode
+                ? (currentProgress < targetProgress ? oneHitApproachSpeed : oneHitReturnSpeed)
+                : (currentProgress < targetProgress ? approachToXSpeed : approachToYSpeed);
 
-            currentProgress = Mathf.Lerp(currentProgress, targetProgress, lerpPct * Time.deltaTime);
+            // Smoothly interpolate towards the target
+            currentProgress = Mathf.Lerp(currentProgress, targetProgress, lerpSpeed * Time.deltaTime);
             SetMaterialProgress(currentProgress);
 
-            // 只有 Normal Mode 下才动态对 hitCount 进行映射
+            // Only update hit count proportionally in normal mode
             if (!isInOneHitMode)
             {
                 float tNorm = Mathf.InverseLerp(progressRange.x, progressRange.y, currentProgress);
@@ -91,7 +88,7 @@ public class S_GetHitFeedBack : MonoBehaviour
         }
     }
 
-    private void handlePlayerStateEvent(Enum state)
+    private void HandlePlayerStateEvent(Enum state)
     {
         var healthState = (PlayerStates.PlayerHealthState)state;
         switch (healthState)
@@ -110,10 +107,9 @@ public class S_GetHitFeedBack : MonoBehaviour
 
     private void OnPlayerGetHit()
     {
-        if (isInOneHitMode)
-            return;
+        if (isInOneHitMode) return;
 
-        // 正常累积
+        // Increase hit count and update target progress
         hitCount = Mathf.Clamp(hitCount + 1, 0, hitsToMax);
         float t = hitCount / (float)hitsToMax;
         targetProgress = Mathf.Lerp(progressRange.x, progressRange.y, t);
@@ -123,7 +119,7 @@ public class S_GetHitFeedBack : MonoBehaviour
     private void OnOneHitModeStart()
     {
         isInOneHitMode = true;
-        hitCount = 0;  // 忽略之前的累积
+        hitCount = 0;                     // reset normal hits
         targetProgress = oneHitProgressRange.y;
         lastHitTime = Time.time;
     }
@@ -131,7 +127,7 @@ public class S_GetHitFeedBack : MonoBehaviour
     private void OnOneHitModeEnd()
     {
         isInOneHitMode = false;
-        hitCount = 0;
+        hitCount = 0;                     // clear state on exit
         targetProgress = oneHitProgressRange.x;
         lastHitTime = Time.time;
     }

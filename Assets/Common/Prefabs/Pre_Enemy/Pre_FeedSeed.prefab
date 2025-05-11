@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6083033547025432002}
   - component: {fileID: 7366211612162912778}
   - component: {fileID: 9007401212746422241}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: 5.9K_EnergyBall_LOW
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 4363768875870508214}
   - component: {fileID: 6288936178571780938}
   - component: {fileID: 2256508909943079645}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Base_LOW
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,8 +176,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7536884721380441578}
   - component: {fileID: 3241660246543454658}
+  - component: {fileID: 2408510005457716084}
   - component: {fileID: 1200695673889253068}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Pre_FeedSeed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -220,8 +221,35 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.2916477, y: 1.2922161, z: 1.7299417}
-  m_Center: {x: -0.23395553, y: 2.3966672, z: -0.05645275}
+  m_Size: {x: 2.2822921, y: 3.1033726, z: 2.0064266}
+  m_Center: {x: 0.0070802374, y: 1.4910898, z: -0.19469516}
+--- !u!54 &2408510005457716084
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8532176960272376094}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!114 &1200695673889253068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,3 +262,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d1c8afd0d7c1d04fab4a7ccd4d23b3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyName: 
+  enemyType: 11
+  health: 200
+  WeaknessExposureHealth: 0
+  enemyDamage: 0
+  WeakPoint: {fileID: 0}
+  energyPoint: {fileID: 284891634115185361, guid: 7ffcda2ccc95748469e58c3af6c7c58f, type: 3}
+  energyDropQuantity: 5
+  enemyGetHitVFX: {fileID: 0}
+  enemyDeathVFX: {fileID: 0}
+  enemyGetHitSound: 
+  enemyDeathSound: 
+  extraWeakPointMaterial: {fileID: 0}
+  weakPointRenderer: {fileID: 0}
+  currentHealth: 0
+  respawnCoolDown: 5

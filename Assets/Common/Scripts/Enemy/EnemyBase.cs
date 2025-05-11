@@ -23,8 +23,8 @@ public class EnemyBase : MonoBehaviour
     public Renderer weakPointRenderer;
     private Material[] originalWeakPointMaterials;
 
-
-    private float currentHealth;
+    [HideInInspector]
+    public float currentHealth;
     private bool isDead = false;
     private S_PLayerInfoDebugDisplay _sPLayerInfoDebugDisplay;
 
@@ -148,7 +148,7 @@ public class EnemyBase : MonoBehaviour
     
 
     // Drops energy items with a random offset.
-    private void DropItems(float DropBonus)
+    public void DropItems(float DropBonus)
     {
         for (int i = 0; i < energyDropQuantity + DropBonus; i++)
         {

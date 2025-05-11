@@ -10,5 +10,6 @@
     OunOun,
     Banshee,
     Banshee_lv2,
-    Banshee_Boss
+    Banshee_Boss,
+    FeedSeed
 }

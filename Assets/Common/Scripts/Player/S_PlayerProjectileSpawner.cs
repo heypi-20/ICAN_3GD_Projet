@@ -1,71 +1,112 @@
+using System;
 using System.Collections;
 using UnityEngine;
-using System;
 
 public class S_PlayerProjectileSpawner : MonoBehaviour
 {
-    // Prefabs for projectiles at different levels
+    [Header("Prefabs / Activation Targets")]
     public GameObject ProjectilePrefab_Lv1;
     public GameObject ProjectilePrefab_Lv2;
     public GameObject ProjectilePrefab_Lv3;
     public GameObject ProjectilePrefab_Lv4;
 
-    [Space(20)]
-    // Base movement speed of the projectile
+    [Header("Activation Mode")]
+    public bool useActivationLv1;
+    public bool useActivationLv2;
+    public bool useActivationLv3;
+    public bool useActivationLv4;
+
+    [Space(10)]
     public float Speed = 200f;
-    // Total lifetime of the projectile before destruction
     public float ProjectileLifeTime = 3f;
-    [Tooltip("Duration (in seconds) that the projectile follows the spawner")]
     public float FollowTime = 0.1f;
-    [Tooltip("Curve to control speed multiplier over lifetime (0=start, 1=end)")]
     public AnimationCurve SpeedCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+
+    // instances for activation mode
+    private GameObject activationInstanceLv1;
+    private GameObject activationInstanceLv2;
+    private GameObject activationInstanceLv3;
+    private GameObject activationInstanceLv4;
 
     private void Start()
     {
-        // Subscribe to the player's shooting event
         S_PlayerStateObserver.Instance.OnShootStateEvent += OnShoot;
+    }
+
+    private void OnDestroy()
+    {
+        if (S_PlayerStateObserver.Instance != null)
+            S_PlayerStateObserver.Instance.OnShootStateEvent -= OnShoot;
     }
 
     private void OnShoot(Enum state, int level)
     {
-        // When the player enters the shooting state, spawn a projectile of the given level
-        if (state.Equals(PlayerStates.ShootState.IsShooting))
-            SpawnProjectile(level);
-    }
-
-    private void SpawnProjectile(int level)
-    {
-        // Select the correct prefab based on the projectile level
-        GameObject prefabToSpawn = null;
+        bool isShooting = state.Equals(PlayerStates.ShootState.IsShooting);
         switch (level)
         {
             case 1:
-                prefabToSpawn = ProjectilePrefab_Lv1;
+                HandleLevel(
+                    ProjectilePrefab_Lv1, useActivationLv1,
+                    ref activationInstanceLv1, isShooting
+                );
                 break;
             case 2:
-                prefabToSpawn = ProjectilePrefab_Lv2;
+                HandleLevel(
+                    ProjectilePrefab_Lv2, useActivationLv2,
+                    ref activationInstanceLv2, isShooting
+                );
                 break;
             case 3:
-                prefabToSpawn = ProjectilePrefab_Lv3;
+                HandleLevel(
+                    ProjectilePrefab_Lv3, useActivationLv3,
+                    ref activationInstanceLv3, isShooting
+                );
                 break;
             case 4:
-                prefabToSpawn = ProjectilePrefab_Lv4;
+                HandleLevel(
+                    ProjectilePrefab_Lv4, useActivationLv4,
+                    ref activationInstanceLv4, isShooting
+                );
                 break;
             default:
                 Debug.LogWarning($"Invalid projectile level: {level}");
-                return;
+                break;
         }
+    }
 
-        // Instantiate the projectile as a child of this spawner to enable initial follow
-        GameObject projectile = Instantiate(
-            prefabToSpawn,
-            transform.position,
-            transform.rotation,
-            transform // Set as child for initial follow phase
-        );
+    private void HandleLevel(GameObject prefab, bool useActivation, 
+                             ref GameObject instance, bool isShooting)
+    {
+        if (prefab == null) return;
 
-        // Start coroutine to handle movement with speed curve and timed destruction
-        StartCoroutine(MoveAndDestroy(projectile));
+        if (useActivation)
+        {
+            if (isShooting)
+            {
+                // instantiate if not exists, then activate and parent
+                if (instance == null)
+                {
+                    instance = Instantiate(prefab);
+                    instance.transform.SetParent(transform, false);
+                }
+                instance.SetActive(true);
+            }
+            else
+            {
+                // shooting stopped: just disable
+                if (instance != null)
+                    instance.SetActive(false);
+            }
+        }
+        else
+        {
+            // normal spawn on shoot
+            if (isShooting)
+            {
+                var proj = Instantiate(prefab, transform.position, transform.rotation, transform);
+                StartCoroutine(MoveAndDestroy(proj));
+            }
+        }
     }
 
     private IEnumerator MoveAndDestroy(GameObject projectile)
@@ -73,34 +114,26 @@ public class S_PlayerProjectileSpawner : MonoBehaviour
         float elapsed = 0f;
         Transform t = projectile.transform;
 
-        // Continue until the projectile's lifetime expires
         while (elapsed < ProjectileLifeTime)
         {
-            // Evaluate speed multiplier from the curve (normalized time from 0 to 1)
-            float normalizedTime = elapsed / ProjectileLifeTime;
-            float speedMultiplier = SpeedCurve.Evaluate(normalizedTime);
-            float currentSpeed = Speed * speedMultiplier;
+            float pct = elapsed / ProjectileLifeTime;
+            float speed = Speed * SpeedCurve.Evaluate(pct);
 
             if (elapsed < FollowTime)
             {
-                // Phase 1: move with the spawner in local space
-                t.Translate(Vector3.forward * (currentSpeed * Time.deltaTime), Space.Self);
+                t.Translate(Vector3.forward * speed * Time.deltaTime, Space.Self);
             }
             else
             {
-                // Phase 2: detach and move independently in world space
                 if (t.parent != null)
-                    t.SetParent(null);  // Detach from spawner
-
-                // Move forward along its current forward direction in world space
-                t.Translate(t.forward * (currentSpeed * Time.deltaTime), Space.World);
+                    t.SetParent(null);
+                t.Translate(t.forward * speed * Time.deltaTime, Space.World);
             }
 
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        // Destroy the projectile after its lifetime has passed
         Destroy(projectile);
     }
 }
