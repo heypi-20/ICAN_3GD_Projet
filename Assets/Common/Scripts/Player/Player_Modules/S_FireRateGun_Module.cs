@@ -35,9 +35,6 @@ public class S_FireRateGun_Module : MonoBehaviour
     private S_InputManager _inputManager;
     private S_EnergyStorage _energyStorage;
     private float _fireCooldown;
-
-    public GameObject HitMarkerPNG;
-
     public event Action<Enum, int> OnShootStateChange;
     private bool shootStartedUseForEvent;
     private bool ShootStoppedUseForEvent;
@@ -212,9 +209,6 @@ public class S_FireRateGun_Module : MonoBehaviour
                 // Éviter les touches répétées sur la même cible
                 if (hitTargets.Add(enemyObject))
                 {
-                    // HitMarkerEnabler
-                    StartCoroutine(HitMarker());
-
                     // Appliquer les degats
                     if(hit.collider.gameObject.CompareTag("WeakPoint"))
                     {
@@ -258,12 +252,5 @@ public class S_FireRateGun_Module : MonoBehaviour
         int currentLevelIndex = _energyStorage.currentLevelIndex + 1; // Ajustement pour correspondre aux niveaux
         return fireRateLevels.Find(level => level.level == currentLevelIndex);
     }
-
-  
-    IEnumerator HitMarker()
-    {
-        HitMarkerPNG.SetActive(true);
-        yield return new WaitForSeconds(0.1f);
-        HitMarkerPNG.SetActive(false);
-    }
+    
 }
