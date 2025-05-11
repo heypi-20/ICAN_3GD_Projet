@@ -103,6 +103,7 @@ public class SoundManager : MonoBehaviour
     private EventInstance Instance_Used_Jump;
     public EventReference Toutched_Ground;
     private EventInstance Instance_Touched_Ground;
+    private int Number_of_Jump;
 
     private void JumpState(Enum state)
     {
@@ -111,10 +112,13 @@ public class SoundManager : MonoBehaviour
             case PlayerStates.JumpState.Jump :
                 Instance_Used_Jump = RuntimeManager.CreateInstance(Used_Jump);
                 Instance_Used_Jump.start();
+                Number_of_Jump = Number_of_Jump + 1;
+                Instance_Used_Jump.setParameterByName("Number_Of_Jump",Number_of_Jump);
                 break;
             case PlayerStates.JumpState.OnGround :
                 Instance_Touched_Ground = RuntimeManager.CreateInstance(Toutched_Ground);
                 Instance_Touched_Ground.start();
+                Number_of_Jump = 0;
                 break;
         }
     }
