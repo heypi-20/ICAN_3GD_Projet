@@ -44,7 +44,7 @@ public class S_SuperJump_Module : MonoBehaviour
     private CharacterController _CC;
     
     //Event
-    public event Action<Enum> OnJumpStateChange;
+    public event Action<Enum,int> OnJumpStateChange;
 
     private void Start()
     {
@@ -69,7 +69,7 @@ public class S_SuperJump_Module : MonoBehaviour
         if (!_customCC.GroundCheck()&&!hadLeaveGround)
         {
             hadLeaveGround = true;
-            JumpObserverEvent(PlayerStates.JumpState.OnAir);
+            JumpObserverEvent(PlayerStates.JumpState.OnAir,GetCurrentJumpLevel().level);
         }
         
         // Réinitialiser le compteur de saut si le joueur est au sol
@@ -77,14 +77,14 @@ public class S_SuperJump_Module : MonoBehaviour
         {
             ResetJumpCount();
             hadLeaveGround = false;
-            JumpObserverEvent(PlayerStates.JumpState.OnGround);
+            JumpObserverEvent(PlayerStates.JumpState.OnGround, GetCurrentJumpLevel().level);
         }
         
     }
 
-    private void JumpObserverEvent(Enum JumpState)
+    private void JumpObserverEvent(Enum JumpState,int level)
     {
-        OnJumpStateChange?.Invoke(JumpState);
+        OnJumpStateChange?.Invoke(JumpState,level);
         
     }
     
@@ -112,7 +112,7 @@ public class S_SuperJump_Module : MonoBehaviour
         JumpVortex();
         
         //Trigger Evenement
-        JumpObserverEvent(PlayerStates.JumpState.Jump);
+        JumpObserverEvent(PlayerStates.JumpState.Jump,currentLevel.level);
         
         // Appliquer la force de saut
         _customCC.velocity.y = Mathf.Sqrt(currentLevel.jumpHeight * -2f * _customCC.gravity);

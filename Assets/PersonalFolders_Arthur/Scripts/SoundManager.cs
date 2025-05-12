@@ -104,7 +104,7 @@ public class SoundManager : MonoBehaviour
     private EventInstance Instance_Touched_Ground;
     private int Number_of_Jump;
 
-    private void JumpState(Enum state)
+    private void JumpState(Enum state, int level)
     {
         switch (state)
         {

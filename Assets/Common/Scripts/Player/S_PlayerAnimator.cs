@@ -168,7 +168,7 @@ public class S_PlayerAnimator : MonoBehaviour
     }
 
     // Modified jump state handling with an additional OnAir state
-    private void HandleJumpState(Enum JumpState)
+    private void HandleJumpState(Enum JumpState, int level)
     {
         switch (JumpState)
         {

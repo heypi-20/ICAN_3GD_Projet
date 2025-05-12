@@ -29,7 +29,7 @@ public class S_PlayerStateObserver : MonoBehaviour
     public Action<Enum, Vector2> OnMoveStateEvent;
     public Action<Enum, int> OnMeleeAttackStateEvent;
     public Action<Enum, int> OnShootStateEvent;
-    public Action<Enum> OnJumpStateEvent;
+    public Action<Enum,int> OnJumpStateEvent;
     public Action<Enum> OnGroundPoundStateEvent;
     public Action<Enum,int> OnLevelUpStateEvent;
     public Action<Enum,int> OnSprintStateEvent; 
@@ -89,11 +89,11 @@ public class S_PlayerStateObserver : MonoBehaviour
         UpdateStateUI(state);
     }
 
-    private void OnJumpStateChanged(Enum state)
+    private void OnJumpStateChanged(Enum state, int level)
     {
         //Done
         UpdateStateUI(state);
-        OnJumpStateEvent?.Invoke(state);
+        OnJumpStateEvent?.Invoke(state,level);
 
     }
 
