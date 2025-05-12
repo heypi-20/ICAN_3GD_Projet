@@ -39,4 +39,3 @@ public class S_ObjectivePanel : MonoBehaviour
         _listDisplay.Clear();
     }
 }
-

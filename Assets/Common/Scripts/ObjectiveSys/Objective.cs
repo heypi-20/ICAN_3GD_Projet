@@ -17,18 +17,27 @@ public class Objective
 
     // Status text can have 2 parameters {0} and {1} for current and max value
     // Example: "Kill {0} of {1} enemies"
-    public Objective(string eventTrigger, string statusText, int maxValue)
+    public Objective(string eventTrigger, string statusText, int currentValue, int maxValue)
     {
         EventTrigger = eventTrigger;
         _statusText = statusText;
+        CurrentValue = currentValue;
         MaxValue = maxValue;
     }
 
-    public Objective(string statusText, int maxValue) : this("", statusText, maxValue) {}
+    public Objective(string statusText, int currentValue, int maxValue) : this("", statusText, currentValue, maxValue) {}
 
     private void CheckCompletion()
     {
         if (CurrentValue >= MaxValue) {
+            IsComplete = true;
+            OnComplete?.Invoke();
+        }
+    }
+
+    private void CheckCompletionNegative()
+    {
+        if (CurrentValue <= 0) {
             IsComplete = true;
             OnComplete?.Invoke();
         }
@@ -48,9 +57,22 @@ public class Objective
         CheckCompletion();
     }
 
+    public void AddProgressNegative(int value)
+    {
+        if (IsComplete)
+            return;
+        CurrentValue -= value;
+
+        if (CurrentValue < 0) {
+            CurrentValue = 0;
+        }
+        
+        OnValueChange?.Invoke();
+        CheckCompletionNegative();
+    }
+
     public string GetStatusText()
     {
         return string.Format(_statusText, CurrentValue, MaxValue);
     }
 }
-

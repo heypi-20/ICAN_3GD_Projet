@@ -14,8 +14,8 @@ public class S_MainObjective : MonoBehaviour
     private void Start()
     {
         ObjectiveManager = GetComponent<S_ObjectiveSystem>().ObjectiveManager;
-        
-        killObjective = new Objective(objectiveParams.eventTrigger, objectiveParams.eventText, objectiveParams.maxValue);
+
+        killObjective = new Objective(objectiveParams.eventTrigger, objectiveParams.eventText, objectiveParams.currentValue, objectiveParams.maxValue);
         ObjectiveManager.AddObjective(killObjective);
         
         if (objectiveDisplay == null) {
@@ -28,7 +28,6 @@ public class S_MainObjective : MonoBehaviour
 
     private void AddProgress(EnemyType enemyType)
     {
-        killObjective.AddProgress(1);
+        killObjective.AddProgressNegative(1);
     }
 }
-

@@ -15,7 +15,7 @@ public class TestObjective : MonoBehaviour
     {
         ObjectiveManager = GetComponent<S_ObjectiveSystem>().ObjectiveManager;
         
-        killObjective = new Objective(objectiveParams.eventTrigger, objectiveParams.eventText, objectiveParams.maxValue);
+        killObjective = new Objective(objectiveParams.eventTrigger, objectiveParams.eventText, objectiveParams.currentValue, objectiveParams.maxValue);
         ObjectiveManager.AddObjective(killObjective);
         
         if (objectiveDisplay == null) {
@@ -31,4 +31,3 @@ public class TestObjective : MonoBehaviour
         killObjective.AddProgress(1);
     }
 }
-

@@ -7,6 +7,7 @@ public class ObjectiveParams
 {
     public string eventTrigger;
     public string eventText;
+    public int currentValue;
     public int maxValue;
 }
 
@@ -19,4 +20,3 @@ public class S_ObjectiveSystem : MonoBehaviour
         ObjectiveManager = new S_ObjectiveManager();
     }   
 }
-
