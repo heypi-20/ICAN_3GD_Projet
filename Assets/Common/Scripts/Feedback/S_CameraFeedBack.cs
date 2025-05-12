@@ -120,6 +120,11 @@ public class S_CameraFeedBack : MonoBehaviour
             timePassed += Time.deltaTime;
             _cinemachineVirtualCamera.m_Lens.FieldOfView = Start_FOV + timePassed * CAC_fov_Multiplier;
         }
+
+        if (Curent_FOV >= 130f)
+        {
+            isIncreasing = false;
+        }
     }
 
     #region CameraMooveFeedback

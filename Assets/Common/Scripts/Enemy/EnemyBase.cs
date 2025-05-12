@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using FMOD.Studio;
+using FMODUnity;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -16,7 +18,8 @@ public class EnemyBase : MonoBehaviour
     public float energyDropQuantity;
     public GameObject enemyGetHitVFX;
     public GameObject enemyDeathVFX;
-    public string enemyGetHitSound;
+    public EventReference enemy_Kill;
+    private EventInstance enemy_kill_instance;
     public string enemyDeathSound;
     [Header("WeakPoint Visuals")]
     public Material extraWeakPointMaterial;
@@ -129,7 +132,9 @@ public class EnemyBase : MonoBehaviour
         OnKilled?.Invoke(this);
 
         // Play kill sound and drop energy items.
-        //SoundManager.Instance.Meth_Shoot_Kill(1);
+        enemy_kill_instance = RuntimeManager.CreateInstance(enemy_Kill);
+        RuntimeManager.AttachInstanceToGameObject(enemy_kill_instance,transform,GetComponent<Rigidbody>());
+        enemy_kill_instance.start();
         DropItems(DropBonus);
 
         // Deactivate the enemy so it can be returned to the pool.

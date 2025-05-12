@@ -57,6 +57,7 @@ public class SoundManager : MonoBehaviour
     public string Dashoot_Dash;
     public string Dashoot_Shoot;
     public string JumpyCuby_Jump;
+    public string Enemy_Kill; 
     
     public string Secret_surprise;
     private int actuallevel;
@@ -200,6 +201,11 @@ public class SoundManager : MonoBehaviour
     public void Meth_JumpyCuby_Jump()
     {
         FMODUnity.RuntimeManager.PlayOneShot(JumpyCuby_Jump);
+    }
+
+    public void Meth_Enemy_Kill()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot(Enemy_Kill);
     }
 
     private void Start()
