@@ -164,7 +164,7 @@ public class SoundManager : MonoBehaviour
     public EventReference Used_Pillonage;
     private EventInstance Instance_Used_Pillonage;
 
-    private void PillonageState(Enum state)
+    private void PillonageState(Enum state,int level)
     {
         switch (state)
         {

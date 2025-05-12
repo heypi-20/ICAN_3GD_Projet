@@ -18,7 +18,7 @@ public class S_UiFeedback : MonoBehaviour
         }
     }
     
-    private void ReceiceGroudPoundEvevent(Enum state)
+    private void ReceiceGroudPoundEvevent(Enum state,int level)
     {
         if (state.Equals(PlayerStates.GroundPoundState.StartGroundPound))
         {
