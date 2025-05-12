@@ -20,7 +20,6 @@ public class EnemyBase : MonoBehaviour
     public GameObject enemyDeathVFX;
     public EventReference enemy_Kill;
     private EventInstance enemy_kill_instance;
-    public string enemyDeathSound;
     [Header("WeakPoint Visuals")]
     public Material extraWeakPointMaterial;
     public Renderer weakPointRenderer;
