@@ -6,6 +6,7 @@ using UnityEngine;
 using FMODUnity;
 using FMOD.Studio;
 using Unity.VisualScripting;
+using STOP_MODE = FMOD.Studio.STOP_MODE;
 
 public class SoundManager : MonoBehaviour
 {
@@ -125,7 +126,6 @@ public class SoundManager : MonoBehaviour
     
     #endregion
     
-    
     #region Sprint
 
     [Header("Sprint")]
@@ -230,6 +230,8 @@ public class SoundManager : MonoBehaviour
     private EventInstance Instance_Music_Lvl3;
     public EventReference Music_Lvl4;
     private EventInstance Instance_Music_Lvl4;
+    public EventReference HeartBeat;
+    private EventInstance Instance_HeartBeat; 
     private void LevelChanged(Enum state,int Level)
     {
         switch (state)
@@ -279,30 +281,41 @@ public class SoundManager : MonoBehaviour
                 break;
             case PlayerStates.LevelState.StartGrace when Level == 2:
                 StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl2, 1f, 0f, 5f));
+                Instance_HeartBeat = RuntimeManager.CreateInstance(HeartBeat);
+                Instance_HeartBeat.start();
                 break;
 
             case PlayerStates.LevelState.EndGrace when Level == 2:
                 StopAllCoroutines();
                 StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl2, 0f, 1f, 0.2f));
+                Instance_HeartBeat.stop(STOP_MODE.IMMEDIATE);
                 break;
 
             case PlayerStates.LevelState.StartGrace when Level == 3:
                 StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl3, 1f, 0f, 5f));
+                Instance_HeartBeat = RuntimeManager.CreateInstance(HeartBeat);
+                Instance_HeartBeat.start();
                 break;
 
             case PlayerStates.LevelState.EndGrace when Level == 3:
                 StopAllCoroutines();
                 StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl3, 0f, 1f, 0.2f));
+                Instance_HeartBeat.stop(STOP_MODE.IMMEDIATE);
                 break;
 
             case PlayerStates.LevelState.StartGrace when Level == 4:
                 StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl4, 1f, 0f, 5f));
+                Instance_HeartBeat = RuntimeManager.CreateInstance(HeartBeat);
+                Instance_HeartBeat.start();
                 break;
 
             case PlayerStates.LevelState.EndGrace when Level == 4:
                 StopAllCoroutines();
+                Instance_HeartBeat.stop(STOP_MODE.IMMEDIATE);
                 StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl4, 0f, 1f, 0.2f));
                 break;
+            
+            
         }
         IEnumerator ChangePitchOverTime(EventInstance musicInstance, float from, float to, float duration)
         {
