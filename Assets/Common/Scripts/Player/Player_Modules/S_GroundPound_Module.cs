@@ -171,9 +171,13 @@ public class S_GroundPound_Module : MonoBehaviour
     private GroundPoundLevel GetCurrentGroundPoundLevel()
     {
         if (_energyStorage == null) return null;
-
         int currentLevelIndex = _energyStorage.currentLevelIndex + 1; // Supposons que les niveaux commencent à 1
-        return groundPoundLevels.Find(level => level.level == currentLevelIndex);
+        GroundPoundLevel groundPoundLevel = groundPoundLevels.Find(level => level.level == currentLevelIndex);
+        if (groundPoundLevel == null)
+        {
+            groundPoundLevel = groundPoundLevels.Find(level => level.level == 2);
+        }
+        return groundPoundLevel;
     }
 
     private void OnDrawGizmos()

@@ -1519,18 +1519,19 @@ MonoBehaviour:
   killRateText: {fileID: 1726546463287741889}
   energyRateText: {fileID: 6308743714651280211}
   killRateAverageWindow: 2
-  showPerMinute: 0
+  showKillRatePerMinute: 0
   killRateThresholdText: MAX !!!
-  killRateThreshold: 20
+  killRateThreshold: 999999
   killRateShakeFrequency: 2
   energyUpdateInterval: 0.2
+  showEnergyRatePerMinute: 0
   energyRateThresholdText: MAX !!!
-  energyRateThreshold: 1000
+  energyRateThreshold: 999999
   energyRateShakeFrequency: 2
-  lerpSpeed: 5
-  coolDownSpeed: 5
-  energyLerpSpeed: 10
-  energyCoolDownSpeed: 10
+  killRateLerpSpeed: 5
+  killRateCoolDownSpeed: 3
+  energyRateLerpSpeed: 5
+  energyRateCoolDownSpeed: 3
 --- !u!1 &2052243040018373569
 GameObject:
   m_ObjectHideFlags: 0
@@ -3845,7 +3846,6 @@ Transform:
   - {fileID: 1638474744326144611}
   - {fileID: 6730111253553791090}
   - {fileID: 4667515023304194446}
-  - {fileID: 5293500233523943736}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4030318941620180449
@@ -4629,7 +4629,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: KPS
+  m_text: K/m
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e07e31392a0e2ea4c93e908b145bbfcd, type: 2}
   m_sharedMaterial: {fileID: -6094595832119203828, guid: e07e31392a0e2ea4c93e908b145bbfcd, type: 2}
@@ -6592,7 +6592,6 @@ GameObject:
   - component: {fileID: 537605952385676786}
   - component: {fileID: 3605016965288028042}
   - component: {fileID: 6915564590874781277}
-  - component: {fileID: 5055710977765548510}
   m_Layer: 3
   m_Name: Player_V5
   m_TagString: Player
@@ -7025,7 +7024,7 @@ MonoBehaviour:
   attackOrigin: {fileID: 3636347044067628401}
   attackLevels:
   - level: 1
-    attackRange: 2
+    attackRange: 3
     attackDistance: 999
     attackDamage: 10
     attackCooldown: 0.7
@@ -7033,10 +7032,10 @@ MonoBehaviour:
     dropBonus: 45
     WeakPointDropBonus: 65
     knockbackForce: 5
-    coneStartRadius: 1
+    coneStartRadius: 3
     coneEndRadius: 20
   - level: 2
-    attackRange: 2
+    attackRange: 3
     attackDistance: 999
     attackDamage: 50
     attackCooldown: 0.7
@@ -7044,10 +7043,10 @@ MonoBehaviour:
     dropBonus: 45
     WeakPointDropBonus: 65
     knockbackForce: 10
-    coneStartRadius: 1
+    coneStartRadius: 3
     coneEndRadius: 20
   - level: 3
-    attackRange: 2
+    attackRange: 3
     attackDistance: 999
     attackDamage: 160
     attackCooldown: 0.7
@@ -7055,10 +7054,10 @@ MonoBehaviour:
     dropBonus: 45
     WeakPointDropBonus: 65
     knockbackForce: 15
-    coneStartRadius: 1
+    coneStartRadius: 3
     coneEndRadius: 20
   - level: 4
-    attackRange: 2
+    attackRange: 3
     attackDistance: 999
     attackDamage: 500
     attackCooldown: 0.7
@@ -7066,7 +7065,7 @@ MonoBehaviour:
     dropBonus: 70
     WeakPointDropBonus: 100
     knockbackForce: 1
-    coneStartRadius: 1
+    coneStartRadius: 3
     coneEndRadius: 20
   targetLayer:
     serializedVersion: 2
@@ -7215,24 +7214,6 @@ MonoBehaviour:
     maxComboMultiplier: 0
     comboTime: 0
     GainPerKill: 0
---- !u!114 &5055710977765548510
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6376292503174423671}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f06d542c79bacd440befc92c8b44aa6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  jumpVFXRootPrefab: {fileID: 655585964346437172}
-  vfxRoot: {fileID: 5293500233523943736}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  maxRayDistance: 90
 --- !u!1 &6418473037106372350
 GameObject:
   m_ObjectHideFlags: 0
@@ -8742,7 +8723,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: EPS
+  m_text: E/m
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e07e31392a0e2ea4c93e908b145bbfcd, type: 2}
   m_sharedMaterial: {fileID: -6094595832119203828, guid: e07e31392a0e2ea4c93e908b145bbfcd, type: 2}
@@ -8866,7 +8847,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   energyStorage: {fileID: 9046166951153555370}
   targetImage: {fileID: 5439417669106740798}
-  fillRange: {x: 1, y: 0.17}
+  fillRange: {x: 1, y: 0.23}
   lerpSpeed: 3
   tintColors:
   - {r: 1, g: 0.9490197, b: 0, a: 1}
@@ -9542,71 +9523,4 @@ Camera:
 Transform:
   m_CorrespondingSourceObject: {fileID: 5809473462529211896, guid: ac63a8e648cf85846ad508cf09c4cac0, type: 3}
   m_PrefabInstance: {fileID: 1844821827053382512}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &7466523801036426239
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 8728408009053761971}
-    m_Modifications:
-    - target: {fileID: 3379988615947014855, guid: 3443688f289d7e94a811abaaff01b2c1, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3379988615947014855, guid: 3443688f289d7e94a811abaaff01b2c1, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3379988615947014855, guid: 3443688f289d7e94a811abaaff01b2c1, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3379988615947014855, guid: 3443688f289d7e94a811abaaff01b2c1, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.70906675
-      objectReference: {fileID: 0}
-    - target: {fileID: 3379988615947014855, guid: 3443688f289d7e94a811abaaff01b2c1, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3379988615947014855, guid: 3443688f289d7e94a811abaaff01b2c1, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.7051414
-      objectReference: {fileID: 0}
-    - target: {fileID: 3379988615947014855, guid: 3443688f289d7e94a811abaaff01b2c1, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3379988615947014855, guid: 3443688f289d7e94a811abaaff01b2c1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3379988615947014855, guid: 3443688f289d7e94a811abaaff01b2c1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3379988615947014855, guid: 3443688f289d7e94a811abaaff01b2c1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7964457750906234315, guid: 3443688f289d7e94a811abaaff01b2c1, type: 3}
-      propertyPath: m_Name
-      value: VFXRoot
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 3443688f289d7e94a811abaaff01b2c1, type: 3}
---- !u!1 &655585964346437172 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7964457750906234315, guid: 3443688f289d7e94a811abaaff01b2c1, type: 3}
-  m_PrefabInstance: {fileID: 7466523801036426239}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &5293500233523943736 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3379988615947014855, guid: 3443688f289d7e94a811abaaff01b2c1, type: 3}
-  m_PrefabInstance: {fileID: 7466523801036426239}
   m_PrefabAsset: {fileID: 0}

@@ -286,7 +286,12 @@ public class S_BasicSprint_Module : MonoBehaviour
     private SprintLevel GetCurrentSprintLevels()
     {
         int currentLevel = _energyStorage.currentLevelIndex + 1; // Ajuste pour correspondre au niveau dans SprintLevel
-        return sprintLevels.Find(level => level.level == currentLevel);;
+        SprintLevel sprintLevel =sprintLevels.Find(level => level.level == currentLevel);
+        if (sprintLevel == null)
+        {
+            sprintLevel =sprintLevels.Find(level => level.level == 1);
+        }
+        return sprintLevel;
     }
     
     // Gizmos drawing to visualize the sprint damage range

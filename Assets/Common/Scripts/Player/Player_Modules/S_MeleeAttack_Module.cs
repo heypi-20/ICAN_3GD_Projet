@@ -9,14 +9,14 @@ public class S_MeleeAttack_Module : MonoBehaviour
     public class MeleeAttackLevel
     {
         public int level; // Required level for this attack level
-        public float attackRange; // Radius of the attack range (unused for cone)
-        public float attackDistance; // Distance of the attack
+        public float attackRange; // Instant hit range threshold (skip dash if within this distance)
+        public float attackDistance; // Max distance of the attack (cone length)
         public float attackDamage; // Damage per attack
         public float attackCooldown; // Cooldown time between attacks
         public float energyConsumption; // Energy consumption per attack
-        public int dropBonus;
-        public int WeakPointDropBonus;
-        public float knockbackForce;
+        public int dropBonus; // Drop bonus on hit
+        public int WeakPointDropBonus; // Additional drop bonus for weak point hit
+        public float knockbackForce; // Knockback force applied on hit
 
         // Cone-specific radii
         public float coneStartRadius; // Radius at the origin of the cone
@@ -94,7 +94,6 @@ public class S_MeleeAttack_Module : MonoBehaviour
         _attackCooldownTimer = currentLevel.attackCooldown;
         _energyStorage.RemoveEnergy(currentLevel.energyConsumption);
         _isWindupInProgress = false;
-
     }
 
     private IEnumerator AttackMovementCoroutine(Vector3 enemyPos, Collider hit, MeleeAttackLevel currentLevel)
@@ -103,24 +102,30 @@ public class S_MeleeAttack_Module : MonoBehaviour
         float totalDistance = Vector3.Distance(originPos, enemyPos) - StopDashDistance;
         Vector3 direction = (enemyPos - attackOrigin.position).normalized;
         float remaining = totalDistance;
-        MeleeAttackObserverEvent(PlayerStates.MeleeState.DashingBeforeMelee, GetCurrentAttackLevel().level);
+        MeleeAttackObserverEvent(PlayerStates.MeleeState.DashingBeforeMelee, currentLevel.level);
 
         // Move until reaching stop distance
         while (remaining > 0f)
         {
             float step = dashSpeed * Time.deltaTime;
-            // Clamp step to not overshoot
             float move = Mathf.Min(step, remaining);
             _characterController.Move(direction * move);
             remaining -= move;
             yield return null;
         }
 
+        ApplyHitEffect(hit, currentLevel);
+        // Start cooldown end event timer
+        yield return StartCoroutine(StartTimer(_attackCooldownTimer));
+    }
+
+    private void ApplyHitEffect(Collider hit, MeleeAttackLevel currentLevel)
+    {
         Rigidbody targetRB = hit.GetComponentInParent<Rigidbody>();
         if (targetRB != null)
         {
             Vector3 forceDirection = (hit.transform.position - transform.position).normalized;
-            targetRB.AddForce(forceDirection * 30f, ForceMode.Impulse);
+            targetRB.AddForce(forceDirection * currentLevel.knockbackForce, ForceMode.Impulse);
         }
 
         if (hit.CompareTag("WeakPoint"))
@@ -133,8 +138,6 @@ public class S_MeleeAttack_Module : MonoBehaviour
             MeleeAttackObserverEvent(PlayerStates.MeleeState.MeleeAttackHit, currentLevel.level);
             hit.GetComponent<EnemyBase>()?.ReduceHealth(currentLevel.attackDamage, currentLevel.dropBonus);
         }
-        yield return StartCoroutine(StartTimer(_attackCooldownTimer));
-
     }
 
     private IEnumerator StartTimer(float seconds)
@@ -161,30 +164,33 @@ public class S_MeleeAttack_Module : MonoBehaviour
             float proj = Vector3.Dot(toTarget, forward);
             if (proj < 0 || proj > maxDistance) continue; // outside cone length
 
-            // interpolate radius at this distance
             float radiusAtDist = Mathf.Lerp(currentLevel.coneStartRadius, currentLevel.coneEndRadius, proj / maxDistance);
-            // perpendicular distance from center line
             float perpDist = Vector3.Magnitude(toTarget - forward * proj);
-            if (perpDist <= radiusAtDist)
+            if (perpDist <= radiusAtDist && proj < bestProj)
             {
-                if (proj < bestProj)
-                {
-                    bestProj = proj;
-                    bestHit = col;
-                }
+                bestProj = proj;
+                bestHit = col;
             }
         }
 
         if (bestHit != null)
         {
-            StartCoroutine(AttackMovementCoroutine(bestHit.transform.position, bestHit, currentLevel));
+            // If within instant hit range, skip dash movement
+            if (bestProj <= currentLevel.attackRange)
+            {
+                ApplyHitEffect(bestHit, currentLevel);
+                StartCoroutine(StartTimer(_attackCooldownTimer));
+            }
+            else
+            {
+                StartCoroutine(AttackMovementCoroutine(bestHit.transform.position, bestHit, currentLevel));
+            }
             return;
         }
 
-        // If no hit, fire missed event
-        MeleeAttackObserverEvent(PlayerStates.MeleeState.MeleeAttackMissed, currentLevel.level); 
+        // If no hit, fire missed event and end attack
+        MeleeAttackObserverEvent(PlayerStates.MeleeState.MeleeAttackMissed, currentLevel.level);
         StartCoroutine(StartTimer(_attackCooldownTimer));
-
     }
 
     private MeleeAttackLevel GetCurrentAttackLevel()
@@ -210,13 +216,10 @@ public class S_MeleeAttack_Module : MonoBehaviour
             float maxDistance = currentLevel.attackDistance;
 
             Gizmos.color = Color.red;
-            // Draw start circle
             Gizmos.DrawWireSphere(origin, currentLevel.coneStartRadius);
-            // Draw end circle
             Vector3 endCenter = origin + forward * maxDistance;
             Gizmos.DrawWireSphere(endCenter, currentLevel.coneEndRadius);
 
-            // Draw lines connecting radii
             Vector3[] dirs = { Vector3.right, Vector3.up, Vector3.left, Vector3.down };
             foreach (var dir in dirs)
             {

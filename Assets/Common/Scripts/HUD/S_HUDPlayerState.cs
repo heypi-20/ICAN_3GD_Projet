@@ -13,10 +13,10 @@ public class S_HUDPlayerState : MonoBehaviour
     [Tooltip("Time window (seconds) used to compute kill rate")]
     public float killRateAverageWindow = 2f;
     [Tooltip("Display kills per minute instead of per second")]
-    public bool showPerMinute = false;
-    [Tooltip("Text to display when rate exceeds threshold")]
+    public bool showKillRatePerMinute = false;
+    [Tooltip("Text to display when kill rate exceeds threshold")]
     public string killRateThresholdText = "MAX !!!";
-    [Tooltip("Rate threshold for triggering text change and animation")]
+    [Tooltip("Kill rate threshold for triggering text change and animation")]
     public float killRateThreshold = 5f;
     [Tooltip("Shake frequency (punches per second) when threshold exceeded")]
     public float killRateShakeFrequency = 2f;
@@ -24,24 +24,26 @@ public class S_HUDPlayerState : MonoBehaviour
     [Header("Energy Rate Settings")]
     [Tooltip("Interval (seconds) at which to sample energy change")]
     public float energyUpdateInterval = 0.2f;
-    [Tooltip("Text to display when rate exceeds threshold")]
+    [Tooltip("Display energy change per minute instead of per second")]
+    public bool showEnergyRatePerMinute = false;
+    [Tooltip("Text to display when energy rate exceeds threshold")]
     public string energyRateThresholdText = "MAX !!!";
-    [Tooltip("Rate threshold for triggering text change and animation")]
+    [Tooltip("Energy rate threshold for triggering text change and animation")]
     public float energyRateThreshold = 10f;
     [Tooltip("Shake frequency (punches per second) when threshold exceeded")]
     public float energyRateShakeFrequency = 2f;
 
     [Header("Kill Rate Smoothing")]
     [Tooltip("Lerp speed when kill rate is increasing")]
-    public float lerpSpeed = 5f;
+    public float killRateLerpSpeed = 5f;
     [Tooltip("Lerp speed when kill rate is decreasing")]
-    public float coolDownSpeed = 3f;
+    public float killRateCoolDownSpeed = 3f;
 
     [Header("Energy Rate Smoothing")]
     [Tooltip("Lerp speed when energy rate is increasing")]
-    public float energyLerpSpeed = 5f;
+    public float energyRateLerpSpeed = 5f;
     [Tooltip("Lerp speed when energy rate is decreasing")]
-    public float energyCoolDownSpeed = 3f;
+    public float energyRateCoolDownSpeed = 3f;
 
     // —— Internal State —— 
     private Queue<float> killTimestamps = new Queue<float>();
@@ -52,6 +54,7 @@ public class S_HUDPlayerState : MonoBehaviour
     private S_EnergyStorage energyStorage;
     private float lastEnergy = 0f;
     private float lastEnergyCheckTime = 0f;
+    private float rawEnergyRate = 0f;
     private float smoothedEnergyRate = 0f;
     private bool isEnergyShaking = false;
     private Tweener energyRateTween;
@@ -96,20 +99,20 @@ public class S_HUDPlayerState : MonoBehaviour
     {
         float now = Time.time;
 
-        // Remove timestamps outside of the averaging window
+        // Remove kill timestamps outside of the averaging window
         while (killTimestamps.Count > 0 && now - killTimestamps.Peek() > killRateAverageWindow)
             killTimestamps.Dequeue();
 
         // Calculate target kill rate (kills per second)
-        float targetRate = killTimestamps.Count / Mathf.Max(0.01f, killRateAverageWindow);
+        float targetKillRate = killTimestamps.Count / Mathf.Max(0.01f, killRateAverageWindow);
 
         // If showing per minute, scale by 60
-        if (showPerMinute)
-            targetRate *= 60f;
+        if (showKillRatePerMinute)
+            targetKillRate *= 60f;
 
         // Smoothly interpolate towards the target rate
-        float speed = targetRate > smoothedKillRate ? lerpSpeed : coolDownSpeed;
-        smoothedKillRate = Mathf.Lerp(smoothedKillRate, targetRate, Time.deltaTime * speed);
+        float killSpeed = targetKillRate > smoothedKillRate ? killRateLerpSpeed : killRateCoolDownSpeed;
+        smoothedKillRate = Mathf.Lerp(smoothedKillRate, targetKillRate, Time.deltaTime * killSpeed);
 
         // Threshold check and animation
         if (smoothedKillRate > killRateThreshold)
@@ -125,7 +128,7 @@ public class S_HUDPlayerState : MonoBehaviour
         }
         else
         {
-            killRateText.text = smoothedKillRate.ToString("F2");
+            killRateText.text = smoothedKillRate.ToString("F0");
             if (isKillRateShaking)
             {
                 isKillRateShaking = false;
@@ -141,21 +144,26 @@ public class S_HUDPlayerState : MonoBehaviour
 
         float now = Time.time;
 
-        // Sample energy change at defined intervals
+        // Sample raw energy rate at defined intervals
         if (now - lastEnergyCheckTime >= energyUpdateInterval)
         {
             float currentEnergy = energyStorage.currentEnergy;
             float delta = currentEnergy - lastEnergy;
             float dt = now - lastEnergyCheckTime;
-            float rawRate = delta / Mathf.Max(0.01f, dt);
+            rawEnergyRate = delta / Mathf.Max(0.01f, dt);
 
             lastEnergy = currentEnergy;
             lastEnergyCheckTime = now;
-
-            // Smoothly interpolate energy rate
-            float speed = rawRate > smoothedEnergyRate ? energyLerpSpeed : energyCoolDownSpeed;
-            smoothedEnergyRate = Mathf.Lerp(smoothedEnergyRate, rawRate, Time.deltaTime * speed);
         }
+
+        // If showing per minute, scale by 60
+        float displayedRawRate = rawEnergyRate;
+        if (showEnergyRatePerMinute)
+            displayedRawRate *= 60f;
+
+        // Smoothly interpolate towards the displayed raw rate
+        float energySpeed = displayedRawRate > smoothedEnergyRate ? energyRateLerpSpeed : energyRateCoolDownSpeed;
+        smoothedEnergyRate = Mathf.Lerp(smoothedEnergyRate, displayedRawRate, Time.deltaTime * energySpeed);
 
         // Threshold check and animation
         if (Mathf.Abs(smoothedEnergyRate) > energyRateThreshold)
@@ -171,7 +179,7 @@ public class S_HUDPlayerState : MonoBehaviour
         }
         else
         {
-            energyRateText.text = smoothedEnergyRate.ToString("F2");
+            energyRateText.text = smoothedEnergyRate.ToString("F0");
             if (isEnergyShaking)
             {
                 isEnergyShaking = false;
