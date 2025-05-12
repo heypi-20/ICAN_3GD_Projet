@@ -201,7 +201,7 @@ public class S_PlayerAnimator : MonoBehaviour
         }
     }
 
-    private void HandleGroundPoundState(Enum GroundPoundState)
+    private void HandleGroundPoundState(Enum GroundPoundState,int Level)
     {
         switch (GroundPoundState)
         {

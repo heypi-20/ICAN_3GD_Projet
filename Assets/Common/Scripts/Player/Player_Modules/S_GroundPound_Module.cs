@@ -39,7 +39,7 @@ public class S_GroundPound_Module : MonoBehaviour
     
 
     //Trigger event
-    public event Action<Enum> OnGroundPoundStateChange;
+    public event Action<Enum,int> OnGroundPoundStateChange;
 
     private void Start()
     {
@@ -60,9 +60,9 @@ public class S_GroundPound_Module : MonoBehaviour
         HandleGroundPound();
     }
 
-    private void GroundPoundObserverEvent(Enum groundPoundState)
+    private void GroundPoundObserverEvent(Enum groundPoundState,int groundPoundLevel)
     {
-        OnGroundPoundStateChange?.Invoke(groundPoundState);
+        OnGroundPoundStateChange?.Invoke(groundPoundState, groundPoundLevel);
     }
 
     private void HandleGroundPound()
@@ -76,7 +76,7 @@ public class S_GroundPound_Module : MonoBehaviour
 
             if (IsLookingAtValidTarget(out float distanceToGround))
             {
-                GroundPoundObserverEvent(PlayerStates.GroundPoundState.StartGroundPound);
+                GroundPoundObserverEvent(PlayerStates.GroundPoundState.StartGroundPound,currentLevel.level);
                 PerformGroundPound(currentLevel, distanceToGround);//Trigger Event
                 _energyStorage.RemoveEnergy(currentLevel.energyConsumption); // Consommer l'énergie une fois
             }
@@ -111,7 +111,7 @@ public class S_GroundPound_Module : MonoBehaviour
         // Ajuster la portée dynamique pour respecter la limite maximale
         _dynamicSphereRange = Mathf.Min(distanceToGround, currentLevel.maxSphereRange);
         
-        GroundPoundObserverEvent(PlayerStates.GroundPoundState.isGroundPounding);//Trigger event
+        GroundPoundObserverEvent(PlayerStates.GroundPoundState.isGroundPounding,currentLevel.level);//Trigger event
         StartCoroutine(MoveToGround(currentLevel.descentSpeed));
     }
 
@@ -141,7 +141,7 @@ public class S_GroundPound_Module : MonoBehaviour
         if (_isGrounded)
         {
             TriggerGroundPoundEffect(); // Exécuter l'effet au sol
-            GroundPoundObserverEvent(PlayerStates.GroundPoundState.EndGroundPound);
+            GroundPoundObserverEvent(PlayerStates.GroundPoundState.EndGroundPound,GetCurrentGroundPoundLevel().level);
 
         }
         _characterController.excludeLayers = savedLayerMask;

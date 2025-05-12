@@ -339,7 +339,7 @@ public class S_CameraFeedBack : MonoBehaviour
 
     #region GroundPound
 
-    private void ReceiveGroudPoundEvevent(Enum state)
+    private void ReceiveGroudPoundEvevent(Enum state,int level)
     {
         if (state.Equals(PlayerStates.GroundPoundState.EndGroundPound))
         {

@@ -45,7 +45,7 @@ public class ExplosionEffect : MonoBehaviour
             Fade_Distance += Time.deltaTime * Fade_Multiplier;
         }
     }
-    private void ReceiceGroudPoundEvevent(Enum state)
+    private void ReceiceGroudPoundEvevent(Enum state,int level)
     {
         if (state.Equals(PlayerStates.GroundPoundState.EndGroundPound))
         {
