@@ -11,6 +11,7 @@ public class ObjectiveParams
     public int maxValue;
 }
 
+[RequireComponent(typeof(S_CheckObjectivesParams))]
 public class S_ObjectiveSystem : MonoBehaviour
 {
     public S_ObjectiveManager ObjectiveManager { get; private set; }

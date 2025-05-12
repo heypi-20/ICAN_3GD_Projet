@@ -1,63 +1,70 @@
-using System;
+Ôªøusing System;
 using UnityEngine;
 
 [RequireComponent(typeof(S_SuperJump_Module))]
 public class S_JumpEffect : MonoBehaviour
 {
-    [Header("RÈfÈrences VFX")]
+    [Header("R√©f√©rences VFX")]
     [Tooltip("Le prefab root (GameObject vide) contenant tous les children ParticleSystem")]
     [SerializeField] private GameObject jumpVFXRootPrefab;
-    [Tooltip("Le parent sous lequel on instanciera tous les VFX (avec VFXRootController)")]
+
+    [Tooltip("Le parent (GameObject de la sc√®ne avec VFXRootController)")]
     [SerializeField] private Transform vfxRoot;
-    [Tooltip("Layer(s) ‡ considÈrer comme sol pour le raycast")]
+
+    [Header("Placement au sol")]
+    [Tooltip("Layer(s) √† consid√©rer comme sol pour le raycast")]
     [SerializeField] private LayerMask groundLayer;
-    [Tooltip("Distance max du raycast pour toucher le sol (en unitÈs Unity)")]
-    [SerializeField] private float maxRayDistance = 5f;
+
+    [Tooltip("Distance max du raycast vers le bas (en unit√©s Unity)")]
+    [SerializeField] private float maxRayDistance = 10f;
 
     private S_SuperJump_Module jumpModule;
 
     private void Start()
     {
         jumpModule = GetComponent<S_SuperJump_Module>();
-        jumpModule.OnJumpStateChange += HandleJumpStateChanged;
+        jumpModule.OnJumpStateChange += OnJump;
     }
 
     private void OnDestroy()
     {
         if (jumpModule != null)
-            jumpModule.OnJumpStateChange -= HandleJumpStateChanged;
+            jumpModule.OnJumpStateChange -= OnJump;
     }
 
-    private void HandleJumpStateChanged(Enum state, int level)
+    private void OnJump(Enum state, int level)
     {
-        // On se dÈclenche uniquement sur l'ÈvÈnement "Jump"
-        if (state is PlayerStates.JumpState js && js == PlayerStates.JumpState.Jump)
-        {
-            // Seulement si on est au palier >=2 (level 2/3/4)
-            if (level > 1)
-                SpawnJumpEffect();
-        }
+        // On ne d√©clenche que sur l'√©tat Jump et palier >=2
+        if (state is PlayerStates.JumpState js && js == PlayerStates.JumpState.Jump && level > 1)
+            SpawnJumpEffect();
     }
 
     private void SpawnJumpEffect()
     {
-        // On tire un rayon vers le bas depuis le joueur
-        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, maxRayDistance, groundLayer))
+        if (jumpVFXRootPrefab == null || vfxRoot == null)
         {
-            // Instanciation ‡ l'emplacement du sol
+            Debug.LogWarning("S_JumpEffect : r√©f√©rence manquante (prefab ou vfxRoot)", this);
+            return;
+        }
+
+        // Origine du raycast l√©g√®rement au-dessus de la position du joueur pour √©viter les self-colliders
+        Vector3 origin = transform.position + Vector3.up * 0.5f;
+        if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, maxRayDistance, groundLayer, QueryTriggerInteraction.Ignore))
+        {
+            // Instanciation du VFX au point d'impact
             var go = Instantiate(jumpVFXRootPrefab, hit.point, Quaternion.identity, vfxRoot);
 
-            // On dÈmarre tous les ParticleSystems enfants
+            // D√©marrage de tous les ParticleSystems enfants
             foreach (var ps in go.GetComponentsInChildren<ParticleSystem>())
+            {
+                var main = ps.main;
+                main.simulationSpace = ParticleSystemSimulationSpace.Local;
                 ps.Play();
-
-            // Optionnel : dÈtruire l'instance au bout de X secondes 
-            // (ajuste 5f selon la durÈe de ton effet ou gËre le StopAction sur chaque PS)
-            Destroy(go, 5f);
+            }
         }
         else
         {
-            Debug.LogWarning($"S_JumpEffect : pas de sol dÈtectÈ sous le joueur dans {maxRayDistance} unitÈs.", this);
+            Debug.LogWarning($"S_JumpEffect : pas de sol d√©tect√© dans {maxRayDistance} unit√©s", this);
         }
     }
 }
