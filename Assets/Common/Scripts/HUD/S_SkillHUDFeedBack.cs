@@ -18,7 +18,7 @@ public class S_SkillHUDFeedBack : MonoBehaviour
     // Map from level number to corresponding crystal GameObject
     private Dictionary<int, GameObject> levelCrystalMap;
 
-    // Store each crystal's original localScale so we can restore it after shaking
+    // Store each crystal's original localScale so we can restore it after shaking or for scale animations
     private Dictionary<int, Vector3> originalScales;
 
     // Current infinite shake tween for grace warning
@@ -133,53 +133,53 @@ public class S_SkillHUDFeedBack : MonoBehaviour
     }
 
     /// <summary>
-    /// Optional: punch-scale feedback when player jumps.
+    /// Optional: simple scale-up then scale-down effect when player jumps.
     /// </summary>
     private void HandleJumpStateEvent(Enum state, int level)
     {
         var js = (PlayerStates.JumpState)state;
         if (js == PlayerStates.JumpState.Jump 
-            && levelCrystalMap.TryGetValue(1, out var crystal))
+            && levelCrystalMap.TryGetValue(1, out var crystal)
+            && originalScales.TryGetValue(1, out var origScale))
         {
-            crystal.transform.DOPunchScale(
-                punch:    new Vector3(0.3f, 0.3f, 0.3f),
-                duration: 0.4f,
-                vibrato:  8
-            );
+            // Scale up to 120% then back to original
+            crystal.transform
+                .DOScale(origScale * 1.2f, 0.2f)
+                .SetLoops(2, LoopType.Yoyo);
         }
     }
 
     /// <summary>
-    /// Optional: punch-scale feedback when player starts sprinting.
+    /// Optional: simple scale-up then scale-down effect when player starts sprinting.
     /// </summary>
     private void HandleSprintStateEvent(Enum state, int level)
     {
         var ss = (PlayerStates.SprintState)state;
         if (ss == PlayerStates.SprintState.StartSprinting 
-            && levelCrystalMap.TryGetValue(2, out var crystal))
+            && levelCrystalMap.TryGetValue(2, out var crystal)
+            && originalScales.TryGetValue(2, out var origScale))
         {
-            crystal.transform.DOPunchScale(
-                punch:    new Vector3(0.3f, 0.3f, 0.3f),
-                duration: 0.3f,
-                vibrato:  8
-            );
+            // Scale up to 120% then back to original
+            crystal.transform
+                .DOScale(origScale * 1.2f, 0.2f)
+                .SetLoops(2, LoopType.Yoyo);
         }
     }
 
     /// <summary>
-    /// Optional: punch-scale feedback when player starts ground pound.
+    /// Optional: simple scale-up then scale-down effect when player starts ground pound.
     /// </summary>
     private void HandleGroundPoundStateEvent(Enum state, int level)
     {
         var gp = (PlayerStates.GroundPoundState)state;
         if (gp == PlayerStates.GroundPoundState.StartGroundPound 
-            && levelCrystalMap.TryGetValue(3, out var crystal))
+            && levelCrystalMap.TryGetValue(3, out var crystal)
+            && originalScales.TryGetValue(3, out var origScale))
         {
-            crystal.transform.DOPunchScale(
-                punch:    new Vector3(0.3f, 0.3f, 0.3f),
-                duration: 0.4f,
-                vibrato:  8
-            );
+            // Scale up to 120% then back to original
+            crystal.transform
+                .DOScale(origScale * 1.2f, 0.2f)
+                .SetLoops(2, LoopType.Yoyo);
         }
     }
 }
