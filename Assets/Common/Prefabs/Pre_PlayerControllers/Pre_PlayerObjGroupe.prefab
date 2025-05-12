@@ -735,7 +735,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4347050850364713306
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7033,6 +7033,8 @@ MonoBehaviour:
     dropBonus: 45
     WeakPointDropBonus: 65
     knockbackForce: 5
+    coneStartRadius: 1
+    coneEndRadius: 20
   - level: 2
     attackRange: 2
     attackDistance: 999
@@ -7042,6 +7044,8 @@ MonoBehaviour:
     dropBonus: 45
     WeakPointDropBonus: 65
     knockbackForce: 10
+    coneStartRadius: 1
+    coneEndRadius: 20
   - level: 3
     attackRange: 2
     attackDistance: 999
@@ -7051,6 +7055,8 @@ MonoBehaviour:
     dropBonus: 45
     WeakPointDropBonus: 65
     knockbackForce: 15
+    coneStartRadius: 1
+    coneEndRadius: 20
   - level: 4
     attackRange: 2
     attackDistance: 999
@@ -7059,13 +7065,15 @@ MonoBehaviour:
     energyConsumption: 1000
     dropBonus: 70
     WeakPointDropBonus: 100
-    knockbackForce: 0
+    knockbackForce: 1
+    coneStartRadius: 1
+    coneEndRadius: 20
   targetLayer:
     serializedVersion: 2
     m_Bits: 2560
   windupTime: 0.3
-  dashDuration: 0.15
-  StopDashDistance: 2.5
+  dashSpeed: 300
+  StopDashDistance: 3
   drawGizmos: 1
   currentAttackCD: 0
 --- !u!114 &8670675854258119381

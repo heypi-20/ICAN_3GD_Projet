@@ -9,7 +9,7 @@ public class S_MeleeAttack_Module : MonoBehaviour
     public class MeleeAttackLevel
     {
         public int level; // Required level for this attack level
-        public float attackRange; // Radius of the attack range
+        public float attackRange; // Radius of the attack range (unused for cone)
         public float attackDistance; // Distance of the attack
         public float attackDamage; // Damage per attack
         public float attackCooldown; // Cooldown time between attacks
@@ -18,32 +18,34 @@ public class S_MeleeAttack_Module : MonoBehaviour
         public int WeakPointDropBonus;
         public float knockbackForce;
 
+        // Cone-specific radii
+        public float coneStartRadius; // Radius at the origin of the cone
+        public float coneEndRadius;   // Radius at the end of the cone
     }
 
     [Header("Attack Settings")]
-    public Transform attackOrigin; // Origin of the attack (center of the capsule)
+    public Transform attackOrigin; // Origin of the attack (center of the cone)
     public List<MeleeAttackLevel> attackLevels; // List of attack levels
-    public LayerMask targetLayer; // Layer for objects that can be destroyed
-    public float windupTime = 0.2f; // Windup time (delay before executing the attack after pressing the attack button)
+    public LayerMask targetLayer; // Layer for objects that can be damaged
+    public float windupTime = 0.2f; // Windup time before executing the attack
     
     [Header("Dash Settings")]
-    public float dashDuration = 0.5f;   // Duration over which to perform the dash movement
-    public float StopDashDistance = 3f;
+    public float dashSpeed = 10f; // Dash movement speed (units per second)
+    public float StopDashDistance = 3f; // Distance from target at which to stop dash
 
-    [Header("Gizmos settings")]
+    [Header("Gizmos Settings")]
     public bool drawGizmos = true;
 
-    private S_InputManager _inputManager; // Reference to the input manager
-    private S_EnergyStorage _energyStorage; // Reference to the energy storage
-    private float _attackCooldownTimer; // Timer to manage the cooldown period
+    private S_InputManager _inputManager;
+    private S_EnergyStorage _energyStorage;
+    private float _attackCooldownTimer;
     public float currentAttackCD;
-    private bool _isWindupInProgress = false; // Flag indicating whether windup is in progress
+    private bool _isWindupInProgress = false;
     private CharacterController _characterController;
     public event Action<Enum, int> OnAttackStateChange;
-    
+
     private void Start()
     {
-        // Initialize references
         _inputManager = FindObjectOfType<S_InputManager>();
         _energyStorage = GetComponent<S_EnergyStorage>();
         _characterController = GetComponent<CharacterController>();
@@ -69,76 +71,58 @@ public class S_MeleeAttack_Module : MonoBehaviour
             return;
         }
         
-        // Check input, cooldown, and energy conditions, and ensure windup is not already in progress
         if (_inputManager.MeleeAttackInput 
-            && 
-            _attackCooldownTimer <= 0f 
-            && 
-            S_PlayerStateObserver.Instance.LastMeleeState == null 
-            && 
-            !_isWindupInProgress)
+            && _attackCooldownTimer <= 0f 
+            && S_PlayerStateObserver.Instance.LastMeleeState == null 
+            && !_isWindupInProgress)
         {
             _isWindupInProgress = true;
-            // Trigger the start attack event
             MeleeAttackObserverEvent(PlayerStates.MeleeState.StartMeleeAttack, currentLevel.level);
-            // Start the windup coroutine and wait for windupTime seconds before executing the attack logic
             StartCoroutine(WindupAndAttack(currentLevel));
-            
         }
 
-        // Decrease the cooldown timer
         if (_attackCooldownTimer > 0f)
         {
             _attackCooldownTimer -= Time.deltaTime;
         }
     }
-    
-    
 
     private IEnumerator WindupAndAttack(MeleeAttackLevel currentLevel)
     {
-        
-        // Wait for the windup time
         yield return new WaitForSeconds(windupTime);
-        
-        // Execute the melee attack logic
         PerformMeleeAttack(currentLevel);
-        _attackCooldownTimer = currentLevel.attackCooldown; // Reset the cooldown timer
-        _energyStorage.RemoveEnergy(currentLevel.energyConsumption); // Consume energy
-
-        // Start the cooldown timer coroutine
-        yield return StartCoroutine(StartTimer(_attackCooldownTimer));
-
+        _attackCooldownTimer = currentLevel.attackCooldown;
+        _energyStorage.RemoveEnergy(currentLevel.energyConsumption);
         _isWindupInProgress = false;
+
     }
-    
-    
-    
-    // Coroutine to move the character gradually forward
-    private IEnumerator AttackMovementCoroutine(float duration,Vector3 enemyPos,Collider hit,MeleeAttackLevel currentLevel)
+
+    private IEnumerator AttackMovementCoroutine(Vector3 enemyPos, Collider hit, MeleeAttackLevel currentLevel)
     {
-        // Calculate constant speed: total distance divided by duration
-        float moveDistance = Vector3.Distance(transform.position, enemyPos)-StopDashDistance;
-        float dashSpeed = moveDistance / duration;
-        float elapsed = 0f;
+        Vector3 originPos = transform.position;
+        float totalDistance = Vector3.Distance(originPos, enemyPos) - StopDashDistance;
+        Vector3 direction = (enemyPos - attackOrigin.position).normalized;
+        float remaining = totalDistance;
         MeleeAttackObserverEvent(PlayerStates.MeleeState.DashingBeforeMelee, GetCurrentAttackLevel().level);
 
-        Vector3 direction =(enemyPos-attackOrigin.position).normalized;
-        while (elapsed < duration)
+        // Move until reaching stop distance
+        while (remaining > 0f)
         {
-            // Move the character in the attack origin's forward direction
-            //_characterController.Move(attackOrigin.forward * (dashSpeed * Time.deltaTime));
-            _characterController.Move(direction * (dashSpeed * Time.deltaTime));
-            elapsed += Time.deltaTime;
+            float step = dashSpeed * Time.deltaTime;
+            // Clamp step to not overshoot
+            float move = Mathf.Min(step, remaining);
+            _characterController.Move(direction * move);
+            remaining -= move;
             yield return null;
         }
-        // yield return new WaitUntil(() => elapsed >= duration);
+
         Rigidbody targetRB = hit.GetComponentInParent<Rigidbody>();
         if (targetRB != null)
         {
             Vector3 forceDirection = (hit.transform.position - transform.position).normalized;
             targetRB.AddForce(forceDirection * 30f, ForceMode.Impulse);
         }
+
         if (hit.CompareTag("WeakPoint"))
         {
             MeleeAttackObserverEvent(PlayerStates.MeleeState.MeleeAttackHitWeakness, currentLevel.level);
@@ -149,6 +133,8 @@ public class S_MeleeAttack_Module : MonoBehaviour
             MeleeAttackObserverEvent(PlayerStates.MeleeState.MeleeAttackHit, currentLevel.level);
             hit.GetComponent<EnemyBase>()?.ReduceHealth(currentLevel.attackDamage, currentLevel.dropBonus);
         }
+        yield return StartCoroutine(StartTimer(_attackCooldownTimer));
+
     }
 
     private IEnumerator StartTimer(float seconds)
@@ -158,135 +144,86 @@ public class S_MeleeAttack_Module : MonoBehaviour
         _inputManager.MeleeAttackInput = false;
     }
 
-    // Detection logic: First use OverlapCapsule to detect targets in the static area; if none are found, use CapsuleCast as a fallback.
     private void PerformMeleeAttack(MeleeAttackLevel currentLevel)
     {
-        Vector3 capsuleStart = attackOrigin.position;
-        Vector3 capsuleEnd = attackOrigin.position + attackOrigin.forward * currentLevel.attackDistance;
-        float radius = currentLevel.attackRange * 0.5f;
+        Vector3 origin = attackOrigin.position;
+        Vector3 forward = attackOrigin.forward;
+        float maxDistance = currentLevel.attackDistance;
 
-        // First use OverlapCapsule to detect targets within the static area (consistent with the Gizmos display)
-        Collider[] overlaps = Physics.OverlapCapsule(capsuleStart, capsuleEnd, radius, targetLayer);
-        if (overlaps.Length > 0)
+        // Cone detection: find candidates in a sphere covering the cone
+        Collider[] candidates = Physics.OverlapSphere(origin, maxDistance + currentLevel.coneEndRadius, targetLayer);
+        Collider bestHit = null;
+        float bestProj = float.MaxValue;
+        
+        foreach (Collider col in candidates)
         {
-            // Select the target that is closest along the attack direction from the detected targets
-            Collider bestHit = null;
-            float bestDist = float.MaxValue;
-            Vector3 origin = attackOrigin.position;
-            Vector3 forward = attackOrigin.forward;
-            foreach (Collider col in overlaps)
+            Vector3 toTarget = col.transform.position - origin;
+            float proj = Vector3.Dot(toTarget, forward);
+            if (proj < 0 || proj > maxDistance) continue; // outside cone length
+
+            // interpolate radius at this distance
+            float radiusAtDist = Mathf.Lerp(currentLevel.coneStartRadius, currentLevel.coneEndRadius, proj / maxDistance);
+            // perpendicular distance from center line
+            float perpDist = Vector3.Magnitude(toTarget - forward * proj);
+            if (perpDist <= radiusAtDist)
             {
-                float dist = Vector3.Dot(col.transform.position - origin, forward);
-                if (dist >= 0 && dist < bestDist)
+                if (proj < bestProj)
                 {
-                    bestDist = dist;
+                    bestProj = proj;
                     bestHit = col;
                 }
             }
-            if (bestHit != null)
-            {
-                //MeleeAttackObserverEvent(PlayerStates.MeleeState.MeleeAttackHit, currentLevel.level);
-                StartCoroutine(AttackMovementCoroutine(dashDuration, bestHit.transform.position,bestHit,currentLevel));
-                return;
-            }
         }
-        else
+
+        if (bestHit != null)
         {
-            // If no target is detected in the static area, use CapsuleCast as a fallback (detection area consistent with OverlapCapsule)
-            RaycastHit hit;
-            bool didHit = Physics.CapsuleCast(capsuleStart, capsuleEnd, radius, attackOrigin.forward, out hit, 0, targetLayer);
-            if (didHit)
-            {
-                
-                Rigidbody targetRB = hit.collider.gameObject.GetComponent<Rigidbody>();
-                if (targetRB != null)
-                {
-                    Vector3 forceDirection = (targetRB.transform.position - transform.position).normalized;
-                    targetRB.AddForce(forceDirection * currentLevel.knockbackForce, ForceMode.Impulse);
-                }
-
-                if (hit.collider.CompareTag("WeakPoint"))
-                {
-                    hit.collider.gameObject.GetComponentInParent<EnemyBase>()?.ReduceHealth(currentLevel.attackDamage * 100, currentLevel.dropBonus * 3);
-                    MeleeAttackObserverEvent(PlayerStates.MeleeState.MeleeAttackHitWeakness, currentLevel.level);
-
-                }
-                else
-                {
-                    hit.collider.gameObject.GetComponent<EnemyBase>()?.ReduceHealth(currentLevel.attackDamage, currentLevel.dropBonus);
-                    MeleeAttackObserverEvent(PlayerStates.MeleeState.MeleeAttackHit, currentLevel.level);
-                }
-                return;
-            }
+            StartCoroutine(AttackMovementCoroutine(bestHit.transform.position, bestHit, currentLevel));
+            return;
         }
 
-        // If no target is detected, trigger the attack missed event
-        MeleeAttackObserverEvent(PlayerStates.MeleeState.MeleeAttackMissed, currentLevel.level);
+        // If no hit, fire missed event
+        MeleeAttackObserverEvent(PlayerStates.MeleeState.MeleeAttackMissed, currentLevel.level); 
+        StartCoroutine(StartTimer(_attackCooldownTimer));
+
     }
 
     private MeleeAttackLevel GetCurrentAttackLevel()
     {
         if (_energyStorage == null)
-        {
             _energyStorage = GetComponent<S_EnergyStorage>();
-        }
         if (_energyStorage == null) return null;
 
-        int currentLevelIndex = _energyStorage.currentLevelIndex + 1; // Adjust to match the attack levels
+        int currentLevelIndex = _energyStorage.currentLevelIndex + 1;
         return attackLevels.Find(level => level.level == currentLevelIndex);
     }
 
-    // Gizmos drawing: Draw a capsule that matches the detection area used by OverlapCapsule.
     private void OnDrawGizmos()
     {
-        if(!drawGizmos)return;
+        if (!drawGizmos) return;
         if (attackOrigin != null && attackLevels != null && attackLevels.Count > 0)
         {
             MeleeAttackLevel currentLevel = GetCurrentAttackLevel();
-            if (currentLevel != null)
+            if (currentLevel == null) return;
+
+            Vector3 origin = attackOrigin.position;
+            Vector3 forward = attackOrigin.forward;
+            float maxDistance = currentLevel.attackDistance;
+
+            Gizmos.color = Color.red;
+            // Draw start circle
+            Gizmos.DrawWireSphere(origin, currentLevel.coneStartRadius);
+            // Draw end circle
+            Vector3 endCenter = origin + forward * maxDistance;
+            Gizmos.DrawWireSphere(endCenter, currentLevel.coneEndRadius);
+
+            // Draw lines connecting radii
+            Vector3[] dirs = { Vector3.right, Vector3.up, Vector3.left, Vector3.down };
+            foreach (var dir in dirs)
             {
-                Vector3 startPoint = attackOrigin.position;
-                Vector3 endPoint = attackOrigin.position + attackOrigin.forward * currentLevel.attackDistance;
-                float radius = currentLevel.attackRange * 0.5f;
-                Gizmos.color = Color.red;
-                DrawWireCapsule(startPoint, endPoint, radius);
+                Vector3 startPoint = origin + dir * currentLevel.coneStartRadius;
+                Vector3 endPoint = endCenter + dir * currentLevel.coneEndRadius;
+                Gizmos.DrawLine(startPoint, endPoint);
             }
-        }
-    }
-
-    // Method to draw a wireframe capsule
-    private void DrawWireCapsule(Vector3 start, Vector3 end, float radius)
-    {
-        Vector3 up = end - start;
-        float height = up.magnitude;
-        if (height < Mathf.Epsilon)
-        {
-            Gizmos.DrawWireSphere(start, radius);
-            return;
-        }
-        up /= height;
-        Vector3 arbitrary = (Mathf.Abs(Vector3.Dot(up, Vector3.up)) > 0.99f) ? Vector3.forward : Vector3.up;
-        Vector3 right = Vector3.Cross(up, arbitrary).normalized * radius;
-        Vector3 forward = Vector3.Cross(right, up).normalized * radius;
-
-        Vector3 startSphereCenter = start + up * radius;
-        Vector3 endSphereCenter = end - up * radius;
-
-        Gizmos.DrawWireSphere(startSphereCenter, radius);
-        Gizmos.DrawWireSphere(endSphereCenter, radius);
-
-        Gizmos.DrawLine(startSphereCenter + right, endSphereCenter + right);
-        Gizmos.DrawLine(startSphereCenter - right, endSphereCenter - right);
-        Gizmos.DrawLine(startSphereCenter + forward, endSphereCenter + forward);
-        Gizmos.DrawLine(startSphereCenter - forward, endSphereCenter - forward);
-
-        int segments = 10;
-        float angleStep = 180f / segments;
-        for (int i = 0; i <= segments; i++)
-        {
-            float angle = Mathf.Deg2Rad * i * angleStep;
-            Vector3 offset = right * Mathf.Cos(angle) + forward * Mathf.Sin(angle);
-            Gizmos.DrawLine(startSphereCenter + offset, endSphereCenter + offset);
         }
     }
 }
