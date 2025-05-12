@@ -674,9 +674,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5359037014503768839, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 4313409659978069822, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1436913619}
   m_SourcePrefab: {fileID: 100100000, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
 --- !u!114 &83086561 stripped
 MonoBehaviour:
@@ -5792,26 +5789,6 @@ PrefabInstance:
     - target: {fileID: 2645031528669413291, guid: 87ba83fc416216045abb3918f8ee6faa, type: 3}
       propertyPath: m_Name
       value: SoundManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 6768836495084319196, guid: 87ba83fc416216045abb3918f8ee6faa, type: 3}
-      propertyPath: HeartBeat.Path
-      value: event:/Energy/ChangePalier/HearthBeat
-      objectReference: {fileID: 0}
-    - target: {fileID: 6768836495084319196, guid: 87ba83fc416216045abb3918f8ee6faa, type: 3}
-      propertyPath: HeartBeat.Guid.Data1
-      value: 418904320
-      objectReference: {fileID: 0}
-    - target: {fileID: 6768836495084319196, guid: 87ba83fc416216045abb3918f8ee6faa, type: 3}
-      propertyPath: HeartBeat.Guid.Data2
-      value: 1281149482
-      objectReference: {fileID: 0}
-    - target: {fileID: 6768836495084319196, guid: 87ba83fc416216045abb3918f8ee6faa, type: 3}
-      propertyPath: HeartBeat.Guid.Data3
-      value: 1585364917
-      objectReference: {fileID: 0}
-    - target: {fileID: 6768836495084319196, guid: 87ba83fc416216045abb3918f8ee6faa, type: 3}
-      propertyPath: HeartBeat.Guid.Data4
-      value: 1362429153
       objectReference: {fileID: 0}
     - target: {fileID: 7503010589162537126, guid: 87ba83fc416216045abb3918f8ee6faa, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11319,7 +11296,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1761756605130781376, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
   m_PrefabInstance: {fileID: 83086560}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1843361077}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d04a8dbb6e2483689101a388c58e847, type: 3}
@@ -11668,73 +11645,17 @@ MonoBehaviour:
   gizmoColor: {r: 1, g: 0, b: 0, a: 1}
   size: 3
   shape: 1
---- !u!1 &1436913617 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4313409659978069822, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+--- !u!114 &1436913619 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4253841867610456985, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
   m_PrefabInstance: {fileID: 83086560}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1436913619
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1436913617}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b90f0764e13de26488fb6008b6991d9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  items:
-  - target: {fileID: 1843361077}
-    startDelay: 0
-    tweens:
-    - type: 0
-      startDelay: 0
-      duration: 0.1
-      ease: 6
-      targetPosition: {x: 0, y: 451, z: 0}
-      useLocalMove: 1
-      scaleMultiplier: 0
-      rotationEuler: {x: 0, y: 0, z: 0}
-      rotateMode: 0
-      rotateAxis: {x: 0, y: 0, z: 0}
-      rotateSpeed: 0
-    - type: 0
-      startDelay: 0.1
-      duration: 0.1
-      ease: 5
-      targetPosition: {x: 0, y: 450, z: 0}
-      useLocalMove: 1
-      scaleMultiplier: 0
-      rotationEuler: {x: 0, y: 0, z: 0}
-      rotateMode: 0
-      rotateAxis: {x: 0, y: 0, z: 0}
-      rotateSpeed: 0
-    - type: 1
-      startDelay: 0
-      duration: 0.1
-      ease: 27
-      targetPosition: {x: 0, y: 0, z: 0}
-      useLocalMove: 0
-      scaleMultiplier: 1.3
-      rotationEuler: {x: 0, y: 0, z: 0}
-      rotateMode: 0
-      rotateAxis: {x: 0, y: 0, z: 0}
-      rotateSpeed: 0
-    - type: 1
-      startDelay: 0.1
-      duration: 0.1
-      ease: 26
-      targetPosition: {x: 0, y: 0, z: 0}
-      useLocalMove: 0
-      scaleMultiplier: 1
-      rotationEuler: {x: 0, y: 0, z: 0}
-      rotateMode: 0
-      rotateAxis: {x: 0, y: 0, z: 0}
-      rotateSpeed: 0
-  playOnStart: 0
-  loopPlay: 0
 --- !u!1 &1438706159
 GameObject:
   m_ObjectHideFlags: 0
@@ -14985,11 +14906,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 5
   spawnPoints: []
---- !u!1 &1843361077 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1487219484664402424, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
-  m_PrefabInstance: {fileID: 83086560}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1851450348
 GameObject:
   m_ObjectHideFlags: 0
@@ -21132,7 +21048,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6533355175243547743
 Transform:
   m_ObjectHideFlags: 0
@@ -22315,7 +22231,9 @@ MonoBehaviour:
     currentValue: 1000
     maxValue: 1000
   objectiveDisplay: {fileID: 1393717936}
+  objectiveLerpSpeed: 5
   dotweenPlayer: {fileID: 1436913619}
+  tweenCooldown: 0.1
 --- !u!114 &9163858388534623605
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1790,7 +1790,7 @@ Transform:
   m_GameObject: {fileID: 2402406978003380506}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.25, z: -0.71}
+  m_LocalPosition: {x: 0, y: -0.43, z: -0.72}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3378,7 +3378,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    m_ImpulseDuration: 0.6
+    m_ImpulseDuration: 0.5
     m_ImpulseType: 0
     m_DissipationRate: 0.5
     m_RawSignal: {fileID: 0}
@@ -3409,7 +3409,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 1.5, y: 0.2, z: 0}
+  m_DefaultVelocity: {x: 2, y: 1, z: 0}
 --- !u!114 &7487571207341063171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4064,7 +4064,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9058978869850009466}
-  - component: {fileID: 3875678264624734759}
+  - component: {fileID: 4253841867610456985}
   m_Layer: 5
   m_Name: ObjectivesUI
   m_TagString: Untagged
@@ -4092,7 +4092,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &3875678264624734759
+--- !u!114 &4253841867610456985
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5759,7 +5759,7 @@ MonoBehaviour:
   CameraShakeCAC_Lvl3: 0.4
   CameraShakeCAC_Lvl4: 0.8
   _impulseSource: {fileID: 4015919512211726238}
-  startimpulseshakeforce: 0.5
+  startimpulseshakeforce: 1
   _imulseMultiplicator: 4
   Weak_shake_Multiplayer: 2
   stopDuration: 0.2
@@ -8091,12 +8091,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ProjectilePrefab_Lv1: {fileID: 4638220235809748010, guid: e0fe8ebdb334f2b419db6969969da9aa, type: 3}
   ProjectilePrefab_Lv2: {fileID: 4638220235809748010, guid: e0fe8ebdb334f2b419db6969969da9aa, type: 3}
-  ProjectilePrefab_Lv3: {fileID: 4560413318242749039, guid: bd587c08777cac142b40de4d72bdde30, type: 3}
-  ProjectilePrefab_Lv4: {fileID: 4560413318242749039, guid: 91684ba6b793e7c4187a92c1ebe70f62, type: 3}
+  ProjectilePrefab_Lv3: {fileID: 4638220235809748010, guid: e0fe8ebdb334f2b419db6969969da9aa, type: 3}
+  ProjectilePrefab_Lv4: {fileID: 4638220235809748010, guid: e0fe8ebdb334f2b419db6969969da9aa, type: 3}
   useActivationLv1: 0
   useActivationLv2: 0
-  useActivationLv3: 1
-  useActivationLv4: 1
+  useActivationLv3: 0
+  useActivationLv4: 0
   Speed: 120
   ProjectileLifeTime: 3
   FollowTime: 0.05

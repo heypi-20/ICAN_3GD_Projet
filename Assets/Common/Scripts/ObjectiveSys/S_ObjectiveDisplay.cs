@@ -1,28 +1,24 @@
-﻿// S_ObjectiveDisplay.cs
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class S_ObjectiveDisplay : MonoBehaviour
 {
     [SerializeField]
     private TextMeshProUGUI _objectiveText;
+
     private Objective _objective;
 
     private void Awake()
     {
-        if (_objectiveText == null)
-            _objectiveText = GetComponent<TextMeshProUGUI>();
+        _objectiveText = GetComponent<TextMeshProUGUI>();
     }
 
-    /// <summary>
-    /// Initialise le display avec l'objectif donné.
-    /// </summary>
     public void Init(Objective objective)
     {
         _objective = objective;
-        _objectiveText.text = _objective.GetStatusText();
-        // On ne souscrit qu'à la complétion pour le strikethrough
-        _objective.OnComplete += OnObjectiveComplete;
+        _objectiveText.text = objective.GetStatusText();
+        objective.OnValueChange += OnObjectiveValueChange;
+        objective.OnComplete += OnObjectiveComplete;
     }
 
     private void OnObjectiveComplete()
@@ -30,16 +26,8 @@ public class S_ObjectiveDisplay : MonoBehaviour
         _objectiveText.text = $"<s>{_objective.GetStatusText()}</s>";
     }
 
-    /// <summary>
-    /// Appelé depuis S_MainObjective pour mettre à jour l'affichage de façon lissée.
-    /// </summary>
-    public void UpdateProgress(int value)
+    private void OnObjectiveValueChange()
     {
-        // On récupère le préfixe (le texte avant ':') pour le conserver
-        string full = _objective.GetStatusText();
-        int idx = full.IndexOf(':');
-        string label = idx >= 0 ? full.Substring(0, idx) : full;
-        // On reconstruit le texte avec la valeur interpolée
-        _objectiveText.text = $"{label}: {value}/{_objective.MaxValue}";
+        _objectiveText.text = _objective.GetStatusText();
     }
 }
