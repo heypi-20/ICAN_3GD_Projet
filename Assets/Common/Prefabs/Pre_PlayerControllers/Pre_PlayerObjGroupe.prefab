@@ -4064,6 +4064,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9058978869850009466}
+  - component: {fileID: 4253841867610456985}
   m_Layer: 5
   m_Name: ObjectivesUI
   m_TagString: Untagged
@@ -4091,6 +4092,68 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4253841867610456985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4313409659978069822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b90f0764e13de26488fb6008b6991d9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  items:
+  - target: {fileID: 1487219484664402424}
+    startDelay: 0
+    tweens:
+    - type: 0
+      startDelay: 0
+      duration: 0.1
+      ease: 6
+      targetPosition: {x: 0, y: 451, z: 0}
+      useLocalMove: 1
+      scaleMultiplier: 0
+      rotationEuler: {x: 0, y: 0, z: 0}
+      rotateMode: 0
+      rotateAxis: {x: 0, y: 0, z: 0}
+      rotateSpeed: 0
+    - type: 0
+      startDelay: 0.1
+      duration: 0.1
+      ease: 5
+      targetPosition: {x: 0, y: 450, z: 0}
+      useLocalMove: 1
+      scaleMultiplier: 0
+      rotationEuler: {x: 0, y: 0, z: 0}
+      rotateMode: 0
+      rotateAxis: {x: 0, y: 0, z: 0}
+      rotateSpeed: 0
+    - type: 1
+      startDelay: 0
+      duration: 0.1
+      ease: 27
+      targetPosition: {x: 0, y: 0, z: 0}
+      useLocalMove: 0
+      scaleMultiplier: 1.3
+      rotationEuler: {x: 0, y: 0, z: 0}
+      rotateMode: 0
+      rotateAxis: {x: 0, y: 0, z: 0}
+      rotateSpeed: 0
+    - type: 1
+      startDelay: 0.1
+      duration: 0.1
+      ease: 26
+      targetPosition: {x: 0, y: 0, z: 0}
+      useLocalMove: 0
+      scaleMultiplier: 1
+      rotationEuler: {x: 0, y: 0, z: 0}
+      rotateMode: 0
+      rotateAxis: {x: 0, y: 0, z: 0}
+      rotateSpeed: 0
+  playOnStart: 0
+  loopPlay: 0
 --- !u!1 &4602451971825173591
 GameObject:
   m_ObjectHideFlags: 0
@@ -8028,12 +8091,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ProjectilePrefab_Lv1: {fileID: 4638220235809748010, guid: e0fe8ebdb334f2b419db6969969da9aa, type: 3}
   ProjectilePrefab_Lv2: {fileID: 4638220235809748010, guid: e0fe8ebdb334f2b419db6969969da9aa, type: 3}
-  ProjectilePrefab_Lv3: {fileID: 4560413318242749039, guid: bd587c08777cac142b40de4d72bdde30, type: 3}
-  ProjectilePrefab_Lv4: {fileID: 4560413318242749039, guid: 91684ba6b793e7c4187a92c1ebe70f62, type: 3}
+  ProjectilePrefab_Lv3: {fileID: 4638220235809748010, guid: e0fe8ebdb334f2b419db6969969da9aa, type: 3}
+  ProjectilePrefab_Lv4: {fileID: 4638220235809748010, guid: e0fe8ebdb334f2b419db6969969da9aa, type: 3}
   useActivationLv1: 0
   useActivationLv2: 0
-  useActivationLv3: 1
-  useActivationLv4: 1
+  useActivationLv3: 0
+  useActivationLv4: 0
   Speed: 120
   ProjectileLifeTime: 3
   FollowTime: 0.05
