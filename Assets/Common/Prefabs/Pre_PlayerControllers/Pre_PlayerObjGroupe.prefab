@@ -3378,7 +3378,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    m_ImpulseDuration: 0.5
+    m_ImpulseDuration: 0.6
     m_ImpulseType: 0
     m_DissipationRate: 0.5
     m_RawSignal: {fileID: 0}
@@ -3409,7 +3409,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 2, y: 1, z: 0}
+  m_DefaultVelocity: {x: 1.5, y: 0.2, z: 0}
 --- !u!114 &7487571207341063171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4064,6 +4064,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9058978869850009466}
+  - component: {fileID: 3875678264624734759}
   m_Layer: 5
   m_Name: ObjectivesUI
   m_TagString: Untagged
@@ -4091,6 +4092,68 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &3875678264624734759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4313409659978069822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b90f0764e13de26488fb6008b6991d9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  items:
+  - target: {fileID: 1487219484664402424}
+    startDelay: 0
+    tweens:
+    - type: 0
+      startDelay: 0
+      duration: 0.1
+      ease: 6
+      targetPosition: {x: 0, y: 451, z: 0}
+      useLocalMove: 1
+      scaleMultiplier: 0
+      rotationEuler: {x: 0, y: 0, z: 0}
+      rotateMode: 0
+      rotateAxis: {x: 0, y: 0, z: 0}
+      rotateSpeed: 0
+    - type: 0
+      startDelay: 0.1
+      duration: 0.1
+      ease: 5
+      targetPosition: {x: 0, y: 450, z: 0}
+      useLocalMove: 1
+      scaleMultiplier: 0
+      rotationEuler: {x: 0, y: 0, z: 0}
+      rotateMode: 0
+      rotateAxis: {x: 0, y: 0, z: 0}
+      rotateSpeed: 0
+    - type: 1
+      startDelay: 0
+      duration: 0.1
+      ease: 27
+      targetPosition: {x: 0, y: 0, z: 0}
+      useLocalMove: 0
+      scaleMultiplier: 1.3
+      rotationEuler: {x: 0, y: 0, z: 0}
+      rotateMode: 0
+      rotateAxis: {x: 0, y: 0, z: 0}
+      rotateSpeed: 0
+    - type: 1
+      startDelay: 0.1
+      duration: 0.1
+      ease: 26
+      targetPosition: {x: 0, y: 0, z: 0}
+      useLocalMove: 0
+      scaleMultiplier: 1
+      rotationEuler: {x: 0, y: 0, z: 0}
+      rotateMode: 0
+      rotateAxis: {x: 0, y: 0, z: 0}
+      rotateSpeed: 0
+  playOnStart: 0
+  loopPlay: 0
 --- !u!1 &4602451971825173591
 GameObject:
   m_ObjectHideFlags: 0
@@ -5696,7 +5759,7 @@ MonoBehaviour:
   CameraShakeCAC_Lvl3: 0.4
   CameraShakeCAC_Lvl4: 0.8
   _impulseSource: {fileID: 4015919512211726238}
-  startimpulseshakeforce: 1
+  startimpulseshakeforce: 0.5
   _imulseMultiplicator: 4
   Weak_shake_Multiplayer: 2
   stopDuration: 0.2

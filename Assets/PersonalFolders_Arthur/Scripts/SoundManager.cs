@@ -44,11 +44,6 @@ public class SoundManager : MonoBehaviour
     }
     #endregion
     
-    [Header("Pillonage")] 
-    public string Pillonage_Explosion;
-    public string Pillonage_Activate;
-    public string Pillonage_Fall;
-    
     [Header("Energy")] 
     public string Gain_Palier;
     public string Loose_Palier;
@@ -62,7 +57,6 @@ public class SoundManager : MonoBehaviour
     
     public string Secret_surprise;
     private int actuallevel;
-
 
     #region Shoot
     [Header("Shoot")]
@@ -186,39 +180,6 @@ public class SoundManager : MonoBehaviour
     }
 
     #endregion
-    public void Meth_Gain_Energy()
-    {
-        FMODUnity.RuntimeManager.PlayOneShot(Gain_Energy);
-    }
-    public void Meth_Dashoot_Dash()
-    {
-        FMODUnity.RuntimeManager.PlayOneShot(Dashoot_Dash);
-    }
-    public void Meth_Dashoot_Shoot()
-    {
-        FMODUnity.RuntimeManager.PlayOneShot(Dashoot_Shoot);
-    }
-    public void Meth_JumpyCuby_Jump()
-    {
-        FMODUnity.RuntimeManager.PlayOneShot(JumpyCuby_Jump);
-    }
-
-    public void Meth_Enemy_Kill()
-    {
-        FMODUnity.RuntimeManager.PlayOneShot(Enemy_Kill);
-    }
-
-    private void Start()
-    {
-        S_PlayerStateObserver.Instance.OnLevelUpStateEvent += LevelChanged;
-        S_PlayerStateObserver.Instance.OnMeleeAttackStateEvent += MeleeState;
-        S_PlayerStateObserver.Instance.OnShootStateEvent += ShootState;
-        S_PlayerStateObserver.Instance.OnSprintStateEvent += SprintState;
-        S_PlayerStateObserver.Instance.OnJumpStateEvent += JumpState;
-        S_PlayerStateObserver.Instance.OnGroundPoundStateEvent += PillonageState;
-        Instance_Music_Lvl1 = RuntimeManager.CreateInstance(Music_Lvl1);
-        Instance_Music_Lvl1.start();
-    }
     
     #region LevelChanged
     [Header("Musique")]
@@ -362,12 +323,42 @@ public class SoundManager : MonoBehaviour
         }
     }
     #endregion
-
+    public void Meth_Gain_Energy()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot(Gain_Energy);
+    }
+    public void Meth_Dashoot_Dash()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot(Dashoot_Dash);
+    }
+    public void Meth_Dashoot_Shoot()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot(Dashoot_Shoot);
+    }
+    public void Meth_JumpyCuby_Jump()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot(JumpyCuby_Jump);
+    }
+    public void Meth_Enemy_Kill()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot(Enemy_Kill);
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
             FMODUnity.RuntimeManager.PlayOneShot(Secret_surprise);
         }
+    }
+    private void Start()
+    {
+        S_PlayerStateObserver.Instance.OnLevelUpStateEvent += LevelChanged; 
+        S_PlayerStateObserver.Instance.OnMeleeAttackStateEvent += MeleeState; 
+        S_PlayerStateObserver.Instance.OnShootStateEvent += ShootState; 
+        S_PlayerStateObserver.Instance.OnSprintStateEvent += SprintState; 
+        S_PlayerStateObserver.Instance.OnJumpStateEvent += JumpState; 
+        S_PlayerStateObserver.Instance.OnGroundPoundStateEvent += PillonageState; 
+        Instance_Music_Lvl1 = RuntimeManager.CreateInstance(Music_Lvl1); 
+        Instance_Music_Lvl1.start();
     }
 }
