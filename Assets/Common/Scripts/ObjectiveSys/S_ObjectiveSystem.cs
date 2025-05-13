@@ -16,15 +16,8 @@ public class S_ObjectiveSystem : MonoBehaviour
 {
     public S_ObjectiveManager ObjectiveManager { get; private set; }
 
-    public float gameChrono;
-    
     private void Awake()
     {
         ObjectiveManager = new S_ObjectiveManager();
-    }
-
-    private void Update()
-    {
-        gameChrono += Time.deltaTime;
     }
 }
