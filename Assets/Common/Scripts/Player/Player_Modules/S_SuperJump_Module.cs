@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 [RequireComponent(typeof(S_CustomCharacterController))]
 [RequireComponent(typeof(S_EnergyStorage))]
