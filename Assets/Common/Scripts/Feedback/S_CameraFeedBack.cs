@@ -89,6 +89,7 @@ public class S_CameraFeedBack : MonoBehaviour
         _recomposer = _cinemachineVirtualCamera.GetComponent<CinemachineRecomposer>();
         _impulseSource = _cinemachineVirtualCamera.GetComponent<CinemachineImpulseSource>();
         _cinemachineInputProvider = _cinemachineVirtualCamera.GetComponent<CinemachineInputProvider>();
+        Start_FOV = _cinemachineVirtualCamera.m_Lens.FieldOfView;
 
     }
 
@@ -283,9 +284,9 @@ public class S_CameraFeedBack : MonoBehaviour
                     break;
             }
             CAC_IsIncreasing = false;
-            float currentFOV = _cinemachineVirtualCamera.m_Lens.FieldOfView;
+            Curent_FOV = _cinemachineVirtualCamera.m_Lens.FieldOfView;
             currentTween = DOTween.To(
-                () => currentFOV,
+                () => Curent_FOV,
                 x => _cinemachineVirtualCamera.m_Lens.FieldOfView = x,
                 Start_FOV,
                 CAC_Fov_transition_time
@@ -309,10 +310,10 @@ public class S_CameraFeedBack : MonoBehaviour
                     CameraShake(CameraShakeCAC_Lvl4* Weak_shake_Multiplayer);
                     break;
             }
-            CAC_IsIncreasing = false;
-            float currentFOV = _cinemachineVirtualCamera.m_Lens.FieldOfView;
+            CAC_IsIncreasing = false; 
+            Curent_FOV = _cinemachineVirtualCamera.m_Lens.FieldOfView;
             currentTween = DOTween.To(
-                () => currentFOV,
+                () => Curent_FOV,
                 x => _cinemachineVirtualCamera.m_Lens.FieldOfView = x,
                 Start_FOV,
                 CAC_Fov_transition_time
@@ -356,9 +357,9 @@ public class S_CameraFeedBack : MonoBehaviour
             }
 
             isIncreasing = false;
-            float currentFOV = _cinemachineVirtualCamera.m_Lens.FieldOfView;
+            Curent_FOV = _cinemachineVirtualCamera.m_Lens.FieldOfView;
             currentTween = DOTween.To(
-                () => currentFOV,
+                () => Curent_FOV,
                 x => _cinemachineVirtualCamera.m_Lens.FieldOfView = x,
                 Start_FOV,
                 fov_transition_time
@@ -367,7 +368,7 @@ public class S_CameraFeedBack : MonoBehaviour
 
         if (state.Equals(PlayerStates.GroundPoundState.StartGroundPound))
         {
-            Start_FOV = _cinemachineVirtualCamera.m_Lens.FieldOfView;
+            //Start_FOV = _cinemachineVirtualCamera.m_Lens.FieldOfView;
             isIncreasing = true;
             timePassed = 0f;
             _timer_of_groundpound = 0f;
