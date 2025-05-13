@@ -147,50 +147,57 @@ public class S_MeleeAttack_Module : MonoBehaviour
         _inputManager.MeleeAttackInput = false;
     }
 
-    private void PerformMeleeAttack(MeleeAttackLevel currentLevel)
+    private void PerformMeleeAttack(MeleeAttackLevel level)
     {
         Vector3 origin = attackOrigin.position;
         Vector3 forward = attackOrigin.forward;
-        float maxDistance = currentLevel.attackDistance;
+        float maxDist = level.attackDistance;
 
-        // Cone detection: find candidates in a sphere covering the cone
-        Collider[] candidates = Physics.OverlapSphere(origin, maxDistance + currentLevel.coneEndRadius, targetLayer);
-        Collider bestHit = null;
+        // Collect colliders in bounding sphere
+        var candidates = Physics.OverlapSphere(origin, maxDist + level.coneEndRadius, targetLayer);
+        Collider best = null;
         float bestProj = float.MaxValue;
-        
-        foreach (Collider col in candidates)
-        {
-            Vector3 toTarget = col.transform.position - origin;
-            float proj = Vector3.Dot(toTarget, forward);
-            if (proj < 0 || proj > maxDistance) continue; // outside cone length
+        Vector3 bestHitPoint = Vector3.zero;
 
-            float radiusAtDist = Mathf.Lerp(currentLevel.coneStartRadius, currentLevel.coneEndRadius, proj / maxDistance);
-            float perpDist = Vector3.Magnitude(toTarget - forward * proj);
-            if (perpDist <= radiusAtDist && proj < bestProj)
+        foreach (var col in candidates)
+        {
+            // Use collider center for projection
+            Vector3 center = col.bounds.center;
+            float proj = Vector3.Dot(center - origin, forward);
+            if (proj < 0f || proj > maxDist) continue;
+
+            // Compute cone radius and axis point
+            float radiusAt = Mathf.Lerp(level.coneStartRadius, level.coneEndRadius, proj / maxDist);
+            Vector3 axisPoint = origin + forward * proj;
+
+            // Find closest point on collider to axis
+            Vector3 closestOnCol = col.ClosestPoint(axisPoint);
+            float perpDist = Vector3.Distance(closestOnCol, axisPoint);
+            if (perpDist <= radiusAt && proj < bestProj)
             {
                 bestProj = proj;
-                bestHit = col;
+                best = col;
+                bestHitPoint = closestOnCol;
             }
         }
 
-        if (bestHit != null)
+        if (best != null)
         {
-            // If within instant hit range, skip dash movement
-            if (bestProj <= currentLevel.attackRange)
+            if (bestProj <= level.attackRange)
             {
-                ApplyHitEffect(bestHit, currentLevel);
+                ApplyHitEffect(best, level);
                 StartCoroutine(StartTimer(_attackCooldownTimer));
             }
             else
             {
-                StartCoroutine(AttackMovementCoroutine(bestHit.transform.position, bestHit, currentLevel));
+                StartCoroutine(AttackMovementCoroutine(bestHitPoint, best, level));
             }
-            return;
         }
-
-        // If no hit, fire missed event and end attack
-        MeleeAttackObserverEvent(PlayerStates.MeleeState.MeleeAttackMissed, currentLevel.level);
-        StartCoroutine(StartTimer(_attackCooldownTimer));
+        else
+        {
+            OnAttackStateChange?.Invoke(PlayerStates.MeleeState.MeleeAttackMissed, level.level);
+            StartCoroutine(StartTimer(_attackCooldownTimer));
+        }
     }
 
     private MeleeAttackLevel GetCurrentAttackLevel()

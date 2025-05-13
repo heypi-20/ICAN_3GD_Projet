@@ -56,12 +56,6 @@ public class S_PlayerDamageReceiver : MonoBehaviour
         {
             ReceiveDamage(enemy.enemyDamage);
         }
-        else
-        {
-            var projectile = other.GetComponent<S_EnemyProjectileDamage>();
-            if (projectile != null)
-                ReceiveDamage(projectile.damage);
-        }
     }
 
     // Called by triggers or other scripts to apply damage

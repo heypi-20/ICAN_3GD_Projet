@@ -62,7 +62,7 @@ public class S_EnergyStorage : MonoBehaviour
     {
         if (Input.GetKeyUp(cheatCodeforAdd))
         {
-            AddEnergy(1200f);
+            AddEnergy(8000f);
         }
 
         if (Input.GetKeyUp(cheatCodeforRemove))

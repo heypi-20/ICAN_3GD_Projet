@@ -27,7 +27,8 @@ public class S_CustomCharacterController : MonoBehaviour
     [Header("Debugger")]
     public Vector3 debugFinalMoveDirection; // Debug: Final movement direction
     public float debugFinalSpeed; 
-    
+    public float currentSpeed;
+    public Vector3 velocity;
     
     public Vector3 _inputDirection{ get; private set; }    // Accéder aux valeurs d'entrée dans d'autres scripts pour gérer la vitesse
 
@@ -42,10 +43,7 @@ public class S_CustomCharacterController : MonoBehaviour
     private float _inputHorizontal_X;
     private float _inputVertical_Z;
     
-    [HideInInspector]
-    public float currentSpeed;
-    [HideInInspector]
-    public Vector3 velocity;
+    
 
     
     

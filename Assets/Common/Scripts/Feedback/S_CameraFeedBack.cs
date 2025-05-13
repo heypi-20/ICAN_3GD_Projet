@@ -79,7 +79,7 @@ public class S_CameraFeedBack : MonoBehaviour
         {
             S_PlayerStateObserver.Instance.OnMoveStateEvent += ReceiveMoveEvent;
             S_PlayerStateObserver.Instance.OnMeleeAttackStateEvent += ReceiveMeleeAttackEvent;
-            S_PlayerStateObserver.Instance.OnGroundPoundStateEvent += ReceiveGroudPoundEvevent;
+            //S_PlayerStateObserver.Instance.OnGroundPoundStateEvent += ReceiveGroudPoundEvevent;
         }
         if (_cinemachineVirtualCamera == null)
         {
@@ -128,7 +128,7 @@ public class S_CameraFeedBack : MonoBehaviour
         }
     }
 
-    #region CameraMooveFeedback
+    #region CameraMoveFeedback
 
      private void EnableCamera(bool state)
         {
@@ -343,76 +343,76 @@ public class S_CameraFeedBack : MonoBehaviour
 
     #endregion
 
-    #region GroundPound
-
-    private void ReceiveGroudPoundEvevent(Enum state,int level)
-    {
-        if (state.Equals(PlayerStates.GroundPoundState.EndGroundPound))
-        {
-            ImpulseGroundPound(impulseforceonGround);
-            StartCoroutine(TimeStopCoroutine());
-            if (!isActive)
-            {
-                StartCoroutine(ChangeFPS());
-            }
-
-            isIncreasing = false;
-            Curent_FOV = _cinemachineVirtualCamera.m_Lens.FieldOfView;
-            currentTween = DOTween.To(
-                () => Curent_FOV,
-                x => _cinemachineVirtualCamera.m_Lens.FieldOfView = x,
-                Start_FOV,
-                fov_transition_time
-            ).SetEase(Ease.OutSine);
-        }
-
-        if (state.Equals(PlayerStates.GroundPoundState.StartGroundPound))
-        {
-            //Start_FOV = _cinemachineVirtualCamera.m_Lens.FieldOfView;
-            isIncreasing = true;
-            timePassed = 0f;
-            _timer_of_groundpound = 0f;
-        }
-    }
-    public void ImpulseGroundPound(float impulseStrength)
-    {
-        if (_impulseSource != null)
-        {
-            _impulseSource.GenerateImpulse(impulseStrength);
-        }
-    }
-    
-    private IEnumerator TimeStopCoroutine()
-    {
-        // Arrêter le temps
-        Time.timeScale = 0.2f;
-        
-        // Attendre en temps réel (pas en temps de jeu)
-        yield return new WaitForSecondsRealtime(stopDuration);
-        
-        // Reprendre le temps normal
-        Time.timeScale = 1f;
-    }
-    private IEnumerator ChangeFPS()
-    {
-        isActive = true;
-            
-            
-        // Applique le FPS réduit
-        Application.targetFrameRate = effectFPS;
-        //Debug.Log("Baisse Fps");
-            
-        // Attend la durée spécifiée
-        yield return new WaitForSecondsRealtime(duration);
-            
-        // Rétablit le FPS normal
-        Application.targetFrameRate = -1;
-        //Debug.Log("Débloooouér sa mèèèèèèère");
-            
-        isActive = false;
-    }
-
-    #endregion
+    // #region GroundPound
+    //
+    // private void ReceiveGroudPoundEvevent(Enum state,int level)
+    // {
+    //     if (state.Equals(PlayerStates.GroundPoundState.EndGroundPound))
+    //     {
+    //         ImpulseGroundPound(impulseforceonGround);
+    //         StartCoroutine(TimeStopCoroutine());
+    //         if (!isActive)
+    //         {
+    //             StartCoroutine(ChangeFPS());
+    //         }
+    //
+    //         isIncreasing = false;
+    //         Curent_FOV = _cinemachineVirtualCamera.m_Lens.FieldOfView;
+    //         currentTween = DOTween.To(
+    //             () => Curent_FOV,
+    //             x => _cinemachineVirtualCamera.m_Lens.FieldOfView = x,
+    //             Start_FOV,
+    //             fov_transition_time
+    //         ).SetEase(Ease.OutSine);
+    //     }
+    //
+    //     if (state.Equals(PlayerStates.GroundPoundState.StartGroundPound))
+    //     {
+    //         //Start_FOV = _cinemachineVirtualCamera.m_Lens.FieldOfView;
+    //         isIncreasing = true;
+    //         timePassed = 0f;
+    //         _timer_of_groundpound = 0f;
+    //     }
+    // }
+    // public void ImpulseGroundPound(float impulseStrength)
+    // {
+    //     if (_impulseSource != null)
+    //     {
+    //         _impulseSource.GenerateImpulse(impulseStrength);
+    //     }
+    // }
+    //
+    // private IEnumerator TimeStopCoroutine()
+    // {
+    //     // Arrêter le temps
+    //     Time.timeScale = 0.2f;
+    //     
+    //     // Attendre en temps réel (pas en temps de jeu)
+    //     yield return new WaitForSecondsRealtime(stopDuration);
+    //     
+    //     // Reprendre le temps normal
+    //     Time.timeScale = 1f;
+    // }
+    // private IEnumerator ChangeFPS()
+    // {
+    //     isActive = true;
+    //         
+    //         
+    //     // Applique le FPS réduit
+    //     Application.targetFrameRate = effectFPS;
+    //     //Debug.Log("Baisse Fps");
+    //         
+    //     // Attend la durée spécifiée
+    //     yield return new WaitForSecondsRealtime(duration);
+    //         
+    //     // Rétablit le FPS normal
+    //     Application.targetFrameRate = -1;
+    //     //Debug.Log("Débloooouér sa mèèèèèèère");
+    //         
+    //     isActive = false;
+    // }
+    //
+    // #endregion
 }
 
     

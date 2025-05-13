@@ -3643,7 +3643,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5942673443579084825
 Transform:
   m_ObjectHideFlags: 0
@@ -3749,7 +3749,7 @@ VFXRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3942367488064149510}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -5145,7 +5145,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 11231
+    m_Bits: 27615
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -6614,7 +6614,7 @@ CharacterController:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 8196
+    m_Bits: 10244
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -6702,7 +6702,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   _directionLerpSpeed: 10
   gravity: -29.43
-  groundCheckDistance: 0.59
+  groundCheckDistance: 0.8
   groundCheckRadius: 0.49
   groundLayer:
     serializedVersion: 2
@@ -7071,7 +7071,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundPoundLevels:
   - level: 3
-    maxSphereRange: 100
+    maxSphereRange: 300
     sphereDamage: 150
     descentSpeed: 300
     energyConsumption: 2000
@@ -7090,6 +7090,14 @@ MonoBehaviour:
     m_Bits: 257
   angleThreshold: 45
   minimumGroundDistance: 10
+  cooldown: 1.5
+  bounceMultiplier: 0.7
+  bounceDuration: 0.5
+  bounceLimite: 90
+  waveExpansionSpeed: 50
+  knockbackAngle: 10
+  knockbackDistance: 50
+  knockbackSpeed: 100
 --- !u!114 &6386192446695717372
 MonoBehaviour:
   m_ObjectHideFlags: 0
