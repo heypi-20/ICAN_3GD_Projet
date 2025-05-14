@@ -13,7 +13,7 @@ public class S_CameraFeedback : MonoBehaviour
     [Header("Modules")]
     [SerializeField] private S_CameraMovementFeedback _movementFeedback;
     [SerializeField] private S_CameraCACFeedback _cacFeedback;
-    //[SerializeField] private S_CameraGroundPoundFeedback _groundPoundFeedback;
+    [SerializeField] private S_CameraGroundPoundFeedback _groundPoundFeedback;
 
     private void Start()
     {
@@ -26,13 +26,13 @@ public class S_CameraFeedback : MonoBehaviour
 
         if (_movementFeedback != null) _movementFeedback.Setup(_cinemachineVirtualCamera, _recomposer);
         if (_cacFeedback != null) _cacFeedback.Setup(_cinemachineVirtualCamera, _impulseSource);
-        //if (_groundPoundFeedback != null) _groundPoundFeedback.Setup(_cinemachineVirtualCamera, _impulseSource);
+        if (_groundPoundFeedback != null) _groundPoundFeedback.Setup(_cinemachineVirtualCamera, _impulseSource);
 
         if (S_PlayerStateObserver.Instance != null)
         {
             S_PlayerStateObserver.Instance.OnMoveStateEvent += _movementFeedback.ReceiveMoveEvent;
             S_PlayerStateObserver.Instance.OnMeleeAttackStateEvent += _cacFeedback.ReceiveMeleeAttackEvent;
-            //S_PlayerStateObserver.Instance.OnGroundPoundStateEvent += _groundPoundFeedback.ReceiveGroundPoundEvent;
+            S_PlayerStateObserver.Instance.OnGroundPoundStateEvent += _groundPoundFeedback.ReceiveGroundPoundEvent;
         }
     }
 
@@ -53,7 +53,7 @@ public class S_CameraFeedback : MonoBehaviour
         {
             S_PlayerStateObserver.Instance.OnMoveStateEvent -= _movementFeedback.ReceiveMoveEvent;
             S_PlayerStateObserver.Instance.OnMeleeAttackStateEvent -= _cacFeedback.ReceiveMeleeAttackEvent;
-            //S_PlayerStateObserver.Instance.OnGroundPoundStateEvent -= _groundPoundFeedback.ReceiveGroundPoundEvent;
+            S_PlayerStateObserver.Instance.OnGroundPoundStateEvent -= _groundPoundFeedback.ReceiveGroundPoundEvent;
         }
     }
 } 

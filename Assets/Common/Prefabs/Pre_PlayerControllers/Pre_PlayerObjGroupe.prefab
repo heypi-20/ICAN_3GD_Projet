@@ -5602,6 +5602,7 @@ GameObject:
   - component: {fileID: 3596900757883356927}
   - component: {fileID: 4399876266117370658}
   - component: {fileID: 3092559396826174644}
+  - component: {fileID: 7814893799909064984}
   m_Layer: 0
   m_Name: CameraFeedBack
   m_TagString: Untagged
@@ -5639,6 +5640,7 @@ MonoBehaviour:
   _cinemachineVirtualCamera: {fileID: 8716976314815281874}
   _movementFeedback: {fileID: 4399876266117370658}
   _cacFeedback: {fileID: 3092559396826174644}
+  _groundPoundFeedback: {fileID: 7814893799909064984}
 --- !u!114 &4399876266117370658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5776,6 +5778,26 @@ MonoBehaviour:
   distortionMax: -2
   distortionDuration: 0.5
   distortionLimit: -0.5
+--- !u!114 &7814893799909064984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5655932433684130944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1c4d543c3fffad49ae7e34d381463fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startShakeForce: 0.5
+  shakeMultiplier: 5
+  fovMultiplier: 50
+  fovDuration: 0.5
+  maxFOV: 130
+  distortionMax: -0.5
+  distortionDuration: 0.5
+  distortionLimit: -0.8
 --- !u!1 &5782617889939652586
 GameObject:
   m_ObjectHideFlags: 0
