@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections;
 
 [RequireComponent(typeof(S_SuperJump_Module))]
 public class JumpVfxSpawner : MonoBehaviour
@@ -42,25 +41,33 @@ public class JumpVfxSpawner : MonoBehaviour
         if (Physics.Raycast(transform.position, Vector3.down,
                             out RaycastHit hit, raycastDistance, groundLayer))
         {
-            // 1) On calcule la taille cible
-            // Récupère le JumpLevel correspondant pour accéder à VortexRange
-            var jumpLevels = _superJump.jumpLevels;
-            var jl = jumpLevels.Find(j => j.level == level);
-            float vortexRange = (jl != null) ? jl.VortexRange : 1f;
+            // Calcul de l'échelle en fonction du VortexRange du palier
+            var jl = _superJump.jumpLevels.Find(j => j.level == level);
+            float vortexRange = jl != null ? jl.VortexRange : 1f;
             float scale = vortexRange * (sizePercent / 100f);
 
-            // 2) Instanciation
+            // Instanciation du prefab
             Vector3 spawnPos = hit.point + Vector3.up * 0.1f;
             GameObject vfx = Instantiate(vortexVFXPrefab, spawnPos, Quaternion.identity);
 
-            // 3) Application de l’échelle
-            vfx.transform.localScale = Vector3.one * scale;
+            // Applique la taille via ton script parent S_ParentJumpVFX
+            var parentVfx = vfx.GetComponent<S_ParentJumpVFX>();
+            if (parentVfx != null)
+            {
+                parentVfx.SetGlobalScale(scale);
+            }
+            else
+            {
+                // Fallback si jamais S_ParentJumpVFX est manquant
+                vfx.transform.localScale = Vector3.one * scale;
+            }
 
-            // 4) Lancement manuel des ParticleSystems (si besoin)
+            // Démarrage manuel des ParticleSystems si nécessaire
             foreach (var ps in vfx.GetComponentsInChildren<ParticleSystem>())
-                ps.Play();
+                if (!ps.isPlaying)
+                    ps.Play();
 
-            // -> Pas de Destroy ici : "Stop Action: Destroy" sur le prefab s'en chargera.
+            // Stop Action: Destroy devrait se charger de la destruction automatique
         }
     }
 }
