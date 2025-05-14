@@ -23,6 +23,10 @@ public class S_CameraGroundPoundFeedback : MonoBehaviour
     public float distortionMax = -0.5f;
     public float distortionDuration = 0.5f;
     public float distortionLimit = -0.8f;
+    
+    [Header("Dutch Oscillation Settings")]
+    public float dutchMaxAmplitude = 0.5f; // à combien ça peut monter
+    public float dutchFrequency = 5f;      // oscillations par seconde
 
     private CinemachineVirtualCamera _vcam;
     private CinemachineImpulseSource _impulseSource;
@@ -52,7 +56,14 @@ public class S_CameraGroundPoundFeedback : MonoBehaviour
 
         _timePassed += Time.deltaTime;
         _accumulatedForce = startShakeForce + _timePassed * shakeMultiplier;
-
+    
+        if (_vcam != null)
+        {
+            float amplitude = Mathf.Min(_timePassed * dutchMaxAmplitude, dutchMaxAmplitude);
+            float dutchValue = Mathf.Sin(Time.time * dutchFrequency * Mathf.PI * 2f) * amplitude;
+            _vcam.m_Lens.Dutch = dutchValue;
+        }
+        
         float targetFOV = _startFOV + _timePassed * fovMultiplier;
         _vcam.m_Lens.FieldOfView = Mathf.Min(targetFOV, maxFOV);
 
@@ -94,6 +105,7 @@ public class S_CameraGroundPoundFeedback : MonoBehaviour
                    _startFOV,
                    fovDuration)
                .SetEase(Ease.OutSine);
+        _vcam.m_Lens.Dutch = 0f;
     }
 
     private void ResetDistortion()
