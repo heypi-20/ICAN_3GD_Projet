@@ -56,4 +56,10 @@ public class S_ParentJumpVFX : MonoBehaviour
                 ps.Play();
         }
     }
+
+    public void SetGlobalScale(float newScale)
+    {
+        globalScale = newScale;
+        ApplyAllSettings();
+    }
 }
