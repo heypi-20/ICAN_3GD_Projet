@@ -3383,7 +3383,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    m_ImpulseDuration: 0.6
+    m_ImpulseDuration: 1
     m_ImpulseType: 0
     m_DissipationRate: 0.5
     m_RawSignal: {fileID: 0}
@@ -3414,7 +3414,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 1.5, y: 0.5, z: 0}
+  m_DefaultVelocity: {x: 1.5, y: 0.2, z: 0}
 --- !u!114 &7487571207341063171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5600,6 +5600,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6446541353025446380}
   - component: {fileID: 3596900757883356927}
+  - component: {fileID: 4399876266117370658}
+  - component: {fileID: 3092559396826174644}
+  - component: {fileID: 7814893799909064984}
   m_Layer: 0
   m_Name: CameraFeedBack
   m_TagString: Untagged
@@ -5635,6 +5638,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cinemachineVirtualCamera: {fileID: 8716976314815281874}
+  _movementFeedback: {fileID: 4399876266117370658}
+  _cacFeedback: {fileID: 3092559396826174644}
+  _groundPoundFeedback: {fileID: 7814893799909064984}
+--- !u!114 &4399876266117370658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5655932433684130944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc21fa4a4124644d8c467651f46421d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   maxDutchAngle: 3
   dutchDuration: 1
   resetDuration: 0.2
@@ -5644,9 +5662,9 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 1
+      inSlope: 0
       outSlope: 1
-      tangentMode: 34
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
@@ -5654,8 +5672,8 @@ MonoBehaviour:
       time: 1
       value: 1
       inSlope: 1
-      outSlope: 1
-      tangentMode: 34
+      outSlope: 0
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
@@ -5668,9 +5686,9 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 1
+      inSlope: 0
       outSlope: 1
-      tangentMode: 34
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
@@ -5678,8 +5696,8 @@ MonoBehaviour:
       time: 1
       value: 1
       inSlope: 1
-      outSlope: 1
-      tangentMode: 34
+      outSlope: 0
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
@@ -5695,8 +5713,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 2
-      outSlope: 2
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -5719,8 +5737,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 2
-      outSlope: 2
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -5737,21 +5755,51 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  CameraShakeCAC_Lvl1: 0.1
-  CameraShakeCAC_Lvl2: 0.2
-  CameraShakeCAC_Lvl3: 0.4
-  CameraShakeCAC_Lvl4: 0.8
-  _impulseSource: {fileID: 4015919512211726238}
-  startimpulseshakeforce: 1
-  _imulseMultiplicator: 4
-  Weak_shake_Multiplayer: 2
-  stopDuration: 0.2
-  effectFPS: 10
-  duration: 0.1
-  fov_multiplicator: 130
-  fov_transition_time: 1
-  CAC_fov_Multiplier: 250
-  CAC_Fov_transition_time: 0.5
+--- !u!114 &3092559396826174644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5655932433684130944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c777f7adfb33fcb43aa9842c1f0c9e06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeLvl1: 0.1
+  shakeLvl2: 0.2
+  shakeLvl3: 0.4
+  shakeLvl4: 0.8
+  weaknessMultiplier: 2
+  fovMultiplier: 300
+  fovDuration: 0.4
+  maxFOV: 80
+  distortionMax: -2
+  distortionDuration: 0.5
+  distortionLimit: -0.5
+--- !u!114 &7814893799909064984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5655932433684130944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1c4d543c3fffad49ae7e34d381463fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startShakeForce: 0.5
+  shakeMultiplier: 5
+  fovMultiplier: 50
+  fovDuration: 0.5
+  maxFOV: 130
+  distortionMax: -0.5
+  distortionDuration: 0.5
+  distortionLimit: -0.8
+  dutchMaxAmplitude: 5
+  dutchFrequency: 15
 --- !u!1 &5782617889939652586
 GameObject:
   m_ObjectHideFlags: 0
