@@ -49,7 +49,7 @@ public class JumpVFXSpawner : MonoBehaviour
 
         // 3) On scale à 50% du vortex
         jumpVFXInstance.globalScale = jl.VortexRange * 0.5f;
-        jumpVFXInstance.ApplyAllSettings();
+        //jumpVFXInstance.ApplyAllSettings();
 
         // 4) On active + on joue tous les PS
         jumpVFXInstance.gameObject.SetActive(true);
