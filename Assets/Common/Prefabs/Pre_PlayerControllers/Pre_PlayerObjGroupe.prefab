@@ -735,7 +735,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4347050850364713306
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1265,7 +1265,6 @@ MonoBehaviour:
   tweenDuration: 0.6
   dotweenPlayer: {fileID: 4253841867610456985}
   tweenCooldown: 0.1
-  gameTime: 
 --- !u!1 &1602881711538766365
 GameObject:
   m_ObjectHideFlags: 0
@@ -6831,18 +6830,22 @@ MonoBehaviour:
     requiredEnergy: 0
     graceTimer: 0
     percentageGiveaway: 0
+    useGrace: 0
   - level: 2
     requiredEnergy: 3000
     graceTimer: 5
     percentageGiveaway: 0.3
+    useGrace: 1
   - level: 3
     requiredEnergy: 15000
     graceTimer: 5
     percentageGiveaway: 0.1
+    useGrace: 1
   - level: 4
     requiredEnergy: 50000
     graceTimer: 5
     percentageGiveaway: 0.05
+    useGrace: 1
   energyDisplay: {fileID: 6788294273892150970}
   isGraceActive: 0
 --- !u!114 &3564773257099203780
@@ -7151,8 +7154,31 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2560
   windupTime: 0.3
-  dashSpeed: 300
-  StopDashDistance: 3
+  dashSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 100
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 300
+      inSlope: 10
+      outSlope: 10
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  StopDashDistance: 1
   drawGizmos: 1
   currentAttackCD: 0
 --- !u!114 &8670675854258119381

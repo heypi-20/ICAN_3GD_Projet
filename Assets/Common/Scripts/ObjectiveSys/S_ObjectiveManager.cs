@@ -17,7 +17,6 @@ public class S_ObjectiveManager
     {
         Objectives.Add(objective);
         
-        Debug.Log("Add New Objective");
         if (!string.IsNullOrEmpty(objective.EventTrigger)) {
             if (!_objectiveMap.ContainsKey(objective.EventTrigger)) {
                 _objectiveMap.Add(objective.EventTrigger, new List<Objective>());

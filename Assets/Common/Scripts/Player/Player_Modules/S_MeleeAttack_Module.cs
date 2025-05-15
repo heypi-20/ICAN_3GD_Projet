@@ -30,8 +30,8 @@ public class S_MeleeAttack_Module : MonoBehaviour
     public float windupTime = 0.2f; // Windup time before executing the attack
     
     [Header("Dash Settings")]
-    public float dashSpeed = 10f; // Dash movement speed (units per second)
-    public float StopDashDistance = 3f; // Distance from target at which to stop dash
+    public AnimationCurve dashSpeedCurve = AnimationCurve.Linear(0, 0, 1, 10);
+    public float StopDashDistance = 3f;
 
     [Header("Gizmos Settings")]
     public bool drawGizmos = true;
@@ -96,28 +96,32 @@ public class S_MeleeAttack_Module : MonoBehaviour
         _isWindupInProgress = false;
     }
 
-    private IEnumerator AttackMovementCoroutine(Vector3 enemyPos, Collider hit, MeleeAttackLevel currentLevel)
+    private IEnumerator AttackMovementCoroutine(Vector3 targetPos, Collider hit, MeleeAttackLevel currentLevel)
     {
-        Vector3 originPos = transform.position;
-        float totalDistance = Vector3.Distance(originPos, enemyPos) - StopDashDistance;
-        Vector3 direction = (enemyPos - attackOrigin.position).normalized;
-        float remaining = totalDistance;
         MeleeAttackObserverEvent(PlayerStates.MeleeState.DashingBeforeMelee, currentLevel.level);
 
-        // Move until reaching stop distance
+        float remaining = Vector3.Distance(transform.position, targetPos) - StopDashDistance;
+        float elapsed = 0f;
+
         while (remaining > 0f)
         {
-            float step = dashSpeed * Time.deltaTime;
+            float currentSpeed = dashSpeedCurve.Evaluate(elapsed);
+
+            float step = currentSpeed * Time.deltaTime;
             float move = Mathf.Min(step, remaining);
-            _characterController.Move(direction * move);
+
+            Vector3 dir = (targetPos - transform.position).normalized;
+            _characterController.Move(dir * move);
+
             remaining -= move;
+            elapsed += Time.deltaTime;
             yield return null;
         }
 
         ApplyHitEffect(hit, currentLevel);
-        // Start cooldown end event timer
         yield return StartCoroutine(StartTimer(_attackCooldownTimer));
     }
+
 
     private void ApplyHitEffect(Collider hit, MeleeAttackLevel currentLevel)
     {
@@ -177,7 +181,6 @@ public class S_MeleeAttack_Module : MonoBehaviour
             {
                 bestProj = proj;
                 best = col;
-                bestHitPoint = closestOnCol;
             }
         }
 
@@ -190,7 +193,8 @@ public class S_MeleeAttack_Module : MonoBehaviour
             }
             else
             {
-                StartCoroutine(AttackMovementCoroutine(bestHitPoint, best, level));
+                Vector3 targetCenter = best.bounds.center;
+                StartCoroutine(AttackMovementCoroutine(targetCenter, best, level));
             }
         }
         else

@@ -10,6 +10,7 @@ public class EnergyLevel
     public float requiredEnergy; // Énergie requise pour atteindre ce niveau
     public float graceTimer; // Temps de grâce pour maintenir le niveau si l'énergie est insuffisante
     public float percentageGiveaway;
+    public bool useGrace = true;
 }
 
 public class S_EnergyStorage : MonoBehaviour
@@ -129,26 +130,27 @@ public class S_EnergyStorage : MonoBehaviour
     // Vérifie si le niveau doit être diminué
     private void CheckDowngradeLevel()
     {
-        //Si l'énergie actuelle est inférieure au minimum requis pour le niveau actuel
+        if (currentLevelIndex == 0)
+            return;
+
         if (currentEnergy < energyLevels[currentLevelIndex].requiredEnergy)
         {
-            //et que le compte à rebours n'est pas encore lancé, démarrez-le.
-            if (!isGraceActive)
+            if (!energyLevels[currentLevelIndex].useGrace)
             {
-                StartGracePeriod();
+                int newLevelIndex = FindLevelIndexForEnergy();
+                EnergyLevelObserverEvent(PlayerStates.LevelState.LevelDown, newLevelIndex + 1);
+                SetNewLevel(newLevelIndex);
+                return;
             }
 
+            if (!isGraceActive)
+                StartGracePeriod();
+
             _graceTimer -= Time.deltaTime;
-            
             if (_graceTimer <= 0f)
-            { 
-                //Fin du compte à rebours : énergie positive, ajustement au niveau correspondant.
+            {
                 int newLevelIndex = FindLevelIndexForEnergy();
-                
-                //Trigger down level event
-                EnergyLevelObserverEvent(PlayerStates.LevelState.LevelDown, newLevelIndex+1);
-                
-               
+                EnergyLevelObserverEvent(PlayerStates.LevelState.LevelDown, newLevelIndex + 1);
                 SetNewLevel(newLevelIndex);
                 ResetGracePeriod();
             }
@@ -158,7 +160,6 @@ public class S_EnergyStorage : MonoBehaviour
             ResetGracePeriod();
         }
     }
-    
     // Définit un nouveau niveau d'énergie
     private void SetNewLevel(int newLevelIndex)
     {

@@ -161,6 +161,9 @@ public class S_PlayerAnimator : MonoBehaviour
             case PlayerStates.MeleeState.StartMeleeAttack when S_PlayerStateObserver.Instance.LastGroundPoundState == null:
                 handAnimator.CrossFade("Punch", 0.2f);
                 break;
+            case PlayerStates.MeleeState.EndMeleeAttack when S_PlayerStateObserver.Instance.LastGroundPoundState == null:
+                handAnimator.CrossFade("Idle", 0.2f);
+                break;
         }
     }
 

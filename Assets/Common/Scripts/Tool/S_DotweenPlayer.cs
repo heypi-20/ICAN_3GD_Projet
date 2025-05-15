@@ -127,11 +127,18 @@ public class S_DotweenPlayer : MonoBehaviour {
         sequences.Clear();
 
         // 2) Reset all targets to their cached initial transforms
-        foreach (var kv in initPos) {
+        foreach (var kv in initPos) 
+        {
             var tr = kv.Key;
-            tr.localPosition = initPos[tr];
-            tr.localRotation = initRot[tr];
-            tr.localScale = initScale[tr];
+            if (tr == null) 
+                continue;
+            if (!initRot.TryGetValue(tr, out var rot))
+                continue;
+            if (!initScale.TryGetValue(tr, out var scale))
+                continue;
+            tr.localPosition = kv.Value;
+            tr.localRotation = rot;
+            tr.localScale    = scale;
         }
 
         // 3) Create and play new Sequences
