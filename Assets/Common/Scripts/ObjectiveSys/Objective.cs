@@ -12,6 +12,8 @@ public class Objective
     public bool IsComplete { get; private set; }
     public int MaxValue { get; }
     public int CurrentValue { get; private set; }
+    public float CompletionTime { get; private set; }
+    public void SetCompletionTime(float time) => CompletionTime = time;
 
     private readonly string _statusText;
 
@@ -29,6 +31,9 @@ public class Objective
 
     private void CheckCompletion()
     {
+        if (IsComplete)
+            return;
+        
         if (CurrentValue >= MaxValue) {
             IsComplete = true;
             OnComplete?.Invoke();
@@ -37,7 +42,10 @@ public class Objective
 
     private void CheckCompletionNegative()
     {
-        if (CurrentValue <= 0) {
+        if (IsComplete)
+            return;
+        
+        if (CurrentValue <= 0 && !IsComplete) {
             IsComplete = true;
             OnComplete?.Invoke();
         }
@@ -52,9 +60,10 @@ public class Objective
         if (CurrentValue > MaxValue) {
             CurrentValue = MaxValue;
         }
-        
-        OnValueChange?.Invoke();
+
         CheckCompletion();
+        if (!IsComplete)
+            OnValueChange?.Invoke();
     }
 
     public void AddProgressNegative(int value)
@@ -66,9 +75,10 @@ public class Objective
         if (CurrentValue < 0) {
             CurrentValue = 0;
         }
-        
-        OnValueChange?.Invoke();
+
         CheckCompletionNegative();
+        if (!IsComplete)
+            OnValueChange?.Invoke();
     }
 
     public string GetStatusText()

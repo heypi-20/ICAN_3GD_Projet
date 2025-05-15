@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class S_ObjectiveDisplay : MonoBehaviour
 {
-    [SerializeField]
-    private TextMeshProUGUI _objectiveText;
+    public TextMeshProUGUI _objectiveText;
     [Tooltip("Duree du tween en secondes pour la valeur")]
     [SerializeField]
     private float tweenDuration = 0.5f;
@@ -16,7 +15,6 @@ public class S_ObjectiveDisplay : MonoBehaviour
     public float tweenCooldown = 0.1f;
     
     private Objective _objective;
-    [HideInInspector] public string gameTime;
     
     private int _displayedValue;
 
@@ -37,18 +35,28 @@ public class S_ObjectiveDisplay : MonoBehaviour
         objective.OnComplete += OnObjectiveComplete;
     }
 
-    public void GetGameTime(string formatedTime)
+    private string GetGameTime()
     {
-        gameTime = formatedTime;
+        float gameTime = _objective.CompletionTime;
+        
+        int min = Mathf.FloorToInt(gameTime / 60f);
+        int sec = Mathf.FloorToInt(gameTime % 60f);
+        
+        return $"{min:00}:{sec:00}";
     }
     
     private void OnObjectiveComplete()
     {
-        _objectiveText.text = gameTime;
+        _objective.OnValueChange -= OnObjectiveValueChange;
+        DOTween.Kill(_objectiveText);
+        _objectiveText.text = GetGameTime();
     }
 
     private void OnObjectiveValueChange()
     {
+        if (_objective.IsComplete) {
+            return;
+        }
         int newValue = _objective.CurrentValue;
         
         // Tween num�rique de la valeur affich�e vers la nouvelle valeur

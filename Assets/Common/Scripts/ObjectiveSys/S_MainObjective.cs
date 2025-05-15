@@ -16,13 +16,22 @@ public class S_MainObjective : MonoBehaviour
     private Objective killObjective;
 
     [HideInInspector] public float gameChrono;
-    private bool once = true;
     
     private void Start()
     {
         ObjectiveManager = GetComponent<S_ObjectiveSystem>().ObjectiveManager;
 
-        killObjective = new Objective(objectiveParams.eventTrigger, objectiveParams.eventText, objectiveParams.currentValue, objectiveParams.maxValue);
+        killObjective = new Objective(
+            objectiveParams.eventTrigger,
+            objectiveParams.eventText,
+            objectiveParams.currentValue,
+            objectiveParams.maxValue
+            );
+        killObjective.OnComplete += () =>
+        {
+            killObjective.SetCompletionTime(gameChrono);
+        };
+        
         ObjectiveManager.AddObjective(killObjective);
 
         if (objectiveDisplay == null)
@@ -36,21 +45,15 @@ public class S_MainObjective : MonoBehaviour
 
     private void Update()
     {
-        gameChrono += Time.deltaTime;
-
-        if (killObjective.IsComplete && once) {
-            Debug.Log("objective is complete");
-            int min = Mathf.FloorToInt(gameChrono / 60f);
-            int sec = Mathf.FloorToInt(gameChrono - min % 60f);
-            string timeFormat = $"{sec:00}:{min:00}";
-            objectiveDisplay.GetGameTime(timeFormat);
-            Debug.Log("Game Time : " + timeFormat);
-            once = false;
+        if (!killObjective.IsComplete) {
+            gameChrono += Time.deltaTime;
         }
     }
 
     private void AddProgress(EnemyType enemyType)
     {
+        if (killObjective.IsComplete)
+            return;
         killObjective.AddProgressNegative(1);
         dotweenPlayer.Play();
     }
