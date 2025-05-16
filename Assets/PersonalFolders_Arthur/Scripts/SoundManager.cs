@@ -166,6 +166,7 @@ public class SoundManager : MonoBehaviour
             case PlayerStates.GroundPoundState.StartGroundPound :
                 Instance_Used_Pillonage = RuntimeManager.CreateInstance(Used_Pillonage);
                 Instance_Used_Pillonage.start();
+                StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl4, 1f, 0f, 0.05f));
                 break;
             case PlayerStates.GroundPoundState.isGroundPounding :
                 Instance_Fall_Pillonage = RuntimeManager.CreateInstance(Fall_Pillonage);
@@ -174,9 +175,23 @@ public class SoundManager : MonoBehaviour
             case PlayerStates.GroundPoundState.EndGroundPound :
                 Instance_ExplosionPillonage = RuntimeManager.CreateInstance(ExplosionPillonage);
                 Instance_ExplosionPillonage.start();
+                StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl4, 0f, 1f, 0.05f));
                 Instance_Fall_Pillonage.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 break;
         }
+        IEnumerator ChangePitchOverTime(EventInstance musicInstance, float from, float to, float duration)
+        {
+            float elapsed = 0f;
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float value = Mathf.Lerp(from, to, elapsed / duration);
+                musicInstance.setParameterByName("Pitch_Music", value);
+                yield return null;
+            }
+            musicInstance.setParameterByName("Pitch_Music", to); // Assure la valeur finale
+        }
+
     }
 
     #endregion
@@ -260,7 +275,7 @@ public class SoundManager : MonoBehaviour
 
             case PlayerStates.LevelState.EndGrace when Level == 3:
                 StopAllCoroutines();
-                StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl3, 0f, 1f, 0.2f));
+                StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl3, 0f, 1f, 0.1f));
                 Instance_HeartBeat.stop(STOP_MODE.IMMEDIATE);
                 break;
 
@@ -273,7 +288,7 @@ public class SoundManager : MonoBehaviour
             case PlayerStates.LevelState.EndGrace when Level == 4:
                 StopAllCoroutines();
                 Instance_HeartBeat.stop(STOP_MODE.IMMEDIATE);
-                StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl4, 0f, 1f, 0.2f));
+                StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl4, 0f, 1f, 0.1f));
                 break;
             
             
