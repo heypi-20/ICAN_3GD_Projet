@@ -56,7 +56,6 @@ public class S_CameraSprintFeedback : MonoBehaviour
 
     public void ReceiveSprintEvent(Enum state, int sprintLevel)
     {
-        Debug.Log($"[SprintEvent] State: {state} | Level: {sprintLevel}");
         if (state.Equals(PlayerStates.SprintState.IsSprinting))
         {
             StartSprintFOV(sprintLevel);

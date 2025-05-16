@@ -20,6 +20,20 @@ public class EnemyBase : MonoBehaviour
     public GameObject enemyGetHitVFX;
     public GameObject enemyDeathVFX;
     public EventReference enemy_Kill;
+    
+    [Header("Health Feedback Material Overlay")]
+    public Renderer targetRenderer;
+    public Material feedbackMatTemplate; 
+    public Color fullHealthColor = Color.green;
+    public Color lowHealthColor = Color.red;
+    public float feedbackAlpha = 0.6f;
+    public float feedbackDuration = 0.3f;
+
+    private Material feedbackMatInstance;
+    private int feedbackMatIndex = -1;
+    private Coroutine feedbackCoroutine;
+    
+    
     private EventInstance enemy_kill_instance;
     [Header("WeakPoint Visuals")]
     public Material extraWeakPointMaterial;
@@ -46,7 +60,69 @@ public class EnemyBase : MonoBehaviour
         {
             originalWeakPointMaterials = weakPointRenderer.materials;
         }
+        InitFeedbackMaterial();
     }
+    
+    private void InitFeedbackMaterial()
+    {
+        if (targetRenderer == null || feedbackMatTemplate == null) return;
+
+        feedbackMatInstance = new Material(feedbackMatTemplate);
+        feedbackMatInstance.color = new Color(fullHealthColor.r, fullHealthColor.g, fullHealthColor.b, 0f);
+
+        Material[] mats = targetRenderer.materials;
+        foreach (var mat in mats)
+        {
+            if (mat.name.Contains(feedbackMatTemplate.name)) return;
+        }
+
+        Material[] newMats = new Material[mats.Length + 1];
+        mats.CopyTo(newMats, 0);
+        newMats[^1] = feedbackMatInstance;
+        targetRenderer.materials = newMats;
+        feedbackMatIndex = newMats.Length - 1;
+    }
+    private void TriggerHealthFeedback()
+    {
+        if (feedbackMatInstance == null) return;
+
+        float healthRatio = Mathf.Clamp01(currentHealth / health);
+        Color targetColor = Color.Lerp(lowHealthColor, fullHealthColor, healthRatio);
+        targetColor.a = feedbackAlpha;
+        Debug.Log("Touchenemy");
+        if (feedbackCoroutine != null)
+        {
+            StopCoroutine(feedbackCoroutine);
+        }
+        feedbackCoroutine = StartCoroutine(AnimateFeedbackColor(targetColor));
+    }
+    private IEnumerator AnimateFeedbackColor(Color visibleColor)
+    {
+        float timer = 0f;
+
+        while (timer < feedbackDuration / 2f)
+        {
+            float t = timer / (feedbackDuration / 2f);
+            Color c = Color.Lerp(new Color(visibleColor.r, visibleColor.g, visibleColor.b, 0f), visibleColor, t);
+            feedbackMatInstance.color = c;
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        timer = 0f;
+        while (timer < feedbackDuration / 2f)
+        {
+            float t = timer / (feedbackDuration / 2f);
+            Color c = Color.Lerp(visibleColor, new Color(visibleColor.r, visibleColor.g, visibleColor.b, 0f), t);
+            feedbackMatInstance.color = c;
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        feedbackMatInstance.color = new Color(visibleColor.r, visibleColor.g, visibleColor.b, 0f);
+    }
+
+
 
     // Finds the weak point among child objects and disables it.
     private void FindWeakPoint()
@@ -79,6 +155,7 @@ public class EnemyBase : MonoBehaviour
         }
 
         // Show hit effect if available.
+        TriggerHealthFeedback();
         if (enemyGetHitVFX != null)
         {
             S_VFXPoolManager.Instance.SpawnVFX(enemyGetHitVFX, hitPosition, transform.rotation, 3f);
