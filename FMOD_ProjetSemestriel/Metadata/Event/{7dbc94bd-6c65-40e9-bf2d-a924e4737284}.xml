@@ -42,6 +42,9 @@
 		</relationship>
 	</object>
 	<object class="MasterTrack" id="{e95d6fb2-ff38-4813-a6a6-f93529a56dc1}">
+		<relationship name="automationTracks">
+			<destination>{bc94165e-3ee8-4766-9ea7-ccea9e39269f}</destination>
+		</relationship>
 		<relationship name="mixerGroup">
 			<destination>{c4fe50e9-bee8-417b-acb1-010940619ed1}</destination>
 		</relationship>
@@ -93,6 +96,11 @@
 		</relationship>
 		<relationship name="mixer">
 			<destination>{43ed5bd1-9202-4409-9e93-c2e66d452afe}</destination>
+		</relationship>
+	</object>
+	<object class="AutomationTrack" id="{bc94165e-3ee8-4766-9ea7-ccea9e39269f}">
+		<relationship name="automator">
+			<destination>{08de2f81-fa24-4ee5-91d4-d8815b50eaf3}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusEffectChain" id="{278d443b-3d2d-4f5e-be00-aa29b359f211}">
@@ -184,7 +192,43 @@
 		<property name="level">
 			<value>0.0749999955</value>
 		</property>
+		<relationship name="automators">
+			<destination>{08de2f81-fa24-4ee5-91d4-d8815b50eaf3}</destination>
+		</relationship>
 	</object>
 	<object class="MixerBusFader" id="{8cfa1c53-0db2-4553-ba5d-587197b74d1f}" />
 	<object class="MixerBusFader" id="{3b076213-4db8-41a2-a2b0-1e299ece84e2}" />
+	<object class="Automator" id="{08de2f81-fa24-4ee5-91d4-d8815b50eaf3}">
+		<property name="nameOfPropertyBeingAutomated">
+			<value>level</value>
+		</property>
+		<relationship name="automationCurves">
+			<destination>{3d50165c-546e-446a-a67a-64816717ceb5}</destination>
+		</relationship>
+	</object>
+	<object class="AutomationCurve" id="{3d50165c-546e-446a-a67a-64816717ceb5}">
+		<relationship name="parameter">
+			<destination>{5870777f-bf6c-410a-8638-b3ec5cbe0f87}</destination>
+		</relationship>
+		<relationship name="automationPoints">
+			<destination>{f2b04843-43d4-4233-bbf7-231cbdd107a5}</destination>
+			<destination>{c6b3c553-a50e-4e51-9350-01ac75f93fe8}</destination>
+		</relationship>
+	</object>
+	<object class="AutomationPoint" id="{f2b04843-43d4-4233-bbf7-231cbdd107a5}">
+		<property name="position">
+			<value>2</value>
+		</property>
+		<property name="value">
+			<value>0</value>
+		</property>
+	</object>
+	<object class="AutomationPoint" id="{c6b3c553-a50e-4e51-9350-01ac75f93fe8}">
+		<property name="position">
+			<value>3</value>
+		</property>
+		<property name="value">
+			<value>0.399999976</value>
+		</property>
+	</object>
 </objects>
