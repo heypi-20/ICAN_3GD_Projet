@@ -44,7 +44,7 @@ public class S_FeedSeed : EnemyBase
     {
         if (currentHealth < previousHealth)
         {
-            DropItems(0);
+            DropItems(energyDropQuantity);
             TriggerPunchScale();
             previousHealth = currentHealth;
         }

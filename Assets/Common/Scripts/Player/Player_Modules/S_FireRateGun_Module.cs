@@ -213,7 +213,7 @@ public class S_FireRateGun_Module : MonoBehaviour
                     if(hit.collider.gameObject.CompareTag("WeakPoint"))
                     {
                         ShootingObserverEvent(PlayerStates.ShootState.hitWeakPoint,GetCurrentFireRateLevel());
-                        enemy.ReduceHealth(damage*GetCurrentFireRateLevel().weekPointMultiplier,GetCurrentFireRateLevel().dropBonus);
+                        enemy.ReduceHealth(damage*GetCurrentFireRateLevel().weekPointMultiplier,GetCurrentFireRateLevel().dropBonus,default,1);
                     }
                     else
                     {
