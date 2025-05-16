@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;
@@ -8,266 +9,245 @@ using Random = UnityEngine.Random;
 public class EnemyBase : MonoBehaviour
 {
     [Header("Enemy Infos")]
-    public string enemyName;
-    public EnemyType enemyType; // Used for tracking and pooling
+    public EnemyType enemyType;            // Used for tracking and pooling
     public float health;
-    public float WeaknessExposureHealth;
     public float enemyDamage;
-    public GameObject WeakPoint;
+    public GameObject WeakPoint;           // GameObject to activate/deactivate the weak point
     public GameObject energyPoint;
     public int energyDropQuantity;
-    public int energyDropParHitWeakness;
+    public int energyDropPerHitWeakness;
     public GameObject enemyGetHitVFX;
     public GameObject enemyDeathVFX;
-    public EventReference enemy_Kill;
-    
-    [Header("Health Feedback Material Overlay")]
-    public Renderer targetRenderer;
-    public Material feedbackMatTemplate; 
+    public EventReference enemyKillEvent;
+
+    [Header("Health Feedback Overlay")]
+    public Renderer targetRenderer;        // Main renderer for damage feedback
+    public Renderer weakPointRenderer;     // Renderer for weak point feedback
+    public Material feedbackMatTemplate;   // Template material supporting transparency
     public Color fullHealthColor = Color.green;
     public Color lowHealthColor = Color.red;
-    public float feedbackAlpha = 0.6f;
-    public float feedbackDuration = 0.3f;
+    public float feedbackAlpha = 0.8f;
+    public float feedbackDuration = 0.2f;
 
-    private Material feedbackMatInstance;
-    private int feedbackMatIndex = -1;
-    private Coroutine feedbackCoroutine;
-    
-    
-    private EventInstance enemy_kill_instance;
-    [Header("WeakPoint Visuals")]
-    public Material extraWeakPointMaterial;
-    public Renderer weakPointRenderer;
-    private Material[] originalWeakPointMaterials;
+    // Internal structure: each Renderer maps to its feedback data
+    private class FeedbackData
+    {
+        public Material instance;
+        public Coroutine coroutine;
+    }
+    private readonly Dictionary<Renderer, FeedbackData> feedbackMap = new Dictionary<Renderer, FeedbackData>();
 
-    [HideInInspector]
-    public float currentHealth;
+    private EventInstance killEventInstance;
+    [HideInInspector] public float currentHealth;
     private bool isDead = false;
-    private S_PLayerInfoDebugDisplay _sPLayerInfoDebugDisplay;
 
-
-    public static event Action<EnemyType> OnEnemyKilled; // Global event for combo tracking
-    public event Action<EnemyBase> OnKilled; // Instance event for pooling
-    
-    // Called when the object is enabled (e.g., when reused from the pool)
+    public static event Action<EnemyType> OnEnemyKilled;  // Global kill event
+    public event Action<EnemyBase> OnKilled;              // Instance kill event
 
     protected virtual void OnEnable()
     {
-        FindWeakPoint();             // Find and disable the weak point
-        currentHealth = health;      // Reset health
-        isDead = false;              // Reset death flag for pooling reuse
-        if (weakPointRenderer != null)
-        {
-            originalWeakPointMaterials = weakPointRenderer.materials;
-        }
-        InitFeedbackMaterial();
+        // Reset health and state
+        currentHealth = health;
+        isDead = false;
+
+        // Automatically find weak point child if not set
+        FindWeakPoint();
+
+        // Activate the weak point object by default
+        if (WeakPoint != null)
+            WeakPoint.SetActive(true);
+
+        // Register feedback materials for renderers (only once per renderer)
+        RegisterFeedbackRenderer(targetRenderer);
+        RegisterFeedbackRenderer(weakPointRenderer);
     }
-    
-    private void InitFeedbackMaterial()
+
+    // OnDisable is virtual so subclasses can override
+    protected virtual void OnDisable()
     {
-        if (targetRenderer == null || feedbackMatTemplate == null) return;
+        // Clear instance kill callback
+        OnKilled = null;
 
-        feedbackMatInstance = new Material(feedbackMatTemplate);
-        feedbackMatInstance.color = new Color(fullHealthColor.r, fullHealthColor.g, fullHealthColor.b, 0f);
-
-        Material[] mats = targetRenderer.materials;
-        foreach (var mat in mats)
+        // Stop all feedback coroutines and reset alpha
+        foreach (var data in feedbackMap.Values)
         {
-            if (mat.name.Contains(feedbackMatTemplate.name)) return;
+            if (data.coroutine != null)
+                StopCoroutine(data.coroutine);
+
+            Color color = data.instance.color;
+            color.a = 0f;
+            data.instance.color = color;
+            data.coroutine = null;
         }
 
-        Material[] newMats = new Material[mats.Length + 1];
-        mats.CopyTo(newMats, 0);
-        newMats[^1] = feedbackMatInstance;
-        targetRenderer.materials = newMats;
-        feedbackMatIndex = newMats.Length - 1;
-    }
-    private void TriggerHealthFeedback()
-    {
-        if (feedbackMatInstance == null) return;
-
-        float healthRatio = Mathf.Clamp01(currentHealth / health);
-        Color targetColor = Color.Lerp(lowHealthColor, fullHealthColor, healthRatio);
-        targetColor.a = feedbackAlpha;
-        Debug.Log("Touchenemy");
-        if (feedbackCoroutine != null)
-        {
-            StopCoroutine(feedbackCoroutine);
-        }
-        feedbackCoroutine = StartCoroutine(AnimateFeedbackColor(targetColor));
-    }
-    private IEnumerator AnimateFeedbackColor(Color visibleColor)
-    {
-        float timer = 0f;
-
-        while (timer < feedbackDuration / 2f)
-        {
-            float t = timer / (feedbackDuration / 2f);
-            Color c = Color.Lerp(new Color(visibleColor.r, visibleColor.g, visibleColor.b, 0f), visibleColor, t);
-            feedbackMatInstance.color = c;
-            timer += Time.deltaTime;
-            yield return null;
-        }
-
-        timer = 0f;
-        while (timer < feedbackDuration / 2f)
-        {
-            float t = timer / (feedbackDuration / 2f);
-            Color c = Color.Lerp(visibleColor, new Color(visibleColor.r, visibleColor.g, visibleColor.b, 0f), t);
-            feedbackMatInstance.color = c;
-            timer += Time.deltaTime;
-            yield return null;
-        }
-
-        feedbackMatInstance.color = new Color(visibleColor.r, visibleColor.g, visibleColor.b, 0f);
+        // Deactivate weak point object
+        if (WeakPoint != null)
+            WeakPoint.SetActive(false);
     }
 
-
-
-    // Finds the weak point among child objects and disables it.
+    /// <summary>
+    /// Find the weak point child by tag and assign it
+    /// </summary>
     private void FindWeakPoint()
     {
-        Transform[] children = transform.GetComponentsInChildren<Transform>();
-        foreach (Transform child in children)
+        if (WeakPoint != null)
+            return;
+
+        foreach (var t in transform.GetComponentsInChildren<Transform>())
         {
-            if (child.CompareTag("WeakPoint"))
+            if (t.CompareTag("WeakPoint"))
             {
-                WeakPoint = child.gameObject;
-                WeakPoint.SetActive(false);
+                WeakPoint = t.gameObject;
                 break;
             }
         }
     }
 
-    // Reduces health by a given amount, shows hit effects, and triggers death if needed.
-    public void ReduceHealth(float amount, int DropBonus,Vector3 hitPosition=default, int hit = 0)
+    /// <summary>
+    /// Register a feedback material instance to the given renderer (only once)
+    /// </summary>
+    private void RegisterFeedbackRenderer(Renderer renderer)
     {
-        if (isDead) return;
+        if (renderer == null || feedbackMatTemplate == null || feedbackMap.ContainsKey(renderer))
+            return;
+
+        // Check if the material is already added
+        foreach (var mat in renderer.materials)
+        {
+            if (mat.name.Contains(feedbackMatTemplate.name))
+            {
+                feedbackMap[renderer] = new FeedbackData { instance = mat, coroutine = null };
+                return;
+            }
+        }
+
+        // Create a new instance and append it
+        Material instance = new Material(feedbackMatTemplate);
+        instance.color = new Color(fullHealthColor.r, fullHealthColor.g, fullHealthColor.b, 0f);
+
+        var mats = renderer.materials;
+        var newMats = new Material[mats.Length + 1];
+        mats.CopyTo(newMats, 0);
+        newMats[mats.Length] = instance;
+        renderer.materials = newMats;
+
+        feedbackMap[renderer] = new FeedbackData { instance = instance, coroutine = null };
+    }
+
+    /// <summary>
+    /// Trigger feedback flash on the appropriate renderer based on hit type
+    /// hit == 1 -> weak point renderer; hit == 0 -> main renderer
+    /// </summary>
+    private void TriggerHealthFeedback(int hit)
+    {
+        float ratio = Mathf.Clamp01(currentHealth / health);
+        Color color = Color.Lerp(lowHealthColor, fullHealthColor, ratio);
+        color.a = feedbackAlpha;
+
+        Renderer renderer = (hit == 1 && weakPointRenderer != null) ? weakPointRenderer : targetRenderer;
+        if (renderer == null || !feedbackMap.TryGetValue(renderer, out var data))
+            return;
+
+        if (data.coroutine != null)
+            StopCoroutine(data.coroutine);
+
+        data.coroutine = StartCoroutine(AnimateFeedbackColor(data.instance, color));
+    }
+
+    private IEnumerator AnimateFeedbackColor(Material mat, Color visibleColor)
+    {
+        float half = feedbackDuration / 2f;
+        float t = 0f;
+
+        // Fade in
+        while (t < half)
+        {
+            float f = t / half;
+            mat.color = Color.Lerp(new Color(visibleColor.r, visibleColor.g, visibleColor.b, 0f), visibleColor, f);
+            t += Time.deltaTime;
+            yield return null;
+        }
+
+        // Fade out
+        t = 0f;
+        while (t < half)
+        {
+            float f = t / half;
+            mat.color = Color.Lerp(visibleColor, new Color(visibleColor.r, visibleColor.g, visibleColor.b, 0f), f);
+            t += Time.deltaTime;
+            yield return null;
+        }
+
+        // Ensure fully transparent
+        mat.color = new Color(visibleColor.r, visibleColor.g, visibleColor.b, 0f);
+    }
+
+    /// <summary>
+    /// Reduce health, trigger feedback, VFX, and death
+    /// </summary>
+    public void ReduceHealth(float amount, int dropBonus, Vector3 hitPosition = default, int hit = 0)
+    {
+        if (isDead)
+            return;
+
         currentHealth -= amount;
         if (hitPosition == default)
-        {
             hitPosition = transform.position;
-        }
 
-        if (hit == 1)
+        if (hit == 1 && WeakPoint != null)
         {
-            DropItems(energyDropParHitWeakness, WeakPoint.transform.position);
+            DropItems(energyDropPerHitWeakness, WeakPoint.transform.position);
         }
 
-        // Show hit effect if available.
-        TriggerHealthFeedback();
+        TriggerHealthFeedback(hit);
+
         if (enemyGetHitVFX != null)
-        {
             S_VFXPoolManager.Instance.SpawnVFX(enemyGetHitVFX, hitPosition, transform.rotation, 3f);
 
-        }
-
-        // Activate weak point if health is low.
-        if (currentHealth <= WeaknessExposureHealth && WeakPoint != null)
-        {
-            activeWeakPoint();
-        }
-
-        // Trigger death if health is zero or below.
         if (currentHealth <= 0)
-        {
-            EnemyDied(DropBonus);
-        }
+            EnemyDied(dropBonus);
     }
 
-    private void activeWeakPoint()
+    /// <summary>
+    /// Handle enemy death: VFX, events, drops, and pool deactivate
+    /// </summary>
+    public void EnemyDied(int dropBonus)
     {
-        WeakPoint.SetActive(true);
-        if (weakPointRenderer != null && extraWeakPointMaterial != null)
-        {
-            Material[] currentMats = weakPointRenderer.materials;
-
-            foreach (var mat in currentMats)
-            {
-                if (mat == extraWeakPointMaterial) return;
-            }
-
-            Material[] newMats = new Material[currentMats.Length + 1];
-            currentMats.CopyTo(newMats, 0);
-            newMats[^1] = extraWeakPointMaterial;
-            weakPointRenderer.materials = newMats;
-        }
-    }
-    
-    
-
-    // Handles enemy death: plays effects, triggers events, drops items, and deactivates the object.
-    public void EnemyDied(int DropBonus)
-    {
-        if (isDead) return;
+        if (isDead)
+            return;
         isDead = true;
 
-        // Play death effect if available.
         if (enemyDeathVFX != null)
-        {
             S_VFXPoolManager.Instance.SpawnVFX(enemyDeathVFX, transform.position, transform.rotation, 3f);
 
-        }
-
-        // Trigger global and instance death events.
         OnEnemyKilled?.Invoke(enemyType);
         OnKilled?.Invoke(this);
 
-        // Play kill sound and drop energy items.
-        enemy_kill_instance = RuntimeManager.CreateInstance(enemy_Kill);
-        RuntimeManager.AttachInstanceToGameObject(enemy_kill_instance,transform,GetComponent<Rigidbody>());
-        enemy_kill_instance.start();
-        DropItems(energyDropQuantity+DropBonus);
+        killEventInstance = RuntimeManager.CreateInstance(enemyKillEvent);
+        RuntimeManager.AttachInstanceToGameObject(killEventInstance, transform, GetComponent<Rigidbody>());
+        killEventInstance.start();
 
-        // Deactivate the enemy so it can be returned to the pool.
+        DropItems(energyDropQuantity + dropBonus);
+
         gameObject.SetActive(false);
-        RemoveWeakPointMat();
     }
 
-    private void RemoveWeakPointMat()
+    /// <summary>
+    /// Drop energy items with random offset
+    /// </summary>
+    public void DropItems(float dropQuantity, Vector3 selfPosition = default)
     {
-        // Remove extra material from weak point
-        if (weakPointRenderer != null && originalWeakPointMaterials != null)
-        {
-            weakPointRenderer.materials = originalWeakPointMaterials;
-        }
-    }
-    
-
-    // Drops energy items with a random offset.
-    public void DropItems(float DropQuantity, Vector3 SelfPosition = default)
-    {
-        bool useDefault = SelfPosition == default;
+        bool useDefault = (selfPosition == default);
         if (useDefault)
-        {
-            SelfPosition = transform.position;
-        }
-        for (int i = 0; i < DropQuantity; i++)
-        {
-            Vector3 spawnPosition;
-            Vector3 direction;
-            if (useDefault)
-            {
-                Vector3 randomOffset = new Vector3(
-                    Random.Range(-0.5f, 0.5f),
-                    Random.Range(-0.5f, 0.5f),
-                    Random.Range(-0.5f, 0.5f)
-                );
-                spawnPosition = SelfPosition + randomOffset;
-                direction = (spawnPosition - SelfPosition).normalized;
-            }
-            else
-            {
-                spawnPosition = SelfPosition;
-                direction = Vector3.forward;
-            }
-            S_EnergyPointPoolManager.Instance.QueueEnergyPoint(energyPoint, spawnPosition, direction);
-        }
-    }
+            selfPosition = transform.position;
 
-    // Clears instance events on disable to avoid multiple subscriptions.
-    private void OnDisable()
-    {
-        OnKilled = null;
+        for (int i = 0; i < dropQuantity; i++)
+        {
+            Vector3 spawnPos = useDefault
+                ? selfPosition + new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f))
+                : selfPosition;
+            Vector3 dir = (spawnPos - selfPosition).normalized;
+            S_EnergyPointPoolManager.Instance.QueueEnergyPoint(energyPoint, spawnPos, dir);
+        }
     }
 }

@@ -179,15 +179,15 @@ MonoBehaviour:
   enemyName: 
   enemyType: 1
   health: 80
-  WeaknessExposureHealth: 60
+  weaknessExposureHealth: 0
   enemyDamage: 200
   WeakPoint: {fileID: 0}
   energyPoint: {fileID: 284891634115185361, guid: 729892a8825d4f64599abe6ea5c6f84b, type: 3}
   energyDropQuantity: 25
-  energyDropParHitWeakness: 5
+  energyDropPerHitWeakness: 5
   enemyGetHitVFX: {fileID: 2014564717100583912, guid: de8051323aef0554fb4a4ee3dd46ebed, type: 3}
   enemyDeathVFX: {fileID: 2014564717100583912, guid: 332f5cf35c013464e8ebf4ac6d81eedc, type: 3}
-  enemy_Kill:
+  enemyKillEvent:
     Guid:
       Data1: 1733625728
       Data2: 1240291159
@@ -195,13 +195,12 @@ MonoBehaviour:
       Data4: -1193831410
     Path: event:/Ennemy/Kill/Kill_Enemie
   targetRenderer: {fileID: 1020421795490251189}
+  weakPointRenderer: {fileID: 8239965984100750593}
   feedbackMatTemplate: {fileID: 2100000, guid: 47c359aaa5609fa40a98232cce5d5e13, type: 2}
   fullHealthColor: {r: 1, g: 1, b: 1, a: 1}
   lowHealthColor: {r: 1, g: 0, b: 0, a: 1}
   feedbackAlpha: 0.8
   feedbackDuration: 0.2
-  extraWeakPointMaterial: {fileID: 2100000, guid: 152d9b433b056a84eac8846e6d4aff69, type: 2}
-  weakPointRenderer: {fileID: 8239965984100750593}
   currentHealth: 0
   jumpForce: 15
   trackingForce: 10
