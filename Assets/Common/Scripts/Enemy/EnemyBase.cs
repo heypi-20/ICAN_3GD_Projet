@@ -15,7 +15,8 @@ public class EnemyBase : MonoBehaviour
     public float enemyDamage;
     public GameObject WeakPoint;
     public GameObject energyPoint;
-    public float energyDropQuantity;
+    public int energyDropQuantity;
+    public int energyDropParHitWeakness;
     public GameObject enemyGetHitVFX;
     public GameObject enemyDeathVFX;
     public EventReference enemy_Kill;
@@ -63,13 +64,18 @@ public class EnemyBase : MonoBehaviour
     }
 
     // Reduces health by a given amount, shows hit effects, and triggers death if needed.
-    public void ReduceHealth(float amount, int DropBonus,Vector3 hitPosition=default)
+    public void ReduceHealth(float amount, int DropBonus,Vector3 hitPosition=default, int hit = 0)
     {
         if (isDead) return;
         currentHealth -= amount;
         if (hitPosition == default)
         {
             hitPosition = transform.position;
+        }
+
+        if (hit == 1)
+        {
+            DropItems(energyDropParHitWeakness, WeakPoint.transform.position);
         }
 
         // Show hit effect if available.
@@ -134,7 +140,7 @@ public class EnemyBase : MonoBehaviour
         enemy_kill_instance = RuntimeManager.CreateInstance(enemy_Kill);
         RuntimeManager.AttachInstanceToGameObject(enemy_kill_instance,transform,GetComponent<Rigidbody>());
         enemy_kill_instance.start();
-        DropItems(DropBonus);
+        DropItems(energyDropQuantity+DropBonus);
 
         // Deactivate the enemy so it can be returned to the pool.
         gameObject.SetActive(false);
@@ -152,21 +158,33 @@ public class EnemyBase : MonoBehaviour
     
 
     // Drops energy items with a random offset.
-    public void DropItems(float DropBonus)
+    public void DropItems(float DropQuantity, Vector3 SelfPosition = default)
     {
-        for (int i = 0; i < energyDropQuantity + DropBonus; i++)
+        bool useDefault = SelfPosition == default;
+        if (useDefault)
         {
-            Vector3 randomOffset = new Vector3(
-                Random.Range(-0.5f, 0.5f),
-                Random.Range(-0.5f, 0.5f),
-                Random.Range(-0.5f, 0.5f)
-            );
-
-            Vector3 spawnPosition = transform.position + randomOffset;
-            Vector3 direction = (spawnPosition - transform.position).normalized;
-
+            SelfPosition = transform.position;
+        }
+        for (int i = 0; i < DropQuantity; i++)
+        {
+            Vector3 spawnPosition;
+            Vector3 direction;
+            if (useDefault)
+            {
+                Vector3 randomOffset = new Vector3(
+                    Random.Range(-0.5f, 0.5f),
+                    Random.Range(-0.5f, 0.5f),
+                    Random.Range(-0.5f, 0.5f)
+                );
+                spawnPosition = SelfPosition + randomOffset;
+                direction = (spawnPosition - SelfPosition).normalized;
+            }
+            else
+            {
+                spawnPosition = SelfPosition;
+                direction = Vector3.forward;
+            }
             S_EnergyPointPoolManager.Instance.QueueEnergyPoint(energyPoint, spawnPosition, direction);
-            
         }
     }
 
