@@ -47,12 +47,17 @@ public class S_CameraCACFeedback : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (_vcam.m_Lens.FieldOfView >= maxFOV)
+        {
+            _isIncreasing = false;
+        }
         if (!_isIncreasing) return;
 
         _timePassed += Time.deltaTime;
         float newFOV = _startFOV + _timePassed * fovMultiplier;
         _vcam.m_Lens.FieldOfView = Mathf.Min(newFOV, maxFOV);
-
+        
+        
         if (_lensDistortion != null)
         {
             float targetDistortion = _timePassed * distortionMax;

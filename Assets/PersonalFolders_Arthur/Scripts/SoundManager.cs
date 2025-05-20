@@ -175,7 +175,7 @@ public class SoundManager : MonoBehaviour
             case PlayerStates.GroundPoundState.EndGroundPound :
                 Instance_ExplosionPillonage = RuntimeManager.CreateInstance(ExplosionPillonage);
                 Instance_ExplosionPillonage.start();
-                StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl4, 0f, 1f, 0.05f));
+                StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl4, 0f, 1f, 1f));
                 Instance_Fall_Pillonage.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 break;
         }
@@ -191,7 +191,6 @@ public class SoundManager : MonoBehaviour
             }
             musicInstance.setParameterByName("Pitch_Music", to); // Assure la valeur finale
         }
-
     }
 
     #endregion
