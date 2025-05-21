@@ -112,12 +112,22 @@ public class S_CameraSprintFeedback : MonoBehaviour
     
     private void StartSprintFOV(int level)
     {
-        float targetFOV = level switch
+        float targetFOV;
+        switch (level)
         {
-            2 => FOV_Pallier2,
-            3 => FOV_Pallier3,
-            4 => FOV_Pallier4
-        };
+            case 2:
+                targetFOV = FOV_Pallier2;
+                break;
+            case 3:
+                targetFOV = FOV_Pallier3;
+                break;
+            case 4:
+                targetFOV = FOV_Pallier4;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(level));
+        }
+
         DOTween.To(() => _vcam.m_Lens.FieldOfView,
                    x => _vcam.m_Lens.FieldOfView = x,
                    targetFOV,
