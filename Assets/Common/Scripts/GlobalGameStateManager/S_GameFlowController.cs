@@ -5,30 +5,36 @@ using UnityEngine;
 public class S_GameFlowController : MonoBehaviour
 {
     public static S_GameFlowController Instance { get; private set; }
+    public List<MonoBehaviour> stateComponents;
+    public Type CurrentStateType { get; private set; }
     private S_IGameState _currentState;
-    private Dictionary<Type, S_IGameState> _states = new Dictionary<Type, S_IGameState>();
-    
-    public event Action<Type> OnStateChanged;
+    private Dictionary<Type, S_IGameState> _states = new();
 
     private void Awake()
     {
-        if (Instance != null) Destroy(gameObject);
-        else
+        if (Instance != null)
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-            RegisterStates();
+            Destroy(gameObject);
+            return;
         }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+        RegisterStates();
     }
 
     private void RegisterStates()
     {
-        _states[typeof(S_MainMenuState)]  = new S_MainMenuState(this);
-        _states[typeof(S_LoadingState)]   = new S_LoadingState(this);
-        _states[typeof(S_InGameState)]    = new S_InGameState(this);
-        _states[typeof(S_GamePauseState)] = new S_GamePauseState(this);
-        _states[typeof(S_GameOverState)]  = new S_GameOverState(this);
+        _states.Clear();
 
+        foreach (var comp in stateComponents)
+        {
+            if (comp is S_IGameState state)
+            {
+                Type t = comp.GetType();
+                _states[t] = state;
+            }
+        }
         ChangeState<S_MainMenuState>();
     }
 
@@ -44,11 +50,11 @@ public class S_GameFlowController : MonoBehaviour
             case S_GameEvent.ReturnMainMenu:
                 ChangeState<S_MainMenuState>();
                 break;
-            case S_GameEvent.LevelSelected:
+            case S_GameEvent.LoadLevel:
             case S_GameEvent.Restart:
                 ChangeState<S_LoadingState>(args);
                 break;
-            case S_GameEvent.GameStart:
+            case S_GameEvent.EnterGameState:
                 ChangeState<S_InGameState>();
                 break;
             case S_GameEvent.PauseGame:
@@ -57,17 +63,18 @@ public class S_GameFlowController : MonoBehaviour
             case S_GameEvent.GameOver:
                 ChangeState<S_GameOverState>(args);
                 break;
-            default:
-                Debug.LogWarning("Unhandled S_GameEvent: " + evt);
-                break;
         }
     }
 
     private void ChangeState<T>(params object[] args) where T : S_IGameState
     {
         _currentState?.OnExit();
-        _currentState = _states[typeof(T)];
-        _currentState.OnEnter(args);
-        OnStateChanged?.Invoke(typeof(T));
+
+        if (_states.TryGetValue(typeof(T), out var nextState))
+        {
+            _currentState = nextState;
+            CurrentStateType = typeof(T);
+            _currentState.OnEnter(args); 
+        }
     }
 }

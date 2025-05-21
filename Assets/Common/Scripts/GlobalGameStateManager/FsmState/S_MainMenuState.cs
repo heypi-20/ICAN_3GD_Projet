@@ -1,20 +1,20 @@
 
 
-public class S_MainMenuState : S_IGameState
+using UnityEngine;
+
+public class S_MainMenuState : MonoBehaviour,S_IGameState
 {
-    private S_GameFlowController _fsm;
-    public S_MainMenuState(S_GameFlowController fsm) { _fsm = fsm; }
+    public GameObject _panel;
 
     public void OnEnter(params object[] args)
     {
-        //show mainmenu page
-        // unload existant scene
+        _panel.SetActive(true);
     }
 
     public void OnTick() { }
 
     public void OnExit()
     {
-        //hide mainmenu page
+        _panel.SetActive(false);
     }
 }

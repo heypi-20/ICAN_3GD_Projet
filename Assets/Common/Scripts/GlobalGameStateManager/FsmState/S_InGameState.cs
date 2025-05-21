@@ -1,10 +1,7 @@
 using UnityEngine;
 
-public class S_InGameState : S_IGameState
+public class S_InGameState : MonoBehaviour,S_IGameState
 {
-    private S_GameFlowController _fsm;
-    public S_InGameState(S_GameFlowController fsm) { _fsm = fsm; }
-
     public void OnEnter(params object[] args)
     {
         Cursor.lockState = CursorLockMode.Locked;

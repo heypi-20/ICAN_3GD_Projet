@@ -1,9 +1,9 @@
 ﻿public enum S_GameEvent
 {
     ReturnMainMenu,
-    LevelSelected,
+    LoadLevel,
     Restart,
-    GameStart,
+    EnterGameState,
     PauseGame,
     GameOver
 }
