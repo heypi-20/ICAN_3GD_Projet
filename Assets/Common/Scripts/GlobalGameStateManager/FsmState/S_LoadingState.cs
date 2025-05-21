@@ -64,7 +64,7 @@ public class S_LoadingState : MonoBehaviour, S_IGameState
 
         while (!_loadingOperation.isDone)
             yield return null;
-
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(_sceneToLoad));
         S_GameFlowController.Instance.FireEvent(S_GameEvent.EnterGameState);
     }
 

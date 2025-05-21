@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class S_InGameState : MonoBehaviour,S_IGameState
 {
     public void OnEnter(params object[] args)
@@ -8,11 +8,19 @@ public class S_InGameState : MonoBehaviour,S_IGameState
         Cursor.visible = false;
     }
 
-    public void OnTick() { }
+    public void OnTick()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            S_GameFlowController.Instance.FireEvent(S_GameEvent.ReturnMainMenu);
+        }
+    }
 
     public void OnExit()
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        SceneManager.UnloadSceneAsync("LD_ToutPlat_ScenePrincipal");
+
     }
 }
