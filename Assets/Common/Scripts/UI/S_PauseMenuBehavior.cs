@@ -2,7 +2,7 @@ using UnityEngine;
 
 /// <summary>
 /// Handles pausing and resuming the game by showing/hiding the pause menu,
-/// adjusting timescale, and toggling cursor state.
+/// adjusting timescale, and toggling cursor state. Ignores pause if settings menu is open.
 /// </summary>
 public class S_PauseMenuBehavior : MonoBehaviour
 {
@@ -10,18 +10,23 @@ public class S_PauseMenuBehavior : MonoBehaviour
     [Tooltip("Assign your Pause Menu UI GameObject here.")]
     public GameObject pauseMenuUI;
 
+    public GameObject settingsMenuUI;
+
     private bool isPaused = false;
 
     void Start()
     {
-        // Ensure the pause menu is hidden at the start
         if (pauseMenuUI != null)
             pauseMenuUI.SetActive(false);
     }
+    
 
     void Update()
     {
-        // Listen for ESC key to toggle pause/resume
+        // If Settings Menu is open, ignore pause toggle
+        if (settingsMenuUI != null && settingsMenuUI.activeSelf)
+            return;
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (isPaused)
@@ -39,10 +44,7 @@ public class S_PauseMenuBehavior : MonoBehaviour
         if (pauseMenuUI != null)
             pauseMenuUI.SetActive(true);
 
-        // Freeze all in-game activity
         Time.timeScale = 0f;
-
-        // Unlock and show cursor
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
@@ -51,17 +53,13 @@ public class S_PauseMenuBehavior : MonoBehaviour
 
     /// <summary>
     /// Resumes the game: hides pause menu, resumes time, and hides the cursor.
-    /// This can be hooked up directly to your Resume button's OnClick in the Inspector.
     /// </summary>
     public void ResumeGame()
     {
         if (pauseMenuUI != null)
             pauseMenuUI.SetActive(false);
 
-        // Resume game activity
         Time.timeScale = 1f;
-
-        // Lock and hide cursor (change as needed)
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
