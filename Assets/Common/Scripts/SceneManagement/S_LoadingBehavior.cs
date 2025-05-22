@@ -2,7 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
-
+using Eflatun.SceneReference;
 /// <summary>
 /// Asynchronously loads a target scene in the background,
 /// displays a timed fake loading percentage,
@@ -13,8 +13,8 @@ public class S_LoadingBehavior : MonoBehaviour
     [Header("UI References")]
     public TMP_Text progressText;             // Displays loading percentage and prompts
 
-    [Header("Settings")]
-    public string targetSceneName = "MainMenu";  // Scene to load
+    [Header("Settings")] 
+    public SceneReference targetSceneName;  // Scene to load
     public float fakeLoadDuration = 2f;           // Duration in seconds for fake progress
 
     private AsyncOperation loadOp;
@@ -28,7 +28,7 @@ public class S_LoadingBehavior : MonoBehaviour
     private IEnumerator FakeLoadAndActivate()
     {
         // Begin asynchronous load but don't activate yet
-        loadOp = SceneManager.LoadSceneAsync(targetSceneName);
+        loadOp = SceneManager.LoadSceneAsync(targetSceneName.BuildIndex);
         loadOp.allowSceneActivation = false;
 
         // Fake progress timer

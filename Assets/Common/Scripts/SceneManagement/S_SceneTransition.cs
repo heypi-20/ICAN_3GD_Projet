@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Eflatun.SceneReference;
 
 public class S_SceneTransition : MonoBehaviour
 {
-    public string sceneName;   
+    public SceneReference sceneName;   
     public void LoadSceneByName()
     {
-        SceneManager.LoadSceneAsync(sceneName);
+        SceneManager.LoadSceneAsync(sceneName.BuildIndex);
 
     }
 }
