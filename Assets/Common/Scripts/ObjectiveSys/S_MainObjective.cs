@@ -30,6 +30,7 @@ public class S_MainObjective : MonoBehaviour
         killObjective.OnComplete += () =>
         {
             killObjective.SetCompletionTime(gameChrono);
+            FindObjectOfType<S_GameResultCalcul>().ShowResultScreen();
         };
         
         ObjectiveManager.AddObjective(killObjective);

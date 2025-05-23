@@ -25,6 +25,9 @@ public class S_SkillHUDFeedBack : MonoBehaviour
     private Tween graceTween;
     private int graceLevel = -1;
 
+    // Sprint usage tween
+    private Tween sprintUsageTween;
+
     private void Awake()
     {
         // Initialize the level-to-crystal mapping
@@ -60,15 +63,25 @@ public class S_SkillHUDFeedBack : MonoBehaviour
     private void HandleLevelChangeEvent(Enum state, int level)
     {
         var lvlState = (PlayerStates.LevelState)state;
+        foreach (var kv in levelCrystalMap)
+        {
+            var rune = kv.Value.GetComponent<RuneDisplay>();
+            if (rune == null) continue;
+
+            if (kv.Key <= level)
+            {
+                // Show rune
+                rune.SetState(RuneDisplay.SkillState.Activé);
+            }
+            else
+            {
+                // Hide rune with its own hide animation
+                rune.SetState(RuneDisplay.SkillState.Désactivé);
+            }
+        }
+
         switch (lvlState)
         {
-            case PlayerStates.LevelState.LevelUp:
-                // Activate all crystals <= current level and stop any ongoing grace shake
-                KillGraceTween();
-                foreach (var kv in levelCrystalMap)
-                    kv.Value.SetActive(kv.Key <= level);
-                break;
-
             case PlayerStates.LevelState.StartGrace:
                 // Start infinite shake on the crystal for the current level
                 StartGraceShake(level);
@@ -79,12 +92,9 @@ public class S_SkillHUDFeedBack : MonoBehaviour
                 KillGraceTween();
                 break;
 
-            case PlayerStates.LevelState.LevelDown:
-                // Stop the shake, then deactivate all crystals > current level
+            default:
+                // For LevelUp and LevelDown, ensure any grace shake is killed
                 KillGraceTween();
-                foreach (var kv in levelCrystalMap)
-                    if (kv.Key > level)
-                        kv.Value.SetActive(false);
                 break;
         }
     }
@@ -100,16 +110,10 @@ public class S_SkillHUDFeedBack : MonoBehaviour
         if (!levelCrystalMap.TryGetValue(level, out var crystal) || crystal == null)
             return;
 
-        graceLevel = level;
-        // Shake scale indefinitely, restarting each loop to original scale
+        var orig = originalScales[level];
         graceTween = crystal.transform
-            .DOShakeScale(
-                duration:   0.5f,
-                strength:   new Vector3(0.2f, 0.2f, 0.2f),
-                vibrato:    10,
-                randomness: 90
-            )
-            .SetLoops(-1, LoopType.Restart)
+            .DOPunchScale(orig * 0.2f, 0.5f, vibrato: 10, elasticity: 0.3f)
+            .SetLoops(-1, LoopType.Yoyo)
             .SetAutoKill(false);
     }
 
@@ -121,8 +125,8 @@ public class S_SkillHUDFeedBack : MonoBehaviour
         if (graceTween != null)
         {
             graceTween.Kill();
-            if (graceLevel > 0 
-                && levelCrystalMap.TryGetValue(graceLevel, out var oldCrystal) 
+            if (graceLevel > 0
+                && levelCrystalMap.TryGetValue(graceLevel, out var oldCrystal)
                 && originalScales.TryGetValue(graceLevel, out var origScale))
             {
                 oldCrystal.transform.localScale = origScale;
@@ -133,7 +137,7 @@ public class S_SkillHUDFeedBack : MonoBehaviour
     }
 
     /// <summary>
-    /// Optional: simple scale-up then scale-down effect when player jumps.
+    /// Simple scale-up then scale-down effect when player jumps.
     /// </summary>
     private void HandleJumpStateEvent(Enum state, int level)
     {
@@ -142,7 +146,6 @@ public class S_SkillHUDFeedBack : MonoBehaviour
             && levelCrystalMap.TryGetValue(1, out var crystal)
             && originalScales.TryGetValue(1, out var origScale))
         {
-            // Scale up to 120% then back to original
             crystal.transform
                 .DOScale(origScale * 1.2f, 0.2f)
                 .SetLoops(2, LoopType.Yoyo);
@@ -150,24 +153,39 @@ public class S_SkillHUDFeedBack : MonoBehaviour
     }
 
     /// <summary>
-    /// Optional: simple scale-up then scale-down effect when player starts sprinting.
+    /// Scale-up then scale-down effect when player starts/stops sprinting.
     /// </summary>
     private void HandleSprintStateEvent(Enum state, int level)
     {
         var ss = (PlayerStates.SprintState)state;
-        if (ss == PlayerStates.SprintState.StartSprinting 
-            && levelCrystalMap.TryGetValue(2, out var crystal)
-            && originalScales.TryGetValue(2, out var origScale))
+        if (!levelCrystalMap.TryGetValue(2, out var crystal) 
+            || !originalScales.TryGetValue(2, out var origScale))
+            return;
+
+        switch (ss)
         {
-            // Scale up to 120% then back to original
-            crystal.transform
-                .DOScale(origScale * 1.2f, 0.2f)
-                .SetLoops(2, LoopType.Yoyo);
+            case PlayerStates.SprintState.StartSprinting:
+                // Begin looping scale animation until stop event
+                sprintUsageTween = crystal.transform
+                    .DOScale(origScale * 1.2f, 0.3f)
+                    .SetLoops(-1, LoopType.Yoyo)
+                    .SetAutoKill(false);
+                break;
+
+            case PlayerStates.SprintState.StopSprinting:
+                // Stop looping animation and restore scale
+                if (sprintUsageTween != null)
+                {
+                    sprintUsageTween.Kill();
+                    crystal.transform.localScale = origScale;
+                    sprintUsageTween = null;
+                }
+                break;
         }
     }
 
     /// <summary>
-    /// Optional: simple scale-up then scale-down effect when player starts ground pound.
+    /// Simple scale-up then scale-down effect when player starts ground pound.
     /// </summary>
     private void HandleGroundPoundStateEvent(Enum state, int level)
     {
@@ -176,7 +194,6 @@ public class S_SkillHUDFeedBack : MonoBehaviour
             && levelCrystalMap.TryGetValue(3, out var crystal)
             && originalScales.TryGetValue(3, out var origScale))
         {
-            // Scale up to 120% then back to original
             crystal.transform
                 .DOScale(origScale * 1.2f, 0.2f)
                 .SetLoops(2, LoopType.Yoyo);

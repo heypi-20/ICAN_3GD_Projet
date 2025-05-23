@@ -1,6 +1,5 @@
 using UnityEngine;
 
-[ExecuteAlways]
 public class RuneDisplay : MonoBehaviour
 {
     public enum SkillType { Sprint, GroundPound, Jump }
@@ -21,8 +20,12 @@ public class RuneDisplay : MonoBehaviour
     public GameObject compGroundPound;
     public GameObject compJump;
 
-    private void Update()
+    /// <summary>
+    /// Définit l'état du rune et met à jour visuellement immédiatement.
+    /// </summary>
+    public void SetState(SkillState newState)
     {
+        etat = newState;
         ToggleEtat();
         ToggleCompetence();
     }
@@ -52,4 +55,3 @@ public class RuneDisplay : MonoBehaviour
         if (compJump)         compJump.SetActive(competence == SkillType.Jump);
     }
 }
-
