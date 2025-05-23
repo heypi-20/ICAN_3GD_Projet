@@ -20,8 +20,7 @@ public class S_SettingsMenuBehavior : MonoBehaviour
     [Header("Panel Reference")]    
     public GameObject settingsPanel;             // Root GameObject for the settings menu
 
-    [Header("Cinemachine Camera")]    
-    public CinemachineVirtualCamera cinemachineCamera;  // Reference to the virtual camera
+    private CinemachineVirtualCamera cinemachineCamera;  // Reference to the virtual camera
 
     private Resolution[] availableResolutions;   // All supported screen resolutions
     private S_HUDPlayerState infotext;           // Reference to a HUD element to toggle
@@ -52,7 +51,10 @@ public class S_SettingsMenuBehavior : MonoBehaviour
     void OnEnable()
     {
         // Cache references when the menu opens
-        infotext = FindObjectOfType<S_HUDPlayerState>();
+        var gameSettings = FindObjectOfType<S_GameSettingsApplier>();
+        infotext = gameSettings.hud;
+        Debug.Log("FindInfotext: " + infotext);
+        // cant find it beacause obj deactive
         if (cinemachineCamera == null)
             cinemachineCamera = FindObjectOfType<CinemachineVirtualCamera>();
 

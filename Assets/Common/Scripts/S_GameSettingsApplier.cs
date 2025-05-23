@@ -3,6 +3,7 @@ using Cinemachine;
 
 public class S_GameSettingsApplier : MonoBehaviour
 {
+    public S_HUDPlayerState hud;
     void Start()
     {
         ApplyVolume();
@@ -43,7 +44,6 @@ public class S_GameSettingsApplier : MonoBehaviour
     private void ApplyToggle()
     {
         bool enabledObj = PlayerPrefs.GetInt("SpecialObjectEnabled", 1) == 1;
-        var hud = FindObjectOfType<S_HUDPlayerState>();
         if (hud != null)
             hud.gameObject.SetActive(enabledObj);
     }
