@@ -1,11 +1,8 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Cinemachine;
 using UnityEngine;
 using FMODUnity;
 using FMOD.Studio;
-using Unity.VisualScripting;
 using STOP_MODE = FMOD.Studio.STOP_MODE;
 
 public class SoundManager : MonoBehaviour
@@ -374,5 +371,9 @@ public class SoundManager : MonoBehaviour
         S_PlayerStateObserver.Instance.OnGroundPoundStateEvent += PillonageState; 
         Instance_Music_Lvl1 = RuntimeManager.CreateInstance(Music_Lvl1); 
         Instance_Music_Lvl1.start();
+    }
+    private void OnDestroy()
+    {
+        RuntimeManager.GetBus("bus:/").stopAllEvents(STOP_MODE.ALLOWFADEOUT);
     }
 }
