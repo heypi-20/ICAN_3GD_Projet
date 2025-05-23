@@ -11,5 +11,7 @@
     Banshee,
     Banshee_lv2,
     Banshee_Boss,
-    FeedSeed
+    FeedSeed,
+    TpShooter_Boss,
+    unknown_Boss
 }

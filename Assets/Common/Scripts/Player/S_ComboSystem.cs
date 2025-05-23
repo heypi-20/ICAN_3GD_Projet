@@ -24,7 +24,7 @@ public class S_ComboSystem : MonoBehaviour
 
     // Current combo state variables.
     public bool comboActive = false;
-    public float currentComboMultiplier = 0f;
+    public float currentComboMultiplier = 1f;
     public float comboActuelTimer = 0f;
     public int comboKillCount;
     public ComboSettings currentComboSetting = null;

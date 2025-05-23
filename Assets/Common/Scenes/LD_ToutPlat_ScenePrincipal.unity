@@ -632,10 +632,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1986054435933074456, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2639689239572980598, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
@@ -644,14 +640,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pre_PlayerObjGroupe
       objectReference: {fileID: 0}
-    - target: {fileID: 4313409659978069822, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4665798941504057970, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6350587353748060149, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -683,14 +671,6 @@ PrefabInstance:
     - target: {fileID: 6608997847661161996, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7093401516704214598, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8370578666788522731, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8728408009053761971, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15098,9 +15078,39 @@ MonoBehaviour:
   - enemyType: 0
     scoreGiven: 5
     killed: 0
-  - enemyType: 5
+    totalScore: 0
+  - enemyType: 1
     scoreGiven: 10
     killed: 0
+    totalScore: 0
+  - enemyType: 2
+    scoreGiven: 20
+    killed: 0
+    totalScore: 0
+  - enemyType: 3
+    scoreGiven: 40
+    killed: 0
+    totalScore: 0
+  - enemyType: 8
+    scoreGiven: 10
+    killed: 0
+    totalScore: 0
+  - enemyType: 9
+    scoreGiven: 20
+    killed: 0
+    totalScore: 0
+  - enemyType: 5
+    scoreGiven: 100
+    killed: 0
+    totalScore: 0
+  - enemyType: 6
+    scoreGiven: 150
+    killed: 0
+    totalScore: 0
+  - enemyType: 7
+    scoreGiven: 500
+    killed: 0
+    totalScore: 0
   score: 0
 --- !u!1 &2110859006
 GameObject:
@@ -19888,6 +19898,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5540581742623340658, guid: 018ebfe0a4fa03c448eb128b5db38204, type: 3}
+      propertyPath: scoreManager
+      value: 
+      objectReference: {fileID: 2108586720}
+    - target: {fileID: 5540581742623340658, guid: 018ebfe0a4fa03c448eb128b5db38204, type: 3}
+      propertyPath: mainObjective
+      value: 
+      objectReference: {fileID: 9151967442530836376}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -20308,8 +20326,8 @@ MonoBehaviour:
   objectiveParams:
     eventTrigger: KillEnemy
     eventText: '{0}'
-    currentValue: 1000
-    maxValue: 1000
+    currentValue: 100
+    maxValue: 100
   objectiveDisplay: {fileID: 1393717936}
   dotweenPlayer: {fileID: 1436913619}
   gameChrono: 0
