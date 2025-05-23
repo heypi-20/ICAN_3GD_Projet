@@ -52,8 +52,11 @@ public class S_SettingsMenuBehavior : MonoBehaviour
     {
         // Cache references when the menu opens
         var gameSettings = FindObjectOfType<S_GameSettingsApplier>();
-        infotext = gameSettings.hud;
-        Debug.Log("FindInfotext: " + infotext);
+        if (gameSettings != null)
+        {
+            infotext = gameSettings.hud;
+        }
+        
         // cant find it beacause obj deactive
         if (cinemachineCamera == null)
             cinemachineCamera = FindObjectOfType<CinemachineVirtualCamera>();
