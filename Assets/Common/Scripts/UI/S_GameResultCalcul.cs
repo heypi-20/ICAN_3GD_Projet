@@ -1,8 +1,6 @@
-using System;
 using UnityEngine;
 using TMPro;
 using System.Linq;
-using UnityEngine.Serialization;
 
 public class S_GameResultCalcul : MonoBehaviour
 {
@@ -45,7 +43,9 @@ public class S_GameResultCalcul : MonoBehaviour
     {
         // 1. Pause the game
         Time.timeScale = 0f;
-
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        
         // 2. Activate the settlement UI
         settlementPanel.SetActive(true);
 
