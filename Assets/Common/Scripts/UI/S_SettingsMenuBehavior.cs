@@ -3,16 +3,21 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using Cinemachine;
+using FMOD.Studio;
+using FMODUnity;
 
 /// <summary>
-/// Manages the Settings menu UI, including volume, mouse sensitivity,
-/// screen resolution, and toggling a special UI element. Settings are loaded
+/// Manages the Settings menu UI, including volume, music volume,
+/// SFX volume, mouse sensitivity, screen resolution,
+/// and toggling a special UI element. Settings are loaded
 /// when the menu is opened and saved when it is closed.
 /// </summary>
 public class S_SettingsMenuBehavior : MonoBehaviour
 {
     [Header("UI References")]    
     public Slider volumeSlider;                  // Slider for global volume
+    public Slider musicVolumeSlider;             // Slider for music volume
+    public Slider sfxVolumeSlider;               // Slider for SFX volume
     public Slider mouseSensitivitySlider;        // Slider for camera sensitivity
     public TMP_Dropdown resolutionDropdown;      // TextMeshPro dropdown for resolution
     public Toggle specialObjectToggle;           // Toggle for enabling/disabling a special object
@@ -27,6 +32,8 @@ public class S_SettingsMenuBehavior : MonoBehaviour
 
     // Keys for PlayerPrefs storage
     private const string VolumeKey = "GlobalVolume";
+    private const string MusicVolumeKey = "MusicVolume";
+    private const string SFXVolumeKey = "SFXVolume";
     private const string SensitivityKey = "MouseSensitivity";
     private const string ResolutionKey = "ResolutionIndex";
     private const string ObjectToggleKey = "SpecialObjectEnabled";
@@ -43,6 +50,8 @@ public class S_SettingsMenuBehavior : MonoBehaviour
 
         // Register UI event callbacks
         volumeSlider.onValueChanged.AddListener(OnVolumeChanged);
+        musicVolumeSlider.onValueChanged.AddListener(OnMusicVolumeChanged);
+        sfxVolumeSlider.onValueChanged.AddListener(OnSFXVolumeChanged);
         mouseSensitivitySlider.onValueChanged.AddListener(OnSensitivityChanged);
         resolutionDropdown.onValueChanged.AddListener(OnResolutionChanged);
         specialObjectToggle.onValueChanged.AddListener(OnToggleChanged);
@@ -57,7 +66,7 @@ public class S_SettingsMenuBehavior : MonoBehaviour
             infotext = gameSettings.hud;
         }
         
-        // cant find it beacause obj deactive
+        // Can't find it because object might be inactive
         if (cinemachineCamera == null)
             cinemachineCamera = FindObjectOfType<CinemachineVirtualCamera>();
 
@@ -98,10 +107,20 @@ public class S_SettingsMenuBehavior : MonoBehaviour
     /// </summary>
     private void LoadSettings()
     {
-        // Volume
+        // Global volume
         float volume = PlayerPrefs.GetFloat(VolumeKey, 1f);
         volumeSlider.value = volume;
-        AudioListener.volume = volume;
+        RuntimeManager.GetBus("bus:/").setVolume(volume);
+
+        // Music volume (FMOD bus)
+        float musicVol = PlayerPrefs.GetFloat(MusicVolumeKey, 1f);
+        musicVolumeSlider.value = musicVol;
+        RuntimeManager.GetBus("bus:/Music").setVolume(musicVol);
+
+        // SFX volume (FMOD bus)
+        float sfxVol = PlayerPrefs.GetFloat(SFXVolumeKey, 1f);
+        sfxVolumeSlider.value = sfxVol;
+        RuntimeManager.GetBus("bus:/SoundEffect").setVolume(sfxVol);
 
         // Mouse sensitivity (Cinemachine POV)
         float sens = PlayerPrefs.GetFloat(SensitivityKey, 1f);
@@ -127,18 +146,39 @@ public class S_SettingsMenuBehavior : MonoBehaviour
     private void SaveSettings()
     {
         PlayerPrefs.SetFloat(VolumeKey, volumeSlider.value);
+        PlayerPrefs.SetFloat(MusicVolumeKey, musicVolumeSlider.value);
+        PlayerPrefs.SetFloat(SFXVolumeKey, sfxVolumeSlider.value);
         PlayerPrefs.SetFloat(SensitivityKey, mouseSensitivitySlider.value);
         PlayerPrefs.SetInt(ResolutionKey, resolutionDropdown.value);
         PlayerPrefs.SetInt(ObjectToggleKey, specialObjectToggle.isOn ? 1 : 0);
     }
 
     /// <summary>
-    /// Handler for volume slider changes. Updates audio volume and PlayerPrefs.
+    /// Handler for global volume slider changes. Updates audio volume and PlayerPrefs.
     /// </summary>
     private void OnVolumeChanged(float val)
     {
-        AudioListener.volume = val;
+        RuntimeManager.GetBus("bus:/").setVolume(val);
         PlayerPrefs.SetFloat(VolumeKey, val);
+
+    }
+
+    /// <summary>
+    /// Handler for music volume slider changes. Updates FMOD music bus and PlayerPrefs.
+    /// </summary>
+    private void OnMusicVolumeChanged(float val)
+    {
+        PlayerPrefs.SetFloat(MusicVolumeKey, val);
+        RuntimeManager.GetBus("bus:/Music").setVolume(val);
+    }
+
+    /// <summary>
+    /// Handler for SFX volume slider changes. Updates FMOD SFX bus and PlayerPrefs.
+    /// </summary>
+    private void OnSFXVolumeChanged(float val)
+    {
+        PlayerPrefs.SetFloat(SFXVolumeKey, val);
+        RuntimeManager.GetBus("bus:/SoundEffect").setVolume(val);
     }
 
     /// <summary>

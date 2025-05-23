@@ -1,20 +1,36 @@
 using UnityEngine;
 using Cinemachine;
+using FMODUnity;
 
 public class S_GameSettingsApplier : MonoBehaviour
 {
     public S_HUDPlayerState hud;
+
     void Start()
     {
-        ApplyVolume();
+        ApplyGlobalVolume();
+        ApplyMusicVolume();
+        ApplySFXVolume();
         ApplySensitivity();
         ApplyResolution();
         ApplyToggle();
     }
 
-    private void ApplyVolume()
+    private void ApplyGlobalVolume()
     {
-        AudioListener.volume = PlayerPrefs.GetFloat("GlobalVolume", 1f);
+        RuntimeManager.GetBus("bus:/").setVolume(PlayerPrefs.GetFloat("GlobalVolume", 1f));
+    }
+
+    private void ApplyMusicVolume()
+    {
+        float musicVol = PlayerPrefs.GetFloat("MusicVolume", 1f);
+        RuntimeManager.GetBus("bus:/Music").setVolume(musicVol);
+    }
+
+    private void ApplySFXVolume()
+    {
+        float sfxVol = PlayerPrefs.GetFloat("SFXVolume", 1f);
+        RuntimeManager.GetBus("bus:/SoundEffect").setVolume(sfxVol);
     }
 
     private void ApplySensitivity()
