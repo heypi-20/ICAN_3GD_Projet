@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using TMPro;
 using System.Linq;
@@ -17,9 +18,8 @@ public class S_GameResultCalcul : MonoBehaviour
     // Display the final total score with bonus applied
     public TMP_Text finalScoreText;
 
-    [Header("Data Sources")]
-    public S_ScoreManager scoreManager;
-    public S_MainObjective mainObjective;
+    private S_ScoreManager scoreManager;
+    private S_MainObjective mainObjective;
 
     [Header("Time Bonus Mapping (in minutes)")]
     [Tooltip("Time range in minutes (min, max)")]
@@ -27,6 +27,12 @@ public class S_GameResultCalcul : MonoBehaviour
     [Tooltip("Bonus percent range corresponding to time range")]
     public Vector2 bonusPercentRange = new Vector2(5, 25);
 
+
+    private void Start()
+    {
+        scoreManager=FindObjectOfType<S_ScoreManager>();
+        mainObjective = FindObjectOfType<S_MainObjective>();
+    }
 
     private void Update()
     {
