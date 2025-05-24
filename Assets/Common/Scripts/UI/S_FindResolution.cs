@@ -14,26 +14,19 @@ public class S_FindResolution : MonoBehaviour
         if (!PlayerPrefs.HasKey("ResolutionIndex"))
         {
             Resolution current = Screen.currentResolution;
-            var resolutions = Screen.resolutions;
-            int closestIndex = 0;
-            int minDiff = int.MaxValue;
 
-            for (int i = 0; i < resolutions.Length; i++)
+            Screen.SetResolution(current.width, current.height, true);
+
+            Resolution[] all = Screen.resolutions;
+            for (int i = 0; i < all.Length; i++)
             {
-                int diff = Mathf.Abs(resolutions[i].width - current.width) +
-                           Mathf.Abs(resolutions[i].height - current.height);
-                if (diff < minDiff)
+                if (all[i].width == current.width && all[i].height == current.height)
                 {
-                    minDiff = diff;
-                    closestIndex = i;
+                    PlayerPrefs.SetInt("ResolutionIndex", i);
+                    PlayerPrefs.Save();
+                    break;
                 }
             }
-
-            // 应用
-            var chosen = resolutions[closestIndex];
-            Screen.SetResolution(chosen.width, chosen.height, true);
-            PlayerPrefs.SetInt("ResolutionIndex", closestIndex);
-            PlayerPrefs.Save();
         }
     }
 
