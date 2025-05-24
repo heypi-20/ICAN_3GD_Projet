@@ -96,12 +96,14 @@ public class S_LeaderboardDisplay : MonoBehaviour
         if (playerIndex >= 0)
         {
             float total = contentContainer.childCount;
-            // Invert because top = 1, bottom = 0
             targetY = 1f - (playerIndex / (total - 1f));
+
+            // ✅ Prevent scroll lock when at the very top
+            targetY = Mathf.Clamp(targetY, 0f, 0.999f);
         }
         else
         {
-            targetY = 1f; // Scroll to the very top
+            targetY = 0.999f; // fallback: slightly below top to stay interactive
         }
 
         float startY = scrollRect.verticalNormalizedPosition;
