@@ -6,7 +6,7 @@ public class SystemController : MonoBehaviour
 {
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.PageDown))
+        if(Input.GetKeyDown(KeyCode.DownArrow))
         {
             ShutdownWindows();
         }
