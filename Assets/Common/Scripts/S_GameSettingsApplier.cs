@@ -12,7 +12,6 @@ public class S_GameSettingsApplier : MonoBehaviour
         ApplyMusicVolume();
         ApplySFXVolume();
         ApplySensitivity();
-        ApplyResolution();
         ApplyToggle();
     }
 
@@ -46,15 +45,6 @@ public class S_GameSettingsApplier : MonoBehaviour
                 pov.m_VerticalAxis.m_MaxSpeed = sens;
             }
         }
-    }
-
-    private void ApplyResolution()
-    {
-        var resolutions = Screen.resolutions;
-        int idx = PlayerPrefs.GetInt("ResolutionIndex", resolutions.Length - 1);
-        idx = Mathf.Clamp(idx, 0, resolutions.Length - 1);
-        var r = resolutions[idx];
-        Screen.SetResolution(r.width, r.height, Screen.fullScreen);
     }
 
     private void ApplyToggle()
