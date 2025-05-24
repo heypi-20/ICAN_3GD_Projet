@@ -17,12 +17,10 @@ public class S_LeaderboardDisplay : MonoBehaviour
     public ScrollRect scrollRect;        // ScrollRect component that controls scrolling
 
     [Header("Settings")]
-    public float scrollDuration = 1f;    // Time (seconds) for the smooth-scroll animation
     public Color highlightColor = Color.yellow; // Text colour used to highlight the local player
 
     private string localPlayerName;
 
-    // ─────────────────────────────────────────────────────────────
     void Start()
     {
         // Load player name from PlayerPrefs (empty string if not set)
@@ -79,45 +77,21 @@ public class S_LeaderboardDisplay : MonoBehaviour
         }
 
         // 3. Smooth-scroll to the local player row (or to the top if not found)
-        StartCoroutine(ScrollToPlayer(playerIndex));
-    }
-
-    /// <summary>
-    /// Smoothly scrolls the ScrollRect so that the requested row is visible.
-    /// Uses verticalNormalizedPosition (1 = top, 0 = bottom).
-    /// </summary>
-    IEnumerator ScrollToPlayer(int playerIndex)
-    {
-        // Wait one frame so the layout system can compute row heights
-        yield return new WaitForEndOfFrame();
+        var contentRect = contentContainer.GetComponent<RectTransform>();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(contentRect);
+        Canvas.ForceUpdateCanvases();
 
         float targetY;
-
         if (playerIndex >= 0)
         {
             float total = contentContainer.childCount;
             targetY = 1f - (playerIndex / (total - 1f));
-
-            // ✅ Prevent scroll lock when at the very top
-            targetY = Mathf.Clamp(targetY, 0f, 0.999f);
+            targetY = Mathf.Clamp(targetY, 0f, 1f);
         }
         else
         {
-            targetY = 0.999f; // fallback: slightly below top to stay interactive
+            targetY = 1f;
         }
-
-        float startY = scrollRect.verticalNormalizedPosition;
-        float elapsed = 0f;
-
-        while (elapsed < scrollDuration)
-        {
-            elapsed += Time.deltaTime;
-            float t = elapsed / scrollDuration;
-            scrollRect.verticalNormalizedPosition = Mathf.Lerp(startY, targetY, t);
-            yield return null;
-        }
-
-        // Ensure exact final position
         scrollRect.verticalNormalizedPosition = targetY;
     }
 }
