@@ -4,17 +4,17 @@ using TMPro;
 public class S_CreateNewPlayerName : MonoBehaviour
 {
     public TMP_InputField nameInputField;
-    private const string playerNameKey = "PlayerName";  // 本地存储的 key
+    private const string playerNameKey = "PlayerName";  // Key used for local storage
 
     void Start()
     {
-        // 如果之前保存过名字，就自动填入
+        // If a name has been saved before, automatically populate the input field
         if (PlayerPrefs.HasKey(playerNameKey))
         {
             nameInputField.text = PlayerPrefs.GetString(playerNameKey);
         }
 
-        // 添加事件监听：当玩家结束输入时保存（你也可以改为按钮点击时保存）
+        // Add a listener: save the name when the player finishes editing
         nameInputField.onEndEdit.AddListener(SavePlayerName);
     }
 
@@ -24,8 +24,8 @@ public class S_CreateNewPlayerName : MonoBehaviour
         if (!string.IsNullOrEmpty(newName))
         {
             PlayerPrefs.SetString(playerNameKey, newName);
-            PlayerPrefs.Save();  // 虽然一般自动保存，但加上更稳妥
-            Debug.Log($"玩家名字已保存: {newName}");
+            PlayerPrefs.Save();  // Manually force save to ensure persistence
+            Debug.Log($"Player name saved: {newName}");
         }
     }
 }
