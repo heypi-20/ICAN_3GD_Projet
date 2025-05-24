@@ -8,8 +8,11 @@ public class S_GameResultCalcul : MonoBehaviour
     [Header("UI References")]
     public GameObject settlementPanel;
     
-    // Combine kills and score into one Text per entry
-    public TMP_Text[] entryTexts;        // length should match number of ScoreData entries
+    // Separate lists for kills and score texts
+    [Tooltip("Text fields for displaying kill counts")]
+    public TMP_Text[] killsTexts;    // should match number of ScoreData entries
+    [Tooltip("Text fields for displaying scores")]
+    public TMP_Text[] scoreTexts;    // should match number of ScoreData entries
 
     // Combine time label and bonus into a single Text
     public TMP_Text timeBonusText;     
@@ -27,10 +30,12 @@ public class S_GameResultCalcul : MonoBehaviour
     [Tooltip("Bonus percent range corresponding to time range")]
     public Vector2 bonusPercentRange = new Vector2(5, 25);
 
-
+    public float timeChrono;
+    public int finalScore;
+    
     private void Start()
     {
-        scoreManager=FindObjectOfType<S_ScoreManager>();
+        scoreManager = FindObjectOfType<S_ScoreManager>();
         mainObjective = FindObjectOfType<S_MainObjective>();
     }
 
@@ -55,9 +60,10 @@ public class S_GameResultCalcul : MonoBehaviour
         // 2. Activate the settlement UI
         settlementPanel.SetActive(true);
 
-        // 3. Populate each entry with 2 lines: Kills and Score
+        // 3. Populate each entry: kills only number, score only number
         var dataList = scoreManager.scoreDatas;
-        int count = Mathf.Min(dataList.Count, entryTexts.Length);
+        int count = Mathf.Min(dataList.Count, killsTexts.Length);
+        count = Mathf.Min(count, scoreTexts.Length);
 
         // Calculate bonus percentage based on play time
         float totalSeconds = mainObjective.gameChrono;
@@ -73,14 +79,12 @@ public class S_GameResultCalcul : MonoBehaviour
         {
             var data = dataList[i];
             
-            // Kills line: "Kills {count}"
-            string killsLine = $"Kills :  {data.killed}";
+            // Display kills count only
+            killsTexts[i].text = data.killed.ToString();
 
-            // Score line: "Score {adjustedScore}"
+            // Display raw score only, rounded
             int adjustedScore = Mathf.RoundToInt(data.totalScore);
-            string scoreLine = $"Score :  {adjustedScore}";
-
-            entryTexts[i].text = $"{killsLine}\n{scoreLine}";
+            scoreTexts[i].text = adjustedScore.ToString();
         }
 
         // 4. Build time summary: "Time {MM:SS} +XX%"
@@ -89,12 +93,14 @@ public class S_GameResultCalcul : MonoBehaviour
         string timeText = $"{minutes:D2}:{seconds:D2}";
         string bonusText = $"x {bonusPercent:F0}%";
         timeResultText.text = $"Time: {timeText}";
-        timeBonusText.text = $"{bonusText}";
+        timeBonusText.text = bonusText;
 
         // 5. Calculate and display final total score
         float sumOriginal = dataList.Sum(d => d.totalScore);
         int sumAdjusted = Mathf.RoundToInt(sumOriginal * bonusMultiplier);
         finalScoreText.text = sumAdjusted.ToString();
+        finalScore=sumAdjusted;
+        timeChrono = totalSeconds;
     }
 
     /// <summary>
