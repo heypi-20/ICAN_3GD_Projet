@@ -37,7 +37,6 @@ public class S_DreamloManager : MonoBehaviour
         string url = $"{baseUrl}{publicCode}/pipe/0/{topN}";
         using var req = UnityWebRequest.Get(url);
 
-        Debug.Log($"[Dreamlo] Request: {url}");
         yield return req.SendWebRequest();
 
         if (req.result == UnityWebRequest.Result.Success)

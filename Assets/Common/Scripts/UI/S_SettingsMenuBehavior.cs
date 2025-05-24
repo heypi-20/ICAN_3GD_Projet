@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using System.Linq;
 using Cinemachine;
 using FMOD.Studio;
 using FMODUnity;
@@ -41,10 +42,18 @@ public class S_SettingsMenuBehavior : MonoBehaviour
     void Awake()
     {
         // Populate the resolution dropdown with all supported resolutions
-        availableResolutions = Screen.resolutions;
+        var filteredResolutions = Screen.resolutions
+            .Select(res => new { res.width, res.height })
+            .Distinct()
+            .Select(res => new Resolution { width = res.width, height = res.height })
+            .ToArray();
+
+        availableResolutions = filteredResolutions;
+
         List<string> options = new List<string>();
         foreach (var res in availableResolutions)
             options.Add(res.width + " x " + res.height);
+
         resolutionDropdown.ClearOptions();
         resolutionDropdown.AddOptions(options);
 
