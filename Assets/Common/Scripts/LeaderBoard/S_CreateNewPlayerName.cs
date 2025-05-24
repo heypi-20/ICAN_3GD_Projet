@@ -25,7 +25,6 @@ public class S_CreateNewPlayerName : MonoBehaviour
         {
             PlayerPrefs.SetString(playerNameKey, newName);
             PlayerPrefs.Save();  // Manually force save to ensure persistence
-            Debug.Log($"Player name saved: {newName}");
         }
     }
 }
