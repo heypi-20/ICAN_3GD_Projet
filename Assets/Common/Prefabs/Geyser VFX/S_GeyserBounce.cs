@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class S_GeyserBounce : MonoBehaviour
 {
-    [Tooltip("Vitesse vers le haut pendant le bounce (unités/seconde)")]
+    [Tooltip("Vitesse vers le haut pendant le bounce")]
     public float bounceForce = 10f;
 
-    [Tooltip("Durée du bounce (secondes)")]
+    [Tooltip("Durï¿½e du bounce (secondes)")]
     public float bounceDuration = 0.3f;
 
     public bool GoUp = false;
     public GameObject Bumper;
-    public float targetY = 2f;              // Position Y cible modifiable dans l’inspecteur
+    public float targetY = 2f;              // Position Y cible modifiable dans lï¿½inspecteur
     public float lerpSpeed = 5f;
 
     private void Start()
@@ -37,7 +37,7 @@ public class S_GeyserBounce : MonoBehaviour
         CharacterController controller = other.GetComponent<CharacterController>();
         if (controller != null)
         {
-            // Démarre le bounce via coroutine
+            // Dï¿½marre le bounce via coroutine
             StartCoroutine(ApplyBounce(controller));
         }
     }
