@@ -1,4 +1,4 @@
-Shader "Custom/PainterlyScrollingNoiseColor_NetSmooth"
+Shader"Custom/MeatShader"
 {
     Properties
     {
