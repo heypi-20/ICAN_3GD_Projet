@@ -29,7 +29,7 @@ public class S_GroundPound_Module : MonoBehaviour
     [Header("Shared Skill Settings")]
     public float cooldown = 5f;
     public float bounceMultiplier = 0.5f;
-    public float bounceDuration = 10f;
+    public float bounceCountStep = 10f;
     public float bounceLimite;
     public float waveExpansionSpeed = 10f;
     public float knockbackAngle = 45f;
@@ -172,7 +172,7 @@ public class S_GroundPound_Module : MonoBehaviour
         float moved = 0f;
         while (moved < height)
         {
-            float step = bounceDuration * Time.deltaTime;
+            float step = bounceCountStep * Time.deltaTime;
             moved += step;
             yield return null;
         }
