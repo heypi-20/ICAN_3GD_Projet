@@ -48,6 +48,7 @@ public class S_GeyserBounce : MonoBehaviour
 
         while (elapsed < bounceDuration)
         {
+            Debug.Log("bounce");
             controller.Move(Vector3.up * bounceForce * Time.deltaTime);
             elapsed += Time.deltaTime;
             yield return null;
