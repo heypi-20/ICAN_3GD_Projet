@@ -41,7 +41,7 @@ public class S_GameResultCalcul : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha9))
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             ShowResultScreen();
         }

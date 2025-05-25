@@ -131,6 +131,7 @@ public class S_PlayerDamageReceiver : MonoBehaviour
     private void HandleDeath()
     {
         // Death logic (animations, UI, respawn) goes here
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        FindObjectOfType<S_GameResultCalcul>().ShowResultScreen();
+
     }
 }
