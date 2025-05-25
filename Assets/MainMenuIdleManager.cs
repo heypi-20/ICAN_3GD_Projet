@@ -23,6 +23,7 @@ public class MainMenuIdleManager : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 1f;
         if (titleTransform != null)
             originalTitlePosition = titleTransform.anchoredPosition;
 
