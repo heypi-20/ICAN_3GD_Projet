@@ -8,8 +8,8 @@ public class S_TutoCheck1 : MonoBehaviour
 
     public GameObject portal;
     
-    private int icount;
-    private int jcount;
+    private int iCount;
+    private int jCount;
     private bool movementComplete;
     private bool jumpComplete;
 
@@ -23,7 +23,6 @@ public class S_TutoCheck1 : MonoBehaviour
 
     private void OnDisable()
     {
-        FindObjectOfType<S_CustomCharacterController>().OnMoveStateChange += CheckForMovement;
         FindObjectOfType<S_SuperJump_Module>().OnJumpStateChange += CheckForJump;
     }
 
@@ -42,24 +41,20 @@ public class S_TutoCheck1 : MonoBehaviour
 
     private void CheckForMovement(Enum playerState, Vector2 direction)
     {
-        if (playerState.Equals(PlayerStates.MoveState.IsMoving)) {
-            icount++;
-        }
+        if (playerState.Equals(PlayerStates.MoveState.IsMoving))
+            iCount++;
 
-        if (icount == inputCount) {
+        if (iCount == inputCount)
             movementComplete = true;
-        }
     }
 
     private void CheckForJump(Enum playerState, int level)
     {
-        if (playerState.Equals(PlayerStates.JumpState.Jump)) {
-            jcount++;
-        }
+        if (playerState.Equals(PlayerStates.JumpState.Jump))
+            jCount++;
 
-        if (jcount == jumpCount) {
+        if (jCount == jumpCount)
             jumpComplete = true;
-        }
     }
 }
 
