@@ -51,7 +51,8 @@ public class S_PlayerProjectileSpawner : MonoBehaviour
     private void OnShoot(Enum state, int level)
     {
         bool isShooting = state.Equals(PlayerStates.ShootState.IsShooting);
-
+        SetAllActivationInstancesActive(false);
+        if (!isShooting) return;
         switch (level)
         {
             case 1:
@@ -74,6 +75,14 @@ public class S_PlayerProjectileSpawner : MonoBehaviour
                 Debug.LogWarning($"Invalid projectile level: {level}");
                 break;
         }
+    }
+    
+    private void SetAllActivationInstancesActive(bool active)
+    {
+        if (activationInstanceLv1 != null) activationInstanceLv1.SetActive(active);
+        if (activationInstanceLv2 != null) activationInstanceLv2.SetActive(active);
+        if (activationInstanceLv3 != null) activationInstanceLv3.SetActive(active);
+        if (activationInstanceLv4 != null) activationInstanceLv4.SetActive(active);
     }
 
     /* ──────────── LEVEL HANDLER ──────────── */
