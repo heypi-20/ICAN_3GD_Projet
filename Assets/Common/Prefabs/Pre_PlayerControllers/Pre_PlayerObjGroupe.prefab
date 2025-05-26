@@ -7987,6 +7987,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7121883038825396396}
   - component: {fileID: 4971031627466220313}
+  - component: {fileID: 537605952385676786}
   - component: {fileID: 2326380425542397526}
   - component: {fileID: 9046166951153555370}
   - component: {fileID: 3564773257099203780}
@@ -7997,7 +7998,6 @@ GameObject:
   - component: {fileID: 930943365604710939}
   - component: {fileID: 8670675854258119381}
   - component: {fileID: 6386192446695717372}
-  - component: {fileID: 537605952385676786}
   - component: {fileID: 3605016965288028042}
   - component: {fileID: 6915564590874781277}
   - component: {fileID: 5836471903733970246}
@@ -8054,6 +8054,29 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.01
   m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!136 &537605952385676786
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6376292503174423671}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 512
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 511
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.6
+  m_Height: 2.1
+  m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2326380425542397526
 MonoBehaviour:
@@ -8566,29 +8589,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   graceDuration: 2
---- !u!136 &537605952385676786
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6376292503174423671}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 512
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 511
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.6
-  m_Height: 2.1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3605016965288028042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11505,6 +11505,10 @@ PrefabInstance:
     - target: {fileID: 4497259054963089055, guid: e5f8fac766ef9584d81da01a9a32b56a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8660049828566715726, guid: e5f8fac766ef9584d81da01a9a32b56a, type: 3}
+      propertyPath: maxSpawnInterval
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
