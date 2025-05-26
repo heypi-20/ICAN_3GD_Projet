@@ -14,12 +14,20 @@ public class S_TeleportToTarget : MonoBehaviour
         }
 
         p = FindObjectOfType<S_CustomCharacterController>().transform;
+        if (p == null) {
+            Debug.LogWarning("Player transform not found.");
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (target != null && other.gameObject.CompareTag("Player")) {
-            p.position = target.transform.position;
+        if (target != null && other.CompareTag("Player")) {
+            CharacterController cc = other.GetComponent<CharacterController>();
+            if (cc != null) {
+                cc.enabled = false;
+                p.position = target.transform.position;
+                cc.enabled = true;
+            }
         }
     }
 }
