@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;  // DOTween
 
 public class S_EnergyHUDSys : MonoBehaviour
 {
@@ -27,6 +28,16 @@ public class S_EnergyHUDSys : MonoBehaviour
     [Tooltip("How fast the shader colors blend when level changes")]
     public float colorLerpSpeed = 5f;
 
+    [Header("Additional Level Image")]
+    [Tooltip("Optional UI Image to tint per level and animate on energy increase")]
+    public Image levelImage;
+    [Tooltip("Must match number of levels in energyStorage.energyLevels")]
+    public Color[] levelImageColors;
+    [Tooltip("Scaling punch strength when energy increases")]
+    public Vector3 punchScale = Vector3.one * 0.1f;
+    [Tooltip("Duration of the punch animation")]
+    public float punchDuration = 0.3f;
+
     [Header("Noise Speed Mapping")]
     [Tooltip("If diff < x, treat as x; if > y, treat as y")]
     public Vector2 diffRange = new Vector2(-50f, 50f);
@@ -49,20 +60,32 @@ public class S_EnergyHUDSys : MonoBehaviour
     private float diffTimer;
     private float currentNoiseSpeed;
 
-    // for color lerp
+    // for shader color lerp
     private Color currentTint;
     private Color currentEmission;
     private Color currentNoiseColor;
+
+    // for levelImage color lerp
+    private Color currentImageColor;
+
+    // for detecting energy increase
+    private float lastEnergyValue;
+    private Vector3 originalImageScale;
+    private Tween punchTween;
 
     void Awake()
     {
         InitializeMaterialInstance();
         InitializeColors();
 
-        // prime sample window
-        lastEnergySample = energyStorage != null ? energyStorage.currentEnergy : 0f;
-        diffTimer = 0f;
-        // get initial noise speed from shader
+        // Record the original scale of levelImage
+        if (levelImage != null)
+            originalImageScale = levelImage.transform.localScale;
+
+        // Prime sample window & energy-increase detector
+        lastEnergySample  = energyStorage != null ? energyStorage.currentEnergy : 0f;
+        lastEnergyValue   = lastEnergySample;
+        diffTimer         = 0f;
         currentNoiseSpeed = runtimeMaterial.GetFloat(NoiseSpeedProp);
     }
 
@@ -70,22 +93,39 @@ public class S_EnergyHUDSys : MonoBehaviour
     {
         if (energyStorage == null || runtimeMaterial == null) return;
 
-        // 1) update fill progress
+        float curEnergy = energyStorage.currentEnergy;
+
+        // —— Energy Increase Detection + Smooth Punch Animation —— 
+        if (levelImage != null && curEnergy > lastEnergyValue)
+        {
+            // Kill previous punch to avoid overlap, reset scale
+            if (punchTween != null && punchTween.IsActive())
+                punchTween.Kill();
+            levelImage.transform.localScale = originalImageScale;
+
+            // Start new punch animation
+            punchTween = levelImage.transform
+                .DOPunchScale(punchScale, punchDuration, vibrato: 10, elasticity: 1f)
+                .SetAutoKill(true);
+        }
+        lastEnergyValue = curEnergy;
+
+        // —— 1) Update Fill Progress —— 
         float targetValue = ComputeTargetMappedValue();
         displayedValue = Mathf.Lerp(displayedValue, targetValue, Time.deltaTime * lerpSpeed);
         runtimeMaterial.SetFloat(ProgressProp, displayedValue);
 
-        // 2) update colors
+        // —— 2) Update Color Transition —— 
         UpdateColorTransition();
 
-        // 3) update noise speed via diff
+        // —— 3) Update Noise Speed —— 
         UpdateNoiseSpeedByDiff();
 
-        // 4) advance the sample window
+        // —— 4) Advance Sample Window —— 
         diffTimer += Time.deltaTime;
         if (diffTimer >= diffSamplePeriod)
         {
-            lastEnergySample = energyStorage.currentEnergy;
+            lastEnergySample = curEnergy;
             diffTimer -= diffSamplePeriod;
         }
     }
@@ -108,13 +148,19 @@ public class S_EnergyHUDSys : MonoBehaviour
         int idx = energyStorage != null
             ? Mathf.Clamp(energyStorage.currentLevelIndex, 0, tintColors.Length - 1)
             : 0;
+
         currentTint       = tintColors[idx];
         currentEmission   = emissionColors[idx];
         currentNoiseColor = noiseColors[idx];
-
         runtimeMaterial.SetColor(TintProp,       currentTint);
         runtimeMaterial.SetColor(EmissionProp,   currentEmission);
         runtimeMaterial.SetColor(NoiseColorProp, currentNoiseColor);
+
+        if (levelImage != null && levelImageColors != null && levelImageColors.Length > idx)
+        {
+            currentImageColor = levelImageColors[idx];
+            levelImage.color  = currentImageColor;
+        }
     }
 
     private float ComputeTargetMappedValue()
@@ -136,35 +182,34 @@ public class S_EnergyHUDSys : MonoBehaviour
     private void UpdateColorTransition()
     {
         int idx = Mathf.Clamp(energyStorage.currentLevelIndex, 0, tintColors.Length - 1);
+
         Color t = tintColors[idx],
               e = emissionColors[idx],
               n = noiseColors[idx];
         currentTint       = Color.Lerp(currentTint,       t, Time.deltaTime * colorLerpSpeed);
         currentEmission   = Color.Lerp(currentEmission,   e, Time.deltaTime * colorLerpSpeed);
         currentNoiseColor = Color.Lerp(currentNoiseColor, n, Time.deltaTime * colorLerpSpeed);
-
         runtimeMaterial.SetColor(TintProp,       currentTint);
         runtimeMaterial.SetColor(EmissionProp,   currentEmission);
         runtimeMaterial.SetColor(NoiseColorProp, currentNoiseColor);
+
+        if (levelImage != null && levelImageColors != null && levelImageColors.Length > idx)
+        {
+            Color targetImgCol = levelImageColors[idx];
+            currentImageColor  = Color.Lerp(currentImageColor, targetImgCol, Time.deltaTime * colorLerpSpeed);
+            levelImage.color   = currentImageColor;
+        }
     }
 
-    /// <summary>
-    /// Compute diff over the last sample window, clamp into diffRange,
-    /// map into noiseSpeedRange, then lerp toward it at noiseSpeedLerpSpeed.
-    /// </summary>
     private void UpdateNoiseSpeedByDiff()
     {
         float current = energyStorage.currentEnergy;
         float diff = current - lastEnergySample;
 
-        // clamp diff
         float clamped = Mathf.Clamp(diff, diffRange.x, diffRange.y);
-        // normalize 0–1
         float tNorm = (clamped - diffRange.x) / (diffRange.y - diffRange.x);
-        // map into noise speed
         float targetNoise = Mathf.Lerp(noiseSpeedRange.x, noiseSpeedRange.y, tNorm);
 
-        // smooth toward targetNoise
         currentNoiseSpeed = Mathf.Lerp(currentNoiseSpeed, targetNoise, Time.deltaTime * noiseSpeedLerpSpeed);
         runtimeMaterial.SetFloat(NoiseSpeedProp, currentNoiseSpeed);
     }

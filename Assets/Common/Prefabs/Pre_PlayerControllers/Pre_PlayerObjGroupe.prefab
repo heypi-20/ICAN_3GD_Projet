@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6608997847661161996}
   - component: {fileID: 4752720556568641837}
   m_Layer: 5
-  m_Name: Sprint
+  m_Name: GroundPound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55,7 +55,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cde8a2dcb99d1a84fbc14348226cddc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  competence: 0
+  competence: 1
   etat: 0
   "etatD\xE9sactiv\xE9": {fileID: 3328137192603384483}
   "etatActiv\xE9": {fileID: 7290394616129234737}
@@ -7565,7 +7565,7 @@ GameObject:
   - component: {fileID: 959237408161227288}
   - component: {fileID: 6972421204666251787}
   m_Layer: 5
-  m_Name: GroundPound
+  m_Name: Sprint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7609,7 +7609,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cde8a2dcb99d1a84fbc14348226cddc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  competence: 1
+  competence: 0
   etat: 0
   "etatD\xE9sactiv\xE9": {fileID: 1918356488769456633}
   "etatActiv\xE9": {fileID: 5300181369284935057}
@@ -9076,8 +9076,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpCrystal: {fileID: 333540229587192218}
-  sprintCrystal: {fileID: 94840724550275368}
-  groundPoundCrystal: {fileID: 5981756625651470614}
+  sprintCrystal: {fileID: 5981756625651470614}
+  groundPoundCrystal: {fileID: 94840724550275368}
 --- !u!1 &7109277113112442977
 GameObject:
   m_ObjectHideFlags: 0
@@ -10168,7 +10168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.8431373, g: 0.078431375, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -10686,20 +10686,28 @@ MonoBehaviour:
   lerpSpeed: 3
   tintColors:
   - {r: 1, g: 0.9490197, b: 0, a: 1}
-  - {r: 1, g: 0.9490197, b: 0, a: 1}
-  - {r: 1, g: 0.9490197, b: 0, a: 1}
-  - {r: 1, g: 0.9490197, b: 0, a: 1}
+  - {r: 1, g: 0.5882353, b: 0, a: 1}
+  - {r: 1, g: 0.40784317, b: 0, a: 1}
+  - {r: 1, g: 0.09411766, b: 0, a: 1}
   emissionColors:
-  - {r: 0.8313726, g: 0.76470596, b: 0, a: 1}
-  - {r: 0.8313726, g: 0.76470596, b: 0, a: 1}
-  - {r: 0.8313726, g: 0.76470596, b: 0, a: 1}
-  - {r: 0.8313726, g: 0.76470596, b: 0, a: 1}
+  - {r: 0.70980394, g: 0.59607846, b: 0, a: 1}
+  - {r: 0.854902, g: 0.53333336, b: 0.039215688, a: 1}
+  - {r: 0.34509805, g: 0.12941177, b: 0, a: 1}
+  - {r: 0.227451, g: 0.007843138, b: 0.003921569, a: 1}
   noiseColors:
-  - {r: 0.8980393, g: 0.078431375, b: 0.078431375, a: 1}
-  - {r: 0.8980393, g: 0.078431375, b: 0.078431375, a: 1}
-  - {r: 0.8980393, g: 0.078431375, b: 0.078431375, a: 1}
-  - {r: 0.8980393, g: 0.078431375, b: 0.078431375, a: 1}
+  - {r: 0, g: 0, b: 0, a: 1}
+  - {r: 0, g: 0, b: 0, a: 1}
+  - {r: 0, g: 0, b: 0, a: 1}
+  - {r: 0, g: 0, b: 0, a: 1}
   colorLerpSpeed: 5
+  levelImage: {fileID: 4257412862287796168}
+  levelImageColors:
+  - {r: 1, g: 0.96234596, b: 0, a: 1}
+  - {r: 0.86666673, g: 0.5647059, b: 0.12941177, a: 1}
+  - {r: 0.8431373, g: 0.38823533, b: 0.078431375, a: 1}
+  - {r: 0.8431373, g: 0.078431375, b: 0, a: 1}
+  punchScale: {x: 0.05, y: 0.05, z: 0.05}
+  punchDuration: 0.3
   diffRange: {x: -50, y: 2000}
   noiseSpeedRange: {x: -0.5, y: 1.5}
   diffSamplePeriod: 0.5
