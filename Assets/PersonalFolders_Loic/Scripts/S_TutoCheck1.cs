@@ -5,6 +5,8 @@ public class S_TutoCheck1 : MonoBehaviour
 {
     public int inputCount = 5;
     public int jumpCount = 5;
+
+    public GameObject portal;
     
     private int icount;
     private int jcount;
@@ -25,10 +27,15 @@ public class S_TutoCheck1 : MonoBehaviour
         FindObjectOfType<S_SuperJump_Module>().OnJumpStateChange += CheckForJump;
     }
 
+    private void Start()
+    {
+        portal.SetActive(false);
+    }
+
     private void Update()
     {
         if (movementComplete && jumpComplete && !once) {
-            Debug.Log("Tuto Complete");
+            portal.SetActive(true);
             once = true;
         }
     }
