@@ -23,6 +23,7 @@ public class S_BossObjective : MonoBehaviour
             objectiveParams.currentValue,
             objectiveParams.maxValue
         );
+
         
         ObjectiveManager.AddObjective(bossObjective);
         EnemyBase.OnEnemyKilled += CheckBosses;
@@ -30,7 +31,7 @@ public class S_BossObjective : MonoBehaviour
 
     private void CheckBosses(EnemyType enemyType)
     {
-        if (enemyType == EnemyType.Banshee_Boss) {
+        if (enemyType == EnemyType.unknown_Boss) {
             bossObjective.AddProgress(1);
             bansheeBossKilled = true;
         }
