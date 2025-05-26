@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 101.63802, y: 59.9, z: -106.48}
-  m_LocalScale: {x: 1.5952, y: 1.5952, z: 1.5952}
+  m_LocalScale: {x: 1.9999999, y: 1.9999999, z: 1.9999999}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7905965215803171095}
@@ -97,13 +97,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caf8618cdf9149f3aaf90f1db1cebfce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyName: 
-  enemyType: 8
+  enemyType: 9
   health: 150
-  weaknessExposureHealth: 0
   enemyDamage: 15
   WeakPoint: {fileID: 7377043181824218058}
-  energyPoint: {fileID: 284891634115185361, guid: 729892a8825d4f64599abe6ea5c6f84b, type: 3}
+  energyPoint: {fileID: 284891634115185361, guid: 2372366192ec55d42a1bd17beb3e79bf, type: 3}
   energyDropQuantity: 15
   energyDropPerHitWeakness: 5
   enemyGetHitVFX: {fileID: 2014564717100583912, guid: de8051323aef0554fb4a4ee3dd46ebed, type: 3}
@@ -123,7 +121,7 @@ MonoBehaviour:
   feedbackAlpha: 0.8
   feedbackDuration: 0.2
   currentHealth: 0
-  chaseSpeedRange: {x: 6, y: 15}
+  chaseSpeedRange: {x: 13, y: 25}
   speedSwitchIntervalRange: {x: 0.2, y: 3}
   rotationSpeed: 10
   avoidDist: 1

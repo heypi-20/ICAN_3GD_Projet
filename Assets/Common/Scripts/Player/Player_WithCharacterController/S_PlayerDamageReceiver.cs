@@ -137,7 +137,10 @@ public class S_PlayerDamageReceiver : MonoBehaviour
 
     private void OnDestroy()
     {
-        FindObjectOfType<S_GameResultCalcul>().ShowResultScreen();
-
+        S_GameResultCalcul resultCalcul = FindObjectOfType<S_GameResultCalcul>();
+        if (resultCalcul != null)
+        {
+            resultCalcul.ShowResultScreen();
+        }
     }
 }
