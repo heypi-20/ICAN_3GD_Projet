@@ -21,8 +21,18 @@ public class S_TutoCheck2 : MonoBehaviour
         FindObjectOfType<S_MeleeAttack_Module>().OnAttackStateChange += CheckForMelee;
     }
 
+    private void OnDisable()
+    {
+        FindObjectOfType<S_FireRateGun_Module>().OnShootStateChange -= CheckForShoot;
+        FindObjectOfType<S_MeleeAttack_Module>().OnAttackStateChange -= CheckForMelee;
+    }
+
     private void Start()
     {
+        if (portal == null) {
+            Debug.LogWarning("No Portal found");
+            return;
+        }
         portal.SetActive(false);
     }
 

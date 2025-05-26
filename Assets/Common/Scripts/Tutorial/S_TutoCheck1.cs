@@ -23,11 +23,16 @@ public class S_TutoCheck1 : MonoBehaviour
 
     private void OnDisable()
     {
-        FindObjectOfType<S_SuperJump_Module>().OnJumpStateChange += CheckForJump;
+        FindObjectOfType<S_CustomCharacterController>().OnMoveStateChange -= CheckForMovement;
+        FindObjectOfType<S_SuperJump_Module>().OnJumpStateChange -= CheckForJump;
     }
 
     private void Start()
     {
+        if (portal == null) {
+            Debug.LogWarning("No Portal found");
+            return;
+        }
         portal.SetActive(false);
     }
 

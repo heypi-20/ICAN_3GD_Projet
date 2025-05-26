@@ -39,6 +39,11 @@ public class S_GeyserBounce : MonoBehaviour
         {
             // D�marre le bounce via coroutine
             StartCoroutine(ApplyBounce(controller));
+            S_TutoCheck3 tutoCheck = FindObjectOfType<S_TutoCheck3>();
+
+            if (tutoCheck != null) {
+                tutoCheck.gCount++;
+            }
         }
     }
 
