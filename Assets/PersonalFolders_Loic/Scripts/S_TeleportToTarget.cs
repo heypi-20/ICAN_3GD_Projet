@@ -16,7 +16,7 @@ public class S_TeleportToTarget : MonoBehaviour
         p = FindObjectOfType<S_CustomCharacterController>().transform;
     }
 
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
         if (target != null && other.gameObject.CompareTag("Player")) {
             p.position = target.transform.position;
