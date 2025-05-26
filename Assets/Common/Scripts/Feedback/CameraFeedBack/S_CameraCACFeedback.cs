@@ -34,14 +34,19 @@ public class S_CameraCACFeedback : MonoBehaviour
     private LensDistortion _lensDistortion;
 
     private bool  _isIncreasing;
+    private float _baseFOV;
     private float _startFOV;
     private float _timePassed;
+    
+    
 
     #region Public API
     public void Setup(CinemachineVirtualCamera vcam, CinemachineImpulseSource impulse)
     {
         _vcam          = vcam;
         _impulseSource = impulse;
+        _baseFOV  = _vcam.m_Lens.FieldOfView;
+        _startFOV = _baseFOV;
 
         // Grab Lens Distortion from the camera’s volume profile (if any)
         var volumeSettings = _vcam.GetComponent<CinemachineVolumeSettings>();
@@ -147,11 +152,11 @@ public class S_CameraCACFeedback : MonoBehaviour
         DOTween.Kill(FOV_TWEEN_ID, complete: false);
 
         DOTween.To(() => _vcam.m_Lens.FieldOfView,
-                   x  => _vcam.m_Lens.FieldOfView = x,
-                   _startFOV,
-                   fovDuration)
-               .SetEase(Ease.OutSine)
-               .SetId(FOV_TWEEN_ID);
+                x  => _vcam.m_Lens.FieldOfView = x,
+                _baseFOV,            
+                fovDuration)
+            .SetEase(Ease.OutSine)
+            .SetId(FOV_TWEEN_ID);
     }
     #endregion
 }
