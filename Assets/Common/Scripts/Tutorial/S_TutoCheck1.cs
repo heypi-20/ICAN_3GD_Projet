@@ -21,12 +21,6 @@ public class S_TutoCheck1 : MonoBehaviour
         FindObjectOfType<S_SuperJump_Module>().OnJumpStateChange += CheckForJump;
     }
 
-    private void OnDisable()
-    {
-        FindObjectOfType<S_CustomCharacterController>().OnMoveStateChange -= CheckForMovement;
-        FindObjectOfType<S_SuperJump_Module>().OnJumpStateChange -= CheckForJump;
-    }
-
     private void Start()
     {
         if (portal == null) {

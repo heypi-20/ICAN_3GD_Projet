@@ -20,11 +20,6 @@ public class S_TutoCheck3 : MonoBehaviour
         FindObjectOfType<S_GroundPound_Module>().OnGroundPoundStateChange += CheckForGP;
     }
 
-    private void OnDisable()
-    {
-        FindObjectOfType<S_GroundPound_Module>().OnGroundPoundStateChange -= CheckForGP;
-    }
-
     private void Start()
     {
         if (portal == null) {
@@ -40,15 +35,15 @@ public class S_TutoCheck3 : MonoBehaviour
             portal.SetActive(true);
             once = true;
         }
-
-        if (gCount == geyserCount)
+        
+        if (gCount >= geyserCount)
             gComplete = true;
     }
 
     private void CheckForGP(Enum playerState, int level)
     {
         if (playerState.Equals(PlayerStates.GroundPoundState.EndGroundPound))
-            gCount++;
+            groundPoundCount++;
         
         if (groundPoundCount == gpCount)
             gpComplete = true;
