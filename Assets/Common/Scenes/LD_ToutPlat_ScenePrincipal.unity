@@ -19223,6 +19223,7 @@ GameObject:
   - component: {fileID: 7273316331452162001}
   - component: {fileID: 221437339104726296}
   - component: {fileID: 9151967442530836376}
+  - component: {fileID: 9151967442530836377}
   m_Layer: 0
   m_Name: ObjectiveManager
   m_TagString: Untagged
@@ -21502,6 +21503,23 @@ MonoBehaviour:
   objectiveDisplay: {fileID: 1393717936}
   dotweenPlayer: {fileID: 1436913619}
   gameChrono: 0
+--- !u!114 &9151967442530836377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009498006620010458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05b72bed9b294c798279bcbb30cf4d13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectiveParams:
+    eventTrigger: KillBoss
+    eventText: '{0}/{1}'
+    currentValue: 0
+    maxValue: 3
 --- !u!114 &9163858388534623605
 MonoBehaviour:
   m_ObjectHideFlags: 0
