@@ -38,7 +38,7 @@ public class EnemyBase : MonoBehaviour
     private readonly Dictionary<Renderer, FeedbackData> feedbackMap = new Dictionary<Renderer, FeedbackData>();
 
     private EventInstance killEventInstance;
-    [HideInInspector] public float currentHealth;
+    public float currentHealth;
     private bool isDead = false;
 
     public static event Action<EnemyType> OnEnemyKilled;  // Global kill event
