@@ -19,21 +19,31 @@ public class S_PlayerProjectileSpawner : MonoBehaviour
 
     /* ──────────── MUZZLE FLASH ──────────── */
     [Header("Muzzle-Flash (VFX)")]
-    [Tooltip("Empty parent avec tes 2 ParticleSystem enfants")]
+    [Tooltip("Empty parent with your 2 ParticleSystem children")]
     public GameObject MuzzleFlashPrefab;
 
-    /* ──────────── TRAJECTOIRE ──────────── */
+    /* ──────────── TRAJECTORY ──────────── */
     [Space(10)]
     public float Speed = 200f;
     public float ProjectileLifeTime = 3f;
     public float FollowTime = 0.1f;
     public AnimationCurve SpeedCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
-    /* ──────────── PRIVATE ──────────── */
+    /* ──────────── ACTIVATION DELAY ──────────── */
+    [Header("Activation Hold Time")]
+    [Tooltip("Seconds to wait after shooting stops before deactivating beam")]
+    public float ActivationOffDelay = 0.2f;
+
+    /* ──────────── PRIVATE INSTANCES & COROUTINES ──────────── */
     private GameObject activationInstanceLv1;
     private GameObject activationInstanceLv2;
     private GameObject activationInstanceLv3;
     private GameObject activationInstanceLv4;
+
+    private Coroutine deactivateCoroutineLv1;
+    private Coroutine deactivateCoroutineLv2;
+    private Coroutine deactivateCoroutineLv3;
+    private Coroutine deactivateCoroutineLv4;
 
     /* ──────────── UNITY EVENTS ──────────── */
     private void Start()
@@ -51,75 +61,126 @@ public class S_PlayerProjectileSpawner : MonoBehaviour
     private void OnShoot(Enum state, int level)
     {
         bool isShooting = state.Equals(PlayerStates.ShootState.IsShooting);
-        SetAllActivationInstancesActive(false);
-        if (!isShooting) return;
+
         switch (level)
         {
             case 1:
-                HandleLevel(ProjectilePrefab_Lv1, useActivationLv1,
-                            ref activationInstanceLv1, isShooting);
+                HandleLevel(
+                    ProjectilePrefab_Lv1,
+                    useActivationLv1,
+                    ref activationInstanceLv1,
+                    isShooting,
+                    ref deactivateCoroutineLv1,
+                    () => deactivateCoroutineLv1 = null
+                );
                 break;
             case 2:
-                HandleLevel(ProjectilePrefab_Lv2, useActivationLv2,
-                            ref activationInstanceLv2, isShooting);
+                HandleLevel(
+                    ProjectilePrefab_Lv2,
+                    useActivationLv2,
+                    ref activationInstanceLv2,
+                    isShooting,
+                    ref deactivateCoroutineLv2,
+                    () => deactivateCoroutineLv2 = null
+                );
                 break;
             case 3:
-                HandleLevel(ProjectilePrefab_Lv3, useActivationLv3,
-                            ref activationInstanceLv3, isShooting);
+                HandleLevel(
+                    ProjectilePrefab_Lv3,
+                    useActivationLv3,
+                    ref activationInstanceLv3,
+                    isShooting,
+                    ref deactivateCoroutineLv3,
+                    () => deactivateCoroutineLv3 = null
+                );
                 break;
             case 4:
-                HandleLevel(ProjectilePrefab_Lv4, useActivationLv4,
-                            ref activationInstanceLv4, isShooting);
+                HandleLevel(
+                    ProjectilePrefab_Lv4,
+                    useActivationLv4,
+                    ref activationInstanceLv4,
+                    isShooting,
+                    ref deactivateCoroutineLv4,
+                    () => deactivateCoroutineLv4 = null
+                );
                 break;
             default:
                 Debug.LogWarning($"Invalid projectile level: {level}");
                 break;
         }
     }
-    
-    private void SetAllActivationInstancesActive(bool active)
-    {
-        if (activationInstanceLv1 != null) activationInstanceLv1.SetActive(active);
-        if (activationInstanceLv2 != null) activationInstanceLv2.SetActive(active);
-        if (activationInstanceLv3 != null) activationInstanceLv3.SetActive(active);
-        if (activationInstanceLv4 != null) activationInstanceLv4.SetActive(active);
-    }
 
     /* ──────────── LEVEL HANDLER ──────────── */
-    private void HandleLevel(GameObject prefab, bool useActivation,
-                             ref GameObject instance, bool isShooting)
+    private void HandleLevel(
+        GameObject prefab,
+        bool useActivation,
+        ref GameObject instance,
+        bool isShooting,
+        ref Coroutine deactivateCoroutine,
+        Action clearCoroutine 
+    )
     {
         if (prefab == null) return;
 
         if (useActivation)
         {
-            /* ------- Mode activation (beam / laser) ------- */
             if (isShooting)
             {
+                if (deactivateCoroutine != null)
+                {
+                    StopCoroutine(deactivateCoroutine);
+                    clearCoroutine();
+                }
+
                 if (instance == null)
                 {
-                    instance = Instantiate(prefab, transform.position,
-                                           transform.rotation, transform);
+                    instance = Instantiate(
+                        prefab,
+                        transform.position,
+                        transform.rotation,
+                        transform
+                    );
                 }
+
                 instance.SetActive(true);
-                SpawnMuzzleFlash();                                  // ← NEW
+                SpawnMuzzleFlash();
             }
-            else if (instance != null)
+            else
             {
-                instance.SetActive(false);
+                if (instance != null && deactivateCoroutine == null)
+                {
+                    deactivateCoroutine = StartCoroutine(
+                        DelayedDeactivate(
+                            instance,
+                            clearCoroutine
+                        )
+                    );
+                }
             }
         }
         else
         {
-            /* ------- Un projectile par tir ------- */
             if (isShooting)
             {
-                var proj = Instantiate(prefab, transform.position,
-                                       transform.rotation, transform);
+                var proj = Instantiate(
+                    prefab,
+                    transform.position,
+                    transform.rotation,
+                    transform
+                );
                 StartCoroutine(MoveAndDestroy(proj));
-                SpawnMuzzleFlash();                                  // ← NEW
+                SpawnMuzzleFlash();
             }
         }
+    }
+
+    /* ──────────── DELAYED DEACTIVATION ──────────── */
+    private IEnumerator DelayedDeactivate(GameObject instance, Action onComplete)
+    {
+        yield return new WaitForSeconds(ActivationOffDelay);
+        if (instance != null)
+            instance.SetActive(false);
+        onComplete?.Invoke();
     }
 
     /* ──────────── MUZZLE FLASH SPAWN ──────────── */
@@ -127,15 +188,15 @@ public class S_PlayerProjectileSpawner : MonoBehaviour
     {
         if (MuzzleFlashPrefab == null) return;
 
-        // L’instantiation suit l’arme ; pas besoin de Destroy(),
-        // les ParticleSystem s’auto-suppriment.
-        Instantiate(MuzzleFlashPrefab,
-                    transform.position,
-                    transform.rotation,
-                    transform);
+        Instantiate(
+            MuzzleFlashPrefab,
+            transform.position,
+            transform.rotation,
+            transform
+        );
     }
 
-    /* ──────────── PROJECTILE TRAJECTOIRE ──────────── */
+    /* ──────────── PROJECTILE TRAJECTORY ──────────── */
     private IEnumerator MoveAndDestroy(GameObject projectile)
     {
         float elapsed = 0f;
@@ -147,13 +208,11 @@ public class S_PlayerProjectileSpawner : MonoBehaviour
             float speed = Speed * SpeedCurve.Evaluate(pct);
 
             if (elapsed < FollowTime)
-            {
-                t.Translate(Vector3.forward * speed * Time.deltaTime, Space.Self);
-            }
+                t.Translate(Vector3.forward * (speed * Time.deltaTime), Space.Self);
             else
             {
                 if (t.parent != null) t.SetParent(null);
-                t.Translate(t.forward * speed * Time.deltaTime, Space.World);
+                t.Translate(t.forward * (speed * Time.deltaTime), Space.World);
             }
 
             elapsed += Time.deltaTime;

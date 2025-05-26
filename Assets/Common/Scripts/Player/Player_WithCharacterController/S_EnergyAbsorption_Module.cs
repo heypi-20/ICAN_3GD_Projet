@@ -126,7 +126,7 @@ public class S_EnergyAbsorption_Module : MonoBehaviour
         // Pull object towards player until close enough
         while (obj != null)
         {
-            if (Vector3.Distance(obj.transform.position, _playerTransform.position) <= 2f)
+            if (Vector3.Distance(obj.transform.position, _playerTransform.position) <= 4.5f)
                 break;
 
             obj.transform.position = Vector3.MoveTowards(

@@ -15,22 +15,22 @@ public class S_SkillHUDFeedBack : MonoBehaviour
     [Tooltip("Level 3: Ground Pound Crystal")]
     [SerializeField] private GameObject groundPoundCrystal;
 
-    // Map from level number to corresponding crystal GameObject
+    // Mapping from level index to its crystal GameObject
     private Dictionary<int, GameObject> levelCrystalMap;
 
-    // Store each crystal's original localScale so we can restore it after shaking or for scale animations
+    // Store the original local scale of each crystal for reset after animations
     private Dictionary<int, Vector3> originalScales;
 
-    // Current infinite shake tween for grace warning
+    // Tween for the infinite shake during grace warning
     private Tween graceTween;
     private int graceLevel = -1;
 
-    // Sprint usage tween
+    // Tween for sprint usage pulse
     private Tween sprintUsageTween;
 
     private void Awake()
     {
-        // Initialize the level-to-crystal mapping
+        // Initialize level-to-crystal mapping
         levelCrystalMap = new Dictionary<int, GameObject>
         {
             { 1, jumpCrystal },
@@ -38,7 +38,7 @@ public class S_SkillHUDFeedBack : MonoBehaviour
             { 3, groundPoundCrystal }
         };
 
-        // Record original scales
+        // Record the original scale of each crystal
         originalScales = new Dictionary<int, Vector3>();
         foreach (var kv in levelCrystalMap)
         {
@@ -49,78 +49,111 @@ public class S_SkillHUDFeedBack : MonoBehaviour
 
     private void Start()
     {
-        // Subscribe to level-related events
+        // Subscribe to player state events
         S_PlayerStateObserver.Instance.OnLevelUpStateEvent     += HandleLevelChangeEvent;
-        // Optional: subscribe to skill events for extra feedback
         S_PlayerStateObserver.Instance.OnJumpStateEvent        += HandleJumpStateEvent;
         S_PlayerStateObserver.Instance.OnSprintStateEvent      += HandleSprintStateEvent;
         S_PlayerStateObserver.Instance.OnGroundPoundStateEvent += HandleGroundPoundStateEvent;
     }
 
+    private void OnDestroy()
+    {
+        if (S_PlayerStateObserver.Instance != null)
+        {
+            // Unsubscribe from all events
+            S_PlayerStateObserver.Instance.OnLevelUpStateEvent     -= HandleLevelChangeEvent;
+            S_PlayerStateObserver.Instance.OnJumpStateEvent        -= HandleJumpStateEvent;
+            S_PlayerStateObserver.Instance.OnSprintStateEvent      -= HandleSprintStateEvent;
+            S_PlayerStateObserver.Instance.OnGroundPoundStateEvent -= HandleGroundPoundStateEvent;
+        }
+    }
+
     /// <summary>
-    /// Handle LevelUp, StartGrace (pre-downgrade shake), EndGrace, and LevelDown.
+    /// Handles level-up, start/end grace, and level-down states.
+    /// Adjusts each crystal's display state based on the current global level.
     /// </summary>
     private void HandleLevelChangeEvent(Enum state, int level)
     {
         var lvlState = (PlayerStates.LevelState)state;
+
+        // Update each crystal's state according to the current level
         foreach (var kv in levelCrystalMap)
         {
-            var rune = kv.Value.GetComponent<RuneDisplay>();
+            int unlockLevel = kv.Key;
+            var crystal = kv.Value;
+            var rune = crystal.GetComponent<RuneDisplay>();
             if (rune == null) continue;
 
-            if (kv.Key <= level)
+            RuneDisplay.SkillState newState;
+
+            if (level < unlockLevel)
             {
-                // Show rune
-                rune.SetState(RuneDisplay.SkillState.Activé);
+                // Not unlocked yet
+                newState = RuneDisplay.SkillState.Désactivé;
             }
             else
             {
-                // Hide rune with its own hide animation
-                rune.SetState(RuneDisplay.SkillState.Désactivé);
+                // Compute tier relative to unlock level
+                int tier;
+                if (unlockLevel == 1)
+                {
+                    // Jump crystal waits one extra level before upgrading
+                    tier = level - unlockLevel - 1;
+                }
+                else
+                {
+                    tier = level - unlockLevel;
+                }
+
+                if (tier <= 0)
+                    newState = RuneDisplay.SkillState.Activé;
+                else if (tier == 1)
+                    newState = RuneDisplay.SkillState.Niveau2;
+                else
+                    newState = RuneDisplay.SkillState.Niveau3;
             }
+
+            rune.SetState(newState);
         }
 
+        // Handle grace shake start/end
         switch (lvlState)
         {
             case PlayerStates.LevelState.StartGrace:
-                // Start infinite shake on the crystal for the current level
-                StartGraceShake(level);
+                BeginGraceShake(level);
                 break;
-
             case PlayerStates.LevelState.EndGrace:
-                // Stop the shake and restore original scale
-                KillGraceTween();
+                StopGraceShake();
                 break;
-
             default:
-                // For LevelUp and LevelDown, ensure any grace shake is killed
-                KillGraceTween();
+                // On level up or down, also stop any lingering shake
+                StopGraceShake();
                 break;
         }
     }
 
     /// <summary>
-    /// Starts an infinite shake tween on the specified level's crystal.
+    /// Begins an infinite shake animation on the crystal of the given level.
     /// </summary>
-    private void StartGraceShake(int level)
+    private void BeginGraceShake(int level)
     {
-        // Kill any existing grace tween
-        KillGraceTween();
+        StopGraceShake();
 
         if (!levelCrystalMap.TryGetValue(level, out var crystal) || crystal == null)
             return;
 
-        var orig = originalScales[level];
+        graceLevel = level;
+        var originalScale = originalScales[level];
         graceTween = crystal.transform
-            .DOPunchScale(orig * 0.2f, 0.5f, vibrato: 10, elasticity: 0.3f)
+            .DOPunchScale(originalScale * 0.2f, 0.5f, vibrato: 10, elasticity: 0.3f)
             .SetLoops(-1, LoopType.Yoyo)
             .SetAutoKill(false);
     }
 
     /// <summary>
-    /// Stops the current shake tween and restores the original scale.
+    /// Stops the grace shake and restores the crystal's original scale.
     /// </summary>
-    private void KillGraceTween()
+    private void StopGraceShake()
     {
         if (graceTween != null)
         {
@@ -137,12 +170,12 @@ public class S_SkillHUDFeedBack : MonoBehaviour
     }
 
     /// <summary>
-    /// Simple scale-up then scale-down effect when player jumps.
+    /// Pulses the jump crystal on jump.
     /// </summary>
     private void HandleJumpStateEvent(Enum state, int level)
     {
         var js = (PlayerStates.JumpState)state;
-        if (js == PlayerStates.JumpState.Jump 
+        if (js == PlayerStates.JumpState.Jump
             && levelCrystalMap.TryGetValue(1, out var crystal)
             && originalScales.TryGetValue(1, out var origScale))
         {
@@ -153,27 +186,24 @@ public class S_SkillHUDFeedBack : MonoBehaviour
     }
 
     /// <summary>
-    /// Scale-up then scale-down effect when player starts/stops sprinting.
+    /// Begins or stops a looping pulse on the sprint crystal.
     /// </summary>
     private void HandleSprintStateEvent(Enum state, int level)
     {
         var ss = (PlayerStates.SprintState)state;
-        if (!levelCrystalMap.TryGetValue(2, out var crystal) 
+        if (!levelCrystalMap.TryGetValue(2, out var crystal)
             || !originalScales.TryGetValue(2, out var origScale))
             return;
 
         switch (ss)
         {
             case PlayerStates.SprintState.StartSprinting:
-                // Begin looping scale animation until stop event
                 sprintUsageTween = crystal.transform
                     .DOScale(origScale * 1.2f, 0.3f)
                     .SetLoops(-1, LoopType.Yoyo)
                     .SetAutoKill(false);
                 break;
-
             case PlayerStates.SprintState.StopSprinting:
-                // Stop looping animation and restore scale
                 if (sprintUsageTween != null)
                 {
                     sprintUsageTween.Kill();
@@ -185,12 +215,12 @@ public class S_SkillHUDFeedBack : MonoBehaviour
     }
 
     /// <summary>
-    /// Simple scale-up then scale-down effect when player starts ground pound.
+    /// Pulses the ground pound crystal on ground pound start.
     /// </summary>
     private void HandleGroundPoundStateEvent(Enum state, int level)
     {
         var gp = (PlayerStates.GroundPoundState)state;
-        if (gp == PlayerStates.GroundPoundState.StartGroundPound 
+        if (gp == PlayerStates.GroundPoundState.StartGroundPound
             && levelCrystalMap.TryGetValue(3, out var crystal)
             && originalScales.TryGetValue(3, out var origScale))
         {

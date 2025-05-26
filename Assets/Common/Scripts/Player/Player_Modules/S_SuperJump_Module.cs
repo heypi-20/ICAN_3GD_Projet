@@ -32,7 +32,7 @@ public class S_SuperJump_Module : MonoBehaviour
     public bool showGizmos = true;
     public float vortexRadius;
 
-    private int _currentJumpCount = 0; // Compteur de sauts utilisés
+    public int _currentJumpCount = 0; // Compteur de sauts utilisés
     private bool _isJumpOnCooldown = false; // Indique si le saut est en cooldown
 
     // Références aux composants nécessaires
@@ -167,7 +167,7 @@ public class S_SuperJump_Module : MonoBehaviour
     /// Obtient le niveau de saut correspondant au niveau d'énergie actuel
     /// </summary>
     /// <returns>Le niveau de saut correspondant ou null si aucun niveau trouvé</returns>
-    private JumpLevel GetCurrentJumpLevel()
+    public JumpLevel GetCurrentJumpLevel()
     {
         int currentLevelIndex = _energyStorage.currentLevelIndex + 1; // Ajuster pour correspondre aux niveaux (index 0 -> niveau 1)
         return jumpLevels.Find(level => level.level == currentLevelIndex);
