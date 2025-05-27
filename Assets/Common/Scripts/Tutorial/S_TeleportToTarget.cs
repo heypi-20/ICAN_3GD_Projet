@@ -6,6 +6,8 @@ public class S_TeleportToTarget : MonoBehaviour
     public GameObject target;
 
     private Transform p;
+
+    public bool LastTuto = false;
     private void Start()
     {
         if (target == null) {
@@ -28,6 +30,10 @@ public class S_TeleportToTarget : MonoBehaviour
                 p.position = target.transform.position;
                 cc.enabled = true;
             }
+        }
+        if(LastTuto == true)
+        {
+            GetComponent<S_SceneTransition>().LoadSceneByName();
         }
     }
 }
