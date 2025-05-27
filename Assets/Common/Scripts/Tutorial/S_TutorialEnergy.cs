@@ -17,6 +17,7 @@ public class S_TutorialEnergy : MonoBehaviour
         if (other.CompareTag("Player") && eStorage.currentEnergy != energy) {
             eStorage.currentEnergy = energy;
         }
+        Destroy(this.gameObject);
     }
 }
 
