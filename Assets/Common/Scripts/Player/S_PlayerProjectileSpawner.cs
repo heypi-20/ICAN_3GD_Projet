@@ -117,7 +117,7 @@ public class S_PlayerProjectileSpawner : MonoBehaviour
         ref GameObject instance,
         bool isShooting,
         ref Coroutine deactivateCoroutine,
-        Action clearCoroutine 
+        Action clearCoroutine
     )
     {
         if (prefab == null) return;
