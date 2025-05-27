@@ -42,6 +42,12 @@ public class S_Dashooter : EnemyBase
     public float fireDistance = 7f;
     public float maxBeamDistance = 7f;
 
+    [Tooltip("Optional transform to specify where the laser originates. If null, defaults to the object's position.")]
+    public Transform laserOrigin;
+
+    [Tooltip("Effect GameObject to activate while charging.")]
+    public GameObject chargeEffect;
+
     [Header("Rotation & Gravity")]
     public float rotationSpeed = 90f;
     public float fallAcceleration = 30f;
@@ -140,7 +146,11 @@ public class S_Dashooter : EnemyBase
             yield break;
         }
 
-        // 4) Charge laser
+        // 4) Start charge effect
+        if (chargeEffect != null)
+            chargeEffect.SetActive(true);
+
+        // 5) Charge laser
         float t = chargeDuration;
         while (t > 0f)
         {
@@ -149,14 +159,20 @@ public class S_Dashooter : EnemyBase
             yield return null;
         }
 
-        // 5) Fire with prediction
+        // 6) End charge effect
+        if (chargeEffect != null)
+            chargeEffect.SetActive(false);
+
+        // 7) Fire with prediction
         float travelTime = distToPlayer / laserSpeed;
         Vector3 predictedPos = player.position + playerVelocity * (travelTime * predictionAccuracy);
-        Vector3 fireDir = (predictedPos - transform.position).normalized;
+        Vector3 fireDir = (predictedPos - (laserOrigin != null ? laserOrigin.position : transform.position)).normalized;
 
+        // Determine spawn position
+        Vector3 spawnPos = laserOrigin != null ? laserOrigin.position : transform.position;
         var trail = Instantiate(
             laserTrailPrefab,
-            transform.position,
+            spawnPos,
             Quaternion.LookRotation(fireDir)
         );
 
@@ -192,7 +208,7 @@ public class S_Dashooter : EnemyBase
 
         Destroy(trail.gameObject, 2f);
 
-        // 6) Next dash
+        // 8) Next dash
         ScheduleNextDash();
     }
 
