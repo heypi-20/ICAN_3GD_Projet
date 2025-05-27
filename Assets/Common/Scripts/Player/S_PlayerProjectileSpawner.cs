@@ -200,25 +200,29 @@ public class S_PlayerProjectileSpawner : MonoBehaviour
     private IEnumerator MoveAndDestroy(GameObject projectile)
     {
         float elapsed = 0f;
-        Transform t = projectile.transform;
+        Transform t = projectile?.transform;
 
         while (elapsed < ProjectileLifeTime)
         {
-            float pct = elapsed / ProjectileLifeTime;
-            float speed = Speed * SpeedCurve.Evaluate(pct);
-
-            if (elapsed < FollowTime)
-                t.Translate(Vector3.forward * (speed * Time.deltaTime), Space.Self);
-            else
+            if (projectile != null)
             {
-                if (t.parent != null) t.SetParent(null);
-                t.Translate(t.forward * (speed * Time.deltaTime), Space.World);
+                float pct = elapsed / ProjectileLifeTime;
+                float speed = Speed * SpeedCurve.Evaluate(pct);
+
+                if (elapsed < FollowTime)
+                    t.Translate(Vector3.forward * (speed * Time.deltaTime), Space.Self);
+                else
+                {
+                    if (t.parent != null) t.SetParent(null);
+                    t.Translate(t.forward * (speed * Time.deltaTime), Space.World);
+                }
             }
 
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        Destroy(projectile);
+        if (projectile != null)
+            Destroy(projectile);
     }
 }

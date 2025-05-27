@@ -205,12 +205,15 @@ public class S_GroundPound_Module : MonoBehaviour
                 {
                     enemy.ReduceHealth(damage, dropBonus);
                     _hitEnemies.Add(enemy);
-
-                    Vector3 dirToEnemy = (enemy.transform.position - _waveOrigin).normalized;
-                    Vector3 horiz = new Vector3(dirToEnemy.x, 0, dirToEnemy.z).normalized;
-                    float rad = knockbackAngle * Mathf.Deg2Rad;
-                    Vector3 dir3D = (horiz * Mathf.Cos(rad) + Vector3.up * Mathf.Sin(rad)).normalized;
-                    StartCoroutine(KnockbackCoroutine(enemy.transform, dir3D, knockbackDistance, knockbackSpeed));
+                    if (enemy.GetComponents<S_LaserShooterBoss>() == null)
+                    {
+                        Vector3 dirToEnemy = (enemy.transform.position - _waveOrigin).normalized;
+                        Vector3 horiz = new Vector3(dirToEnemy.x, 0, dirToEnemy.z).normalized;
+                        float rad = knockbackAngle * Mathf.Deg2Rad;
+                        Vector3 dir3D = (horiz * Mathf.Cos(rad) + Vector3.up * Mathf.Sin(rad)).normalized;
+                        StartCoroutine(KnockbackCoroutine(enemy.transform, dir3D, knockbackDistance, knockbackSpeed));
+                    }
+                    
                 }
             }
             yield return null;

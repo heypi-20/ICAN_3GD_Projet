@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class S_LaserShooter : EnemyBase
+public class S_LaserShooterBoss : EnemyBase
 {
     #region Inspector --------------------------------------------------------
 
@@ -14,14 +14,14 @@ public class S_LaserShooter : EnemyBase
     [Header("Laser Settings")]
     public GameObject laserPrefab;
     public Transform laserOrigin;
-    public int  initialLaserCount = 1;
-    public int  maxLaserCount     = 5;
+    public int initialLaserCount = 1;
+    public int maxLaserCount     = 5;
     public float homingSpeed          = 180f;
     public float homingSwitchInterval = 2f;
     public float homingRampDuration   = 1f;
 
     [Tooltip("Delay before the very first beam (index 0) begins homing, seconds.")]
-    public float firstBeamHomingDelay = 0.5f;                 // NEW ★
+    public float firstBeamHomingDelay = 0.5f;
 
     [Header("Non-Homing Drift Settings")]
     public float minDriftSpeed = 10f;
@@ -40,9 +40,11 @@ public class S_LaserShooter : EnemyBase
 
     [Header("Proximity AoE")]
     public float aoeRange = 2f;
-    public float aoeDamage = 20f;
+    [Tooltip("Damage per SECOND dealt while player stays in AoE.")]
+    public float aoeDamage = 20f;                // now DPS
     public float aoeCooldown = 10f;
     public float aoeDelay    = 1f;
+    [Tooltip("How long AoE damage & impact VFX last.")]
     public float aoeImpactDuration = 1f;
     public GameObject aoeWarningPrefab;
     public GameObject aoeImpactPrefab;
@@ -75,12 +77,12 @@ public class S_LaserShooter : EnemyBase
 
         currentLaserCount = Mathf.Clamp(initialLaserCount, 1, maxLaserCount);
 
+        // Pool AoE VFX
         if (aoeWarningPrefab != null)
         {
             aoeWarningInstance = Instantiate(aoeWarningPrefab, transform.position, Quaternion.identity, transform);
             aoeWarningInstance.SetActive(false);
         }
-
         if (aoeImpactPrefab != null)
         {
             aoeImpactInstance = Instantiate(aoeImpactPrefab, transform.position, Quaternion.identity, transform);
@@ -96,6 +98,9 @@ public class S_LaserShooter : EnemyBase
 
     #region AoE logic ---------------------------------------------------------
 
+    /// <summary>
+    /// Check distance & trigger AoE cooldown.
+    /// </summary>
     private void HandleProximityAoE ()
     {
         if (player == null) return;
@@ -114,9 +119,15 @@ public class S_LaserShooter : EnemyBase
         aoeTimer = aoeCooldown;
     }
 
+    /// <summary>
+    /// Waits aoeDelay, then deals DPS for aoeImpactDuration while showing impact VFX.
+    /// </summary>
     private IEnumerator DelayedAoE ()
     {
         yield return new WaitForSeconds(aoeDelay);
+
+        if (aoeWarningInstance != null)
+            aoeWarningInstance.SetActive(false);
 
         if (aoeImpactInstance != null)
         {
@@ -124,13 +135,23 @@ public class S_LaserShooter : EnemyBase
             aoeImpactInstance.SetActive(true);
         }
 
-        var receiver = player?.GetComponent<S_PlayerDamageReceiver>();
-        if (receiver != null) receiver.ReceiveDamage(aoeDamage);
+        float t = 0f;
+        while (t < aoeImpactDuration)
+        {
+            t += Time.deltaTime;
 
-        yield return new WaitForSeconds(aoeImpactDuration);
+            if (player != null &&
+                Vector3.Distance(transform.position, player.position) <= aoeRange)
+            {
+                var receiver = player.GetComponent<S_PlayerDamageReceiver>();
+                if (receiver != null)
+                    receiver.ReceiveDamage(aoeDamage * Time.deltaTime);
+            }
+            yield return null;
+        }
 
-        if (aoeWarningInstance != null) aoeWarningInstance.SetActive(false);
-        if (aoeImpactInstance  != null) aoeImpactInstance.SetActive(false);
+        if (aoeImpactInstance != null)
+            aoeImpactInstance.SetActive(false);
     }
 
     #endregion ----------------------------------------------------------------
@@ -146,18 +167,21 @@ public class S_LaserShooter : EnemyBase
             if (chargeEffect != null) chargeEffect.SetActive(false);
 
             float volleyStartTime = Time.time;
-            currentMainIndex      = 0;
-            nextMainSwitchTime    = volleyStartTime + homingSwitchInterval;
+            currentMainIndex   = 0;
+            nextMainSwitchTime = volleyStartTime + homingSwitchInterval;
 
             activeLasers.Clear();
             for (int i = 0; i < currentLaserCount; ++i)
             {
                 Vector3 originPos = GetLaserOrigin();
-                Vector3 dir       = player != null ? (player.position - originPos).normalized : transform.forward;
+                Vector3 dir = player != null
+                    ? (player.position - originPos).normalized
+                    : transform.forward;
 
                 GameObject laserGO = Instantiate(laserPrefab, originPos, Quaternion.LookRotation(dir));
 
-                float driftSpeed = Random.Range(minDriftSpeed, maxDriftSpeed) * (Random.value < .5f ? -1f : 1f);
+                float driftSpeed = Random.Range(minDriftSpeed, maxDriftSpeed)
+                                 * (Random.value < .5f ? -1f : 1f);
 
                 activeLasers.Add(StartCoroutine(
                     LaserBeamRoutine(laserGO, i, driftSpeed, volleyStartTime)));
@@ -176,13 +200,13 @@ public class S_LaserShooter : EnemyBase
 
     private IEnumerator LaserBeamRoutine (
         GameObject laser,
-        int        beamIndex,
-        float      signedDriftSpeed,
-        float      volleyStartTime)
+        int beamIndex,
+        float signedDriftSpeed,
+        float volleyStartTime)
     {
         Transform beamTransform = laser.transform;
 
-        float homingRampTimer    = 0f;
+        float homingRampTimer = 0f;
         bool  wasHomingLastFrame = beamIndex == currentMainIndex;
 
         GameObject reflectInstance = null;
@@ -202,10 +226,9 @@ public class S_LaserShooter : EnemyBase
 
             bool isHoming = beamIndex == currentMainIndex;
 
-            // --- First-beam delay (NEW) ---
+            // First-beam delay
             if (beamIndex == 0 && elapsedSinceVolley < firstBeamHomingDelay)
                 isHoming = false;
-            // --------------------------------
 
             Vector3 originPos = GetLaserOrigin();
 
@@ -230,24 +253,32 @@ public class S_LaserShooter : EnemyBase
             }
             else
             {
-                beamTransform.Rotate(0f, signedDriftSpeed * Time.deltaTime, 0f, Space.World);
+                beamTransform.Rotate(0f,
+                                     signedDriftSpeed * Time.deltaTime,
+                                     0f,
+                                     Space.World);
                 wasHomingLastFrame = false;
             }
 
-            if (Physics.Raycast(originPos, beamTransform.forward, out RaycastHit hit,
-                                beamLength, hitMask, QueryTriggerInteraction.Ignore))
+            // Damage raycast
+            if (Physics.Raycast(originPos, beamTransform.forward,
+                                out RaycastHit hit, beamLength, hitMask,
+                                QueryTriggerInteraction.Ignore))
             {
                 var receiver = hit.collider.GetComponent<S_PlayerDamageReceiver>();
                 if (receiver != null)
                     receiver.ReceiveDamage(damagePerSecond * Time.deltaTime);
             }
 
+            // Ground reflect VFX
             if (reflectEffectPrefab != null &&
-                Physics.Raycast(originPos, beamTransform.forward, out RaycastHit groundHit,
+                Physics.Raycast(originPos, beamTransform.forward,
+                                out RaycastHit groundHit,
                                 beamLength, groundLayerMask))
             {
                 if (reflectInstance == null)
-                    reflectInstance = Instantiate(reflectEffectPrefab, groundHit.point, Quaternion.identity);
+                    reflectInstance = Instantiate(reflectEffectPrefab,
+                                                  groundHit.point, Quaternion.identity);
                 else
                     reflectInstance.transform.position = groundHit.point;
             }
@@ -268,7 +299,7 @@ public class S_LaserShooter : EnemyBase
 
     private void OnDrawGizmosSelected ()
     {
-        Gizmos.color = new Color(1f, 0f, 0f, .5f);
+        Gizmos.color = new Color(1f, 0f, 0f);
         Gizmos.DrawWireSphere(transform.position, aoeRange);
     }
 
