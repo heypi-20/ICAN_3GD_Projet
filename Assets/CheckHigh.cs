@@ -7,7 +7,7 @@ public class CheckHigh : MonoBehaviour
     public GameObject target;
     void Update()
     {
-        if(gameObject.transform.position.y <1)
+        if(gameObject.transform.position.y <50)
         {
             if (gameObject.GetComponent<CharacterController>() != null)
             {
