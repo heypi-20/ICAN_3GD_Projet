@@ -51,38 +51,36 @@ public class S_EnergyPointPoolManager : MonoBehaviour
 
     private void ProcessSpawn(Request req)
     {
-        if (!pool.ContainsKey(req.prefab))
-            pool[req.prefab] = new Queue<GameObject>();
+        if (!pool.TryGetValue(req.prefab, out var q))
+            pool[req.prefab] = q = new Queue<GameObject>();
 
-        GameObject obj;
+        GameObject obj = null;
 
-        if (pool[req.prefab].Count > 0)
-        {
-            obj = pool[req.prefab].Dequeue();
-            obj.SetActive(true);
-        }
-        else
-        {
+        while (q.Count > 0 && (obj = q.Dequeue()) == null) { }
+
+        if (obj == null)
             obj = Instantiate(req.prefab);
-        }
+        else
+            obj.SetActive(true);
 
-        obj.transform.position = req.position;
-        obj.transform.rotation = Quaternion.identity;
+        Transform t = obj.transform;
+        t.position  = req.position;
+        t.rotation  = Quaternion.identity;
+
         if (obj.TryGetComponent(out S_AddEnergyTypeWithDelay energySetting))
-        {
             energySetting.selfPrefab = req.prefab;
-        }
 
-        Rigidbody rb = obj.GetComponent<Rigidbody>();
-        if (rb != null)
+        if (obj.TryGetComponent(out Rigidbody rb))
         {
             rb.velocity = Vector3.zero;
             rb.AddForce(req.direction * 10f, ForceMode.Impulse);
         }
     }
 
+
     public void ReturnToPool(GameObject obj, GameObject prefab)
     {
+        if (obj == null) return;
         obj.SetActive(false);
         Destroy(obj.GetComponent<EnergyType>());
         if (!pool.ContainsKey(prefab))

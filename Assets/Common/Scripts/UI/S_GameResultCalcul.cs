@@ -142,8 +142,7 @@ public class S_GameResultCalcul : MonoBehaviour
         yield return RevealSimple(timeBonusText);
 
         /* 5️⃣  Final score with its own duration */
-        int finalTarget = int.Parse(finalScoreText.text);
-        yield return RevealNumber(finalScoreText, finalTarget, countDurationFinal);
+        yield return RevealNumber(finalScoreText, finalScore, countDurationFinal);
 
         menuActive = false;
     }
@@ -194,7 +193,7 @@ public class S_GameResultCalcul : MonoBehaviour
         float bonusPct = MapValueClamped(totalSec / 60f,
                                          timeRangeMinutes.x, timeRangeMinutes.y,
                                          bonusPercentRange.x, bonusPercentRange.y);
-        float multiplier = 1 + bonusPct / 100f;
+        float multiplier = bonusPct / 100f;
 
         for (int i = 0; i < count; i++)
         {
@@ -312,6 +311,12 @@ public class S_GameResultCalcul : MonoBehaviour
     {
         skipRequested = true;
         DOTween.CompleteAll();     // finish every tween instantly
+        PopulateTexts();
+        foreach (var t in killsTexts)   t.transform.localScale = Vector3.one;
+        foreach (var t in scoreTexts)   t.transform.localScale = Vector3.one;
+        timeBonusText.transform.localScale  = Vector3.one;
+        timeResultText.transform.localScale = Vector3.one;
+        finalScoreText.transform.localScale = Vector3.one;
     }
 
     IEnumerator WaitForSecondsWithSkip(float seconds)
