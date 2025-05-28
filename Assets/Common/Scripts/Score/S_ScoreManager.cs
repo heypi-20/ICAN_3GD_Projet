@@ -18,17 +18,20 @@ public class S_ScoreManager : MonoBehaviour
     public List<ScoreData> scoreDatas;
 
     [Header("Read Only Global Score")]
-    public float score;
+    public float gainScore;
 
     // Quick lookup by enemy type
     private Dictionary<EnemyType, ScoreData> _scoreDataDict;
     private S_ComboSystem _comboSystem;
+    private S_DisplayGainScore _displayGainScore;
 
     private void Awake()
     {
         // Build a dictionary for fast access
         _scoreDataDict = scoreDatas.ToDictionary(sd => sd.enemyType);
         _comboSystem = FindObjectOfType<S_ComboSystem>();
+        _displayGainScore= FindObjectOfType<S_DisplayGainScore>();
+
     }
 
     private void OnEnable()
@@ -48,6 +51,8 @@ public class S_ScoreManager : MonoBehaviour
 
             // Update per-type stats
             data.killed++;
+            gainScore = data.scoreGiven * _comboSystem.currentComboMultiplier;
+            _displayGainScore.ShowGainScore(gainScore);
             data.totalScore += data.scoreGiven*_comboSystem.currentComboMultiplier;
         }
         
