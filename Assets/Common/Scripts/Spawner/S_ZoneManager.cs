@@ -26,7 +26,7 @@ public class S_ZoneManager : MonoBehaviour
         SimpleSingleton();
         
         // Get all S_SpawnZone components in the scene.
-        spawnZones = new List<S_SpawnZone>(FindObjectsOfType<S_SpawnZone>());
+        spawnZones = new List<S_SpawnZone>(GetComponentsInChildren<S_SpawnZone>(true));
         
         // Find the player by looking for the S_CustomCharacterController component.
         player = FindObjectOfType<S_CustomCharacterController>().gameObject;
