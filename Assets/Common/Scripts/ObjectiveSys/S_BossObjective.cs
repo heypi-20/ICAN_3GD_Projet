@@ -12,6 +12,8 @@ public class S_BossObjective : MonoBehaviour
     private bool bansheeBossKilled = false;
     private bool cubyBossKilled = false;
     private bool tpShooterBossKilled = false;
+    [HideInInspector] public float gameChrono;
+
 
     private void Start()
     {
@@ -24,9 +26,20 @@ public class S_BossObjective : MonoBehaviour
             objectiveParams.maxValue
         );
 
-        
+        bossObjective.OnComplete += () =>
+        {
+            bossObjective.SetCompletionTime(gameChrono);
+            FindObjectOfType<S_GameResultCalcul>().ShowResultScreen();
+        };
         ObjectiveManager.AddObjective(bossObjective);
         EnemyBase.OnEnemyKilled += CheckBosses;
+        
+    }
+    private void Update()
+    {
+        if (!bossObjective.IsComplete) {
+            gameChrono += Time.deltaTime;
+        }
     }
 
     private void CheckBosses(EnemyType enemyType)

@@ -53,7 +53,7 @@ public class S_LoadingBehavior : MonoBehaviour
             yield return null;
 
         // Prompt in French
-        progressText.text = "Appuyez sur n'importe quelle touche";
+        progressText.text = "You are summoned by the Divine once more \n \n Press any key to accept the challenge";
 
         // Wait for any key press
         while (!Input.anyKeyDown)

@@ -15,7 +15,6 @@ public class S_MainObjective : MonoBehaviour
     private S_ObjectiveManager ObjectiveManager;
     private Objective killObjective;
 
-    [HideInInspector] public float gameChrono;
     
     private void Start()
     {
@@ -29,8 +28,7 @@ public class S_MainObjective : MonoBehaviour
             );
         killObjective.OnComplete += () =>
         {
-            killObjective.SetCompletionTime(gameChrono);
-            FindObjectOfType<S_GameResultCalcul>().ShowResultScreen();
+            FindObjectOfType<BossPhaseActivator>().StartBossPhase();
         };
         
         ObjectiveManager.AddObjective(killObjective);
@@ -43,13 +41,7 @@ public class S_MainObjective : MonoBehaviour
 
         EnemyBase.OnEnemyKilled += AddProgress;
     }
-
-    private void Update()
-    {
-        if (!killObjective.IsComplete) {
-            gameChrono += Time.deltaTime;
-        }
-    }
+    
 
     private void AddProgress(EnemyType enemyType)
     {
