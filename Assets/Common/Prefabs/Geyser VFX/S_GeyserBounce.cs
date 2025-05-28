@@ -14,17 +14,19 @@ public class S_GeyserBounce : MonoBehaviour
     public GameObject Bumper;
     public float targetY = 2f;              // Position Y cible modifiable dans l�inspecteur
     public float lerpSpeed = 5f;
-
+    public bool Tuto = false;
     private void Start()
     {
         GetComponentInChildren<MeshRenderer>().enabled = false;
         GoUp = true;
-        Bumper.transform.position = new Vector3(transform.position.x, transform.position.y-4, transform.position.z);
+
+        //Bumper.transform.position = new Vector3(transform.position.x, transform.position.y - 4, transform.position.z);
+
     }
 
     private void Update()
     {
-        if (GoUp && Bumper != null)
+        if (GoUp && Bumper != null && Tuto == false)
         {
             Vector3 currentPosition = Bumper.transform.position;
             Vector3 targetPosition = new Vector3(currentPosition.x, targetY, currentPosition.z);
