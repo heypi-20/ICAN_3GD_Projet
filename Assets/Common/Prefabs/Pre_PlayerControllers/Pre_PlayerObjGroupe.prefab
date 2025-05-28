@@ -11988,11 +11988,55 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6714939764422766652, guid: e5f8fac766ef9584d81da01a9a32b56a, type: 3}
+      propertyPath: m_Size.x
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 6714939764422766652, guid: e5f8fac766ef9584d81da01a9a32b56a, type: 3}
+      propertyPath: m_Size.z
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 8660049828566715726, guid: e5f8fac766ef9584d81da01a9a32b56a, type: 3}
+      propertyPath: lifeTime
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8660049828566715726, guid: e5f8fac766ef9584d81da01a9a32b56a, type: 3}
+      propertyPath: maxSpawnInterval
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8660049828566715726, guid: e5f8fac766ef9584d81da01a9a32b56a, type: 3}
+      propertyPath: minSpawnInterval
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1428575591185448899, guid: e5f8fac766ef9584d81da01a9a32b56a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 887998153182761112}
   m_SourcePrefab: {fileID: 100100000, guid: e5f8fac766ef9584d81da01a9a32b56a, type: 3}
+--- !u!1 &6412579987052729820 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1428575591185448899, guid: e5f8fac766ef9584d81da01a9a32b56a, type: 3}
+  m_PrefabInstance: {fileID: 5417089743561714207}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &887998153182761112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6412579987052729820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b28ba760fcbc2184da42e1d8cc722f08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabToSpawn: {fileID: 2228865803579743919, guid: a18cbc35247955a418435ecc283b23e3, type: 3}
+  lifeTime: 15
+  minSpawnInterval: 10
+  maxSpawnInterval: 15
 --- !u!4 &8449921835496354944 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4497259054963089055, guid: e5f8fac766ef9584d81da01a9a32b56a, type: 3}
