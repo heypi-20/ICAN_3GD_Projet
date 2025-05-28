@@ -58,7 +58,7 @@ public class S_PortalSpawner : MonoBehaviour
     void SpawnPortal()
     {
         Vector3 pos = transform.position + spawnOffset;
-        currentPortal = Instantiate(portalPrefab, pos, Quaternion.identity);
+        currentPortal = Instantiate(portalPrefab, pos, Quaternion.identity, transform);
         currentPortal.transform.localScale = Vector3.zero;
         scaleCoroutine = StartCoroutine(ScalePortal(currentPortal.transform, originalScale, false));
     }

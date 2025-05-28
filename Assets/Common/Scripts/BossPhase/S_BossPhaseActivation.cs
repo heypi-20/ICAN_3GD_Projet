@@ -20,6 +20,7 @@ public class BossPhaseActivator : MonoBehaviour
     /// </summary>
     public void StartBossPhase()
     {
+        // Destroy the normal phase spawner
         StartCoroutine(BossPhaseSequence());
     }
 
@@ -41,9 +42,9 @@ public class BossPhaseActivator : MonoBehaviour
         if (normalPhaseUI != null) normalPhaseUI.SetActive(false);
         if (bossPhaseUI   != null) bossPhaseUI.SetActive(true);
 
-        // Destroy the normal phase spawner
         if (normalPhaseSpawner != null)
             Destroy(normalPhaseSpawner);
+        yield return new WaitForSeconds(1);
 
         // Instantiate the boss phase spawner prefab at this object's position
         if (bossPhaseSpawnerPrefab != null)
