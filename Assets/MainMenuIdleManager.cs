@@ -1,11 +1,13 @@
 using UnityEngine;
 
+using UnityEngine;
+using UnityEngine.UI;
+
 public class MainMenuIdleManager : MonoBehaviour
 {
     [Header("Game Object")]
     public GameObject[] menuElements; 
-    public RectTransform titleTransform;
-    public TMPro.TMP_Text titleText;
+    public RectTransform titleTransform; // Transforme du logo (Image)
     
     [Header("Anchors")]
     public Vector2 originalTitlePosition;
@@ -16,27 +18,23 @@ public class MainMenuIdleManager : MonoBehaviour
     private float idleTimer = 0f;
     private bool isIdle = false;
     
-    [Header("Changement Dynamique Titre")]
-    public float moveSpeed = 3f; // Vitesse de déplacement du titre
-    public float idleFontSize = 48f;
-    private float originalFontSize;
+    [Header("Changement Dynamique Logo")]
+    public float moveSpeed = 3f;
+    public Vector3 idleScale = new Vector3(1.2f, 1.2f, 1f); // Échelle en idle
+    private Vector3 originalScale;
 
     void Start()
     {
         Time.timeScale = 1f;
         if (titleTransform != null)
             originalTitlePosition = titleTransform.anchoredPosition;
-
-        if (titleText != null)
-        {
-            originalFontSize = titleText.fontSize;
-        }
+            originalScale = titleTransform.localScale;
     }
 
     void Update()
     {
         Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-        bool mouseMoved = mouseDelta.sqrMagnitude > 0.01f; // évite les micro fluctuations
+        bool mouseMoved = mouseDelta.sqrMagnitude > 0.01f;
 
         bool hasInput = Input.anyKeyDown 
                         || Input.GetMouseButtonDown(0) 
@@ -59,11 +57,14 @@ public class MainMenuIdleManager : MonoBehaviour
             }
         }
 
-        // Déplacement fluide du titre
+        // Déplacement fluide du logo
         if (titleTransform != null)
         {
             Vector2 targetPosition = isIdle ? centerPosition : originalTitlePosition;
             titleTransform.anchoredPosition = Vector2.Lerp(titleTransform.anchoredPosition, targetPosition, Time.deltaTime * moveSpeed);
+            
+            Vector3 targetScale = isIdle ? idleScale : originalScale;
+            titleTransform.localScale = Vector3.Lerp(titleTransform.localScale, targetScale, Time.deltaTime * moveSpeed);
         }
     }
 
@@ -75,12 +76,6 @@ public class MainMenuIdleManager : MonoBehaviour
             obj.SetActive(false);
         }
         Cursor.visible = false;
-        
-        if (titleText != null)
-        {
-            titleText.fontSize = idleFontSize;
-        }
-        
     }
 
     void ShowMenu()
@@ -91,10 +86,5 @@ public class MainMenuIdleManager : MonoBehaviour
             obj.SetActive(true);
         }
         Cursor.visible = true;
-        
-        if (titleText != null)
-        {
-            titleText.fontSize = originalFontSize;
-        }
     }
 }
