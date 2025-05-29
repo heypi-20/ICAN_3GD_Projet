@@ -30,10 +30,15 @@ public class S_GameResultCalcul : MonoBehaviour
     [Tooltip("Hide indicator after result menu appears?")]
     public bool   hideIndicatorOnMenu    = true;
 
-    /* ───────── Bonus Mapping ─────── */
-    [Header("Time-Bonus Mapping (minutes)")]
-    public Vector2 timeRangeMinutes  = new(0, 5);
-    public Vector2 bonusPercentRange = new(5, 25);
+    /* ───────── Bonus Mapping (curve) ─────── */
+    [Header("Time-Bonus Curve")]
+    [Tooltip(
+        "X = elapsed minutes, Y = bonus percent (500 = 500 %).\n" +
+        "Example default: 0 min ➜ 500 %, 5 min ➜ 300 %, 8 min ➜ 0 %.")]
+    public AnimationCurve timeBonusCurve = new AnimationCurve(
+        new Keyframe(0f, 500f),
+        new Keyframe(5f, 300f),
+        new Keyframe(8f, 0f));
 
     /* ───────── Animation Settings ───────── */
     [Header("Animation Settings")]
@@ -72,6 +77,9 @@ public class S_GameResultCalcul : MonoBehaviour
     {
         // All DOTween tweens run in real-time, ignoring Time.timeScale
         DOTween.defaultTimeScaleIndependent = true;
+
+        // Clamp the bonus curve outside its last key
+        timeBonusCurve.postWrapMode = WrapMode.ClampForever;
     }
 
     void Start()
@@ -166,7 +174,6 @@ public class S_GameResultCalcul : MonoBehaviour
         
         StartCoroutine(TypeWriter(indicatorText, indicatorMessage, indicatorTypeDuration));
 
-
         seq.OnComplete(() => indicatorText.transform.localScale = Vector3.one);
 
         // wait while still allowing skip
@@ -186,14 +193,15 @@ public class S_GameResultCalcul : MonoBehaviour
     /* ───────── Populate & Hide ───────── */
     void PopulateTexts()
     {
-        var list = scoreManager.scoreDatas;
+        var list  = scoreManager.scoreDatas;
         int count = Mathf.Min(list.Count, Mathf.Min(killsTexts.Length, scoreTexts.Length));
 
         float totalSec = mainObjective.gameChrono;
-        float bonusPct = MapValueClamped(totalSec / 60f,
-                                         timeRangeMinutes.x, timeRangeMinutes.y,
-                                         bonusPercentRange.x, bonusPercentRange.y);
-        float multiplier = bonusPct / 100f;
+        float minutes  = totalSec / 60f;
+
+        // ⚠️  Bonus % now comes from AnimationCurve
+        float bonusPct = Mathf.Max(timeBonusCurve.Evaluate(minutes), 0f);
+        float multiplier = bonusPct * 0.01f;
 
         for (int i = 0; i < count; i++)
         {
@@ -327,14 +335,5 @@ public class S_GameResultCalcul : MonoBehaviour
             elapsed += Time.unscaledDeltaTime;
             yield return null;
         }
-    }
-
-    /* ───────── Utility ───────── */
-    float MapValueClamped(float v,
-                          float inMin, float inMax,
-                          float outMin, float outMax)
-    {
-        float t = Mathf.InverseLerp(inMin, inMax, v);
-        return Mathf.Lerp(outMin, outMax, t);
     }
 }

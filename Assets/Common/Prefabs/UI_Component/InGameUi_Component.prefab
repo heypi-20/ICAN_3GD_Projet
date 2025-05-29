@@ -7367,8 +7367,48 @@ MonoBehaviour:
   indicatorPopDuration: 0.25
   indicatorTypeDuration: 1
   hideIndicatorOnMenu: 1
-  timeRangeMinutes: {x: 0, y: 6}
-  bonusPercentRange: {x: 300, y: 10}
+  timeBonusCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 800
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 5
+      value: 300
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 5.3
+      value: 60
+      inSlope: -62.460125
+      outSlope: -62.460125
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.23379998
+    - serializedVersion: 3
+      time: 8
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   slowMotionScale: 0.05
   slowMotionRampDuration: 0.5
   slowMotionHoldDuration: 2.5
