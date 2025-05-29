@@ -12,6 +12,7 @@ public class S_LoadingBehavior : MonoBehaviour
 {
     [Header("UI References")]
     public TMP_Text progressText;             // Displays loading percentage and prompts
+    public string TextToShow;
 
     [Header("Settings")] 
     public SceneReference targetSceneName;  // Scene to load
@@ -53,7 +54,7 @@ public class S_LoadingBehavior : MonoBehaviour
             yield return null;
 
         // Prompt in French
-        progressText.text = "You are summoned by the Divine once more \n \n Press any key to accept the challenge";
+        progressText.text = TextToShow + "\n \n Press any key to accept the challenge";
 
         // Wait for any key press
         while (!Input.anyKeyDown)
