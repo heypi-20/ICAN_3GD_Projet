@@ -8671,7 +8671,7 @@ MonoBehaviour:
   - level: 4
     requiredEnergy: 50000
     graceTimer: 5
-    percentageGiveaway: 0.05
+    percentageGiveaway: 0.1
     useGrace: 1
   energyDisplay: {fileID: 6788294273892150970}
   isGraceActive: 0
@@ -8714,10 +8714,10 @@ MonoBehaviour:
     energyConsumptionRate: 40
   - level: 3
     speed: 20
-    energyConsumptionRate: 100
+    energyConsumptionRate: 450
   - level: 4
     speed: 24
-    energyConsumptionRate: 450
+    energyConsumptionRate: 1000
 --- !u!114 &8464428744350943366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8915,9 +8915,9 @@ MonoBehaviour:
     knockbackForce: 10
   - level: 4
     fireRate: 20
-    damage: 300
+    damage: 200
     weekPointMultiplier: 2
-    energyConsumption: 100
+    energyConsumption: 200
     dropBonus: -5
     knockbackForce: 15
 --- !u!114 &930943365604710939
@@ -8963,14 +8963,14 @@ MonoBehaviour:
     attackCooldown: 0.7
     energyConsumption: 500
     dropBonus: 45
-    WeakPointDropBonus: 80
+    WeakPointDropBonus: 65
     knockbackForce: 15
     coneStartRadius: 1
     coneEndRadius: 20
   - level: 4
     attackRange: 3
     attackDistance: 999
-    attackDamage: 500
+    attackDamage: 1200
     attackCooldown: 0.7
     energyConsumption: 1000
     dropBonus: 45
@@ -9024,13 +9024,13 @@ MonoBehaviour:
   groundPoundLevels:
   - level: 3
     maxSphereRange: 300
-    sphereDamage: 150
+    sphereDamage: 300
     descentSpeed: 500
     energyConsumption: 2000
     dropBonus: -10
   - level: 4
     maxSphereRange: 500
-    sphereDamage: 1500
+    sphereDamage: 18000
     descentSpeed: 500
     energyConsumption: 9000
     dropBonus: -7
@@ -12549,7 +12549,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabToSpawn: {fileID: 2228865803579743919, guid: a18cbc35247955a418435ecc283b23e3, type: 3}
   lifeTime: 15
-  minSpawnInterval: 10
+  minSpawnInterval: 8
   maxSpawnInterval: 15
 --- !u!4 &8449921835496354944 stripped
 Transform:
