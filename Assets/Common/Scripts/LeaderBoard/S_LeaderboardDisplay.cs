@@ -27,7 +27,7 @@ public class S_LeaderboardDisplay : MonoBehaviour
         localPlayerName = PlayerPrefs.GetString("PlayerName", string.Empty);
 
         // Pull the top 100 scores from Dreamlo
-        StartCoroutine(dreamlo.DownloadTopScores(100, OnLeaderboardReceived));
+        StartCoroutine(dreamlo.DownloadTopScores(500, OnLeaderboardReceived));
     }
 
     /// <summary>

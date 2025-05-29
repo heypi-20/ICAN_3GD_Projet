@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Eflatun.SceneReference;
@@ -5,9 +6,23 @@ using Eflatun.SceneReference;
 public class S_SceneTransition : MonoBehaviour
 {
     public SceneReference sceneName;   
+    public bool WaitForSceneLoad = false;
     public void LoadSceneByName()
     {
-        SceneManager.LoadSceneAsync(sceneName.BuildIndex);
+        if (WaitForSceneLoad)
+        {
+            StartCoroutine(DelayedLoadSceneByName());
+        }
+        else
+        {
+            SceneManager.LoadSceneAsync(sceneName.BuildIndex);
+        }
+    }
 
+    private IEnumerator DelayedLoadSceneByName()
+    {
+        new WaitForSeconds(1f);
+        SceneManager.LoadSceneAsync(sceneName.BuildIndex);
+        yield break;
     }
 }
