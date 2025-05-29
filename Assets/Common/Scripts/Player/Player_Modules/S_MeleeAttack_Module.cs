@@ -135,7 +135,7 @@ public class S_MeleeAttack_Module : MonoBehaviour
         if (hit.CompareTag("WeakPoint"))
         {
             MeleeAttackObserverEvent(PlayerStates.MeleeState.MeleeAttackHitWeakness, currentLevel.level);
-            hit.GetComponentInParent<EnemyBase>()?.ReduceHealth(currentLevel.attackDamage * 100, currentLevel.dropBonus + currentLevel.WeakPointDropBonus);
+            hit.GetComponentInParent<EnemyBase>()?.ReduceHealth(currentLevel.attackDamage * 100, currentLevel.WeakPointDropBonus);
         }
         else
         {

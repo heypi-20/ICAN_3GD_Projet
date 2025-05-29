@@ -8692,7 +8692,7 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 512
-  vortexPullSpeed: 20
+  vortexPullSpeed: 35
   vortexDuration: 1
   pullSpeedOverTime:
     serializedVersion: 2
@@ -8747,29 +8747,29 @@ MonoBehaviour:
     damage: 25
     weekPointMultiplier: 0.3
     energyConsumption: 2.5
-    dropBonus: 10
-    knockbackForce: 2
+    dropBonus: 5
+    knockbackForce: 5
   - level: 2
     fireRate: 6
     damage: 45
     weekPointMultiplier: 0.2
     energyConsumption: 15
     dropBonus: 0
-    knockbackForce: 5
+    knockbackForce: 10
   - level: 3
     fireRate: 10
     damage: 85
     weekPointMultiplier: 0.2
     energyConsumption: 80
-    dropBonus: -5
-    knockbackForce: 5
+    dropBonus: 10
+    knockbackForce: 10
   - level: 4
     fireRate: 20
     damage: 300
     weekPointMultiplier: 2
     energyConsumption: 100
-    dropBonus: -10
-    knockbackForce: 0
+    dropBonus: -5
+    knockbackForce: 15
 --- !u!114 &930943365604710939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8790,7 +8790,7 @@ MonoBehaviour:
     attackDamage: 10
     attackCooldown: 0.7
     energyConsumption: 10
-    dropBonus: 45
+    dropBonus: 35
     WeakPointDropBonus: 65
     knockbackForce: 5
     coneStartRadius: 1
@@ -8813,7 +8813,7 @@ MonoBehaviour:
     attackCooldown: 0.7
     energyConsumption: 500
     dropBonus: 45
-    WeakPointDropBonus: 65
+    WeakPointDropBonus: 80
     knockbackForce: 15
     coneStartRadius: 1
     coneEndRadius: 20
@@ -8823,8 +8823,8 @@ MonoBehaviour:
     attackDamage: 500
     attackCooldown: 0.7
     energyConsumption: 1000
-    dropBonus: 70
-    WeakPointDropBonus: 100
+    dropBonus: 45
+    WeakPointDropBonus: 80
     knockbackForce: 1
     coneStartRadius: 1
     coneEndRadius: 20
@@ -8879,7 +8879,7 @@ MonoBehaviour:
     energyConsumption: 2000
     dropBonus: -10
   - level: 4
-    maxSphereRange: 100
+    maxSphereRange: 500
     sphereDamage: 1500
     descentSpeed: 500
     energyConsumption: 9000
@@ -10178,7 +10178,6 @@ GameObject:
   - component: {fileID: 91740358299139688}
   - component: {fileID: 6588766956695912219}
   - component: {fileID: 6179642441875658368}
-  - component: {fileID: 4846581958637280283}
   m_Layer: 0
   m_Name: GameSettingsApplier
   m_TagString: Untagged
@@ -10228,18 +10227,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseHeight: 1440
   baseScale: 0.5
---- !u!114 &4846581958637280283
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7675066029411702336}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f864726b1d5acf042b2fbbbf01330523, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7675864561282676840
 GameObject:
   m_ObjectHideFlags: 0
@@ -11759,7 +11746,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &537277304048129258
 RectTransform:
   m_ObjectHideFlags: 0
