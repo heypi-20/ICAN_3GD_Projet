@@ -12,22 +12,26 @@ using FMODUnity;
 /// SFX volume, mouse sensitivity, screen resolution,
 /// and toggling a special UI element. Settings are loaded
 /// when the menu is opened and saved when it is closed.
+/// Also shows the numeric values of sliders via TMP_Text.
 /// </summary>
 public class S_SettingsMenuBehavior : MonoBehaviour
 {
-    [Header("UI References")]    
+    [Header("UI References")]
     public Slider volumeSlider;                  // Slider for global volume
+    public TMP_Text volumeValueText;             // TMP text to show global volume value
     public Slider musicVolumeSlider;             // Slider for music volume
+    public TMP_Text musicVolumeValueText;        // TMP text to show music volume value
     public Slider sfxVolumeSlider;               // Slider for SFX volume
+    public TMP_Text sfxVolumeValueText;          // TMP text to show SFX volume value
     public Slider mouseSensitivitySlider;        // Slider for camera sensitivity
+    public TMP_Text sensitivityValueText;        // TMP text to show sensitivity value
     public TMP_Dropdown resolutionDropdown;      // TextMeshPro dropdown for resolution
     public Toggle specialObjectToggle;           // Toggle for enabling/disabling a special object
 
-    [Header("Panel Reference")]    
+    [Header("Panel Reference")]
     public GameObject settingsPanel;             // Root GameObject for the settings menu
 
     private CinemachineVirtualCamera cinemachineCamera;  // Reference to the virtual camera
-
     private Resolution[] availableResolutions;   // All supported screen resolutions
     private S_HUDPlayerState infotext;           // Reference to a HUD element to toggle
 
@@ -47,7 +51,6 @@ public class S_SettingsMenuBehavior : MonoBehaviour
             .Distinct()
             .Select(res => new Resolution { width = res.width, height = res.height })
             .ToArray();
-
         availableResolutions = filteredResolutions;
 
         List<string> options = new List<string>();
@@ -64,6 +67,12 @@ public class S_SettingsMenuBehavior : MonoBehaviour
         mouseSensitivitySlider.onValueChanged.AddListener(OnSensitivityChanged);
         resolutionDropdown.onValueChanged.AddListener(OnResolutionChanged);
         specialObjectToggle.onValueChanged.AddListener(OnToggleChanged);
+
+        // Initialize TMP text values
+        UpdateVolumeText(volumeSlider.value);
+        UpdateMusicVolumeText(musicVolumeSlider.value);
+        UpdateSFXVolumeText(sfxVolumeSlider.value);
+        UpdateSensitivityText(mouseSensitivitySlider.value);
     }
 
     void OnEnable()
@@ -74,8 +83,7 @@ public class S_SettingsMenuBehavior : MonoBehaviour
         {
             infotext = gameSettings.hud;
         }
-        
-        // Can't find it because object might be inactive
+
         if (cinemachineCamera == null)
             cinemachineCamera = FindObjectOfType<CinemachineVirtualCamera>();
 
@@ -120,21 +128,25 @@ public class S_SettingsMenuBehavior : MonoBehaviour
         float volume = PlayerPrefs.GetFloat(VolumeKey, 1f);
         volumeSlider.value = volume;
         RuntimeManager.GetBus("bus:/").setVolume(volume);
+        UpdateVolumeText(volume);
 
         // Music volume (FMOD bus)
         float musicVol = PlayerPrefs.GetFloat(MusicVolumeKey, 1f);
         musicVolumeSlider.value = musicVol;
         RuntimeManager.GetBus("bus:/Music").setVolume(musicVol);
+        UpdateMusicVolumeText(musicVol);
 
         // SFX volume (FMOD bus)
         float sfxVol = PlayerPrefs.GetFloat(SFXVolumeKey, 1f);
         sfxVolumeSlider.value = sfxVol;
         RuntimeManager.GetBus("bus:/SoundEffect").setVolume(sfxVol);
+        UpdateSFXVolumeText(sfxVol);
 
         // Mouse sensitivity (Cinemachine POV)
         float sens = PlayerPrefs.GetFloat(SensitivityKey, 1f);
         mouseSensitivitySlider.value = sens;
         ApplyCinemachineSensitivity(sens);
+        UpdateSensitivityText(sens);
 
         // Screen resolution
         int idx = PlayerPrefs.GetInt(ResolutionKey, availableResolutions.Length - 1);
@@ -169,7 +181,7 @@ public class S_SettingsMenuBehavior : MonoBehaviour
     {
         RuntimeManager.GetBus("bus:/").setVolume(val);
         PlayerPrefs.SetFloat(VolumeKey, val);
-
+        UpdateVolumeText(val);
     }
 
     /// <summary>
@@ -179,6 +191,7 @@ public class S_SettingsMenuBehavior : MonoBehaviour
     {
         PlayerPrefs.SetFloat(MusicVolumeKey, val);
         RuntimeManager.GetBus("bus:/Music").setVolume(val);
+        UpdateMusicVolumeText(val);
     }
 
     /// <summary>
@@ -188,6 +201,7 @@ public class S_SettingsMenuBehavior : MonoBehaviour
     {
         PlayerPrefs.SetFloat(SFXVolumeKey, val);
         RuntimeManager.GetBus("bus:/SoundEffect").setVolume(val);
+        UpdateSFXVolumeText(val);
     }
 
     /// <summary>
@@ -197,6 +211,7 @@ public class S_SettingsMenuBehavior : MonoBehaviour
     {
         PlayerPrefs.SetFloat(SensitivityKey, val);
         ApplyCinemachineSensitivity(val);
+        UpdateSensitivityText(val);
     }
 
     /// <summary>
@@ -240,4 +255,30 @@ public class S_SettingsMenuBehavior : MonoBehaviour
             pov.m_VerticalAxis.m_MaxSpeed = sensitivity;
         }
     }
+
+    #region Value Text Updaters
+    private void UpdateVolumeText(float val)
+    {
+        if (volumeValueText != null)
+            volumeValueText.text = (val * 100f).ToString("F0") + "%";
+    }
+
+    private void UpdateMusicVolumeText(float val)
+    {
+        if (musicVolumeValueText != null)
+            musicVolumeValueText.text = (val * 100f).ToString("F0") + "%";
+    }
+
+    private void UpdateSFXVolumeText(float val)
+    {
+        if (sfxVolumeValueText != null)
+            sfxVolumeValueText.text = (val * 100f).ToString("F0") + "%";
+    }
+
+    private void UpdateSensitivityText(float val)
+    {
+        if (sensitivityValueText != null)
+            sensitivityValueText.text = val.ToString("F2");
+    }
+    #endregion
 }

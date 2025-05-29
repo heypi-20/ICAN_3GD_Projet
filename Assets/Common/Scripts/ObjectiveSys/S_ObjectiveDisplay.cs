@@ -49,7 +49,7 @@ public class S_ObjectiveDisplay : MonoBehaviour
     {
         _objective.OnValueChange -= OnObjectiveValueChange;
         DOTween.Kill(_objectiveText);
-        _objectiveText.text = "0";
+        _objectiveText.text = "Warning !";
     }
 
     private void OnObjectiveValueChange()
