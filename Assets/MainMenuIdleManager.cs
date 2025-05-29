@@ -8,6 +8,7 @@ public class MainMenuIdleManager : MonoBehaviour
     [Header("Game Object")]
     public GameObject[] menuElements; 
     public RectTransform titleTransform; // Transforme du logo (Image)
+    public GameObject menuToCheck;
     
     [Header("Anchors")]
     public Vector2 originalTitlePosition;
@@ -50,10 +51,13 @@ public class MainMenuIdleManager : MonoBehaviour
         }
         else
         {
-            idleTimer += Time.deltaTime;
-            if (!isIdle && idleTimer >= idleTimeThreshold)
+            if (menuToCheck != null && menuToCheck.activeSelf == false)
             {
-                HideMenu();
+                idleTimer += Time.deltaTime;
+                if (!isIdle && idleTimer >= idleTimeThreshold)
+                {
+                    HideMenu();
+                }
             }
         }
 
