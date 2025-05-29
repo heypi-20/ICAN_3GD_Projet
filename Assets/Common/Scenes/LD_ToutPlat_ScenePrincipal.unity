@@ -512,6 +512,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1455337304}
     m_Modifications:
+    - target: {fileID: 619715610332939172, guid: 679335dfc310bcd40bfdaa80b37707ca, type: 3}
+      propertyPath: VFXStayTime
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 619715610332939172, guid: 679335dfc310bcd40bfdaa80b37707ca, type: 3}
+      propertyPath: maxActivationsPerFrame
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 1847633914598501553, guid: 679335dfc310bcd40bfdaa80b37707ca, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -906,6 +914,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 930943365604710939, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: attackLevels.Array.data[1].dropBonus
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 930943365604710939, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: attackLevels.Array.data[2].dropBonus
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 930943365604710939, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: attackLevels.Array.data[1].WeakPointDropBonus
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: 930943365604710939, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: attackLevels.Array.data[2].WeakPointDropBonus
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 930943365604710939, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: attackLevels.Array.data[3].WeakPointDropBonus
+      value: 80
+      objectReference: {fileID: 0}
     - target: {fileID: 959237408161227288, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -934,6 +962,10 @@ PrefabInstance:
       propertyPath: boss
       value: 
       objectReference: {fileID: 1889766400}
+    - target: {fileID: 5131711004954361696, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: fireRateLevels.Array.data[2].dropBonus
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6350587353748060149, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1004,6 +1036,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8728408009053761971, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8876415628083292975, guid: 2d7191d34cc629741a2d10f7123ab1da, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -19883,7 +19919,7 @@ MonoBehaviour:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 1
+        value: 0.5
         inSlope: Infinity
         outSlope: Infinity
         tangentMode: 103
@@ -19891,8 +19927,8 @@ MonoBehaviour:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 30
-        value: 0.6
+        time: 15
+        value: 0.3
         inSlope: Infinity
         outSlope: Infinity
         tangentMode: 103
@@ -21399,6 +21435,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3858090502915720912, guid: 018ebfe0a4fa03c448eb128b5db38204, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8048919711318311899, guid: 018ebfe0a4fa03c448eb128b5db38204, type: 3}
+      propertyPath: m_VertexColorAlwaysGammaSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8048919711318311899, guid: 018ebfe0a4fa03c448eb128b5db38204, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

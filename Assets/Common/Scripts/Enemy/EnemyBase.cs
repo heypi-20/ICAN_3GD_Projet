@@ -200,7 +200,6 @@ public class EnemyBase : MonoBehaviour
         }
 
         TriggerHealthFeedback(hit);
-
         if (enemyGetHitVFX != null)
             S_VFXPoolManager.Instance.SpawnVFX(enemyGetHitVFX, hitPosition, transform.rotation, 3f);
 
@@ -245,7 +244,7 @@ public class EnemyBase : MonoBehaviour
         {
             Vector3 spawnPos = useDefault
                 ? selfPosition + new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f))
-                : selfPosition;
+                : selfPosition + new Vector3(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f));
             Vector3 dir = (spawnPos - selfPosition).normalized;
             S_EnergyPointPoolManager.Instance.QueueEnergyPoint(energyPoint, spawnPos, dir);
         }
