@@ -51,8 +51,7 @@ public class SoundManager : MonoBehaviour
     public string Dashoot_Shoot;
     public string JumpyCuby_Jump;
     public string Enemy_Kill; 
-    
-    public string Secret_surprise;
+   
     private int actuallevel;
 
     #region Shoot
@@ -354,13 +353,7 @@ public class SoundManager : MonoBehaviour
     {
         FMODUnity.RuntimeManager.PlayOneShot(Enemy_Kill);
     }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            FMODUnity.RuntimeManager.PlayOneShot(Secret_surprise);
-        }
-    }
+
     private void Start()
     {
         S_PlayerStateObserver.Instance.OnLevelUpStateEvent += LevelChanged; 
