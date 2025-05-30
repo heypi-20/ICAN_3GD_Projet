@@ -289,8 +289,9 @@ public class S_BasicSprint_Module : MonoBehaviour
         SprintLevel sprintLevel =sprintLevels.Find(level => level.level == currentLevel);
         if (sprintLevel == null)
         {
-            sprintLevel =sprintLevels.Find(level => level.level == 1);
+            sprintLevel =sprintLevels.Find(level => level.level == 2);
         }
+        Debug.Log(sprintLevel.level);
         return sprintLevel;
     }
     

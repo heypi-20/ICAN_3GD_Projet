@@ -238,7 +238,7 @@ public class S_GroundPound_Module : MonoBehaviour
         if (_energyStorage == null)
             return null;
         int idx = _energyStorage.currentLevelIndex + 1;
-        var lvl = groundPoundLevels.Find(l => l.level == idx) ?? groundPoundLevels.Find(l => l.level == 2);
+        var lvl = groundPoundLevels.Find(l => l.level == idx) ?? groundPoundLevels.Find(l => l.level == 3);
         return lvl;
     }
 
