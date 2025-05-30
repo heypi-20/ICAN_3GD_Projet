@@ -91,7 +91,7 @@ public class S_CameraCACFeedback : MonoBehaviour
         // Dash start: begin increasing FOV
         if (state.Equals(PlayerStates.MeleeState.DashingBeforeMelee))
         {
-            _startFOV    = _vcam.m_Lens.FieldOfView; // Use live FOV as baseline
+            _startFOV    = 60f; // Use live FOV as baseline
             _timePassed  = 0f;
             _isIncreasing = true;
 
