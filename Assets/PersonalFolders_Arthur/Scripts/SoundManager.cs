@@ -212,19 +212,25 @@ public class SoundManager : MonoBehaviour
                 FMODUnity.RuntimeManager.PlayOneShot(Loose_Palier);
                 Instance_Music_Lvl1.start();
                 Instance_Music_Lvl2.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                Instance_Music_Lvl3.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                Instance_Music_Lvl4.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 break;
             
             case PlayerStates.LevelState.LevelDown when Level == 2 : 
                 FMODUnity.RuntimeManager.PlayOneShot(Loose_Palier);
                 FMODUnity.RuntimeManager.StudioSystem.setParameterByName("PalierInt", 1f);
                 Instance_Music_Lvl2.start();
+                Instance_Music_Lvl1.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 Instance_Music_Lvl3.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                Instance_Music_Lvl4.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 break;
             case PlayerStates.LevelState.LevelDown when Level == 3 : 
                 FMODUnity.RuntimeManager.StudioSystem.setParameterByName("PalierInt", 2f);
                 FMODUnity.RuntimeManager.PlayOneShot(Loose_Palier);
                 Instance_Music_Lvl3.start();
+                Instance_Music_Lvl1.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 Instance_Music_Lvl4.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                Instance_Music_Lvl2.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 break;
             
             
@@ -235,6 +241,8 @@ public class SoundManager : MonoBehaviour
                 Instance_Music_Lvl2 = RuntimeManager.CreateInstance(Music_Lvl2);
                 Instance_Music_Lvl2.start();
                 Instance_Music_Lvl1.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                Instance_Music_Lvl3.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                Instance_Music_Lvl4.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 break;
             case PlayerStates.LevelState.LevelUp when Level == 3 : 
                 FMODUnity.RuntimeManager.StudioSystem.setParameterByName("PalierInt", 2f);
@@ -242,12 +250,16 @@ public class SoundManager : MonoBehaviour
                 FMODUnity.RuntimeManager.PlayOneShot(Gain_Palier);
                 Instance_Music_Lvl3.start();
                 Instance_Music_Lvl2.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                Instance_Music_Lvl1.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                Instance_Music_Lvl4.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 break;
             case PlayerStates.LevelState.LevelUp when Level == 4 : 
                 FMODUnity.RuntimeManager.StudioSystem.setParameterByName("PalierInt", 3f);
                 Instance_Music_Lvl4 = RuntimeManager.CreateInstance(Music_Lvl4);
                 FMODUnity.RuntimeManager.PlayOneShot(Gain_Palier);
                 Instance_Music_Lvl4.start();
+                Instance_Music_Lvl2.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                Instance_Music_Lvl1.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 Instance_Music_Lvl3.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 break;
             case PlayerStates.LevelState.StartGrace when Level == 2:

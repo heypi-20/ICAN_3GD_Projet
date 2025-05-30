@@ -324,6 +324,11 @@ MonoBehaviour:
   ProjectilePrefab_Lv2: {fileID: 3953531229119934194, guid: a99bbd84083b8384b86ee4590c4a1dec, type: 3}
   ProjectilePrefab_Lv3: {fileID: 3953531229119934194, guid: a99bbd84083b8384b86ee4590c4a1dec, type: 3}
   ProjectilePrefab_Lv4: {fileID: 3953531229119934194, guid: f198e14c66f2eba4c87ed26fb5bc46a9, type: 3}
+  useActivationLv1: 0
+  useActivationLv2: 0
+  useActivationLv3: 0
+  useActivationLv4: 0
+  MuzzleFlashPrefab: {fileID: 0}
   Speed: 300
   ProjectileLifeTime: 3
   FollowTime: 0.1
@@ -351,6 +356,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  ActivationOffDelay: 0.2
 --- !u!1 &3067188605988808966
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,7 +371,7 @@ GameObject:
   - component: {fileID: 8957669322025032805}
   - component: {fileID: 7867883131502575722}
   - component: {fileID: 5734631039705917807}
-  - component: {fileID: 8716248582497740291}
+  - component: {fileID: 6228860732158989296}
   m_Layer: 0
   m_Name: FPSCameraBrain
   m_TagString: MainCamera
@@ -397,7 +403,7 @@ Camera:
   m_GameObject: {fileID: 3067188605988808966}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 2
+  m_ClearFlags: 1
   m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -421,7 +427,7 @@ Camera:
     height: 1
   near clip plane: 0.01
   far clip plane: 1000
-  field of view: 90
+  field of view: 60
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -540,7 +546,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerBody: {fileID: 60826091439302408}
   cameraTransform: {fileID: 6930588632035586381}
---- !u!114 &8716248582497740291
+--- !u!114 &6228860732158989296
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -553,7 +559,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IsGlobal: 1
-  priority: 1
+  priority: 0
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: fc723267deb8d5943b22ee27a50c5499, type: 2}
@@ -882,7 +888,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 60826091439302408}
   m_Lens:
-    FieldOfView: 90
+    FieldOfView: 60
     OrthographicSize: 5
     NearClipPlane: 0.01
     FarClipPlane: 1000
@@ -1234,6 +1240,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8051317258864304930}
+  - component: {fileID: 1152660889281855904}
   m_Layer: 0
   m_Name: Basic_CC_UseForShowCase
   m_TagString: Player
@@ -1259,3 +1266,17 @@ Transform:
   - {fileID: 5689408578514641273}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1152660889281855904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9158118851176187430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c160c1e842393745b441db85641f804, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseHeight: 1440
+  baseScale: 0.4

@@ -10,9 +10,12 @@ public class S_PauseMenuBehavior : MonoBehaviour
     [Tooltip("Assign your Pause Menu UI GameObject here.")]
     public GameObject pauseMenuUI;
 
+    public GameObject GameOverUI;
+    public GameObject GameWinUI;
     public GameObject settingsMenuUI;
 
     private bool isPaused = false;
+    
 
     void Start()
     {
@@ -23,6 +26,8 @@ public class S_PauseMenuBehavior : MonoBehaviour
 
     void Update()
     {
+        if ((GameOverUI != null && GameOverUI.activeSelf) || 
+            (GameWinUI != null && GameWinUI.activeSelf)) return;  
         // If Settings Menu is open, ignore pause toggle
         if (settingsMenuUI != null && settingsMenuUI.activeSelf)
             return;

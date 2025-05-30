@@ -4000,7 +4000,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 7121883038825396396}
   m_Lens:
-    FieldOfView: 76.53057
+    FieldOfView: 60
     OrthographicSize: 5
     NearClipPlane: 0.01
     FarClipPlane: 1000
@@ -6361,7 +6361,7 @@ Camera:
     height: 1
   near clip plane: 0.01
   far clip plane: 1000
-  field of view: 76.53057
+  field of view: 60
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -8648,8 +8648,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9077fe9c8aaf7bf48be7dda69cfc094c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cheatCodeforAdd: 273
-  cheatCodeforRemove: 274
+  cheatCodeforAdd: 0
+  cheatCodeforRemove: 0
   maxEnergy: 100000
   currentEnergy: 500
   energyLevels:
@@ -8671,7 +8671,7 @@ MonoBehaviour:
   - level: 4
     requiredEnergy: 50000
     graceTimer: 5
-    percentageGiveaway: 0.1
+    percentageGiveaway: 0.3
     useGrace: 1
   energyDisplay: {fileID: 6788294273892150970}
   isGraceActive: 0
@@ -9305,6 +9305,8 @@ MonoBehaviour:
   killLerpSpeed: 5
   dotweenPlayer: {fileID: 2780994105607742661}
   tweenCooldown: 0.1
+  multiplierPulseSpeed: 3
+  multiplierPulseAmount: 0.05
 --- !u!114 &2780994105607742661
 MonoBehaviour:
   m_ObjectHideFlags: 0

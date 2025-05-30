@@ -11,7 +11,7 @@ public class S_ComboEffect : MonoBehaviour
     public S_ComboSystem comboSystem;
 
     [Header("Barre visuelle")]
-    public GameObject redBarObject; // GameObject contenant la barre rouge
+    public GameObject redBarObject;
     public string redBarProgressProperty = "_Progress";
 
     [Header("Textes 3D")]
@@ -28,13 +28,22 @@ public class S_ComboEffect : MonoBehaviour
     [Tooltip("Temps minimal (s) entre deux déclenchements")]
     public float tweenCooldown = 0.1f;
 
+    [Header("Multiplier Pulse Animation")]
+    [Tooltip("Speed of the pulsing effect (cycles per second)")]
+    public float multiplierPulseSpeed = 1.5f;
+    [Tooltip("How far above/below 1× scale the pulse goes (e.g. 0.05 = ±5%)")]
+    public float multiplierPulseAmount = 0.05f;
+
     private int lastKillCount = 0;
     private float lastTweenTime = -Mathf.Infinity;
     private float displayedKills = 0f;
 
-    // --- Nouvelles variables pour l'instance de matériau ---
+    // Material instance
     private Renderer redBarRenderer;
     private MaterialPropertyBlock propertyBlock;
+
+    // Cache the original scale of the multiplier text
+    private Vector3 multiplicateurBaseScale;
 
     void OnEnable()
     {
@@ -43,11 +52,14 @@ public class S_ComboEffect : MonoBehaviour
             redBarRenderer = redBarObject.GetComponent<Renderer>();
             propertyBlock = new MaterialPropertyBlock();
         }
+
+        if (multiplicateurText != null)
+            multiplicateurBaseScale = multiplicateurText.transform.localScale;
     }
 
     void Update()
     {
-        // En mode éditeur sans Play, on garde l'affichage
+        // In editor, always show
         if (!Application.isPlaying)
         {
             redBarObject?.SetActive(true);
@@ -61,15 +73,14 @@ public class S_ComboEffect : MonoBehaviour
 
         if (comboSystem.comboActive)
         {
+            // -- show UI
             redBarObject?.SetActive(true);
             killText?.gameObject.SetActive(true);
             multiplicateurText?.gameObject.SetActive(true);
 
-            // Calcul du ratio combo
+            // -- update red bar
             float ratio = Mathf.Clamp01(1f - comboSystem.comboActuelTimer / comboSystem.currentComboSetting.comboTime);
             float mapped = 0.5f + 0.5f * ratio;
-
-            // Appliquer la propriété sur l'instance du matériau sans modifier l'asset
             if (redBarRenderer != null)
             {
                 redBarRenderer.GetPropertyBlock(propertyBlock);
@@ -77,13 +88,14 @@ public class S_ComboEffect : MonoBehaviour
                 redBarRenderer.SetPropertyBlock(propertyBlock);
             }
 
-            // —— Lissage du compteur de kills ——
+            // -- smooth kill counter
             float targetKills = comboSystem.comboKillCount;
             displayedKills = Mathf.Lerp(displayedKills, targetKills, Time.deltaTime * killLerpSpeed);
-            int shownKills = Mathf.FloorToInt(displayedKills + 0.5f)+1;
+            int shownKills = Mathf.FloorToInt(displayedKills + 0.5f) + 1;
             if (killText != null)
                 killText.text = shownKills.ToString();
 
+            // -- kill tween
             if (comboSystem.comboKillCount > lastKillCount
                 && Time.time - lastTweenTime >= tweenCooldown
                 && dotweenPlayer != null)
@@ -93,16 +105,28 @@ public class S_ComboEffect : MonoBehaviour
             }
             lastKillCount = comboSystem.comboKillCount;
 
-            // MAJ multiplicateur (sans lissage)
+            // -- multiplier text (as percent + pts + EN)
             if (multiplicateurText != null)
-                multiplicateurText.text = $"x{comboSystem.currentComboMultiplier:F2}";
+                multiplicateurText.text = $"x{comboSystem.currentComboMultiplier * 100f:F0}%";
+
+            // -- now apply a continuous subtle pulse to its scale
+            if (multiplicateurText != null)
+            {
+                float pulse = 1f + multiplierPulseAmount * Mathf.Sin(Time.time * multiplierPulseSpeed * 2f * Mathf.PI);
+                multiplicateurText.transform.localScale = multiplicateurBaseScale * pulse;
+            }
         }
         else
         {
+            // hide UI and reset
             redBarObject?.SetActive(false);
             killText?.gameObject.SetActive(false);
             multiplicateurText?.gameObject.SetActive(false);
             displayedKills = 0f;
+
+            // restore original scale so it’s perfect next combo
+            if (multiplicateurText != null)
+                multiplicateurText.transform.localScale = multiplicateurBaseScale;
         }
     }
 }

@@ -94,8 +94,6 @@ public class S_GameResultCalcul : MonoBehaviour
     /* Dev hot-key & skip detection */
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-            ShowResultScreen();
 
         if (menuActive && !skipRequested && Input.GetMouseButtonDown(0))
             SkipAnimations();
