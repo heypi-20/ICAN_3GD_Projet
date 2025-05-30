@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -14,6 +15,12 @@ public class BossPhaseActivator : MonoBehaviour
     public GameObject bossPhaseSpawnerPrefab;  // Prefab to instantiate for boss phase spawning
     public GameObject bossEgg;                 // The egg object appearing before the boss
     public GameObject bossObject;              // The actual boss object
+    
+    [Header("Knockback Settings")]
+    public float knockbackRadius;
+    public float knockbackForce;
+    public float knockbackDuration;
+    public LayerMask playerLayer;
 
     /// <summary>
     /// Call this method to start the boss phase sequence.
@@ -31,6 +38,21 @@ public class BossPhaseActivator : MonoBehaviour
         if (bossEgg != null)
             bossEgg.SetActive(true);
 
+        if (bossEgg.activeSelf) {
+            Collider[] hits = Physics.OverlapSphere(bossEgg.transform.position, knockbackRadius, playerLayer);
+
+            foreach (Collider hit in hits) {
+                Debug.Log("Start Knockback player");
+                Debug.Log(hit.gameObject.name);
+    
+                CharacterController controller = hit.GetComponent<CharacterController>();
+                if (controller != null) {
+                    Vector3 dir = (hit.transform.position - bossEgg.transform.position).normalized;
+                    StartCoroutine(ApplyKnockback(controller, dir));
+                }
+            }
+        }
+        
         // 2) Wait for bossDelay, then enable boss, switch UI, destroy normal spawner and spawn boss spawner
         yield return new WaitForSeconds(bossDelay);
 
@@ -49,5 +71,16 @@ public class BossPhaseActivator : MonoBehaviour
         // Instantiate the boss phase spawner prefab at this object's position
         if (bossPhaseSpawnerPrefab != null)
             Instantiate(bossPhaseSpawnerPrefab, transform.position, Quaternion.identity);
+    }
+
+    private IEnumerator ApplyKnockback(CharacterController controller, Vector3 dir)
+    {
+        float timer = 0f;
+        
+        while (timer < knockbackDuration) {
+            controller.Move(dir * knockbackForce * Time.deltaTime);
+            timer += Time.deltaTime;
+            yield return null;
+        }
     }
 }
