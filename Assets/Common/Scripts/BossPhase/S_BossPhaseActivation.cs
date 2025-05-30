@@ -42,9 +42,6 @@ public class BossPhaseActivator : MonoBehaviour
             Collider[] hits = Physics.OverlapSphere(bossEgg.transform.position, knockbackRadius, playerLayer);
 
             foreach (Collider hit in hits) {
-                Debug.Log("Start Knockback player");
-                Debug.Log(hit.gameObject.name);
-    
                 CharacterController controller = hit.GetComponent<CharacterController>();
                 if (controller != null) {
                     Vector3 dir = (hit.transform.position - bossEgg.transform.position).normalized;

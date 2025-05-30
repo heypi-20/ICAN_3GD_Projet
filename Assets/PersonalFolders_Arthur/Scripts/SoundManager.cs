@@ -259,7 +259,7 @@ public class SoundManager : MonoBehaviour
             case PlayerStates.LevelState.EndGrace when Level == 2:
                 StopAllCoroutines();
                 StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl2, 0f, 1f, 0.2f));
-                Instance_HeartBeat.stop(STOP_MODE.IMMEDIATE);
+                Instance_HeartBeat.stop(STOP_MODE.ALLOWFADEOUT);
                 break;
 
             case PlayerStates.LevelState.StartGrace when Level == 3:
@@ -282,7 +282,7 @@ public class SoundManager : MonoBehaviour
 
             case PlayerStates.LevelState.EndGrace when Level == 4:
                 StopAllCoroutines();
-                Instance_HeartBeat.stop(STOP_MODE.IMMEDIATE);
+                Instance_HeartBeat.stop(STOP_MODE.ALLOWFADEOUT);
                 StartCoroutine(ChangePitchOverTime(Instance_Music_Lvl4, 0f, 1f, 0.1f));
                 break;
             
