@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Cinemachine;
 using DG.Tweening;
@@ -122,10 +123,10 @@ public class S_GroundPound_Module : MonoBehaviour
         _groundPoundStartHeight = transform.position.y;
 
         GroundPoundObserverEvent(PlayerStates.GroundPoundState.isGroundPounding, level.level);
-        StartCoroutine(MoveToGround(level.descentSpeed));
+        StartCoroutine(MoveToGround(level.descentSpeed, level));
     }
 
-    private IEnumerator MoveToGround(float maxSpeed)
+    private IEnumerator MoveToGround(float maxSpeed, GroundPoundLevel level)
     {
         float curSpeed = 0f;
         float accel = maxSpeed;
@@ -149,7 +150,7 @@ public class S_GroundPound_Module : MonoBehaviour
             float impactY = transform.position.y;
             _waveOrigin = transform.position;
             TriggerGroundPoundEffect();
-            GroundPoundObserverEvent(PlayerStates.GroundPoundState.EndGroundPound, GetCurrentGroundPoundLevel().level);
+            GroundPoundObserverEvent(PlayerStates.GroundPoundState.EndGroundPound, level.level);
 
             float traveled = _groundPoundStartHeight - impactY;
             float bounceHeight = traveled * bounceMultiplier;
@@ -235,11 +236,19 @@ public class S_GroundPound_Module : MonoBehaviour
 
     private GroundPoundLevel GetCurrentGroundPoundLevel()
     {
-        if (_energyStorage == null)
-            return null;
+        if (groundPoundLevels == null || groundPoundLevels.Count == 0) return null;
+
         int idx = _energyStorage.currentLevelIndex + 1;
-        var lvl = groundPoundLevels.Find(l => l.level == idx) ?? groundPoundLevels.Find(l => l.level == 3);
-        return lvl;
+
+        var lvl = groundPoundLevels.FirstOrDefault(l => l.level == idx);
+        if (lvl != null) return lvl;
+
+        lvl = groundPoundLevels.Where(l => l.level < idx)
+            .OrderByDescending(l => l.level)
+            .FirstOrDefault();
+        if (lvl != null) return lvl;
+
+        return null;
     }
 
     private void OnDrawGizmos()
