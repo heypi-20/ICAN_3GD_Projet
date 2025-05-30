@@ -44,7 +44,7 @@ public class S_CameraGroundPoundFeedback : MonoBehaviour
     {
         _vcam          = vcam;
         _impulseSource = impulse;
-        _startFOV      = vcam.m_Lens.FieldOfView;
+        _startFOV      = 60f;
 
         var volumeSettings = _vcam.GetComponent<CinemachineVolumeSettings>();
         if (volumeSettings != null &&

@@ -128,7 +128,7 @@ public class S_CameraSprintFeedback : MonoBehaviour
             2 => FOV_Pallier2,
             3 => FOV_Pallier3,
             4 => FOV_Pallier4,
-            _ => _vcam.m_Lens.FieldOfView
+            _ => 60f
         };
 
         DOTween.Kill(FOV_TWEEN_ID, complete: false);
