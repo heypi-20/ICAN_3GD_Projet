@@ -52,10 +52,6 @@ public class S_MainObjective : MonoBehaviour
     private void Update()
     {
         objectiveCurrentValue = killObjective.CurrentValue;
-
-        if (killObjective.IsComplete) {
-            Debug.Log("MAIN OBJECTIVE COMPLETE");
-        }
     }
 
 
