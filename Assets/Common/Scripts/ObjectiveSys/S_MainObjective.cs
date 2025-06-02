@@ -28,6 +28,7 @@ public class S_MainObjective : MonoBehaviour
             );
         killObjective.OnComplete += () =>
         {
+            Debug.Log("Kill Objective");
             FindObjectOfType<BossPhaseActivator>().StartBossPhase();
         };
         
