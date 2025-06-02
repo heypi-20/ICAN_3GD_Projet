@@ -21,7 +21,7 @@ public class S_SceneTransition : MonoBehaviour
 
     private IEnumerator DelayedLoadSceneByName()
     {
-        new WaitForSeconds(1f);
+        new WaitForSeconds(2.5f);
         SceneManager.LoadSceneAsync(sceneName.BuildIndex);
         yield break;
     }
