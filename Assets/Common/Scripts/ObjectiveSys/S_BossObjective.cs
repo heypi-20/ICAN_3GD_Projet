@@ -35,6 +35,12 @@ public class S_BossObjective : MonoBehaviour
         EnemyBase.OnEnemyKilled += CheckBosses;
         
     }
+
+    private void OnDestroy()
+    {
+        EnemyBase.OnEnemyKilled -= CheckBosses;
+    }
+
     private void Update()
     {
         if (!bossObjective.IsComplete) {

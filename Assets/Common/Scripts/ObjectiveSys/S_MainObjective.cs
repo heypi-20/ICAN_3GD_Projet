@@ -15,6 +15,8 @@ public class S_MainObjective : MonoBehaviour
     private S_ObjectiveManager ObjectiveManager;
     private Objective killObjective;
 
+    [Header("Read-Only Properties")]
+    public int objectiveCurrentValue;
     
     private void Start()
     {
@@ -28,10 +30,9 @@ public class S_MainObjective : MonoBehaviour
             );
         killObjective.OnComplete += () =>
         {
-            Debug.Log("Kill Objective");
             FindObjectOfType<BossPhaseActivator>().StartBossPhase();
         };
-        
+
         ObjectiveManager.AddObjective(killObjective);
 
         if (objectiveDisplay == null)
@@ -42,7 +43,21 @@ public class S_MainObjective : MonoBehaviour
 
         EnemyBase.OnEnemyKilled += AddProgress;
     }
-    
+
+    private void OnDestroy()
+    {
+        EnemyBase.OnEnemyKilled -= AddProgress;
+    }
+
+    private void Update()
+    {
+        objectiveCurrentValue = killObjective.CurrentValue;
+
+        if (killObjective.IsComplete) {
+            Debug.Log("MAIN OBJECTIVE COMPLETE");
+        }
+    }
+
 
     private void AddProgress(EnemyType enemyType)
     {
