@@ -18,6 +18,9 @@ public class S_LeaderboardDisplay : MonoBehaviour
 
     [Header("Settings")]
     public Color highlightColor = Color.yellow; // Text colour used to highlight the local player
+    
+    [Header("Auto Refresh")]
+    public float refreshInterval = 5f;
 
     private string localPlayerName;
 
@@ -28,8 +31,19 @@ public class S_LeaderboardDisplay : MonoBehaviour
 
         // Pull the top 100 scores from Dreamlo
         StartCoroutine(dreamlo.DownloadTopScores(500, OnLeaderboardReceived));
+        
+        StartCoroutine(AutoRefreshLeaderboard());
     }
 
+    IEnumerator AutoRefreshLeaderboard()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(refreshInterval);
+            StartCoroutine(dreamlo.DownloadTopScores(500, OnLeaderboardReceived));
+        }
+    }
+    
     /// <summary>
     /// Callback executed when the list is downloaded.
     /// Generates UI rows, highlights the local player and starts the scroll coroutine.
